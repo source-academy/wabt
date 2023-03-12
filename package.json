@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "preprocess": "yarn run cpp",
-    "cpp": "ts-node scripts/preprocess.ts"
+    "preprocess": "ts-node scripts/main.ts -P",
+    "cpp": "yarn run preprocess"
   },
   "author": "",
   "license": "ISC",
