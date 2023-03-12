@@ -2,7 +2,7 @@
 // import { writeFile } from 'fs/promises'
 import { outputFile, readFileSync, remove } from 'fs-extra'
 import { join } from 'path';
-import { getAllFilesFromDir, preprocess } from '../../scripts/preprocess';
+import { getAllFilesFromDir, preprocess } from '../../scripts/cpp';
 
 describe('detect nested files', () => {
     const FILE_SUFFIX = '.1234';
