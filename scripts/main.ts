@@ -1,15 +1,6 @@
-import { getAllFilesFromDir, preprocess } from "./preprocess";
-
 const args = process.argv.slice(2)
 
 const PREPROCESSOR_FLAG = '-P';
 if (args.includes(PREPROCESSOR_FLAG)) {
-    const SOURCE_DIRS = ['./src']
-    const BASE_PROJECT_DIR = __dirname.slice(0, __dirname.lastIndexOf('/'))
-
-    const sourceFiles = SOURCE_DIRS.flatMap(dir => getAllFilesFromDir(dir))
-    const inputFiles = sourceFiles.filter(dir => /cpp\.(t|j)s$/.test(dir))
-    const outputFiles = inputFiles.map(file => file.replace(/.cpp.ts$/, '.ts').replace(/.cpp.js$/, '.js'));
-
-    preprocess(inputFiles, outputFiles)
+    require('./preprocess').main();
 }
