@@ -4,10 +4,12 @@
 import { readdirSync, statSync } from 'fs';
 import { join, sep } from 'path';
 import { promisify } from 'util';
-import { } from 'child_process';
-import assert from 'assert';
-import { EncodingOption, outputFile, readFile } from 'fs-extra';
+import { outputFile, readFile } from 'fs-extra';
 const exec = promisify(require('child_process').exec);
+
+const BASE_DIR = __dirname.slice(0, __dirname.lastIndexOf(sep))
+const INCLUDE_PATH = join(BASE_DIR, 'include');
+const SOURCE_FILE_PATH = join(BASE_DIR, 'src');
 
 const getAllFilesFromDir = (directory: string): string[] => {
     if (statSync(directory).isFile())
@@ -16,9 +18,6 @@ const getAllFilesFromDir = (directory: string): string[] => {
         .map((file) => join(directory, file))
         .flatMap((subdirectory) => getAllFilesFromDir(subdirectory));
 }
-
-const BASE_DIR = __dirname.slice(0, __dirname.lastIndexOf(sep))
-const INCLUDE_PATH = join(BASE_DIR, 'include');
 
 const preprocess = (inputFile: string, outputFile: string): Promise<any> => {
     return exec(`cpp -I ${INCLUDE_PATH} -P -H ${inputFile} ${outputFile}`)
@@ -50,10 +49,7 @@ async function removeSelfImport(filePath: string, encoding: BufferEncoding = 'ut
 }
 
 export async function main() {
-    let SOURCE_DIRS = ['src', 'include']
-        .map(dir => join(BASE_DIR, dir))
-
-    const sourceFiles = SOURCE_DIRS.flatMap(dir => getAllFilesFromDir(dir))
+    const sourceFiles = getAllFilesFromDir(SOURCE_FILE_PATH)
     const inputFiles = sourceFiles.filter(dir => /cpp\.(t|j)s$/.test(dir))
     const outputFiles = inputFiles.map(file => file.replace(/.cpp.ts$/, '.ts').replace(/.cpp.js$/, '.js'));
 
