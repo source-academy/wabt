@@ -40,9 +40,9 @@ describe('preprocess macros', () => {
     })
 
     // // TODO: async-ify this, async has some issues it seems
-    // afterEach(() => {
-    //     FILES.forEach(file => removeSync(file));
-    // })
+    afterEach(() => {
+        FILES.forEach(file => removeSync(file));
+    })
 
     test('#include macro', async () => {
         const INCLUDE_TEXT = 'include_test';

@@ -45,9 +45,7 @@ async function removeSelfImport(filePath: string, encoding: BufferEncoding = 'ut
         + `['"]\\.\\/(${potentialImportNames.join("|")})['"]`
         + ';?$';
 
-    console.log(regexString);
     const selfImportRegex = new RegExp(regexString, 'mg')
-    console.log(fileString.replace(selfImportRegex, ''))
     return await outputFile(filePath, fileString.replace(selfImportRegex, ''))
 }
 
