@@ -6,7 +6,7 @@ import { join, sep } from 'path';
 import { promisify } from 'util';
 import { } from 'child_process';
 import assert from 'assert';
-
+import { EncodingOption, outputFile, readFile } from 'fs-extra';
 const exec = promisify(require('child_process').exec);
 
 const getAllFilesFromDir = (directory: string): string[] => {
@@ -19,19 +19,37 @@ const getAllFilesFromDir = (directory: string): string[] => {
 
 const BASE_DIR = __dirname.slice(0, __dirname.lastIndexOf(sep))
 const INCLUDE_PATH = join(BASE_DIR, 'include');
-const preprocess = (inputFiles: string[], outputFiles: string[]) => {
-    assert(inputFiles.length === outputFiles.length);
-    return Promise.all(
-        inputFiles.map((val, i) =>
-            exec(`cpp -I ${INCLUDE_PATH} -P -H ${inputFiles[i]} ${outputFiles[i]}`))
-    )
+
+const preprocess = (inputFile: string, outputFile: string): Promise<any> => {
+    return exec(`cpp -I ${INCLUDE_PATH} -P -H ${inputFile} ${outputFile}`)
 }
 
-function removeSelfImport(filename: string) {
+async function removeSelfImport(filePath: string, encoding: BufferEncoding = 'utf-8') {
+    const fileString = await readFile(filePath, encoding)
+    const fileName = filePath.split(sep).at(-1)!
 
+    let potentialImportNames = [fileName];
+    if (fileName.endsWith('.ts')) // Technically, you can't do import x from 'file.ts', but whatever
+        potentialImportNames = [fileName, fileName.slice(0, fileName.indexOf('.ts'))]
+    else if (fileName.endsWith('.js'))
+        potentialImportNames = [fileName, fileName.slice(0, fileName.indexOf('.js'))]
+
+    // for regex
+    potentialImportNames = potentialImportNames.map(name => name.replace(/\./g, '\\.'))
+
+    const regexString =
+        '^'
+        + 'import\\s*'
+        + '[^\\n]*\\s*'
+        + 'from\\s*'
+        + `['"]\\.\\/(${potentialImportNames.join("|")})['"]`
+        + ';?$\\n';
+
+    const selfImportRegex = new RegExp(regexString, 'mg')
+    return await outputFile(filePath, fileString.replace(selfImportRegex, ''))
 }
 
-export function main() {
+export async function main() {
     let SOURCE_DIRS = ['src', 'include']
         .map(dir => join(BASE_DIR, dir))
 
@@ -39,7 +57,8 @@ export function main() {
     const inputFiles = sourceFiles.filter(dir => /cpp\.(t|j)s$/.test(dir))
     const outputFiles = inputFiles.map(file => file.replace(/.cpp.ts$/, '.ts').replace(/.cpp.js$/, '.js'));
 
-    preprocess(inputFiles, outputFiles)
+    await Promise.all(inputFiles.map((x, i) => preprocess(inputFiles[i], outputFiles[i])))
+    await Promise.all(outputFiles.map(file => removeSelfImport(file)))
 }
 
-export const TEST_EXPORTS = {getAllFilesFromDir, preprocess, removeSelfImport}
+export const TEST_EXPORTS = { getAllFilesFromDir, preprocess, removeSelfImport }

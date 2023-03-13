@@ -39,10 +39,10 @@ describe('preprocess macros', () => {
         FILES.forEach(file => outputFileSync(file, ''))
     })
 
-    // TODO: async-ify this, async has some issues it seems
-    afterEach(() => {
-        FILES.forEach(file => removeSync(file));
-    })
+    // // TODO: async-ify this, async has some issues it seems
+    // afterEach(() => {
+    //     FILES.forEach(file => removeSync(file));
+    // })
 
     test('#include macro', async () => {
         const INCLUDE_TEXT = 'include_test';
@@ -50,7 +50,7 @@ describe('preprocess macros', () => {
             outputFile(INPUT_FILE_PATH, '#include "test.txt"'),
             outputFile(INCLUDE_FILE_PATH, INCLUDE_TEXT)
         ])
-        await preprocess([INPUT_FILE_PATH], [OUTPUT_FILE_PATH]);
+        await preprocess(INPUT_FILE_PATH, OUTPUT_FILE_PATH);
         const result_text = readFileSync(OUTPUT_FILE_PATH, "utf-8");
         expect(result_text.trim()).toEqual(INCLUDE_TEXT);
     })
@@ -65,10 +65,20 @@ describe('preprocess macros', () => {
         const EXPECTED_CONTENTS = 'test_12345'
         const INPUT_FILE_CONTENTS =
             `import {x, from, ${INPUT_FILE_NAME}} from './${INPUT_FILE_NAME}'\n${EXPECTED_CONTENTS}`
-        // await outputFile(INPUT_FILE_PATH, INPUT_FILE_CONTENTS);
-        // await removeSelfImport(INPUT_FILE_1_PATH);
+        await outputFile(INPUT_FILE_PATH, INPUT_FILE_CONTENTS);
+        await removeSelfImport(INPUT_FILE_PATH);
 
         expect(readFileSync(INPUT_FILE_PATH, 'utf-8')).toEqual(EXPECTED_CONTENTS)
+    })
+
+    
+    test('does not remove import from same file name, one directory down', async () => {
+        const INPUT_FILE_CONTENTS =
+            `import {x, from, ${INPUT_FILE_NAME}} from '../${INPUT_FILE_NAME}'\ntest_12345`
+        await outputFile(INPUT_FILE_PATH, INPUT_FILE_CONTENTS);
+        await removeSelfImport(INPUT_FILE_PATH);
+
+        expect(readFileSync(INPUT_FILE_PATH, 'utf-8')).toEqual(INPUT_FILE_CONTENTS)
     })
 
 })
