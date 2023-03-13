@@ -1,6 +1,5 @@
-import { OpcodeType } from "./opcode"
+
 import { Type } from "./type";
-namespace anon {
 export enum OpcodeType {
 Unreachable = 0x00,
 Nop = 0x01,
@@ -544,7 +543,6 @@ I64AtomicRmw16CmpxchgU = 0x4d,
 I64AtomicRmw32CmpxchgU = 0x4e,
     Invalid = 'invalid',
 };
-}
 class Opcode {
     constructor() { }
     static constructor1(e: OpcodeType) {
@@ -628,5 +626,3 @@ uint32_t prefix_code = PrefixCode(prefix, code);
     return Opcode(EncodeInvalidOpcode(prefix_code));
 }
 }
-export { OpcodeType };
-

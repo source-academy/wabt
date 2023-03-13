@@ -64,11 +64,12 @@ describe('preprocess macros', () => {
     test('remove import from self', async () => {
         const EXPECTED_CONTENTS = 'test_12345'
         const INPUT_FILE_CONTENTS =
-            `import {x, from, ${INPUT_FILE_NAME}} from './${INPUT_FILE_NAME}'\n${EXPECTED_CONTENTS}`
+            `import {x, from, ${INPUT_FILE_NAME}} from './${INPUT_FILE_NAME}'\n`
+            + `${EXPECTED_CONTENTS}`
         await outputFile(INPUT_FILE_PATH, INPUT_FILE_CONTENTS);
         await removeSelfImport(INPUT_FILE_PATH);
 
-        expect(readFileSync(INPUT_FILE_PATH, 'utf-8')).toEqual(EXPECTED_CONTENTS)
+        expect(readFileSync(INPUT_FILE_PATH, 'utf-8').trimStart()).toEqual(EXPECTED_CONTENTS)
     })
 
     
