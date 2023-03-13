@@ -3,14 +3,13 @@
  */
 import { readdirSync, statSync } from 'fs';
 import { join, sep } from 'path';
-import child_process from 'child_process';
 import { promisify } from 'util';
 import { } from 'child_process';
-
-const exec = promisify(child_process.exec);
 import assert from 'assert';
 
-export const getAllFilesFromDir = (directory: string): string[] => {
+const exec = promisify(require('child_process').exec);
+
+const getAllFilesFromDir = (directory: string): string[] => {
     if (statSync(directory).isFile())
         return [directory]
     return readdirSync(directory)
@@ -18,17 +17,23 @@ export const getAllFilesFromDir = (directory: string): string[] => {
         .flatMap((subdirectory) => getAllFilesFromDir(subdirectory));
 }
 
-export const preprocess = (inputFiles: string[], outputFiles: string[]) => {
+const BASE_DIR = __dirname.slice(0, __dirname.lastIndexOf(sep))
+const INCLUDE_PATH = join(BASE_DIR, 'include');
+const preprocess = (inputFiles: string[], outputFiles: string[]) => {
     assert(inputFiles.length === outputFiles.length);
     return Promise.all(
         inputFiles.map((val, i) =>
-            exec(`cpp -P -H ${inputFiles[i]} ${outputFiles[i]}`))
+            exec(`cpp -I ${INCLUDE_PATH} -P -H ${inputFiles[i]} ${outputFiles[i]}`))
     )
 }
 
+function removeSelfImport(filename: string) {
+
+}
+
 export function main() {
-    const BASE_PROJECT_DIR = __dirname.slice(0, __dirname.lastIndexOf(sep))
-    const SOURCE_DIRS = ['src'].map(dir => join(BASE_PROJECT_DIR, dir))
+    let SOURCE_DIRS = ['src', 'include']
+        .map(dir => join(BASE_DIR, dir))
 
     const sourceFiles = SOURCE_DIRS.flatMap(dir => getAllFilesFromDir(dir))
     const inputFiles = sourceFiles.filter(dir => /cpp\.(t|j)s$/.test(dir))
@@ -36,3 +41,5 @@ export function main() {
 
     preprocess(inputFiles, outputFiles)
 }
+
+export const TEST_EXPORTS = {getAllFilesFromDir, preprocess, removeSelfImport}

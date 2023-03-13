@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-// #ifndef WABT_OPCODE
-// #error "You must define WABT_OPCODE before including this file."
-// #endif
+#ifndef WABT_OPCODE
+#error "You must define WABT_OPCODE before including this file."
+#endif
 
 /* *** NOTE *** This list must be kept sorted so it can be binary searched */
 
@@ -34,10 +34,6 @@
  *
  *          tr    t1    t2    t3    m  prefix code  Name text
  * ==========================================================  */
-
-
-// function definition to be modified at runtime
-let WABT_OPCODE: (tr, t1, t2, t3, m, prefix, code, name, text, decomp) => any = () => null;
 
 WABT_OPCODE(___,  ___,  ___,  ___,  0,  0,    0x00, Unreachable, "unreachable", "")
 WABT_OPCODE(___,  ___,  ___,  ___,  0,  0,    0x01, Nop, "nop", "")
