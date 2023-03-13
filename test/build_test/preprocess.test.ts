@@ -49,6 +49,7 @@ describe('preprocess macros', () => {
     FILES.forEach((file) => removeSync(file));
   });
 
+<<<<<<< HEAD
   test('#include macro', async () => {
     const INCLUDE_TEXT = 'include_test';
     await Promise.all([
@@ -75,6 +76,26 @@ describe('preprocess macros', () => {
         EXPECTED_CONTENTS,
       );
   });
+=======
+    test('#include macro', async () => {
+        const INCLUDE_TEXT = 'include_test';
+        await Promise.all([
+            outputFile(INPUT_FILE_PATH, '/// #include "test.txt"'),
+            outputFile(INCLUDE_FILE_PATH, INCLUDE_TEXT)
+        ])
+        await preprocess(INPUT_FILE_PATH, OUTPUT_FILE_PATH);
+        const result_text = readFileSync(OUTPUT_FILE_PATH, "utf-8");
+        expect(result_text.trim()).toEqual(INCLUDE_TEXT);
+    })
+
+    test('remove import from self', async () => {
+        const EXPECTED_CONTENTS = 'test_12345'
+        const INPUT_FILE_CONTENTS =
+            `import {x, from, ${INPUT_FILE_NAME}} from './${INPUT_FILE_NAME}'\n`
+            + `${EXPECTED_CONTENTS}`
+        await outputFile(INPUT_FILE_PATH, INPUT_FILE_CONTENTS);
+        await removeSelfImport(INPUT_FILE_PATH);
+>>>>>>> 722a374 (Add commented c preprocessor feature)
 
   test('does not remove import from same file name, one directory down', async () => {
     const INPUT_FILE_CONTENTS = `import {x, from, ${INPUT_FILE_NAME}} from '../${INPUT_FILE_NAME}'\ntest_12345`;
