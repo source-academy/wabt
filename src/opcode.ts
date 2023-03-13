@@ -541,7 +541,7 @@ I32AtomicRmw16CmpxchgU = 0x4b,
 I64AtomicRmw8CmpxchgU = 0x4c,
 I64AtomicRmw16CmpxchgU = 0x4d,
 I64AtomicRmw32CmpxchgU = 0x4e,
-    Invalid = 'invalid',
+Invalid = 'invalid',
 };
 class Opcode {
     constructor() { }

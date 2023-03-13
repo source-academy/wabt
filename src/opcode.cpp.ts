@@ -1,24 +1,18 @@
 import { OpcodeType } from "./opcode"
 import { Type } from "./type";
 
-///#if 0
-    `
-///#endif
-// Opcode enumerations.
-//
-// NOTE: this enum does not match the binary encoding.
-//
-export enum OpcodeType {
-    #define WABT_OPCODE(rtype, type1, type2, type3, mem_size, prefix, code, Name, \
-    text, decomp) \
-    Name = code,
-    #include "wabt/opcode.def"
-    #undef WABT_OPCODE
-    Invalid = 'invalid',
-};
-///#if 0
-`
-///#endif
+/// // Opcode enumerations.
+/// //
+/// // NOTE: this enum does not match the binary encoding.
+/// //
+/// export enum OpcodeType {
+///     #define WABT_OPCODE(rtype, type1, type2, type3, mem_size, prefix, code, Name, \
+///     text, decomp) \
+///     Name = code,
+///     #include "wabt/opcode.def"
+///     #undef WABT_OPCODE
+///     Invalid = 'invalid',
+/// };
 
 // // Static opcode objects.
 // #define WABT_OPCODE(rtype, type1, type2, type3, mem_size, prefix, code, Name, \

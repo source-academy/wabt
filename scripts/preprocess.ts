@@ -5,11 +5,8 @@ import { readdirSync, statSync } from 'fs';
 import { join, sep } from 'path';
 import { promisify } from 'util';
 import { outputFile, readFile, readFileSync, remove, writeFile } from 'fs-extra';
+import { INCLUDE_PATH, SOURCE_FILE_PATH } from './directories';
 const exec = promisify(require('child_process').exec);
-
-const BASE_DIR = __dirname.slice(0, __dirname.lastIndexOf(sep))
-const INCLUDE_PATH = join(BASE_DIR, 'include');
-const SOURCE_FILE_PATH = join(BASE_DIR, 'src');
 
 const getAllFilesFromDir = (directory: string): string[] => {
     if (statSync(directory).isFile())
