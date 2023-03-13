@@ -47,7 +47,7 @@ describe('preprocess macros', () => {
     test('#include macro', async () => {
         const INCLUDE_TEXT = 'include_test';
         await Promise.all([
-            outputFile(INPUT_FILE_PATH, '#include "test.txt"'),
+            outputFile(INPUT_FILE_PATH, '/// #include "test.txt"'),
             outputFile(INCLUDE_FILE_PATH, INCLUDE_TEXT)
         ])
         await preprocess(INPUT_FILE_PATH, OUTPUT_FILE_PATH);
@@ -55,12 +55,6 @@ describe('preprocess macros', () => {
         expect(result_text.trim()).toEqual(INCLUDE_TEXT);
     })
 
-    /*
-    Test for removing import from self.
-    The logic here is that you might define an enum in example.cpp.ts, then
-    process it to example.ts, and import type definitions from example.ts in example.cpp.ts.
-
-    */
     test('remove import from self', async () => {
         const EXPECTED_CONTENTS = 'test_12345'
         const INPUT_FILE_CONTENTS =
