@@ -8,8 +8,8 @@ const WATCH_FLAG = '--watch'
 if (args.includes(PREPROCESSOR_FLAG) && args.includes(WATCH_FLAG)) {
     // For now, running every second will do...
     const run = () => {
-        require('./preprocess').main()
         console.clear();
+        require('./preprocess').main()
         console.log('Running preprocessor...')
     }
 
