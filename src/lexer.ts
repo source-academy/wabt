@@ -1,45 +1,3 @@
-/*
-* Full disclosure: The general structure of this file is adapted from my own
-* Rust implementation of a scanner
-* https://github.com/Fidget-Spinner/crafting_interpreters/blob/main/rust/src/scanner.rs.
-* That is in turn is adapted from the Java code written by the excellent book,
-* "Crafting Interpreters" https://craftinginterpreters.com/scanning.html.
-* Said book's copyright is under Robert Nystrom.
-* I've included the MIT license that code snippets from
-* the book is licensed under down below. See
-* https://github.com/munificent/craftinginterpreters/blob/master/LICENSE
-*
-* The changes I've made: I have rewritten basically everything from scratch.
-* Only the method names and overall method APIs
-* are the same. Their internal behaviors are quite different as the scanner
-* in the book parses a JS-like language, not Python.
-*
-* - The book was written in Java. I have written this in TypeScript.
-* - The scanner supports a whitespace significant language now.
-* - Also added support for column numbers for better error messages in the future.
-* - Also added better errors.
-* - Also added forbidden identifiers.
-*
-*
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to
-    deal in the Software without restriction, including without limitation the
-    rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-    sell copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in
-    all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-    IN THE SOFTWARE.
-* */
-
 const kEof = "\0";
 
 import { IsTokenTypeBare, IsTokenTypeOpcode, IsTokenTypeRefKind, IsTokenTypeType, Token, TokenType } from './token'
@@ -49,6 +7,17 @@ import { LiteralType } from './literal';
 import { isKeyWord } from './keywords.cpp';
 import { getOpcodeType, getTokenType, getType } from './keywords';
 
+export function tokenize(source: string): Token[] {
+    let tokens = [];
+    const lexer = new Lexer(source);
+    while (true) {
+        const token = lexer.getToken();
+        if (token.type === TokenType.Eof)
+            break;
+        tokens.push(token)
+    }
+    return tokens;
+}
 enum ReservedChars { None, Some, Id };
 
 function IsDigit(c: string) {
@@ -67,7 +36,7 @@ function IsIdChar(c: string) {
     assert(c.length == 1)
     return /[!-~]/.test(c) && /[^\"\(\)\,\;\=\[\]\{\}]/.test(c);
 }
-export class Tokenizer {
+export class Lexer {
     private readonly source: string;
     private readonly tokens: Token[];
     private start: number;
@@ -532,7 +501,7 @@ export class Tokenizer {
     GetKeywordToken(): Token {
         this.ReadReservedChars();
         const text = this.GetText();
-        
+
         if (!isKeyWord(text)) {
             return this.TextToken(TokenType.Reserved);
         }
@@ -546,6 +515,8 @@ export class Tokenizer {
             return new Token(tokenType!, text, this.line, this.col, this.cursor);
             // return new Token(GetLocation(), tokenType, valueType);
         } else {
+            console.log({tokenType})
+            console.log({text})
             assert(IsTokenTypeOpcode(tokenType));
             return new Token(tokenType!, text, this.line, this.col, this.cursor);
             // return new Token(GetLocation(), tokenType, opcodeType);
@@ -608,7 +579,7 @@ export class Tokenizer {
     }
 
     GetText(offset: number = 0): string {
-        return this.source.slice(this.token_start + offset, this.cursor + 1)
+        return this.source.slice(this.token_start + offset, this.cursor)
     }
 
     GetReservedToken(): Token {
