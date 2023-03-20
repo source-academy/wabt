@@ -36,6 +36,7 @@ function IsIdChar(c: string) {
     assert(c.length == 1)
     return /[!-~]/.test(c) && /[^\"\(\)\,\;\=\[\]\{\}]/.test(c);
 }
+
 export class Lexer {
     private readonly source: string;
     private readonly tokens: Token[];
@@ -207,6 +208,35 @@ export class Lexer {
         return true;
     }
 
+    Newline() {
+        this.line++;
+        this.cursor++;
+        this.col = 0;
+    }
+
+    NoTrailingReservedChars(): boolean {
+        return this.ReadReservedChars() == ReservedChars.None;
+    }
+
+    ReadReservedChars() {
+        let ret = ReservedChars.None;
+        while (true) {
+            let peek = this.PeekChar();
+            if (IsIdChar(peek)) {
+                this.ReadChar();
+                if (ret == ReservedChars.None) {
+                    ret = ReservedChars.Id;
+                }
+            } else if (peek == '"') {
+                this.GetStringToken();
+                ret = ReservedChars.Some;
+            } else {
+                break;
+            }
+        }
+        return ret;
+    }
+
     ReadBlockComment(): boolean {
         let nesting = 1;
         while (true) {
@@ -247,7 +277,6 @@ export class Lexer {
         }
     }
 
-
     ReadWhitespace(): void {
         while (true) {
             switch (this.PeekChar()) {
@@ -268,7 +297,51 @@ export class Lexer {
         }
     }
 
+    ReadSign(): void { // TODO: this really doesn't return anything?
+        if (this.PeekChar() == '+' || this.PeekChar() == '-') {
+            this.ReadChar();
+        }
+    }
 
+    ReadNum(): boolean {
+        if (IsDigit(this.PeekChar())) {
+            this.ReadChar();
+            return this.MatchChar('_') || IsDigit(this.PeekChar()) ? this.ReadNum() : true;
+        }
+        return false;
+    }
+
+    ReadHexNum(): boolean {
+        if (IsHexDigit(this.PeekChar())) {
+            this.ReadChar();
+            return this.MatchChar('_') || IsHexDigit(this.PeekChar()) ? this.ReadHexNum() : true;
+        }
+        return false;
+    }
+
+    BareToken(token_type: TokenType): Token {
+        return new Token(token_type, "", this.line, this.col, this.cursor);
+    }
+
+    // TODO: need to do something with literal_type
+    LiteralToken(token_type: TokenType, literal_type: LiteralType): Token {
+        // return Token(GetLocation(), token_type, Literal(literal_type, GetText()));
+        return new Token(token_type, this.GetText(), this.line, this.col, this.cursor);
+    }
+
+    TextToken(token_type: TokenType, offset: number = 0): Token {
+        return new Token(token_type, this.GetText(offset), this.line, this.col, this.cursor);
+    }
+
+    GetText(offset: number = 0): string {
+        return this.source.slice(this.token_start + offset, this.cursor)
+    }
+
+    GetReservedToken(): Token {
+        this.ReadReservedChars();
+        return this.TextToken(TokenType.Reserved);
+    }
+    
     GetStringToken(): Token {
         const saved_token_start = this.token_start;
         let has_error: boolean = false;
@@ -390,13 +463,6 @@ export class Lexer {
         return this.TextToken(TokenType.Text);
     }
 
-    Newline() {
-        this.line++;
-        this.cursor++;
-        this.col = 0;
-    }
-
-
     GetNumberToken(token_type: TokenType): Token {
         if (this.ReadNum()) {
             if (this.MatchChar('.')) {
@@ -459,10 +525,6 @@ export class Lexer {
         return this.GetKeywordToken();
     }
 
-    NoTrailingReservedChars(): boolean {
-        return this.ReadReservedChars() == ReservedChars.None;
-    }
-
     GetNanToken(): Token {
         if (this.MatchString("nan")) {
             if (this.MatchChar(':')) {
@@ -515,76 +577,13 @@ export class Lexer {
             return new Token(tokenType!, text, this.line, this.col, this.cursor);
             // return new Token(GetLocation(), tokenType, valueType);
         } else {
-            console.log({tokenType})
-            console.log({text})
+            console.log({ tokenType })
+            console.log({ text })
             assert(IsTokenTypeOpcode(tokenType));
             return new Token(tokenType!, text, this.line, this.col, this.cursor);
             // return new Token(GetLocation(), tokenType, opcodeType);
         }
     }
 
-    ReadReservedChars() {
-        let ret = ReservedChars.None;
-        while (true) {
-            let peek = this.PeekChar();
-            if (IsIdChar(peek)) {
-                this.ReadChar();
-                if (ret == ReservedChars.None) {
-                    ret = ReservedChars.Id;
-                }
-            } else if (peek == '"') {
-                this.GetStringToken();
-                ret = ReservedChars.Some;
-            } else {
-                break;
-            }
-        }
-        return ret;
-    }
-
-    ReadSign() {
-        if (this.PeekChar() == '+' || this.PeekChar() == '-') {
-            this.ReadChar();
-        }
-    }
-
-    ReadNum(): boolean {
-        if (IsDigit(this.PeekChar())) {
-            this.ReadChar();
-            return this.MatchChar('_') || IsDigit(this.PeekChar()) ? this.ReadNum() : true;
-        }
-        return false;
-    }
-
-    ReadHexNum(): boolean {
-        if (IsHexDigit(this.PeekChar())) {
-            this.ReadChar();
-            return this.MatchChar('_') || IsHexDigit(this.PeekChar()) ? this.ReadHexNum() : true;
-        }
-        return false;
-    }
-
-    BareToken(token_type: TokenType): Token {
-        return new Token(token_type, "", this.line, this.col, this.cursor);
-    }
-
-    // TODO: need to do something with literal_type
-    LiteralToken(token_type: TokenType, literal_type: LiteralType): Token {
-        // return Token(GetLocation(), token_type, Literal(literal_type, GetText()));
-        return new Token(token_type, this.GetText(), this.line, this.col, this.cursor);
-    }
-
-    TextToken(token_type: TokenType, offset: number = 0): Token {
-        return new Token(token_type, this.GetText(offset), this.line, this.col, this.cursor);
-    }
-
-    GetText(offset: number = 0): string {
-        return this.source.slice(this.token_start + offset, this.cursor)
-    }
-
-    GetReservedToken(): Token {
-        this.ReadReservedChars();
-        return this.TextToken(TokenType.Reserved);
-    }
 
 }
