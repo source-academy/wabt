@@ -1,1 +1,0 @@
-export const WABT_UNREACHABLE = process.exit();//abort();

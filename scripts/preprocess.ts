@@ -35,6 +35,7 @@ const preprocess = async (inputFilePath: string, outputFilePath: string, encodin
     await exec(`cpp -I ${INCLUDE_PATH} -P -H ${tempFilePath} ${outputFilePath}`)
     return remove(tempFilePath)
 }
+
 /**
  * Removes import from the same file. The logic here is that if you define an enum in example.cpp.ts,
  * You will import type definitions from example.ts, but when example.cpp.ts is preprocessed into example.ts,
