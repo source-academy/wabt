@@ -39,353 +39,581 @@
     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
     IN THE SOFTWARE.
 * */
-import { Token, TokenType } from './token'
 
+const kEof = "\0";
 
+import { IsTokenTypeBare, IsTokenTypeOpcode, IsTokenTypeRefKind, IsTokenTypeType, Token, TokenType } from './token'
+import assert from 'assert'
+import { ParseHexdigit } from './literal.cpp';
+import { LiteralType } from './literal';
+import { isKeyWord } from './keywords.cpp';
+import { getOpcodeType, getTokenType, getType } from './keywords';
+
+enum ReservedChars { None, Some, Id };
+
+function IsDigit(c: string) {
+    assert(c.length == 1)
+    return /[0-9]/.test(c);
+}
+function IsHexDigit(c: string) {
+    assert(c.length == 1)
+    return /[0-9a-f]/i.test(c);
+}
+function IsKeyword(c: string) {
+    assert(c.length == 1)
+    return /a-z/.test(c);
+}
+function IsIdChar(c: string) {
+    assert(c.length == 1)
+    return /[!-~]/.test(c) && /[^\"\(\)\,\;\=\[\]\{\}]/.test(c);
+}
 export class Tokenizer {
     private readonly source: string;
     private readonly tokens: Token[];
     private start: number;
-    private current: number;
+    private cursor: number;
     private line: number;
     private col: number;
-    private prevLineLeadingWhiteSpace: number;
-    private currLineLeadingWhiteSpace: number;
-    private specialIdentifiers: Map<string, TokenType>;
-    private forbiddenIdentifiers: Map<string, TokenType>;
-    // forbiddenOperators: Set<TokenType>;
+    private token_start: number
+
     constructor(source: string) {
         this.source = source;
-        this.tokens = [];
+        this.tokens = []
         this.start = 0;
-        this.current = 0;
+        this.cursor = 0;
         this.line = 0;
         this.col = 0;
-        this.prevLineLeadingWhiteSpace = 0;
-        this.currLineLeadingWhiteSpace = 0;
-        this.specialIdentifiers = specialIdentifiers;
-        // Not used by us, but should be kept reserved as per Python spec
-        this.forbiddenIdentifiers = new Map([
-            ["async", TokenType.ASYNC],
-            ["await", TokenType.AWAIT],
-            ["yield", TokenType.YIELD],
-            ["with", TokenType.WITH],
-            ["del", TokenType.DEL],
-            ["try", TokenType.TRY],
-            ["except", TokenType.EXCEPT],
-            ["finally", TokenType.FINALLY],
-            ["raise", TokenType.RAISE],
-        ]);
-        // Operators that are valid in Python, but invalid for our use case.
-        // this.forbiddenOperators = new Set([
-        //     TokenType.AT,
-        //     // Augmented assign e.g. *=
-        //     TokenType.ATEQUAL,
-        //     TokenType.PLUSEQUAL,
-        //     TokenType.MINEQUAL,
-        //     TokenType.STAREQUAL,
-        //     TokenType.SLASHEQUAL,
-        //     TokenType.PERCENTEQUAL,
-        //     TokenType.AMPEREQUAL,
-        //     TokenType.VBAREQUAL,
-        //     TokenType.CIRCUMFLEXEQUAL,
-        //     TokenType.LEFTSHIFTEQUAL,
-        //     TokenType.RIGHTSHIFTEQUAL,
-        //     TokenType.DOUBLESTAREQUAL,
-        //     TokenType.DOUBLESLASHEQUAL,
-        // ])
+        this.token_start = 0;
     }
 
-    private isAtEnd() {
-        return this.current >= this.source.length;
-    }
+    getToken() {
+        while (true) {
+            this.token_start = this.cursor;
+            switch (this.PeekChar()) {
+                case kEof:
+                    return this.BareToken(TokenType.Eof);
 
-    private advance() {
-        const res = this.source[this.current];
-        this.current += 1;
-        this.col += 1;
-        return res;
-    }
-
-    /* Single character lookahead. */
-    private peek(): string {
-        return this.isAtEnd() ? '\0' : this.source[this.current];
-    }
-
-    /* Double character lookahead. */
-
-    private overwriteToken(type: TokenType) {
-        const previousToken = this.tokens[this.tokens.length - 1];
-        const lexeme = this.source.slice(previousToken.indexInSource, this.current);
-        this.tokens[this.tokens.length - 1] = new Token(type, lexeme, previousToken.line, previousToken.col, previousToken.indexInSource);
-    }
-    private addToken(type: TokenType) {
-        const line = this.line
-        const col = this.col;
-        const lexeme = this.source.slice(this.start, this.current);
-        this.tokens.push(new Token(type, lexeme, line, col, this.current - lexeme.length))
-    }
-
-    // Checks that the current character matches a pattern. If so the character is consumed, else nothing is consumed.
-    private matches(pattern: string): boolean {
-        if (this.isAtEnd()) {
-            return false;
-        } else {
-            if (this.source[this.current] === pattern) {
-                this.col += 1;
-                this.current += 1;
-                return true;
-            }
-            return false;
-        }
-    }
-
-    private isAlpha(c: string): boolean {
-        return /^[A-Za-z]$/i.test(c);
-    }
-
-    private isDigit(c: string): boolean {
-        return /^[0-9]/.test(c);
-    }
-
-    private isIdentifier(c: string): boolean {
-        return c === '_' || this.isAlpha(c) || this.isDigit(c);
-    }
-
-    private number() {
-        while (this.isDigit(this.peek())) {
-            this.advance();
-        }
-        // Fractional part
-        if (this.peek() === '.') {
-            this.advance();
-            while (this.isDigit(this.peek())) {
-                this.advance();
-            }
-        }
-        this.addToken(TokenType.NUMBER);
-    }
-
-    private name() {
-        while (this.isIdentifier(this.peek())) {
-            this.advance();
-        }
-        const identifier = this.source.slice(this.start, this.current);
-        if (!!this.forbiddenIdentifiers.get(identifier)) {
-            throw new TokenizerErrors.ForbiddenIdentifierError(this.line, this.col,
-                this.source, this.start);
-        }
-        const specialIdent = this.specialIdentifiers.get(identifier);
-        if (specialIdent !== undefined) {
-            /* Merge multi-token operators, like 'is not', 'not in' */
-            const previousToken = this.tokens[this.tokens.length - 1];
-            switch (specialIdent) {
-                case TokenType.NOT:
-                    if (previousToken.type === TokenType.IS) {
-                        this.overwriteToken(TokenType.ISNOT);
+                case '(':
+                    if (this.MatchString("(;")) {
+                        if (this.ReadBlockComment()) {
+                            continue;
+                        }
+                        return this.BareToken(TokenType.Eof);
+                    } else if (this.MatchString("(@")) {
+                        this.GetIdToken();
+                        // offset=2 to skip the "(@" prefix
+                        return this.TextToken(TokenType.LparAnn, 2);
                     } else {
-                        this.addToken(specialIdent);
+                        this.ReadChar();
+                        return this.BareToken(TokenType.Lpar);
                     }
-                    return;
-                case TokenType.IN:
-                    if (previousToken.type === TokenType.NOT) {
-                        this.overwriteToken(TokenType.NOTIN);
+                    break;
+
+                case ')':
+                    this.ReadChar();
+                    return this.BareToken(TokenType.Rpar);
+
+                case ';':
+                    if (this.MatchString(";;")) {
+                        if (this.ReadLineComment()) {
+                            continue;
+                        }
+                        return this.BareToken(TokenType.Eof);
                     } else {
-                        this.addToken(specialIdent);
+                        this.ReadChar();
+                        throw new Error("unexpected char");
+                        continue;
                     }
-                    return;
+                    break;
+
+                case ' ':
+                case '\t':
+                case '\r':
+                case '\n':
+                    this.ReadWhitespace();
+                    continue;
+
+                case '"':
+                    return this.GetStringToken();
+
+                case '+':
+                case '-':
+                    this.ReadChar();
+                    switch (this.PeekChar()) {
+                        case 'i':
+                            return this.GetInfToken();
+
+                        case 'n':
+                            return this.GetNanToken();
+
+                        case '0':
+                            return this.MatchString("0x") ? this.GetHexNumberToken(TokenType.Int)
+                                : this.GetNumberToken(TokenType.Int);
+                        case '1':
+                        case '2':
+                        case '3':
+                        case '4':
+                        case '5':
+                        case '6':
+                        case '7':
+                        case '8':
+                        case '9':
+                            return this.GetNumberToken(TokenType.Int);
+
+                        default:
+                            return this.GetReservedToken();
+                    }
+                    break;
+
+                case '0':
+                    return this.MatchString("0x") ? this.GetHexNumberToken(TokenType.Nat)
+                        : this.GetNumberToken(TokenType.Nat);
+
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    return this.GetNumberToken(TokenType.Nat);
+
+                case '$':
+                    return this.GetIdToken();
+
+                case 'a':
+                    return this.GetNameEqNumToken("align=", TokenType.AlignEqNat);
+
+                case 'i':
+                    return this.GetInfToken();
+
+                case 'n':
+                    return this.GetNanToken();
+
+                case 'o':
+                    return this.GetNameEqNumToken("offset=", TokenType.OffsetEqNat);
+
                 default:
-                    this.addToken(specialIdent);
+                    if (IsKeyword(this.PeekChar())) {
+                        return this.GetKeywordToken();
+                    } else if (IsIdChar(this.PeekChar())) {
+                        return this.GetReservedToken();
+                    } else {
+                        this.ReadChar();
+                        throw new Error("unexpected char");
+                        continue;
+                    }
             }
-        } else {
-            this.addToken(TokenType.NAME);
         }
     }
 
-    private scanToken() {
-        const c = this.advance();
-        // KJ: I really hope the JS runtime optimizes this to a jump table...
-        switch (c) {
-            //// SPECIAL MARKERS
-            // Comment -- advance to end of line.
-            case '#':
-                while (this.peek() != '\n' && !this.isAtEnd()) {
-                    this.advance();
+    PeekChar(): string {
+        return this.cursor < this.source.length ? this.source[this.cursor] : kEof;
+    }
+
+    ReadChar(): string {
+        return this.cursor < this.source.length ? this.source[this.cursor++] : kEof;
+    }
+
+    MatchChar(c: string): boolean {
+        assert(c.length == 1);
+        if (this.PeekChar() == c) {
+            this.ReadChar();
+            return true;
+        }
+        return false;
+    }
+
+    MatchString(s: string): boolean {
+        const saved_cursor = this.cursor;
+        for (let i = 0; i < s.length; i++) {
+            const c = s[i];
+            if (this.ReadChar() != c) {
+                this.cursor = saved_cursor;
+                return false;
+            }
+        }
+        return true;
+    }
+
+    ReadBlockComment(): boolean {
+        let nesting = 1;
+        while (true) {
+            switch (this.ReadChar()) {
+                case kEof:
+                    throw new Error("EOF in block comment");
+                    return false;
+
+                case ';':
+                    if (this.MatchChar(')') && --nesting == 0) {
+                        return true;
+                    }
+                    break;
+
+                case '(':
+                    if (this.MatchChar(';')) {
+                        nesting++;
+                    }
+                    break;
+
+                case '\n':
+                    this.Newline();
+                    break;
+            }
+        }
+    }
+
+    ReadLineComment(): boolean {
+        while (true) {
+            switch (this.ReadChar()) {
+                case kEof:
+                    return false;
+
+                case '\n':
+                    this.Newline();
+                    return true;
+            }
+        }
+    }
+
+
+    ReadWhitespace(): void {
+        while (true) {
+            switch (this.PeekChar()) {
+                case ' ':
+                case '\t':
+                case '\r':
+                    this.ReadChar();
+                    break;
+
+                case '\n':
+                    this.ReadChar();
+                    this.Newline();
+                    break;
+
+                default:
+                    return;
+            }
+        }
+    }
+
+
+    GetStringToken(): Token {
+        const saved_token_start = this.token_start;
+        let has_error: boolean = false;
+        let in_string: boolean = true;
+        this.ReadChar();
+        while (in_string) {
+            switch (this.ReadChar()) {
+                case kEof:
+                    return this.BareToken(TokenType.Eof);
+
+                case '\n':
+                    this.token_start = this.cursor - 1;
+                    throw new Error("newline in string");
+                    has_error = true;
+                    this.Newline();
+                    continue;
+
+                case '"':
+                    if (this.PeekChar() == '"') {
+                        throw new Error("invalid string token");
+                        has_error = true;
+                    }
+                    in_string = false;
+                    break;
+
+                case '\\': {
+                    switch (this.ReadChar()) {
+                        case 't':
+                        case 'n':
+                        case 'r':
+                        case '"':
+                        case '\'':
+                        case '\\':
+                            // Valid escape.
+                            break;
+
+                        case '0':
+                        case '1':
+                        case '2':
+                        case '3':
+                        case '4':
+                        case '5':
+                        case '6':
+                        case '7':
+                        case '8':
+                        case '9':
+                        case 'a':
+                        case 'b':
+                        case 'c':
+                        case 'd':
+                        case 'e':
+                        case 'f':
+                        case 'A':
+                        case 'B':
+                        case 'C':
+                        case 'D':
+                        case 'E':
+                        case 'F':  // Hex byte escape.
+                            if (IsHexDigit(this.PeekChar())) {
+                                this.ReadChar();
+                            } else {
+                                this.token_start = this.cursor - 2;
+                                throw new Error("bad escape \"%.*s\"" + this.GetText);
+                                has_error = true;
+                            }
+                            break;
+
+                        case 'u': {
+                            this.token_start = this.cursor - 2;
+                            if (this.ReadChar() != '{') {
+                                throw new Error("bad escape \"%.*s\"" + this.GetText);
+                                has_error = true;
+                            }
+
+                            // Value must be a valid unicode scalar value.
+                            let digit: number;
+                            let scalar_value: number = 0;
+
+                            while (IsHexDigit(this.PeekChar())) {
+                                digit = ParseHexdigit(this.source[this.cursor++]);
+
+                                scalar_value = (scalar_value << 4) | digit;
+                                // Maximum value of a unicode code point.
+                                if (scalar_value >= 0x110000) {
+                                    throw new Error("bad escape \"%.*s\"" + this.GetText);
+                                    has_error = true;
+                                }
+                            }
+
+                            if (this.PeekChar() != '}') {
+                                throw new Error("bad escape \"%.*s\"" + this.GetText);
+                                has_error = true;
+                            }
+
+                            // Scalars between 0xd800 and 0xdfff are not allowed.
+                            if ((scalar_value >= 0xd800 && scalar_value < 0xe000) ||
+                                this.token_start == this.cursor - 3) {
+                                this.ReadChar();
+                                throw new Error("bad escape \"%.*s\"" + this.GetText);
+                                has_error = true;
+                            }
+                            break;
+                        }
+
+                        default:
+                            this.token_start = this.cursor - 2;
+                            throw new Error("bad escape \"%.*s\"" + this.GetText);
+                            has_error = true;
+                    }
+                    break;
                 }
-                break;
-            case ':':
-                this.addToken(this.matches(':') ? TokenType.DOUBLECOLON : TokenType.COLON);
-                break;
-            // All non-significant whitespace
-            case ' ':
-                break;
-            // CR LF on Windows
-            case '\r':
-                if (this.matches('\n')) {
-                    // fall through
+            }
+        }
+        this.token_start = saved_token_start;
+        if (has_error) {
+            return new Token(TokenType.Invalid, this.GetText(), this.line, this.col, this.cursor);
+        }
+
+        return this.TextToken(TokenType.Text);
+    }
+
+    Newline() {
+        this.line++;
+        this.cursor++;
+        this.col = 0;
+    }
+
+
+    GetNumberToken(token_type: TokenType): Token {
+        if (this.ReadNum()) {
+            if (this.MatchChar('.')) {
+                token_type = TokenType.Float;
+                if (IsDigit(this.PeekChar()) && !this.ReadNum()) {
+                    return this.GetReservedToken();
+                }
+            }
+            if (this.MatchChar('e') || this.MatchChar('E')) {
+                token_type = TokenType.Float;
+                this.ReadSign();
+                if (!this.ReadNum()) {
+                    return this.GetReservedToken();
+                }
+            }
+            if (this.NoTrailingReservedChars()) {
+                if (token_type == TokenType.Float) {
+                    return this.LiteralToken(token_type, LiteralType.Float);
                 } else {
-                    break;
+                    return this.LiteralToken(token_type, LiteralType.Int);
                 }
-            case '\n':
-                this.addToken(TokenType.NEWLINE);
-                this.line += 1;
-                this.col = 0;
-                // @TODO fix me
-                // // Avoid lines that are completely empty.
-                // if (this.peek() === '\n' || this.peek() === '\r') {
-                //     this.advance();
-                //     if (this.peek() === '\n') {
-                //         this.advance();
-                //     }
-                //     this.addToken(TokenType.NEWLINE);
-                //     break;
-                // }
-                this.prevLineLeadingWhiteSpace = this.currLineLeadingWhiteSpace;
-                this.currLineLeadingWhiteSpace = 0;
-                // Detect significant whitespace
-                while (this.peek() === " " && !this.isAtEnd()) {
-                    this.currLineLeadingWhiteSpace += 1;
-                    // Consume the rest of the line's leading whitespace.
-                    this.advance();
+            }
+        }
+        return this.GetReservedToken();
+    }
+
+    GetHexNumberToken(token_type: TokenType): Token {
+        if (this.ReadHexNum()) {
+            if (this.MatchChar('.')) {
+                token_type = TokenType.Float;
+                if (IsHexDigit(this.PeekChar()) && !this.ReadHexNum()) {
+                    return this.GetReservedToken();
                 }
-                if (this.currLineLeadingWhiteSpace > this.prevLineLeadingWhiteSpace) {
-                    if (this.currLineLeadingWhiteSpace % 4 !== 0) {
-                        throw new TokenizerErrors.NonFourIndentError(this.line, this.col, this.source, this.current);
-                    }
-                    const indents = Math.floor((this.currLineLeadingWhiteSpace - this.prevLineLeadingWhiteSpace) / 4);
-                    for (let i = 0; i < indents; ++i) {
-                        this.addToken(TokenType.INDENT);
-                    }
-                    break;
+            }
+            if (this.MatchChar('p') || this.MatchChar('P')) {
+                token_type = TokenType.Float;
+                this.ReadSign();
+                if (!this.ReadNum()) {
+                    return this.GetReservedToken();
                 }
-                if (this.currLineLeadingWhiteSpace < this.prevLineLeadingWhiteSpace) {
-                    const indents = Math.floor((this.prevLineLeadingWhiteSpace - this.currLineLeadingWhiteSpace) / 4);
-                    for (let i = 0; i < indents; ++i) {
-                        this.addToken(TokenType.DEDENT);
-                    }
-                    break;
+            }
+            if (this.NoTrailingReservedChars()) {
+                if (token_type == TokenType.Float) {
+                    return this.LiteralToken(token_type, LiteralType.Hexfloat);
+                } else {
+                    return this.LiteralToken(token_type, LiteralType.Int);
                 }
-                break;
-            // String
-            case '"':
-                while (this.peek() != '"' && this.peek() != '\n' && !this.isAtEnd()) {
-                    this.advance();
+            }
+        }
+        return this.GetReservedToken();
+    }
+
+    GetInfToken(): Token {
+        if (this.MatchString("inf")) {
+            if (this.NoTrailingReservedChars()) {
+                return this.LiteralToken(TokenType.Float, LiteralType.Infinity);
+            }
+            return this.GetReservedToken();
+        }
+        return this.GetKeywordToken();
+    }
+
+    NoTrailingReservedChars(): boolean {
+        return this.ReadReservedChars() == ReservedChars.None;
+    }
+
+    GetNanToken(): Token {
+        if (this.MatchString("nan")) {
+            if (this.MatchChar(':')) {
+                if (this.MatchString("0x") && this.ReadHexNum() && this.NoTrailingReservedChars()) {
+                    return this.LiteralToken(TokenType.Float, LiteralType.Nan);
                 }
-                if (this.peek() === '\n' || this.isAtEnd()) {
-                    throw new TokenizerErrors.UnterminatedStringError(this.line, this.col, this.source, this.start, this.current);
+            } else if (this.NoTrailingReservedChars()) {
+                return this.LiteralToken(TokenType.Float, LiteralType.Nan);
+            }
+        }
+        return this.GetKeywordToken();
+    }
+
+    GetNameEqNumToken(name: string, token_type: TokenType): Token {
+        if (this.MatchString(name)) {
+            if (this.MatchString("0x")) {
+                if (this.ReadHexNum() && this.NoTrailingReservedChars()) {
+                    return this.TextToken(token_type, name.length);
                 }
-                // Consume closing "
-                this.advance();
-                this.addToken(TokenType.STRING);
-                break;
-            // Number... I wish JS had match statements :(
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-                this.number();
-                break;
-            //// Everything else
-            case '(':
-                this.addToken(TokenType.LPAR);
-                break;
-            case ')':
-                this.addToken(TokenType.RPAR);
-                break;
-            case ',':
-                this.addToken(TokenType.COMMA);
-                break;
-            //// OPERATORS
-            case '-':
-                if (this.matches('=')) {
-                    this.raiseForbiddenOperator();
-                }
-                this.addToken(TokenType.MINUS);
-                break;
-            case '+':
-                if (this.matches('=')) {
-                    this.raiseForbiddenOperator();
-                }
-                this.addToken(TokenType.PLUS);
-                break;
-            case '*':
-                if (this.matches('=')) {
-                    this.raiseForbiddenOperator();
-                }
-                this.addToken(this.matches('*') ? TokenType.DOUBLESTAR : TokenType.STAR);
-                break;
-            case '/':
-                if (this.matches('=')) {
-                    this.raiseForbiddenOperator();
-                }
-                this.addToken(this.matches('/') ? TokenType.DOUBLESLASH : TokenType.SLASH);
-                break;
-            case '%':
-                if (this.matches('=')) {
-                    this.raiseForbiddenOperator();
-                }
-                this.addToken(TokenType.PERCENT);
-                break;
-            case '!':
-                this.addToken(this.matches('=') ? TokenType.NOTEQUAL : TokenType.BANG);
-                break;
-            case '=':
-                this.addToken(this.matches('=') ? TokenType.DOUBLEEQUAL : TokenType.EQUAL);
-                break;
-            case '<':
-                this.addToken(this.matches('=') ? TokenType.LESSEQUAL : TokenType.LESS);
-                break;
-            case '>':
-                this.addToken(this.matches('=') ? TokenType.GREATEREQUAL : TokenType.GREATER);
-                break;
-            default:
-                // Identifier start
-                if (c === '_' || this.isAlpha(c)) {
-                    this.name();
-                    break;
-                }
-                this.matchForbiddenOperator(c);
-                throw new TokenizerErrors.UnknownTokenError(c, this.line, this.col, this.source, this.current);
+            } else if (this.ReadNum() && this.NoTrailingReservedChars()) {
+                return this.TextToken(token_type, name.length);
+            }
+        }
+        return this.GetKeywordToken();
+    }
+
+    GetIdToken(): Token {
+        this.ReadChar();
+        if (this.ReadReservedChars() == ReservedChars.Id) {
+            return this.TextToken(TokenType.Var);
+        }
+
+        return this.TextToken(TokenType.Reserved);
+    }
+
+    GetKeywordToken(): Token {
+        this.ReadReservedChars();
+        const text = this.GetText();
+        
+        if (!isKeyWord(text)) {
+            return this.TextToken(TokenType.Reserved);
+        }
+        const tokenType = getTokenType(text);
+        const valueType = getType(text);
+        const opcodeType = getOpcodeType(text);
+        if (IsTokenTypeBare(tokenType)) {
+            return this.BareToken(tokenType!);
+        } else if (IsTokenTypeType(tokenType) ||
+            IsTokenTypeRefKind(tokenType)) {
+            return new Token(tokenType!, text, this.line, this.col, this.cursor);
+            // return new Token(GetLocation(), tokenType, valueType);
+        } else {
+            assert(IsTokenTypeOpcode(tokenType));
+            return new Token(tokenType!, text, this.line, this.col, this.cursor);
+            // return new Token(GetLocation(), tokenType, opcodeType);
         }
     }
 
-    private matchForbiddenOperator(ch: string) {
-        switch (ch) {
-            case '@':
-            case '|':
-            case '&':
-            case '~':
-            case '^':
-                this.matches('=');
-                this.raiseForbiddenOperator();
+    ReadReservedChars() {
+        let ret = ReservedChars.None;
+        while (true) {
+            let peek = this.PeekChar();
+            if (IsIdChar(peek)) {
+                this.ReadChar();
+                if (ret == ReservedChars.None) {
+                    ret = ReservedChars.Id;
+                }
+            } else if (peek == '"') {
+                this.GetStringToken();
+                ret = ReservedChars.Some;
+            } else {
                 break;
-            default:
-                break;
+            }
+        }
+        return ret;
+    }
+
+    ReadSign() {
+        if (this.PeekChar() == '+' || this.PeekChar() == '-') {
+            this.ReadChar();
         }
     }
 
-    scanEverything(): Token[] {
-        while (!this.isAtEnd()) {
-            this.start = this.current;
-            this.scanToken();
+    ReadNum(): boolean {
+        if (IsDigit(this.PeekChar())) {
+            this.ReadChar();
+            return this.MatchChar('_') || IsDigit(this.PeekChar()) ? this.ReadNum() : true;
         }
-        this.tokens.push(new Token(TokenType.ENDMARKER, "", this.line, this.col, this.current));
-        return this.tokens
+        return false;
     }
 
-    printTokens() {
-        for (const token of this.tokens) {
-            console.log(`${token.indexInSource}:${token.line}-${token.line},${token.indexInSource + token.lexeme.length}\t\t\t\
-            ${TokenType[token.type]}\t\t\t'${token.lexeme}'`);
+    ReadHexNum(): boolean {
+        if (IsHexDigit(this.PeekChar())) {
+            this.ReadChar();
+            return this.MatchChar('_') || IsHexDigit(this.PeekChar()) ? this.ReadHexNum() : true;
         }
+        return false;
     }
-    private raiseForbiddenOperator() {
-        throw new TokenizerErrors.ForbiddenOperatorError(this.line, this.col, this.source, this.start, this.current);
+
+    BareToken(token_type: TokenType): Token {
+        return new Token(token_type, "", this.line, this.col, this.cursor);
     }
+
+    // TODO: need to do something with literal_type
+    LiteralToken(token_type: TokenType, literal_type: LiteralType): Token {
+        // return Token(GetLocation(), token_type, Literal(literal_type, GetText()));
+        return new Token(token_type, this.GetText(), this.line, this.col, this.cursor);
+    }
+
+    TextToken(token_type: TokenType, offset: number = 0): Token {
+        return new Token(token_type, this.GetText(offset), this.line, this.col, this.cursor);
+    }
+
+    GetText(offset: number = 0): string {
+        return this.source.slice(this.token_start + offset, this.cursor + 1)
+    }
+
+    GetReservedToken(): Token {
+        this.ReadReservedChars();
+        return this.TextToken(TokenType.Reserved);
+    }
+
 }
