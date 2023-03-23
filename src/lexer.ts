@@ -34,7 +34,7 @@ function isKeyword(c: string) {
 }
 function isIdChar(c: string) {
   assert(c.length === 1);
-  return /[!-~]/u.test(c) && /[^"(),;=[]\{\}]/u.test(c);
+  return /[!-~]/u.test(c) && /[^"(),;=[\]{}]/u.test(c);
 }
 
 export class Lexer {
@@ -615,13 +615,13 @@ export class Lexer {
       return this.bareToken(tokenType!);
     }
     if (isTokenTypeType(tokenType) || isTokenTypeRefKind(tokenType)) {
-      return new Token(tokenType!, text, this.line, this.col, this.cursor);
+      return new Token(tokenType, text, this.line, this.col, this.cursor, undefined, valueType);
       // return new Token(GetLocation(), tokenType, valueType);
     }
     console.log({ tokenType });
     console.log({ text });
     assert(isTokenTypeOpcode(tokenType));
-    return new Token(tokenType!, text, this.line, this.col, this.cursor);
+    return new Token(tokenType, text, this.line, this.col, this.cursor, opcodeType);
     // return new Token(GetLocation(), tokenType, opcodeType);
   }
 }

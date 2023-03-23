@@ -1,6 +1,4 @@
 import { watch, WatchListener } from 'fs-extra';
-import { BASE_DIR } from './directories';
-
 const args = process.argv.slice(2);
 
 const PREPROCESSOR_FLAG = '-P';

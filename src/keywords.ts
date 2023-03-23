@@ -2,7 +2,7 @@ import { OpcodeType } from './opcode';
 import { TokenType } from './token';
 import { Type } from './type';
 
-export const wordlist: Record<string, [TokenType | undefined, OpcodeType | undefined, Type | undefined]> = {
+export const wordlist: Record<string, [TokenType, OpcodeType | undefined, Type | undefined]> = {
   'array': [TokenType.Array, undefined, Type.Array],
   'assert_exception': [TokenType.AssertException, undefined, undefined],
   'assert_exhaustion': [TokenType.AssertExhaustion, undefined, undefined],
@@ -601,7 +601,7 @@ export function isKeyWord(str: string) {
 export function getType(str: string): Type | undefined {
   return wordlist[str][2];
 }
-export function getTokenType(str: string): TokenType | undefined {
+export function getTokenType(str: string): TokenType {
   return wordlist[str][0];
 }
 export function getOpcodeType(str: string): OpcodeType | undefined {

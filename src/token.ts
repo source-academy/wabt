@@ -1,5 +1,10 @@
+import { type OpcodeType } from './opcode';
+import { type Type } from './type';
+
 export class Token {
   type: TokenType;
+  opcodeType: OpcodeType | undefined;
+  valueType: Type | undefined;
   lexeme: string;
   line: number;
   col: number;
@@ -10,12 +15,16 @@ export class Token {
     line: number,
     col: number,
     indexInSource: number,
+    opcodeType: OpcodeType | undefined = undefined,
+    valueType: Type | undefined = undefined,
   ) {
     this.type = type;
     this.lexeme = lexeme;
     this.line = line;
     this.col = col;
     this.indexInSource = indexInSource;
+    this.opcodeType = opcodeType;
+    this.valueType = valueType;
   }
   static EofToken(
     lexeme: string,
