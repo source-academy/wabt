@@ -1,4 +1,4 @@
-export enum Type {
+export enum ValueType {
   I32, // 0x7f
   I64, // 0x7e
   F32, // 0x7d
@@ -20,45 +20,48 @@ export enum Type {
   I32U, // Not actually specified, but used internally with load/store
 }
 
-export function getValue(t: Type) {
-  switch (t) {
-    case Type.I32:
-      return -0x01; // 0x7f
-    case Type.I64:
-      return -0x02; // 0x7e
-    case Type.F32:
-      return -0x03; // 0x7d
-    case Type.F64:
-      return -0x04; // 0x7c
-    case Type.V128:
-      return -0x05; // 0x7b
-    case Type.I8:
-      return -0x06; // 0x7a  : packed-type only, used in gc and as v128 lane
-    case Type.I16:
-      return -0x07; // 0x79  : packed-type only, used in gc and as v128 lane
-    case Type.FuncRef:
-      return -0x10; // 0x70
-    case Type.ExternRef:
-      return -0x11; // 0x6f
-    case Type.Reference:
-      return -0x15; // 0x6b
-    case Type.Func:
-      return -0x20; // 0x60
-    case Type.Struct:
-      return -0x21; // 0x5f
-    case Type.Array:
-      return -0x22; // 0x5e
-    case Type.Void:
-      return -0x40; // 0x40
-    case Type.___:
-      return -0x40; // Convenient for the opcode table in opcode.h
-    case Type.Any:
-      return 0; // Not actually specified, but useful for type-checking
-    case Type.I8U:
-      return 4; // Not actually specified, but used internally with load/store
-    case Type.I16U:
-      return 6; // Not actually specified, but used internally with load/store
-    case Type.I32U:
-      return 7; // Not actually specified, but used internally with load/store
+export namespace ValueType {
+  export function getValue(t: ValueType): number {
+    switch (t) {
+      case ValueType.I32:
+        return 0x7f; // 0x7f
+      case ValueType.I64:
+        return 0x7e; // 0x7e
+      case ValueType.F32:
+        return 0x7d; // 0x7d
+      case ValueType.F64:
+        return 0x7c; // 0x7c
+      case ValueType.V128:
+        return 0x7b; // 0x7b
+      case ValueType.I8:
+        return 0x7a; // 0x7a  : packed-type only, used in gc and as v128 lane
+      case ValueType.I16:
+        return 0x79; // 0x79  : packed-type only, used in gc and as v128 lane
+      case ValueType.FuncRef:
+        return 0x70; // 0x70
+      case ValueType.ExternRef:
+        return 0x6f; // 0x6f
+      case ValueType.Reference:
+        return 0x6b; // 0x6b
+      case ValueType.Func:
+        return 0x60; // 0x60
+      case ValueType.Struct:
+        return 0x5f; // 0x5f
+      case ValueType.Array:
+        return 0x5e; // 0x5e
+      case ValueType.Void:
+        return 0x40; // 0x40
+      case ValueType.___:
+        return -0x40; // Convenient for the opcode table in opcode.h
+      case ValueType.Any:
+        return 0; // Not actually specified, but useful for type-checking
+      case ValueType.I8U:
+        return 4; // Not actually specified, but used internally with load/store
+      case ValueType.I16U:
+        return 6; // Not actually specified, but used internally with load/store
+      case ValueType.I32U:
+        return 7; // Not actually specified, but used internally with load/store
+    }
+    throw new Error('Unexpected Value Type');
   }
 }

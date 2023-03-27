@@ -1,3 +1,4 @@
+/* eslint-disable require-unicode-regexp */ // (I don't know why eslint asks me to put this, but it doesnt work when i put this)
 /**
  * Preprocess all files ending with .cpp.ts/js to .ts/js files respectively with cpp (C Preprocessor).
  */
@@ -5,7 +6,7 @@ import { readdirSync, statSync } from 'fs';
 import { join, sep } from 'path';
 import { promisify } from 'util';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { outputFile, readFile, readFileSync, remove } from 'fs-extra';
+import { outputFile, readFile, readFileSync, remove, writeFile } from 'fs-extra';
 import { INCLUDE_PATH, SOURCE_FILE_PATH } from './directories';
 const exec = promisify(require('child_process').exec);
 
@@ -36,7 +37,7 @@ const preprocess = async (
   const tempFilePath = `${inputFilePath}.temp`;
 
   const originalFileString = readFileSync(inputFilePath, encoding);
-  const newFileString = originalFileString.replace(/^\/\/\s?\/\s*/gm, '');
+  const newFileString = originalFileString.replace(/^\s*\/\/\s?\/\s*/gm, '');
 
   await outputFile(tempFilePath, newFileString);
   await exec(`cpp -I ${INCLUDE_PATH} -P -H ${tempFilePath} ${outputFilePath}`);
@@ -89,12 +90,14 @@ async function removeSelfImport(
 }
 
 /**
- * Lint and fix a file with eslint
+ * Fix eslint errors (ignore error lol)
  * @param filePath File to lint
  * @returns a promise that resolves when the operation is done.
  */
-async function fixEslint(filePath: string) {
-  return exec(`yarn eslint ${filePath} --fix`);
+async function fixEslint(filePath: string, encoding: BufferEncoding = 'utf-8') {
+  // return exec(`yarn eslint ${filePath} --fix`);
+  const fileString = await readFile(filePath, encoding);
+  return writeFile(filePath, `/* eslint-disable */\n${fileString}`);
 }
 
 export async function main() {

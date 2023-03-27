@@ -1,10 +1,10 @@
 const kEof = '\0';
 
 import {
-  IsTokenTypeBare as isTokenTypeBare,
-  IsTokenTypeOpcode as isTokenTypeOpcode,
-  IsTokenTypeRefKind as isTokenTypeRefKind,
-  IsTokenTypeType as isTokenTypeType,
+  isTokenTypeBare,
+  isTokenTypeOpcode,
+  isTokenTypeRefKind,
+  isTokenTypeType,
   Token,
   TokenType,
 } from './token';
@@ -615,11 +615,11 @@ export class Lexer {
       return this.bareToken(tokenType!);
     }
     if (isTokenTypeType(tokenType) || isTokenTypeRefKind(tokenType)) {
-      return new Token(tokenType, text, this.line, this.col, this.cursor, undefined, valueType);
+      return new Token(tokenType, text, this.line, this.col, this.cursor, null, valueType);
       // return new Token(GetLocation(), tokenType, valueType);
     }
-    console.log({ tokenType });
-    console.log({ text });
+    // console.log({ tokenType });
+    // console.log({ text });
     assert(isTokenTypeOpcode(tokenType));
     return new Token(tokenType, text, this.line, this.col, this.cursor, opcodeType);
     // return new Token(GetLocation(), tokenType, opcodeType);

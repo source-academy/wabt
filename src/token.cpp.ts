@@ -1,4 +1,6 @@
+import { type OpcodeType } from './opcode';
 import { TokenType } from './token';
+import { type ValueType } from './type';
 
 export class Token {
   type: TokenType;
@@ -6,6 +8,8 @@ export class Token {
   line: number;
   col: number;
   indexInSource: number;
+  valueType: ValueType | null;
+  opcodeType: OpcodeType | null;
 
   constructor(
     type: TokenType,
@@ -13,12 +17,16 @@ export class Token {
     line: number,
     col: number,
     indexInSource: number,
+    opcodeType: OpcodeType | null = null,
+    valueType: ValueType | null = null,
   ) {
     this.type = type;
     this.lexeme = lexeme;
     this.line = line;
     this.col = col;
     this.indexInSource = indexInSource;
+    this.opcodeType = opcodeType;
+    this.valueType = valueType;
   }
 
   static EofToken(
@@ -27,13 +35,13 @@ export class Token {
     col: number,
     indexInSource: number,
   ) {
-    return new Token(TokenType.Eof, lexeme, line, col, indexInSource);
+    return new Token(TokenType.Eof, lexeme, line, col, indexInSource, null, null);
   }
 }
 
 // eslint-disable-next-line complexity
-export function isTokenTypeBare(token_type: TokenType | undefined): boolean {
-  if (typeof token_type === 'undefined') return false;
+export function isTokenTypeBare(token_type: TokenType | null): boolean {
+  if (token_type === null) return false;
   return (
     token_type === TokenType.Invalid
     || token_type === TokenType.Array
@@ -91,8 +99,8 @@ export function isTokenTypeBare(token_type: TokenType | undefined): boolean {
   );
 }
 
-function isTokenTypeString(token_type: TokenType | undefined): boolean {
-  if (typeof token_type === 'undefined') return false;
+function isTokenTypeString(token_type: TokenType | null): boolean {
+  if (token_type === null) return false;
   return (
     token_type === TokenType.AlignEqNat
     || token_type === TokenType.LparAnn
@@ -103,14 +111,14 @@ function isTokenTypeString(token_type: TokenType | undefined): boolean {
   );
 }
 
-export function isTokenTypeType(token_type: TokenType | undefined): boolean {
-  if (typeof token_type === 'undefined') return false;
+export function isTokenTypeType(token_type: TokenType | null): boolean {
+  if (token_type === null) return false;
   return token_type === TokenType.ValueType;
 }
 
 // eslint-disable-next-line complexity
-export function isTokenTypeOpcode(token_type: TokenType | undefined): boolean {
-  if (typeof token_type === 'undefined') return false;
+export function isTokenTypeOpcode(token_type: TokenType | null): boolean {
+  if (token_type === null) return false;
   return (
     token_type === TokenType.AtomicFence
     || token_type === TokenType.AtomicLoad
@@ -181,8 +189,8 @@ export function isTokenTypeOpcode(token_type: TokenType | undefined): boolean {
   );
 }
 
-export function isTokenTypeLiteral(token_type: TokenType | undefined): boolean {
-  if (typeof token_type === 'undefined') return false;
+export function isTokenTypeLiteral(token_type: TokenType | null): boolean {
+  if (token_type === null) return false;
   return (
     token_type === TokenType.Float
     || token_type === TokenType.Int
@@ -190,8 +198,8 @@ export function isTokenTypeLiteral(token_type: TokenType | undefined): boolean {
   );
 }
 
-export function isTokenTypeRefKind(token_type: TokenType | undefined): boolean {
-  if (typeof token_type === 'undefined') return false;
+export function isTokenTypeRefKind(token_type: TokenType | null): boolean {
+  if (token_type === null) return false;
   return (
     token_type === TokenType.Func
     || token_type === TokenType.Extern

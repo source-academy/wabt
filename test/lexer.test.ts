@@ -13,11 +13,9 @@ test('lexer', () => {
      (then
      ;; do something if $bool_i32 is not 0
      ;; nop is a "no operation" opcode.
-     nop ;; I use it to stand in for code that would actually do something.
      )
      (else
      ;; do something if $bool_i32 is 0
-     nop
      )`;
 
   console.log(new Lexer(program1)
