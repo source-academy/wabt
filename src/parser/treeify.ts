@@ -1,6 +1,7 @@
 import { TokenType, type Token } from '../token';
 import { type TokenTree } from './tree_types';
 import assert from 'assert';
+import { tokenize } from '../lexer/lexer';
 
 /**
  * Parse a sequence of tokens to a tree of tokens
@@ -19,12 +20,11 @@ class Parser {
   cursor: number = 0;
 
   constructor(tokens: Token[]) {
-    // This is because the lexer automatically omits the first bracket (and makes the parser more robust in tests).
-    if (tokens[0].type === TokenType.Lpar) {
-      this.tokens = tokens.slice(1);
-    } else {
-      this.tokens = tokens;
+    // This is because the lexer automatically omits the first bracket (and this makes the parser more robust in tests).
+    if (tokens[0].type !== TokenType.Lpar) {
+      tokens.unshift(tokenize('(')[0]);
     }
+    this.tokens = tokens;
   }
 
   private peek(): Token {
@@ -35,33 +35,34 @@ class Parser {
     return this.tokens[this.cursor++];
   }
 
+  private peekOffset(i: number): Token {
+    assert(this.cursor + i >= 0 && this.cursor + i < this.tokens.length);
+    return this.tokens[this.cursor + i];
+  }
+
   private isEof(): boolean {
     return this.cursor >= this.tokens.length;
   }
 
   getGrouping(): TokenTree {
-    const getNestedGrouping: (() => Token | TokenTree) = () => {
-      const token = this.read();
-      console.log(token);
-      if (token.type === TokenType.Lpar) {
-        return getNestedGrouping();
-      }
-      if (token.opcodeType === null) { // If token is not opcode, token is by itself
-        return token;
-      }
-
-      const subtree: TokenTree = [];
-      const operandNumber = token.getOpcodeParamLength();
-
-      for (let i = 0; i < operandNumber; i++) {
-        subtree.push(getNestedGrouping());
-      }
-      return subtree;
-    };
-
     const tree: TokenTree = [];
     while (!this.isEof()) {
-      tree.push(getNestedGrouping());
+      const token = this.read();
+      if (token.lexeme === 'f64.const') {
+        console.log(token);
+        console.log(`
+          ${token.lexeme}
+          ${token.opcodeType !== null}
+          ${token.getOpcodeParamLength()}
+        `);
+      }
+      if (token.type === TokenType.Lpar) {
+        tree.push(this.getGrouping());
+      } else if (token.type === TokenType.Rpar) {
+        return tree;
+      } else {
+        tree.push(token);
+      }
     }
 
     return tree;

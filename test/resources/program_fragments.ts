@@ -3,21 +3,17 @@ import 'reflect-metadata';
 import { plainToInstance } from 'class-transformer';
 import { type IntermediateRepresentation } from '../../src/parser/ir';
 import { Token } from '../../src/token';
-import { Tree, type TokenTree } from '../../src/parser/tree_types';
+import { type Tree, type TokenTree } from '../../src/parser/tree_types';
 import { getSingleToken } from '../../src/lexer/lexer';
 
-interface TestCaseFragment {
-  str: string;
-  tokens: Token[];
-  ir: IntermediateRepresentation;
-}
 
-interface TestCase extends TestCaseFragment {
-  str: string;
-  tokens: Token[];
-  tokenTree: TokenTree;
-  ir: IntermediateRepresentation;
-  bytecode: Uint8Array;
+
+interface TestCase {
+  str?: string;
+  tokens?: Token[];
+  tokenTreeStr?: Tree<string>;
+  ir?: IntermediateRepresentation;
+  bytecode?: Uint8Array;
 }
 
 export const f64_addition_sexpr = {
@@ -159,4 +155,20 @@ export const f64_addition_stack = {
     ['f64.const', '1.5'],
     'f64.add',
   ],
+};
+
+export const double_function: TestCase = {
+  str: `(func (param $p i32)
+  (result i32)
+  local.get $p
+  local.get $p
+  i32.add)
+`,
+
+  tokenTreeStr: ['func',
+    ['param', '$p', 'i32'],
+    ['result', 'i32'],
+    ['local.get', '$p'],
+    ['local.get', '$p'],
+    ['i32.add']],
 };
