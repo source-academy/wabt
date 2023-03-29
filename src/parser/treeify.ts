@@ -20,10 +20,6 @@ class Parser {
   cursor: number = 0;
 
   constructor(tokens: Token[]) {
-    // This is because the lexer automatically omits the first bracket (and this makes the parser more robust in tests).
-    if (tokens[0].type !== TokenType.Lpar) {
-      tokens.unshift(tokenize('(')[0]);
-    }
     this.tokens = tokens;
   }
 
@@ -48,14 +44,6 @@ class Parser {
     const tree: TokenTree = [];
     while (!this.isEof()) {
       const token = this.read();
-      if (token.lexeme === 'f64.const') {
-        console.log(token);
-        console.log(`
-          ${token.lexeme}
-          ${token.opcodeType !== null}
-          ${token.getOpcodeParamLength()}
-        `);
-      }
       if (token.type === TokenType.Lpar) {
         tree.push(this.getGrouping());
       } else if (token.type === TokenType.Rpar) {

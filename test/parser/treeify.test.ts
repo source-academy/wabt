@@ -20,31 +20,34 @@ import { f64_addition_sexpr, f64_addition_stack } from '../resources/program_fra
 //     .toEqual(f64_addition_stack.tokenTreeStr);
 // });
 
-// test('avoid making stack expressions trees', () => {
-//   const str = `
-//     f64.const 1
-//     f64.const 1
-//     f64.add
-//     f64.const 1
-//     f64.const 1
-//     f64.add
-//     f64.add
-//     `;
+test('avoid making stack expressions trees', () => {
+  const str = `
+    f64.const 1
+    f64.const 1
+    f64.add
+    f64.const 1
+    f64.const 1
+    f64.add
+    f64.add
+    `;
 
-//   const expected = [
-//     ['f64.const', '1'],
-//     ['f64.const', '1'],
-//     'f64.add',
-//     ['f64.const', '1'],
-//     ['f64.const', '1'],
-//     'f64.add',
-//     'f64.add',
-//   ];
+  const expected = [
+    'f64.const',
+    '1',
+    'f64.const',
+    '1',
+    'f64.add',
+    'f64.const',
+    '1',
+    'f64.const',
+    '1',
+    'f64.add',
+    'f64.add',
+  ];
 
-//   console.log(TokenTree.getStringArrayRepr(getTokenTree(tokenize(str))));
-//   expect(TokenTree.getStringArrayRepr(getTokenTree(tokenize(str))))
-//     .toEqual(expected);
-// });
+  expect(TokenTree.getStringArrayRepr(getTokenTree(tokenize(str))))
+    .toEqual(expected);
+});
 
 test('parse expressions trees', () => {
   const str = `
@@ -59,18 +62,9 @@ test('parse expressions trees', () => {
 
   const expected = [
     ['f64.add',
-      ['f64.add',
-        ['f64.const', '1'],
-        ['f64.const', '1']],
-      ['f64.add',
-        ['f64.const', '1'],
-        ['f64.const', '1']]],
+      ['f64.add', 'f64.const', '1', 'f64.const', '1'],
+      ['f64.add', 'f64.const', '1', 'f64.const', '1']],
   ];
-
-  const tokens = tokenize(str);
-  const tokenTree = getTokenTree(tokens);
-  const tokenTreeStr = TokenTree.getStringArrayRepr(tokenTree);
-  console.log(tokenTreeStr);
 
   expect(TokenTree.getStringArrayRepr(getTokenTree(tokenize(str))))
     .toEqual(expected);
