@@ -1,6 +1,6 @@
 /* eslint-disable array-element-newline */ // (array formatting)
-import { type ModuleExpression } from './ir';
-import { ValueType } from './type';
+import { type ModuleExpression } from './parser/ir';
+import { ValueType } from './common/type';
 import assert from 'assert';
 
 namespace SectionCode {

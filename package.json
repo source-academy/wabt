@@ -32,8 +32,10 @@
     "typescript-eslint": "^0.0.1-alpha.0"
   },
   "dependencies": {
+    "class-transformer": "^0.5.1",
     "lodash": "^4.17.21",
-    "typescript": "*",
+    "reflect-metadata": "^0.1.13",
+    "typescript": "4",
     "wabt": "^1.0.32"
   }
 }

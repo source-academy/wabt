@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { type ProgramTree } from './parser';
-import { type Token } from './token';
-import { type ValueType } from './type';
+import { type ProgramTree } from '../parser_1/parser';
+import { type Token } from '../token';
+import { type ValueType } from '../common/type';
 import assert from 'assert';
+import { type OpcodeType } from '../common/opcode';
 
 export abstract class IntermediateRepresentation {
 
@@ -86,11 +87,13 @@ export class FunctionBody {
   }
 }
 
-export class UnfoldedTokenSequence extends IntermediateRepresentation {
-  contents: Token[];
+export class OperationTree extends IntermediateRepresentation {
+  private operator: OpcodeType;
+  private operands: Token[];
 
-  constructor(contents: Token[]) {
+  constructor(operator: OpcodeType, operands: Token[]) {
     super();
-    this.contents = contents;
+    this.operator = operator;
+    this.operands = operands;
   }
 }

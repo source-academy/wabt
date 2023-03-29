@@ -1,6 +1,6 @@
-import { Lexer } from './lexer';
-import { Parser } from './parser';
 import wabt from 'wabt';
+import { tokenize } from './lexer/lexer';
+import { getTokenTree } from './parser/treeify';
 
 namespace Program1 {
 
@@ -104,12 +104,11 @@ wabt()
     //     write_debug_names: false,
     //   });
     // console.log(text);
-    const lexer = new Lexer(Program1.text);
-    const tokens = lexer.getAllTokens();
-    const parser = new Parser(tokens);
-    // const tree = parser.getGrouping();
-    // console.log(JSON.stringify(tree, undefined, 2));
-    const ir = parser.parse();
 
-    console.log(JSON.stringify(ir, undefined, 2));
+    const tokens = tokenize(Program1.text);
+    const tree = getTokenTree(tokens);
+    console.log(JSON.stringify(tree, undefined, 2));
+    // const ir = parser.parse();
+
+    // console.log(JSON.stringify(ir, undefined, 2));
   });

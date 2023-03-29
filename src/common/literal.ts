@@ -1,7 +1,7 @@
 import assert from 'assert';
 
 // eslint-disable-next-line complexity
-export function ParseHexdigit(c: string): number {
+export function parseHexdigit(c: string): number {
   assert(c.length === 1);
   switch (c) {
     case '0':

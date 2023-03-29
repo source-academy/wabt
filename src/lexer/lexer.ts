@@ -7,12 +7,23 @@ import {
   isTokenTypeType,
   Token,
   TokenType,
-} from './token';
+} from '../token';
+
 import assert from 'assert';
-import { ParseHexdigit as parseHexdigit } from './literal';
-import { LiteralType } from './literal';
-import { isKeyWord } from './keywords.cpp';
-import { getOpcodeType, getTokenType, getType } from './keywords';
+import { LiteralType, parseHexdigit } from '../common/literal';
+import { getOpcodeType, getTokenType, getType, isKeyWord } from '../common/keywords';
+
+export function tokenize(program: string): Token[] {
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  return new Lexer(program)
+    .getAllTokens();
+}
+
+export function getSingleToken(token: string): Token {
+  return new Lexer(token)
+    .getToken();
+}
+
 
 enum ReservedChars {
   None,
@@ -30,14 +41,14 @@ function isHexDigit(c: string) {
 }
 function isKeyword(c: string) {
   assert(c.length === 1);
-  return /a-z/u.test(c);
+  return /[a-z]/u.test(c);
 }
 function isIdChar(c: string) {
   assert(c.length === 1);
   return /[!-~]/u.test(c) && /[^"(),;=[\]{}]/u.test(c);
 }
 
-export class Lexer {
+class Lexer {
   private readonly source: string;
   private readonly tokens: Token[];
   private start: number;
@@ -65,6 +76,7 @@ export class Lexer {
     }
     return tokens;
   }
+
   // eslint-disable-next-line complexity
   getToken(): Token {
     while (true) {
@@ -180,9 +192,11 @@ export class Lexer {
 
         default:
           if (isKeyword(this.peekChar())) {
+            console.log(`peekchar 195: ${this.peekChar()}, ${isKeyword(this.peekChar())}, ${isIdChar(this.peekChar())}`);
             return this.getKeywordToken();
           }
           if (isIdChar(this.peekChar())) {
+            console.log(`peekchar 199: ${this.peekChar()}, ${isKeyword(this.peekChar())}, ${isIdChar(this.peekChar())}`);
             return this.getReservedToken();
           }
           this.readChar();
@@ -192,15 +206,15 @@ export class Lexer {
     }
   }
 
-  peekChar(): string {
+  private peekChar(): string {
     return this.cursor < this.source.length ? this.source[this.cursor] : kEof;
   }
 
-  readChar(): string {
+  private readChar(): string {
     return this.cursor < this.source.length ? this.source[this.cursor++] : kEof;
   }
 
-  matchChar(c: string): boolean {
+  private matchChar(c: string): boolean {
     assert(c.length === 1);
     if (this.peekChar() === c) {
       this.readChar();
@@ -209,7 +223,7 @@ export class Lexer {
     return false;
   }
 
-  matchString(s: string): boolean {
+  private matchString(s: string): boolean {
     const saved_cursor = this.cursor;
     for (let i = 0; i < s.length; i++) {
       const c = s[i];
@@ -221,17 +235,17 @@ export class Lexer {
     return true;
   }
 
-  newline() {
+  private newline() {
     this.line++;
     this.cursor++;
     this.col = 0;
   }
 
-  noTrailingReservedChars(): boolean {
+  private noTrailingReservedChars(): boolean {
     return this.readReservedChars() === ReservedChars.None;
   }
 
-  readReservedChars() {
+  private readReservedChars() {
     let ret = ReservedChars.None;
     while (true) {
       let peek = this.peekChar();
@@ -250,7 +264,7 @@ export class Lexer {
     return ret;
   }
 
-  readBlockComment(): boolean {
+  private readBlockComment(): boolean {
     let nesting = 1;
     while (true) {
       switch (this.readChar()) {
@@ -277,7 +291,7 @@ export class Lexer {
     }
   }
 
-  readLineComment(): boolean {
+  private readLineComment(): boolean {
     while (true) {
       switch (this.readChar()) {
         case kEof:
@@ -290,7 +304,7 @@ export class Lexer {
     }
   }
 
-  readWhitespace(): void {
+  private readWhitespace(): void {
     while (true) {
       switch (this.peekChar()) {
         case ' ':
@@ -310,14 +324,14 @@ export class Lexer {
     }
   }
 
-  readSign(): void {
+  private readSign(): void {
     // TODO: this really doesn't return anything?
     if (this.peekChar() === '+' || this.peekChar() === '-') {
       this.readChar();
     }
   }
 
-  readNum(): boolean {
+  private readNum(): boolean {
     if (isDigit(this.peekChar())) {
       this.readChar();
       return this.matchChar('_') || isDigit(this.peekChar())
@@ -327,7 +341,7 @@ export class Lexer {
     return false;
   }
 
-  readHexNum(): boolean {
+  private readHexNum(): boolean {
     if (isHexDigit(this.peekChar())) {
       this.readChar();
       return this.matchChar('_') || isHexDigit(this.peekChar())
@@ -337,12 +351,12 @@ export class Lexer {
     return false;
   }
 
-  bareToken(token_type: TokenType): Token {
+  private bareToken(token_type: TokenType): Token {
     return new Token(token_type, '', this.line, this.col, this.cursor);
   }
 
   // TODO: need to do something with literal_type
-  literalToken(token_type: TokenType, literal_type: LiteralType): Token {
+  private literalToken(token_type: TokenType, literal_type: LiteralType): Token {
     // return Token(GetLocation(), token_type, Literal(literal_type, GetText()));
     return new Token(
       token_type,
@@ -353,7 +367,7 @@ export class Lexer {
     );
   }
 
-  textToken(token_type: TokenType, offset: number = 0): Token {
+  private textToken(token_type: TokenType, offset: number = 0): Token {
     return new Token(
       token_type,
       this.getText(offset),
@@ -363,17 +377,18 @@ export class Lexer {
     );
   }
 
-  getText(offset: number = 0): string {
+  private getText(offset: number = 0): string {
     return this.source.slice(this.token_start + offset, this.cursor);
   }
 
-  getReservedToken(): Token {
+  private getReservedToken(): Token {
     this.readReservedChars();
+    assert(false);
     return this.textToken(TokenType.Reserved);
   }
 
   // eslint-disable-next-line complexity
-  getStringToken(): Token {
+  private getStringToken(): Token {
     const saved_token_start = this.token_start;
     let has_error: boolean = false;
     let in_string: boolean = true;
@@ -502,7 +517,7 @@ export class Lexer {
     return this.textToken(TokenType.Text);
   }
 
-  getNumberToken(token_type: TokenType): Token {
+  private getNumberToken(token_type: TokenType): Token {
     if (this.readNum()) {
       if (this.matchChar('.')) {
         token_type = TokenType.Float;
@@ -527,7 +542,7 @@ export class Lexer {
     return this.getReservedToken();
   }
 
-  getHexNumberToken(token_type: TokenType): Token {
+  private getHexNumberToken(token_type: TokenType): Token {
     if (this.readHexNum()) {
       if (this.matchChar('.')) {
         token_type = TokenType.Float;
@@ -552,7 +567,7 @@ export class Lexer {
     return this.getReservedToken();
   }
 
-  getInfToken(): Token {
+  private getInfToken(): Token {
     if (this.matchString('inf')) {
       if (this.noTrailingReservedChars()) {
         return this.literalToken(TokenType.Float, LiteralType.Infinity);
@@ -562,7 +577,7 @@ export class Lexer {
     return this.getKeywordToken();
   }
 
-  getNanToken(): Token {
+  private getNanToken(): Token {
     if (this.matchString('nan')) {
       if (this.matchChar(':')) {
         if (
@@ -579,7 +594,7 @@ export class Lexer {
     return this.getKeywordToken();
   }
 
-  getNameEqNumToken(name: string, token_type: TokenType): Token {
+  private getNameEqNumToken(name: string, token_type: TokenType): Token {
     if (this.matchString(name)) {
       if (this.matchString('0x')) {
         if (this.readHexNum() && this.noTrailingReservedChars()) {
@@ -592,7 +607,7 @@ export class Lexer {
     return this.getKeywordToken();
   }
 
-  getIdToken(): Token {
+  private getIdToken(): Token {
     this.readChar();
     if (this.readReservedChars() === ReservedChars.Id) {
       return this.textToken(TokenType.Var);
@@ -601,7 +616,7 @@ export class Lexer {
     return this.textToken(TokenType.Reserved);
   }
 
-  getKeywordToken(): Token {
+  private getKeywordToken(): Token {
     this.readReservedChars();
     const text = this.getText();
 
@@ -612,16 +627,13 @@ export class Lexer {
     const valueType = getType(text);
     const opcodeType = getOpcodeType(text);
     if (isTokenTypeBare(tokenType)) {
-      return this.bareToken(tokenType!);
+      return this.bareToken(tokenType);
     }
     if (isTokenTypeType(tokenType) || isTokenTypeRefKind(tokenType)) {
       return new Token(tokenType, text, this.line, this.col, this.cursor, null, valueType);
-      // return new Token(GetLocation(), tokenType, valueType);
     }
-    // console.log({ tokenType });
-    // console.log({ text });
+
     assert(isTokenTypeOpcode(tokenType));
     return new Token(tokenType, text, this.line, this.col, this.cursor, opcodeType);
-    // return new Token(GetLocation(), tokenType, opcodeType);
   }
 }
