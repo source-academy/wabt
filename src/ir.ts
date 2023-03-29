@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { type ProgramTree } from './parser';
 import { type Token } from './token';
 import { type ValueType } from './type';
@@ -77,18 +78,18 @@ export class FunctionSignature {
  *  (2) WABT function bodies are in a different module section compared to other blocks.
  */
 export class FunctionBody {
-  body: GenericIntermediateRepresentation;
+  body: UnfoldedTokenSequence;
 
   constructor(body: IntermediateRepresentation) {
-    assert(body instanceof GenericIntermediateRepresentation);
+    assert(body instanceof UnfoldedTokenSequence);
     this.body = body;
   }
 }
 
-export class GenericIntermediateRepresentation extends IntermediateRepresentation {
-  contents: ProgramTree | Token[];
+export class UnfoldedTokenSequence extends IntermediateRepresentation {
+  contents: Token[];
 
-  constructor(contents: ProgramTree | Token[]) {
+  constructor(contents: Token[]) {
     super();
     this.contents = contents;
   }

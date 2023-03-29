@@ -3,8 +3,8 @@ import assert from 'assert';
 import {
   FunctionBody, FunctionExpression,
   FunctionSignature,
-  GenericIntermediateRepresentation,
   ModuleExpression,
+  UnfoldedTokenSequence,
   type IntermediateRepresentation,
 } from './ir';
 
@@ -45,6 +45,29 @@ export class ProgramTree {
 
   getBody() {
     return this.contents.slice(1);
+  }
+
+  /**
+   * Unfold a given program tree into from an s-expression to a sequence of tokens for a stack machine
+   * @returns an array of tokens.
+   */
+  unfold(): Token[] {
+    const unfoldedBody = this.getBody()
+      .flatMap((tok) => {
+        if (tok instanceof ProgramTree) { return tok.unfold(); }
+        return [tok];
+      });
+
+
+    if (this.getTypeToken()
+      .isOpcodeToken() && this.getTypeToken()
+      .getOpcodeParamLength() > 0) {
+      assert(this.getBody().length === this.getTypeToken()
+        .getOpcodeParamLength());
+      return [...unfoldedBody, this.getTypeToken()];
+    }
+
+    return [this.getTypeToken(), ...unfoldedBody];
   }
 
   isReservedType(lexeme: string) {
@@ -121,7 +144,7 @@ export class Parser {
       return this.parseFunctionExpression(tree);
     }
 
-    return new GenericIntermediateRepresentation(tree);
+    return new UnfoldedTokenSequence(tree.unfold());
   }
 
   private parseModuleExpression(tree: ProgramTree): ModuleExpression {

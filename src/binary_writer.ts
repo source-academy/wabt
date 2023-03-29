@@ -100,13 +100,11 @@ class BinaryWriter {
 
   private encodeCodeSection(): number[] {
     let func_length = this.module.functionBodies.length;
-    let encoded_func_bodies: number[][] = [
-      ...this.module.functionBodies.map((body) => {
-        const contents = body.body.contents;
-        assert(Array.isArray(contents));
-        contents.map(token => )
-      }),
-    ];
+    let encoded_func_bodies: number[][]
+    = this.module.functionBodies.map((body) => {
+      const contents = body.body.contents;
+      return contents.map((token) => token.getOpcodeEncoding());
+    });
 
     return [SectionCode.Code];
   }

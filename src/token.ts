@@ -1,7 +1,8 @@
 /* eslint-disable */
-import { type OpcodeType } from './opcode';
+import { Opcode, type OpcodeType } from './opcode';
 
 import { type ValueType } from './type';
+import assert from 'assert';
 export class Token {
   type: TokenType;
   lexeme: string;
@@ -34,6 +35,32 @@ export class Token {
     indexInSource: number,
   ) {
     return new Token(TokenType.Eof, lexeme, line, col, indexInSource, null, null);
+  }
+  isBareToken(): boolean {
+    return isTokenTypeBare(this.type);
+  }
+  isStringToken(): boolean {
+    return isTokenTypeString(this.type);
+  }
+  isValueToken(): boolean {
+    return isTokenTypeType(this.type);
+  }
+  isOpcodeToken(): boolean {
+    return isTokenTypeOpcode(this.type);
+  }
+  isLiteral(): boolean {
+    return isTokenTypeLiteral(this.type);
+  }
+  isReference(): boolean {
+    return isTokenTypeRefKind(this.type);
+  }
+  getOpcodeParamLength(): number {
+    assert(this.opcodeType !== null);
+    return Opcode.getParamLength(this.opcodeType);
+  }
+  getOpcodeEncoding(): number {
+    assert(this.opcodeType !== null);
+    return Opcode.getCode(this.opcodeType);
   }
 }
 export function isTokenTypeBare(token_type: TokenType | null): boolean {
