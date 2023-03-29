@@ -192,11 +192,9 @@ class Lexer {
 
         default:
           if (isKeyword(this.peekChar())) {
-            console.log(`peekchar 195: ${this.peekChar()}, ${isKeyword(this.peekChar())}, ${isIdChar(this.peekChar())}`);
             return this.getKeywordToken();
           }
           if (isIdChar(this.peekChar())) {
-            console.log(`peekchar 199: ${this.peekChar()}, ${isKeyword(this.peekChar())}, ${isIdChar(this.peekChar())}`);
             return this.getReservedToken();
           }
           this.readChar();
