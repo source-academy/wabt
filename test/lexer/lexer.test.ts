@@ -11,14 +11,16 @@ import { Token } from '../../src/token';
 
 // We just assume that the lexer works as long as it doesn't throw. Sorry.
 
-// test('tokenize s-expression addition', () => {
-//   expect(tokenize(f64_addition_sexpr.str))
-//     .toEqual(f64_addition_sexpr.tokens);
-// });
-// test('tokenize stack expression addition', () => {
-//   expect(tokenize(f64_addition_stack.str))
-//     .toEqual(f64_addition_stack.tokens);
-// });
+test('tokenize s-expression addition', () => {
+  outputFile('out1.json', JSON.stringify(tokenize(f64_addition_sexpr.str)));
+  expect(tokenize(f64_addition_sexpr.str))
+    .toEqual(f64_addition_sexpr.tokens);
+});
+test('tokenize stack expression addition', () => {
+  outputFile('out2.json', JSON.stringify(tokenize(f64_addition_stack.str)));
+  expect(tokenize(f64_addition_stack.str))
+    .toEqual(f64_addition_stack.tokens);
+});
 
 
 test('tokenize opcode correctly', () => {
