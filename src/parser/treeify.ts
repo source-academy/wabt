@@ -1,4 +1,4 @@
-import { TokenType, type Token } from '../token';
+import { TokenType, type Token } from '../common/token';
 import { type TokenTree } from './tree_types';
 import assert from 'assert';
 import { tokenize } from '../lexer/lexer';

@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { TokenType } from '../token';
 import { OpcodeType } from './opcode';
+import { TokenType } from './token';
 import { ValueType } from './type';
 
 export const wordlist: Record<string, [TokenType, OpcodeType | null, ValueType | null]> = {

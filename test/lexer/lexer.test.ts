@@ -7,7 +7,7 @@ import { tokenize } from '../../src/lexer/lexer';
 import { f64_addition_sexpr, f64_addition_stack } from '../resources/program_fragments';
 import 'reflect-metadata';
 import { plainToInstance } from 'class-transformer';
-import { Token } from '../../src/token';
+import { Token } from '../../src/common/token';
 
 // We just assume that the lexer works as long as it doesn't throw. Sorry.
 

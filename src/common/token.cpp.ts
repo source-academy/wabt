@@ -1,6 +1,6 @@
 import { Opcode, type OpcodeType } from './opcode';
 import { TokenType } from './token';
-import { type ValueType } from './common/type';
+import { type ValueType } from './type';
 import assert from 'assert';
 
 export class Token {

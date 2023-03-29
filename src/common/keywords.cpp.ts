@@ -3,9 +3,9 @@
 
 // These are used as values after preprocessing
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-import { OpcodeType } from '../opcode';
+import { OpcodeType } from './opcode';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-import { TokenType } from '../token';
+import { TokenType } from './token';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { ValueType } from './type';
 

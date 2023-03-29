@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { type Token, TokenType } from '../token';
+import { type Token, TokenType } from '../common/token';
 import assert from 'assert';
 import 'reflect-metadata';
 import { instanceToPlain } from 'class-transformer';

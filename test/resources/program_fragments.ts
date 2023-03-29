@@ -2,7 +2,7 @@
 import 'reflect-metadata';
 import { plainToInstance } from 'class-transformer';
 import { type IntermediateRepresentation } from '../../src/parser/ir';
-import { Token } from '../../src/token';
+import { Token } from '../../src/common/token';
 import { type Tree, type TokenTree } from '../../src/parser/tree_types';
 import { getSingleToken } from '../../src/lexer/lexer';
 

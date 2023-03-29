@@ -1,7 +1,8 @@
 /* eslint-disable */
-import { type ValueType } from './common/type';
+import { Opcode, type OpcodeType } from './opcode';
+
+import { type ValueType } from './type';
 import assert from 'assert';
-import { Opcode, OpcodeType } from './common/opcode';
 export class Token {
   type: TokenType;
   lexeme: string;

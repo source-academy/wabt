@@ -7,7 +7,7 @@ import {
   isTokenTypeType,
   Token,
   TokenType,
-} from '../token';
+} from '../common/token';
 
 import assert from 'assert';
 import { LiteralType, parseHexdigit } from '../common/literal';
