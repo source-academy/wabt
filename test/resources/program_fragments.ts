@@ -25,7 +25,7 @@ export const f64_addition_sexpr = {
 
   tokens: plainToInstance(Token, [{
     type: '(',
-    lexeme: '',
+    lexeme: '(',
     line: 1,
     col: 0,
     indexInSource: 4,
@@ -73,7 +73,7 @@ export const f64_addition_sexpr = {
     valueType: null,
   }, {
     type: ')',
-    lexeme: '',
+    lexeme: ')',
     line: 3,
     col: 0,
     indexInSource: 50,
@@ -94,7 +94,7 @@ export const f64_addition_stack = {
   `,
   tokens: plainToInstance(Token, [{
     type: '(',
-    lexeme: '',
+    lexeme: '(',
     line: 1,
     col: 0,
     indexInSource: 4,
@@ -142,7 +142,7 @@ export const f64_addition_stack = {
     valueType: null,
   }, {
     type: ')',
-    lexeme: '',
+    lexeme: ')',
     line: 3,
     col: 0,
     indexInSource: 50,

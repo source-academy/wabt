@@ -1,5 +1,5 @@
 import { type IntermediateRepresentation } from './ir';
-import { type Token, TokenType } from '../token';
+import { type Token, TokenType } from '../common/token';
 import { type TokenTree } from './tree_types';
 
 export function getIntermediateRepresentation(tokenTree: TokenTree): IntermediateRepresentation {

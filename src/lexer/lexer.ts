@@ -350,7 +350,9 @@ class Lexer {
   }
 
   private bareToken(token_type: TokenType): Token {
-    return new Token(token_type, '', this.line, this.col, this.cursor);
+    // return new Token(token_type, '', this.line, this.col, this.cursor);
+    // Originally, lexeme was '' for baretoken - but this doesn't make sense, does it?
+    return new Token(token_type, this.getText(), this.line, this.col, this.cursor);
   }
 
   // TODO: need to do something with literal_type

@@ -61,9 +61,53 @@ test('parse expressions trees', () => {
     `;
 
   const expected = [
-    ['f64.add',
-      ['f64.add', 'f64.const', '1', 'f64.const', '1'],
-      ['f64.add', 'f64.const', '1', 'f64.const', '1']],
+    'f64.add',
+    ['f64.add', 'f64.const', '1', 'f64.const', '1'],
+    ['f64.add', 'f64.const', '1', 'f64.const', '1'],
+  ];
+
+  console.log(expected);
+  expect(TokenTree.getStringArrayRepr(getTokenTree(tokenize(str))))
+    .toEqual(expected);
+});
+
+test('parse simple function declaration', () => {
+  const str = `
+      (func (param $p i32)
+          (result i32)
+          local.get $p
+          local.get $p
+          i32.add)
+      `;
+  const expected = [
+    'func',
+    ['param', '$p', 'i32'],
+    ['result', 'i32'],
+    'local.get',
+    '$p',
+    'local.get',
+    '$p',
+    'i32.add',
+  ];
+
+  expect(TokenTree.getStringArrayRepr(getTokenTree(tokenize(str))))
+    .toEqual(expected);
+});
+
+test('parse sexpr function declaration', () => {
+  const str = `
+    (func (param $p i32)
+        (result i32)
+        (i32.add 
+            local.get $p
+            local.get $p)
+        )
+      `;
+  const expected = [
+    'func',
+    ['param', '$p', 'i32'],
+    ['result', 'i32'],
+    ['i32.add', 'local.get', '$p', 'local.get', '$p'],
   ];
 
   expect(TokenTree.getStringArrayRepr(getTokenTree(tokenize(str))))

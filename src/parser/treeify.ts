@@ -9,6 +9,9 @@ import { tokenize } from '../lexer/lexer';
  * @returns a program tree
  */
 export function getTokenTree(tokenList: Token[]): TokenTree {
+  if (tokenList[0].type === TokenType.Lpar) {
+    tokenList = tokenList.slice(1);
+  }
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
   return new Parser(tokenList)
     .getGrouping();
