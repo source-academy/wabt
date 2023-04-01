@@ -16,6 +16,7 @@ import {
   nested_addition_sexpr,
   simple_add_function_no_param_names,
   simple_function_sexpr_with_param_names,
+  simple_addition_sexpr_without_argument_bracket_fails,
 } from '../resources/program_fragments';
 import { TokenData } from '../resources/resolved_tokens';
 import { Token } from '../../src/common/token';
@@ -28,6 +29,12 @@ test('convert simple_addition_sexpr into ir', () => {
 
   expect(ir)
     .toEqual(expectedIR);
+});
+
+test('convert simple_addition_sexpr into ir without argument bracket fails', () => {
+  const tokenTree = simple_addition_sexpr_without_argument_bracket_fails.tokenTree;
+  expect(() => getIntermediateRepresentation(tokenTree))
+    .toThrow();
 });
 
 test('convert simple_addition_stack into ir', () => {

@@ -64,6 +64,7 @@ function parseSExpression(tokenTree: TokenTree): OperationTree {
     }
   }
 
+  assert(Opcode.getParamLength(head.opcodeType!) === body.length);
   return new OperationTree(head, body);
 }
 
