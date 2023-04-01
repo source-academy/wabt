@@ -132,7 +132,7 @@ const resolvedTokens: Record<string, TokenData> = {
 };
 
 export function getExpectedTokenData(lexeme: string): TokenData {
-  if (/^\d+$/.test(lexeme)) {
+  if (/^\d+$/u.test(lexeme)) {
     return TokenObjects.getNatToken(Number.parseInt(lexeme));
   }
   return resolvedTokens[lexeme];

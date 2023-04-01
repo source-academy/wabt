@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { type ValueType } from '../common/type';
-import assert from 'assert';
 import { Token } from '../common/token';
-import { isEqual } from 'lodash';
 
 export abstract class IntermediateRepresentation {
 
