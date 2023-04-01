@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { type IntermediateRepresentation } from '../../src/parser/ir';
 import { type Tree } from '../../src/parser/tree_types';
 
@@ -18,9 +19,7 @@ export const simple_addition_sexpr: TestCaseData = {
       f64.const 1.5)
   `,
   tokens: ['(', 'f64.add', 'f64.const', '1', 'f64.const', '1.5', ')'],
-  tokenTreeStr: ['f64.add',
-    ['f64.const', '1'],
-    ['f64.const', '1.5']],
+  tokenTreeStr: ['f64.add', 'f64.const', '1', 'f64.const', '1.5'],
   ir: undefined,
   minimal_binary: undefined,
 };
@@ -32,11 +31,7 @@ export const simple_addition_stack: TestCaseData = {
       f64.add)
   `,
   tokens: ['(', 'f64.const', '1', 'f64.const', '1.5', 'f64.add', ')'],
-  tokenTreeStr: [
-    ['f64.const', '1'],
-    ['f64.const', '1.5'],
-    'f64.add',
-  ],
+  tokenTreeStr: ['f64.const', '1', 'f64.const', '1.5', 'f64.add'],
   ir: undefined,
   minimal_binary: undefined,
 };

@@ -1,6 +1,3 @@
-// import { Lexer } from '../src/lexer/lexer';
-// import { TokenType } from '../src/token';
-
 import { tokenize } from '../../src/lexer/lexer';
 import { getExpectedTokenData, TokenData } from '../resources/resolved_tokens';
 import {
