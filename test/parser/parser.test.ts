@@ -25,6 +25,7 @@ test('convert simple_addition_sexpr into ir', () => {
   const tokenTree = simple_addition_sexpr.tokenTree;
   const ir = getIntermediateRepresentation(tokenTree);
   const expectedIR = simple_addition_sexpr.ir!;
+
   expect(ir)
     .toEqual(expectedIR);
 });

@@ -85,7 +85,7 @@ export class FunctionBody {
   EXPRESSION BODIES
 */
 
-type TokenExpression = OperationTree | UnfoldedTokenExpression;
+export type TokenExpression = OperationTree | UnfoldedTokenExpression;
 
 /**
  * Interface indicating that the particular intermediate representation
@@ -100,9 +100,9 @@ interface Unfoldable {
  */
 export class OperationTree extends IntermediateRepresentation implements Unfoldable {
   operator: Token;
-  operands: (Token | OperationTree)[];
+  operands: (Token | TokenExpression)[];
 
-  constructor(operator: Token, operands: (Token | OperationTree)[]) {
+  constructor(operator: Token, operands: (Token | TokenExpression)[]) {
     super();
     this.operator = operator;
     this.operands = operands;

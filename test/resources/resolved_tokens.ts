@@ -75,7 +75,7 @@ namespace TokenObjects {
   export const F64_CONST: TokenData = {
     type: TokenType.Const,
     lexeme: 'f64.const',
-    opcodeType: 58,
+    opcodeType: OpcodeType.F64Const,
     valueType: null,
   };
   export const I32: TokenData = {

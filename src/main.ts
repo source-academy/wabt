@@ -1,4 +1,5 @@
 import wabt from 'wabt';
+import { Opcode, OpcodeType } from './common/opcode';
 import { tokenize } from './lexer/lexer';
 import { getTokenTree } from './parser/treeify';
 
@@ -15,10 +16,10 @@ namespace Program1 {
   //     `;
   export const text = `
 (module
-    (func (param $lhs i64) (param $rhs i64) (result i64)
+    (func (param $lhs f64) (param $rhs f64) (result f64)
       local.get $lhs
       local.get $rhs
-      i64.add)
+      f64.add)
 )
 `;
   export const stripped_binary = new Uint8Array(
@@ -79,6 +80,27 @@ namespace Program1 {
     '9',  '1',  '0',  '0',
   '0', '4',
     '6d', '61', '69', '6e'
+
+
+
+    [
+  '0',  '61', '73', '6d', '1',  '0',  '0',  '0',
+  '1',
+  '87', '80', '80', '80', '0',  '1',  '60', '2',  '7e',
+  '7e', '1',  '7e',
+
+  '3',  '82', '80', '80', '80', '0',
+  '1',  '0',
+
+  'a',  '8d', '80', '80', '80', '0',  '1',
+  '87', '80', '80', '80', '0',
+
+  '0',  '20', '0',  '20',
+  '1',  '7c', 'b',  '0',  '94', '80', '80', '80', '0',
+  '7',  '6c', '69', '6e', '6b', '69', '6e', '67', '2',
+  '8',  '85', '80', '80', '80', '0',  '1',  '0',  '6',
+  '0',  '0'
+]
 */
 
 // let tokens = new Lexer(program1)
@@ -95,22 +117,58 @@ namespace Program1 {
 // console.log(JSON.stringify(parser.parse()
 //   .treeMap((t) => t), undefined, 2));
 // console.log(treeMap(parser.parse(), (t) => t.lexeme));
-wabt()
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  .then((wabt) => {
-    // const text = wabt.parseWat('', Program1.text)
-    //   .toBinary({
-    //     log: false,
-    //     canonicalize_lebs: false,
-    //     relocatable: false,
-    //     write_debug_names: false,
-    //   });
-    // console.log(text);
+// wabt()
+//   // eslint-disable-next-line @typescript-eslint/no-shadow
+//   .then((wabt) => {
+//     const bin = wabt.parseWat('', `
+//     (module
+//         (func (param $lhs f64) (param $rhs f64) (result f64)
+//           local.get $lhs
+//           local.get $rhs
+//           f64.add)
+//     )`)
+//       .toBinary({
+//         log: false,
+//         canonicalize_lebs: false,
+//         relocatable: true,
+//         write_debug_names: false,
+//       });
+//     console.log(Array.from(bin.buffer)
+//       .map((x) => x.toString(16)));
 
-    const tokens = tokenize(Program1.text);
-    const tree = getTokenTree(tokens);
-    console.log(JSON.stringify(tree, undefined, 2));
-    // const ir = parser.parse();
 
-    // console.log(JSON.stringify(ir, undefined, 2));
-  });
+// const tokens = tokenize(Program1.text);
+// const tree = getTokenTree(tokens);
+// console.log(JSON.stringify(tree, undefined, 2));
+// const ir = parser.parse();
+
+// console.log(JSON.stringify(ir, undefined, 2));
+// });
+
+console.log(Opcode.getParamLength(OpcodeType.F64Const));
+console.log(Opcode.getParamTypes(OpcodeType.F64Const));
+
+/*
+[
+  '0',  '61', '73', '6d',
+  '1',  '0',  '0',  '0',
+  '1',  '85', '80', '80', '80', '0',  '1',
+
+  '60',
+    '0',
+  '1',  '7c',
+
+  '3',  '82', '80', '80', '80',
+  '0',  '1',  '0',
+
+  'a',
+  '9b', F64
+  '80',
+  '80',
+  '80',
+  '0',  '1',  '95', '80', '80', '80', '0',  '0',
+  'a0', '44', '0',  '0',  '0',  '0',  '0',  '0',
+  'f0', '3f', '44', '0',  '0',  '0',  '0',  '0',
+  '0',  'f8', '3f', 'b'
+]
+  */

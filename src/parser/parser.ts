@@ -2,7 +2,7 @@ import {
   FunctionExpression,
   OperationTree,
   UnfoldedTokenExpression,
-  type IntermediateRepresentation, FunctionBody, FunctionSignature, ModuleExpression,
+  type IntermediateRepresentation, FunctionBody, FunctionSignature, ModuleExpression, type TokenExpression,
 } from './ir';
 import { Token, TokenType } from '../common/token';
 import { type TokenTree } from './tree_types';
@@ -33,7 +33,7 @@ export function getIntermediateRepresentation(
 /*
   Functions for parsing
 */
-function parseExpression(tokenTree:TokenTree): OperationTree | UnfoldedTokenExpression {
+function parseExpression(tokenTree:TokenTree): TokenExpression {
   // console.log(tokenTree[0]);
   // console.log(isSExpression(tokenTree));
   // console.log(isStackExpression(tokenTree));
@@ -52,14 +52,14 @@ function parseSExpression(tokenTree: TokenTree): OperationTree {
   const head = tokenTree[0];
   assert(head instanceof Token); // Head should be token here, assert to make typescript happy
 
-  const body: (Token | OperationTree)[] = [];
+  const body: (Token | TokenExpression)[] = [];
   for (let i = 1; i < tokenTree.length; i++) {
     const token = tokenTree[i];
     if (token instanceof Token) {
       body.push(token);
     } else {
       const irNode = getIntermediateRepresentation(token);
-      assert(irNode instanceof Token || irNode instanceof OperationTree);
+      assert(irNode instanceof Token || irNode instanceof OperationTree || irNode instanceof UnfoldedTokenExpression);
       body.push(irNode);
     }
   }
@@ -166,6 +166,7 @@ function parseModuleExpression(tokenTree: TokenTree): ModuleExpression {
 
 function isSExpression(tokenTree: TokenTree): boolean {
   const tokenHeader = tokenTree[0];
+  assert(tokenHeader instanceof Token);
   return (
     tokenHeader instanceof Token
     && tokenHeader.isOpcodeToken()

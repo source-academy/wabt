@@ -13,15 +13,20 @@ export interface TestCaseData {
   minimal_binary?: Uint8Array;
 }
 
+// TODO note that the brackets around f64.const are necessary. Add a test case that fails when there are no brackets.
 export const simple_addition_sexpr: TestCaseData = {
   str: `
   (f64.add
-      f64.const 1
-      f64.const 1.5)
+      (f64.const 1)
+      (f64.const 1.5)
+      )
   `,
-  tokens: ['(', 'f64.add', 'f64.const', '1', 'f64.const', '1.5', ')'].map(t),
-  tokenTree: ['f64.add', 'f64.const', '1', 'f64.const', '1.5'].map(t),
-  ir: new OperationTree(t('f64.add'), ['f64.const', '1', 'f64.const', '1.5'].map(t)),
+  tokens: ['(', 'f64.add', '(', 'f64.const', '1', ')', '(', 'f64.const', '1.5', ')', ')'].map(t),
+  tokenTree: [t('f64.add'), [t('f64.const'), t('1')], [t('f64.const'), t('1.5')]],
+  ir: new OperationTree(t('f64.add'), [
+    new UnfoldedTokenExpression([t('f64.const'), t('1')]),
+    new UnfoldedTokenExpression([t('f64.const'), t('1.5')]),
+  ]),
   minimal_binary: undefined,
 };
 
@@ -57,41 +62,42 @@ export const nested_addition_sexpr: TestCaseData = {
   str: `
   (f64.add
     (f64.add
-        f64.const 1
-        f64.const 1)
+      (f64.const 1)
+      (f64.const 1)
+    )
     (f64.add
-        f64.const 1
-        f64.const 1)))
+      (f64.const 1)
+      (f64.const 1)
+    )
+  )
     `,
   tokens: [
     ...['(', 'f64.add'],
     ...['(', 'f64.add'],
-    ...['f64.const', '1'],
-    ...['f64.const', '1', ')'],
+    ...['(', 'f64.const', '1', ')'],
+    ...['(', 'f64.const', '1', ')'],
+    ...[')'],
     ...['(', 'f64.add'],
-    ...['f64.const', '1'],
-    ...['f64.const', '1', ')'],
+    ...['(', 'f64.const', '1', ')'],
+    ...['(', 'f64.const', '1', ')'],
     ')',
     ')',
   ].map(t),
-  tokenTree: Tree.treeMap(
-    [
-      'f64.add',
-      ['f64.add', 'f64.const', '1', 'f64.const', '1'],
-      ['f64.add', 'f64.const', '1', 'f64.const', '1'],
-    ]
-    , t,
-  ),
+  tokenTree: [
+    t('f64.add'),
+    [t('f64.add'), [t('f64.const'), t('1')], [t('f64.const'), t('1')]],
+    [t('f64.add'), [t('f64.const'), t('1')], [t('f64.const'), t('1')]],
+  ],
   ir: new OperationTree(
     t('f64.add'),
     [
       new OperationTree(
         t('f64.add'),
-        ['f64.const', '1', 'f64.const', '1'].map(t),
+        [new UnfoldedTokenExpression([t('f64.const'), t('1')]), new UnfoldedTokenExpression([t('f64.const'), t('1')])],
       ),
       new OperationTree(
         t('f64.add'),
-        ['f64.const', '1', 'f64.const', '1'].map(t),
+        [new UnfoldedTokenExpression([t('f64.const'), t('1')]), new UnfoldedTokenExpression([t('f64.const'), t('1')])],
       ),
     ],
   ),
@@ -103,28 +109,34 @@ export const simple_function_sexpr_with_param_names: TestCaseData = {
   (func (param $p f64)
   (result f64)
   (f64.add 
-    local.get $p
-    local.get $p)
+    (local.get $p)
+    (local.get $p))
   )
     `,
   tokens: [
     ...['(', 'func', '(', 'param', '$p', 'f64', ')'],
     ...['(', 'result', 'f64', ')'],
     ...['(', 'f64.add'],
-    ...['local.get', '$p'],
-    ...['local.get', '$p', ')'],
+    ...['(', 'local.get', '$p', ')'],
+    ...['(', 'local.get', '$p', ')', ')'],
     ...[')'],
   ].map(t),
 
   tokenTree: Tree.treeMap(['func',
     ['param', '$p', 'f64'],
     ['result', 'f64'],
-    ['f64.add', 'local.get', '$p', 'local.get', '$p']]
+    ['f64.add', ['local.get', '$p'], ['local.get', '$p']]]
   , t),
   ir: new FunctionExpression(
     new FunctionSignature([ValueType.F64], [ValueType.F64], ['$p']),
     new FunctionBody(
-      new OperationTree(t('f64.add'), ['local.get', '$p', 'local.get', '$p'].map(t)),
+      new OperationTree(
+        t('f64.add'),
+        [
+          new UnfoldedTokenExpression([t('local.get'), t('$p')]),
+          new UnfoldedTokenExpression([t('local.get'), t('$p')]),
+        ],
+      ),
     ),
   ),
   minimal_binary: undefined,
