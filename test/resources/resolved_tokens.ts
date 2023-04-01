@@ -1,6 +1,6 @@
-import { type OpcodeType } from '../../src/common/opcode';
+import { OpcodeType } from '../../src/common/opcode';
 import { Token, TokenType } from '../../src/common/token';
-import { type ValueType } from '../../src/common/type';
+import { ValueType } from '../../src/common/type';
 import assert from 'assert';
 
 export interface TokenData {
@@ -24,7 +24,17 @@ export namespace TokenData {
   }
 }
 
+
 namespace TokenObjects {
+  export const getNatToken = (n: number) => {
+    assert(Number.isInteger(n));
+    return {
+      type: TokenType.Nat,
+      lexeme: n.toString(),
+      opcodeType: null,
+      valueType: null,
+    };
+  };
   export const LPAR: TokenData = {
     type: TokenType.Lpar,
     lexeme: '(',
@@ -55,10 +65,16 @@ namespace TokenObjects {
     opcodeType: 58,
     valueType: null,
   };
-  export const ONE: TokenData = {
-    type: TokenType.Nat,
-    lexeme: '1',
+  export const I32: TokenData = {
+    type: TokenType.ValueType,
+    lexeme: 'i32',
     opcodeType: null,
+    valueType: ValueType.I32,
+  };
+  export const I32_ADD: TokenData = {
+    type: TokenType.Binary,
+    lexeme: 'i32.add',
+    opcodeType: OpcodeType.I32Add,
     valueType: null,
   };
   export const ONE_POINT_FIVE: TokenData = {
@@ -99,14 +115,14 @@ namespace TokenObjects {
   };
 
 }
-
 const resolvedTokens: Record<string, TokenData> = {
   '(': TokenObjects.LPAR,
   ')': TokenObjects.RPAR,
   'f64': TokenObjects.F64,
   'f64.add': TokenObjects.F64_ADD,
   'f64.const': TokenObjects.F64_CONST,
-  '1': TokenObjects.ONE,
+  'i32': TokenObjects.I32,
+  'i32.add': TokenObjects.I32_ADD,
   '1.5': TokenObjects.ONE_POINT_FIVE,
   'local.get': TokenObjects.LOCAL_GET,
   '$p': TokenObjects.VAR_P,
@@ -116,6 +132,9 @@ const resolvedTokens: Record<string, TokenData> = {
 };
 
 export function getExpectedTokenData(lexeme: string): TokenData {
+  if (/^\d+$/.test(lexeme)) {
+    return TokenObjects.getNatToken(Number.parseInt(lexeme));
+  }
   return resolvedTokens[lexeme];
 }
 
@@ -123,11 +142,11 @@ export function getSampleToken(lexeme: string): Token {
   return TokenData.toToken(getExpectedTokenData(lexeme));
 }
 
-export function checkToken(token: TokenData | Token) {
-  const expectedToken = getExpectedTokenData(token.lexeme);
+// export function checkToken(token: TokenData | Token) {
+//   const expectedToken = getExpectedTokenData(token.lexeme);
 
-  assert(hasSameData(token, expectedToken));
-}
+//   assert(hasSameData(token, expectedToken));
+// }
 
 export function hasSameData(lhs: TokenData | Token, rhs: TokenData | Token) {
   return (

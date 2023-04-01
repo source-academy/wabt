@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { type Token } from '../../src/common/token';
-import { OperationTree, UnfoldedTokenExpression, type IntermediateRepresentation } from '../../src/parser/ir';
+import { ValueType } from '../../src/common/type';
+import { FunctionBody, FunctionExpression, FunctionSignature, OperationTree, UnfoldedTokenExpression, type IntermediateRepresentation } from '../../src/parser/ir';
 import { Tree } from '../../src/parser/tree_types';
 import { getSampleToken as t } from './resolved_tokens';
 
@@ -8,7 +9,7 @@ interface TestCaseData {
   str: string;
   tokens: Array<Token>;
   tokenTree: Tree<Token>;
-  ir?: IntermediateRepresentation;
+  ir: IntermediateRepresentation;
   minimal_binary?: Uint8Array;
 }
 
@@ -97,7 +98,7 @@ export const nested_addition_sexpr: TestCaseData = {
   minimal_binary: undefined,
 };
 
-export const simple_function_sexpr: TestCaseData = {
+export const simple_function_sexpr_with_param_names: TestCaseData = {
   str: `
   (func (param $p f64)
   (result f64)
@@ -120,6 +121,44 @@ export const simple_function_sexpr: TestCaseData = {
     ['result', 'f64'],
     ['f64.add', 'local.get', '$p', 'local.get', '$p']]
   , t),
-  ir: undefined,
+  ir: new FunctionExpression(
+    new FunctionSignature([ValueType.F64], [ValueType.F64], ['$p']),
+    new FunctionBody(
+      new OperationTree(t('f64.add'), ['local.get', '$p', 'local.get', '$p'].map(t)),
+    ),
+  ),
+  minimal_binary: undefined,
+};
+
+export const simple_add_function_no_param_names: TestCaseData = {
+  str: `
+  (func (param i32) (param i32) (result i32)
+    local.get 0
+    local.get 0
+    i32.add)
+    `,
+  tokens: [
+    ...['(', 'func', '(', 'param', 'i32', ')', '(', 'param', 'i32', ')', '(', 'result', 'i32', ')'],
+    ...['local.get', '0'],
+    ...['local.get', '0'],
+    ...['i32.add', ')'],
+  ].map(t),
+
+  tokenTree: Tree.treeMap(['func',
+    ['param', 'i32'],
+    ['param', 'i32'],
+    ['result', 'i32'],
+    'local.get',
+    '0',
+    'local.get',
+    '0',
+    'i32.add']
+  , t),
+  ir: new FunctionExpression(
+    new FunctionSignature([ValueType.F64], [ValueType.F64], ['$p']),
+    new FunctionBody(
+      new OperationTree(t('f64.add'), ['local.get', '$p', 'local.get', '$p'].map(t)),
+    ),
+  ),
   minimal_binary: undefined,
 };

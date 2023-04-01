@@ -44,6 +44,10 @@ export class ModuleExpression extends IntermediateRepresentation {
   }
 }
 
+/*
+FUNCTIONS
+*/
+
 /**
  * Intermediate representation of function expression.
  * Note that signature and body will be encoded in different places afterward
@@ -61,20 +65,24 @@ export class FunctionExpression extends IntermediateRepresentation {
 
 export class FunctionSignature {
   paramTypes: ValueType[];
-  paramNames: string[];
+  paramNames?: string[];
   returnTypes: ValueType[];
+  hasParamNames: boolean;
 
-  constructor(paramTypes: ValueType[], paramNames: string[], returnTypes: ValueType[]) {
+  constructor(paramTypes: ValueType[], returnTypes: ValueType[]);
+  constructor(paramTypes: ValueType[], returnTypes: ValueType[], paramNames: string[]);
+  constructor(paramTypes: ValueType[], returnTypes: ValueType[], paramNames?: string[]) {
     this.paramTypes = paramTypes;
-    this.paramNames = paramNames;
     this.returnTypes = returnTypes;
+    this.paramNames = paramNames;
+    this.hasParamNames = typeof paramNames === 'undefined';
   }
 }
 
 /**
  * Intermediate representation of function body.
- * We are using a wrapper around ProgramTree because:
- *  (1) WABT function bodies have to be encoded differently from other blocks (e.g. start/end blocks)
+ * We are using a wrapper around TokenExpression because:
+ *  (1) WABT function bodies have to be encoded differently from other blocks
  *  (2) WABT function bodies are in a different module section compared to other blocks.
  */
 export class FunctionBody {

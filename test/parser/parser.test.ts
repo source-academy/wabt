@@ -12,6 +12,7 @@ import {
   simple_addition_stack,
   nested_addition_stack,
   nested_addition_sexpr,
+  simple_add_function_no_param_names,
 } from '../resources/program_fragments';
 import { TokenData } from '../resources/resolved_tokens';
 import { Token } from '../../src/common/token';
@@ -20,8 +21,6 @@ test('convert simple_addition_sexpr into ir', () => {
   const tokenTree = simple_addition_sexpr.tokenTree;
   const ir = getIntermediateRepresentation(tokenTree);
   const expectedIR = simple_addition_sexpr.ir!;
-  console.log(ir);
-  console.log(expectedIR);
   expect(ir)
     .toEqual(expectedIR);
 });
@@ -30,8 +29,6 @@ test('convert simple_addition_stack into ir', () => {
   const tokenTree = simple_addition_stack.tokenTree;
   const ir = getIntermediateRepresentation(tokenTree);
   const expectedIR = simple_addition_stack.ir!;
-  console.log(ir);
-  console.log(expectedIR);
   expect(ir)
     .toEqual(expectedIR);
 });
@@ -48,6 +45,14 @@ test('convert nested_addition_sexpr into ir', () => {
   const tokenTree = nested_addition_sexpr.tokenTree;
   const ir = getIntermediateRepresentation(tokenTree);
   const expectedIR = nested_addition_sexpr.ir!;
+  expect(ir)
+    .toEqual(expectedIR);
+});
+
+test('convert simple_add_function_no_param_names into ir', () => {
+  const tokenTree = simple_add_function_no_param_names.tokenTree;
+  const ir = getIntermediateRepresentation(tokenTree);
+  const expectedIR = simple_add_function_no_param_names.ir!;
   expect(ir)
     .toEqual(expectedIR);
 });
