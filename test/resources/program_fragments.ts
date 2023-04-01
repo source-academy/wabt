@@ -155,9 +155,9 @@ export const simple_add_function_no_param_names: TestCaseData = {
     'i32.add']
   , t),
   ir: new FunctionExpression(
-    new FunctionSignature([ValueType.F64], [ValueType.F64], ['$p']),
+    new FunctionSignature([ValueType.I32, ValueType.I32], [ValueType.I32], []),
     new FunctionBody(
-      new OperationTree(t('f64.add'), ['local.get', '$p', 'local.get', '$p'].map(t)),
+      new UnfoldedTokenExpression(['local.get', '0', 'local.get', '0', 'i32.add'].map(t)),
     ),
   ),
   minimal_binary: undefined,

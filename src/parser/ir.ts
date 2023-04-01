@@ -37,8 +37,8 @@ export class ModuleExpression extends IntermediateRepresentation {
 
     body.forEach((node) => {
       if (node instanceof FunctionExpression) {
-        this.functionSignatures.push(node.signature);
-        this.functionBodies.push(node.body);
+        this.functionSignatures.push(node.functionSignature);
+        this.functionBodies.push(node.functionBody);
       }
     });
   }
@@ -53,13 +53,13 @@ FUNCTIONS
  * Note that signature and body will be encoded in different places afterward
  */
 export class FunctionExpression extends IntermediateRepresentation {
-  signature: FunctionSignature;
-  body: FunctionBody;
+  functionSignature: FunctionSignature;
+  functionBody: FunctionBody;
 
   constructor(signature: FunctionSignature, body: FunctionBody) {
     super();
-    this.signature = signature;
-    this.body = body;
+    this.functionSignature = signature;
+    this.functionBody = body;
   }
 }
 
@@ -69,13 +69,11 @@ export class FunctionSignature {
   returnTypes: ValueType[];
   hasParamNames: boolean;
 
-  constructor(paramTypes: ValueType[], returnTypes: ValueType[]);
-  constructor(paramTypes: ValueType[], returnTypes: ValueType[], paramNames: string[]);
-  constructor(paramTypes: ValueType[], returnTypes: ValueType[], paramNames?: string[]) {
+  constructor(paramTypes: ValueType[], returnTypes: ValueType[], paramNames: string[]) {
     this.paramTypes = paramTypes;
     this.returnTypes = returnTypes;
     this.paramNames = paramNames;
-    this.hasParamNames = typeof paramNames === 'undefined';
+    this.hasParamNames = paramNames.length === 0;
   }
 }
 

@@ -3,9 +3,10 @@ import {
   OperationTree,
   PureUnfoldedTokenExpression,
   UnfoldedTokenExpression,
+  FunctionExpression,
 } from '../../src/parser/ir';
 import { getIntermediateRepresentation } from '../../src/parser/parser';
-import { isEqual as isDeepEqual } from 'lodash';
+import { isEqual as isDeepEqual, isEqual } from 'lodash';
 import { expect } from '@jest/globals';
 import {
   simple_addition_sexpr,
@@ -13,6 +14,7 @@ import {
   nested_addition_stack,
   nested_addition_sexpr,
   simple_add_function_no_param_names,
+  simple_function_sexpr_with_param_names,
 } from '../resources/program_fragments';
 import { TokenData } from '../resources/resolved_tokens';
 import { Token } from '../../src/common/token';
@@ -45,6 +47,14 @@ test('convert nested_addition_sexpr into ir', () => {
   const tokenTree = nested_addition_sexpr.tokenTree;
   const ir = getIntermediateRepresentation(tokenTree);
   const expectedIR = nested_addition_sexpr.ir!;
+  expect(ir)
+    .toEqual(expectedIR);
+});
+
+test('convert simple_function_sexpr_with_param_names into ir', () => {
+  const tokenTree = simple_function_sexpr_with_param_names.tokenTree;
+  const ir = getIntermediateRepresentation(tokenTree);
+  const expectedIR = simple_function_sexpr_with_param_names.ir!;
   expect(ir)
     .toEqual(expectedIR);
 });
@@ -118,6 +128,14 @@ function isIREqual(
       && rhs instanceof PureUnfoldedTokenExpression
   ) {
     return isIREqual(lhs.tokens, rhs.tokens);
+  }
+
+  if (
+    lhs instanceof FunctionExpression
+      && rhs instanceof FunctionExpression
+  ) {
+    return isIREqual(lhs.functionBody.body, rhs.functionBody.body)
+    && isEqual(lhs.functionSignature, rhs.functionSignature);
   }
 
   return false;

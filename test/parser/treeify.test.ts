@@ -57,6 +57,15 @@ test('treeify simple_function_sexpr', () => {
 });
 
 
+test('treeify simple_function_sexpr_with_param_names', () => {
+  const tree = Tree.treeMap(getTokenTree(simple_function_sexpr_with_param_names.tokens), TokenData.fromToken);
+  const expectedTree = Tree.treeMap(simple_function_sexpr_with_param_names.tokenTree, TokenData.fromToken);
+
+  expect(tree)
+    .toEqual(expectedTree);
+});
+
+
 test('treeify simple_add_function_no_param_names', () => {
   const tree = Tree.treeMap(getTokenTree(simple_add_function_no_param_names.tokens), TokenData.fromToken);
   const expectedTree = Tree.treeMap(simple_add_function_no_param_names.tokenTree, TokenData.fromToken);

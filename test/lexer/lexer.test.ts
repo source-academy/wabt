@@ -50,6 +50,15 @@ test('tokenize simple_function_sexpr', () => {
     .toEqual(expectedTokenData);
 });
 
+test('tokenize simple_function_sexpr_with_param_names', () => {
+  const tokens = tokenize(simple_function_sexpr_with_param_names.str)
+    .map(TokenData.fromToken);
+  const expectedTokenData = simple_function_sexpr_with_param_names.tokens.map(TokenData.fromToken);
+
+  expect(tokens)
+    .toEqual(expectedTokenData);
+});
+
 test('tokenize simple_add_function_no_param_names', () => {
   const tokens = tokenize(simple_add_function_no_param_names.str)
     .map(TokenData.fromToken);
