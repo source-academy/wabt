@@ -32,6 +32,7 @@
     "typescript-eslint": "^0.0.1-alpha.0"
   },
   "dependencies": {
+    "@jest/globals": "^29.5.0",
     "class-transformer": "^0.5.1",
     "lodash": "^4.17.21",
     "reflect-metadata": "^0.1.13",

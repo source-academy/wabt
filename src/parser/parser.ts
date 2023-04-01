@@ -1,70 +1,85 @@
-import { type IntermediateRepresentation } from './ir';
-import { type Token, TokenType } from '../common/token';
+import {
+  OperationTree,
+  UnfoldedTokenExpression,
+  type IntermediateRepresentation,
+} from './ir';
+import { Token, TokenType } from '../common/token';
 import { type TokenTree } from './tree_types';
+import assert from 'assert';
+import { Opcode } from '../common/opcode';
 
-export function getIntermediateRepresentation(tokenTree: TokenTree): IntermediateRepresentation {
-  const treeTypeToken = tokenTree[0];
+export function getIntermediateRepresentation(
+  tokenTree: TokenTree,
+): IntermediateRepresentation {
+  if (isSExpression(tokenTree)) {
+    const head = tokenTree[0];
+    assert(head instanceof Token); // Head should be token here, assert to make typescript happy
 
-  throw new Error(`Unexpected token type to parse: ${JSON.stringify(treeTypeToken)}`);
-}
+    const body: (Token | OperationTree)[] = [];
+    for (let i = 1; i < tokenTree.length; i++) {
+      const token = tokenTree[i];
+      if (token instanceof Token) {
+        body.push(token);
+      } else {
+        const irNode = getIntermediateRepresentation(token);
+        assert(irNode instanceof Token || irNode instanceof OperationTree);
+        body.push(irNode);
+      }
+    }
 
+    return new OperationTree(head, body);
+  }
 
-function isFunctionDeclaration(token: Token): boolean {
-  return isReservedType(token, 'func');
-}
+  if (isStackExpression(tokenTree)) {
+    const nodes: (Token | OperationTree)[] = [];
+    tokenTree.forEach((tokenNode) => {
+      if (tokenNode instanceof Token) {
+        nodes.push(tokenNode);
+      } else {
+        const temp = getIntermediateRepresentation(tokenNode);
+        assert(temp instanceof Token || temp instanceof OperationTree);
+        nodes.push(temp);
+      }
+    });
 
-function isModuleDeclaration(token: Token): boolean {
-  return isReservedType(token, 'module');
-}
+    return new UnfoldedTokenExpression(nodes);
+  }
 
-function isReservedType(token: Token, lexeme: string) {
-  return (
-    token.type === TokenType.Reserved
-      && token.lexeme === lexeme
+  throw new Error(
+    `Unexpected token type to parse: ${JSON.stringify(tokenTree)}`,
   );
 }
 
+function isSExpression(tokenTree: TokenTree): boolean {
+  const tokenHeader = tokenTree[0];
+  return (
+    tokenHeader instanceof Token
+    && tokenHeader.isOpcodeToken()
+    && Opcode.getParamLength(tokenHeader.opcodeType!) > 0
+  );
+}
 
-/*
-  unfold(): Token[] {
-    const unfoldedBody = this.getBody()
-      .flatMap((tok) => {
-        if (tok instanceof ProgramTree) {
-          return tok.unfold();
-        }
-        return [tok];
-      });
+function isStackExpression(tokenTree: TokenTree): boolean {
+  const tokenHeader = tokenTree[0];
+  return (
+    tokenHeader instanceof Token
+    && tokenHeader.isOpcodeToken()
+    && !isFunctionDeclaration(tokenTree)
+    // && !isModuleDeclaration(tokenTree)
+    // && !isStackExpression(tokenTree)
+  );
+}
 
+function isFunctionDeclaration(tokenTree: TokenTree): boolean {
+  const tokenHeader = tokenTree[0];
+  return tokenHeader instanceof Token && isReservedType(tokenHeader, 'func');
+}
 
-    if (this.getTypeToken()
-      .isOpcodeToken() && this.getTypeToken()
-      .getOpcodeParamLength() > 0) {
-      assert(this.getBody().length === this.getTypeToken()
-        .getOpcodeParamLength());
-      return [...unfoldedBody, this.getTypeToken()];
-    }
+function isModuleDeclaration(tokenTree: TokenTree): boolean {
+  const tokenHeader = tokenTree[0];
+  return tokenHeader instanceof Token && isReservedType(tokenHeader, 'module');
+}
 
-    return [this.getTypeToken(), ...unfoldedBody];
-  }
-
-
-
-  treeMap<T>(func: (t: Token) => T): Tree<T> {
-    return this.contents.map(
-      (t) => ((t instanceof ProgramTree) ? t.treeMap(func) : func(t)),
-    );
-  }
-*/
-
-// import { type ProgramTree } from './tree_types';
-
-// export function getIntermediateRepresentation() {
-
-// }
-// class Parser {
-//   private readonly tokenTree: ProgramTree;
-
-//   constructor(tokenTree: ProgramTree) {
-//     this.tokenTree = tokenTree;
-//   }
-// }
+function isReservedType(token: Token, lexeme: string) {
+  return token.type === TokenType.Reserved && token.lexeme === lexeme;
+}

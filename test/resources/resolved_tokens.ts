@@ -119,6 +119,10 @@ export function getExpectedTokenData(lexeme: string): TokenData {
   return resolvedTokens[lexeme];
 }
 
+export function getSampleToken(lexeme: string): Token {
+  return TokenData.toToken(getExpectedTokenData(lexeme));
+}
+
 export function checkToken(token: TokenData | Token) {
   const expectedToken = getExpectedTokenData(token.lexeme);
 

@@ -1,13 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { type IntermediateRepresentation } from '../../src/parser/ir';
-import { type Tree } from '../../src/parser/tree_types';
-
-
+import { type Token } from '../../src/common/token';
+import { OperationTree, UnfoldedTokenExpression, type IntermediateRepresentation } from '../../src/parser/ir';
+import { Tree } from '../../src/parser/tree_types';
+import { getSampleToken as t } from './resolved_tokens';
 
 interface TestCaseData {
   str: string;
-  tokens: Array<string>;
-  tokenTreeStr: Tree<string>;
+  tokens: Array<Token>;
+  tokenTree: Tree<Token>;
   ir?: IntermediateRepresentation;
   minimal_binary?: Uint8Array;
 }
@@ -18,9 +18,9 @@ export const simple_addition_sexpr: TestCaseData = {
       f64.const 1
       f64.const 1.5)
   `,
-  tokens: ['(', 'f64.add', 'f64.const', '1', 'f64.const', '1.5', ')'],
-  tokenTreeStr: ['f64.add', 'f64.const', '1', 'f64.const', '1.5'],
-  ir: undefined,
+  tokens: ['(', 'f64.add', 'f64.const', '1', 'f64.const', '1.5', ')'].map(t),
+  tokenTree: ['f64.add', 'f64.const', '1', 'f64.const', '1.5'].map(t),
+  ir: new OperationTree(t('f64.add'), ['f64.const', '1', 'f64.const', '1.5'].map(t)),
   minimal_binary: undefined,
 };
 
@@ -30,9 +30,9 @@ export const simple_addition_stack: TestCaseData = {
       f64.const 1.5
       f64.add)
   `,
-  tokens: ['(', 'f64.const', '1', 'f64.const', '1.5', 'f64.add', ')'],
-  tokenTreeStr: ['f64.const', '1', 'f64.const', '1.5', 'f64.add'],
-  ir: undefined,
+  tokens: ['(', 'f64.const', '1', 'f64.const', '1.5', 'f64.add', ')'].map(t),
+  tokenTree: ['f64.const', '1', 'f64.const', '1.5', 'f64.add'].map(t),
+  ir: new UnfoldedTokenExpression(['f64.const', '1', 'f64.const', '1.5', 'f64.add'].map(t)),
   minimal_binary: undefined,
 };
 
@@ -46,9 +46,9 @@ export const nested_addition_stack: TestCaseData = {
     f64.add
     f64.add
     `,
-  tokens: ['f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.add'],
-  tokenTreeStr: ['f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.add'],
-  ir: undefined,
+  tokens: ['f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.add'].map(t),
+  tokenTree: ['f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.add'].map(t),
+  ir: new UnfoldedTokenExpression(['f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.add'].map(t)),
   minimal_binary: undefined,
 };
 
@@ -72,13 +72,28 @@ export const nested_addition_sexpr: TestCaseData = {
     ...['f64.const', '1', ')'],
     ')',
     ')',
-  ],
-  tokenTreeStr: [
-    'f64.add',
-    ['f64.add', 'f64.const', '1', 'f64.const', '1'],
-    ['f64.add', 'f64.const', '1', 'f64.const', '1'],
-  ],
-  ir: undefined,
+  ].map(t),
+  tokenTree: Tree.treeMap(
+    [
+      'f64.add',
+      ['f64.add', 'f64.const', '1', 'f64.const', '1'],
+      ['f64.add', 'f64.const', '1', 'f64.const', '1'],
+    ]
+    , t,
+  ),
+  ir: new OperationTree(
+    t('f64.add'),
+    [
+      new OperationTree(
+        t('f64.add'),
+        ['f64.const', '1', 'f64.const', '1'].map(t),
+      ),
+      new OperationTree(
+        t('f64.add'),
+        ['f64.const', '1', 'f64.const', '1'].map(t),
+      ),
+    ],
+  ),
   minimal_binary: undefined,
 };
 
@@ -98,12 +113,13 @@ export const simple_function_sexpr: TestCaseData = {
     ...['local.get', '$p'],
     ...['local.get', '$p', ')'],
     ...[')'],
-  ],
+  ].map(t),
 
-  tokenTreeStr: ['func',
+  tokenTree: Tree.treeMap(['func',
     ['param', '$p', 'f64'],
     ['result', 'f64'],
-    ['f64.add', 'local.get', '$p', 'local.get', '$p']],
+    ['f64.add', 'local.get', '$p', 'local.get', '$p']]
+  , t),
   ir: undefined,
   minimal_binary: undefined,
 };

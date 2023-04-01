@@ -12,67 +12,45 @@ import { getTokenTree } from '../../src/parser/treeify';
 
 
 test('treeify simple_addition_sexpr', () => {
-  const tree = getTokenTree(
-    simple_addition_sexpr.tokens
-      .map(getExpectedTokenData)
-      .map(TokenData.toToken),
-  );
-  const expectedTree = Tree.treeMap(simple_addition_sexpr.tokenTreeStr, getExpectedTokenData);
+  const tree = Tree.treeMap(getTokenTree(simple_addition_sexpr.tokens), TokenData.fromToken);
+  const expectedTree = Tree.treeMap(simple_addition_sexpr.tokenTree, TokenData.fromToken);
 
-  console.log(Tree.treeMap(tree, TokenData.fromToken));
-  console.log(expectedTree);
-  expect(Tree.treeMap(tree, TokenData.fromToken))
+  expect(tree)
     .toEqual(expectedTree);
 });
 
 
 test('treeify simple_addition_stack', () => {
-  const tree = getTokenTree(
-    simple_addition_stack.tokens
-      .map(getExpectedTokenData)
-      .map(TokenData.toToken),
-  );
-  const expectedTree = Tree.treeMap(simple_addition_stack.tokenTreeStr, getExpectedTokenData);
+  const tree = Tree.treeMap(getTokenTree(simple_addition_stack.tokens), TokenData.fromToken);
+  const expectedTree = Tree.treeMap(simple_addition_stack.tokenTree, TokenData.fromToken);
 
-  expect(Tree.treeMap(tree, TokenData.fromToken))
+  expect(tree)
     .toEqual(expectedTree);
 });
 
 
 test('treeify nested_addition_stack', () => {
-  const tree = getTokenTree(
-    nested_addition_stack.tokens
-      .map(getExpectedTokenData)
-      .map(TokenData.toToken),
-  );
-  const expectedTree = Tree.treeMap(nested_addition_stack.tokenTreeStr, getExpectedTokenData);
+  const tree = Tree.treeMap(getTokenTree(nested_addition_stack.tokens), TokenData.fromToken);
+  const expectedTree = Tree.treeMap(nested_addition_stack.tokenTree, TokenData.fromToken);
 
-  expect(Tree.treeMap(tree, TokenData.fromToken))
+  expect(tree)
     .toEqual(expectedTree);
 });
 
 
 test('treeify nested_addition_sexpr', () => {
-  const tree = getTokenTree(
-    nested_addition_sexpr.tokens
-      .map(getExpectedTokenData)
-      .map(TokenData.toToken),
-  );
-  const expectedTree = Tree.treeMap(nested_addition_sexpr.tokenTreeStr, getExpectedTokenData);
+  const tree = Tree.treeMap(getTokenTree(nested_addition_sexpr.tokens), TokenData.fromToken);
+  const expectedTree = Tree.treeMap(nested_addition_sexpr.tokenTree, TokenData.fromToken);
 
-  expect(Tree.treeMap(tree, TokenData.fromToken))
+  expect(tree)
     .toEqual(expectedTree);
 });
 
 
 test('treeify simple_function_sexpr', () => {
-  const tree = getTokenTree(
-    simple_function_sexpr.tokens
-      .map(getExpectedTokenData)
-      .map(TokenData.toToken),
-  );
-  const expectedTree = Tree.treeMap(simple_function_sexpr.tokenTreeStr, getExpectedTokenData);
+  const tree = Tree.treeMap(getTokenTree(simple_function_sexpr.tokens), TokenData.fromToken);
+  const expectedTree = Tree.treeMap(simple_function_sexpr.tokenTree, TokenData.fromToken);
 
-  expect(Tree.treeMap(tree, TokenData.fromToken))
+  expect(tree)
     .toEqual(expectedTree);
 });

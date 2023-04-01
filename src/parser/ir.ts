@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { type ProgramTree } from '../parser_1/parser';
-import { type Token } from '../token';
 import { type ValueType } from '../common/type';
 import assert from 'assert';
-import { type OpcodeType } from '../common/opcode';
+import { Token } from '../common/token';
+import { isEqual } from 'lodash';
 
 export abstract class IntermediateRepresentation {
 
@@ -79,21 +78,85 @@ export class FunctionSignature {
  *  (2) WABT function bodies are in a different module section compared to other blocks.
  */
 export class FunctionBody {
-  body: UnfoldedTokenSequence;
+  body: TokenExpression;
 
-  constructor(body: IntermediateRepresentation) {
-    assert(body instanceof UnfoldedTokenSequence);
+  constructor(body: TokenExpression) {
     this.body = body;
   }
 }
 
-export class OperationTree extends IntermediateRepresentation {
-  private operator: OpcodeType;
-  private operands: Token[];
 
-  constructor(operator: OpcodeType, operands: Token[]) {
+/*
+  EXPRESSION BODIES
+*/
+
+type TokenExpression = OperationTree | UnfoldedTokenExpression;
+
+/**
+ * Interface indicating that the particular intermediate representation
+ * may contain s-expressions, and can therefore be 'unfolded'.
+ */
+interface Unfoldable {
+  unfold(): PureUnfoldedTokenExpression;
+}
+
+/**
+ * Class representing operators and operands in an s-expression.
+ */
+export class OperationTree extends IntermediateRepresentation implements Unfoldable {
+  operator: Token;
+  operands: (Token | OperationTree)[];
+
+  constructor(operator: Token, operands: (Token | OperationTree)[]) {
     super();
     this.operator = operator;
     this.operands = operands;
+  }
+
+  unfold(): PureUnfoldedTokenExpression {
+    const unfoldedOperands: Token[] = this.operands.flatMap((operand) => {
+      if (operand instanceof Token) {
+        return [operand];
+      }
+
+      return operand.unfold().tokens;
+    });
+
+    return new PureUnfoldedTokenExpression([...unfoldedOperands, this.operator]);
+  }
+}
+
+/**
+ * Class representing a stack token expression. May have s-expressions inside.
+ */
+export class UnfoldedTokenExpression extends IntermediateRepresentation implements Unfoldable {
+  tokens: (Token | OperationTree)[];
+
+  constructor(tokens: (Token | OperationTree)[]) {
+    super();
+    this.tokens = tokens;
+  }
+  unfold(): PureUnfoldedTokenExpression {
+    const unfoldedOperands: Token[] = this.tokens.flatMap((token) => {
+      if (token instanceof Token) {
+        return [token];
+      }
+
+      return token.unfold().tokens;
+    });
+
+    return new PureUnfoldedTokenExpression(unfoldedOperands);
+  }
+}
+
+/**
+ * Class representing a stack token expression. May NOT have s-expressions inside.
+ */
+export class PureUnfoldedTokenExpression extends UnfoldedTokenExpression {
+  tokens: Token[];
+
+  constructor(tokens: Token[]) {
+    super(tokens);
+    this.tokens = tokens;
   }
 }
