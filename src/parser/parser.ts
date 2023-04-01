@@ -2,7 +2,7 @@ import {
   FunctionExpression,
   OperationTree,
   UnfoldedTokenExpression,
-  type IntermediateRepresentation, FunctionBody, FunctionSignature,
+  type IntermediateRepresentation, FunctionBody, FunctionSignature, ModuleExpression,
 } from './ir';
 import { Token, TokenType } from '../common/token';
 import { type TokenTree } from './tree_types';
@@ -17,8 +17,12 @@ export function getIntermediateRepresentation(
     return parseExpression(tokenTree);
   }
 
-  if (isFunctionDeclaration(tokenTree)) {
+  if (isFunctionExpression(tokenTree)) {
     return parseFunctionExpression(tokenTree);
+  }
+
+  if (isModuleDeclaration(tokenTree)) {
+    return parseModuleExpression(tokenTree);
   }
 
   throw new Error(
@@ -79,7 +83,7 @@ function parseStackExpression(tokenTree: TokenTree): UnfoldedTokenExpression {
 }
 
 function parseFunctionExpression(tokenTree: TokenTree): FunctionExpression {
-  assert(isFunctionDeclaration(tokenTree));
+  assert(isFunctionExpression(tokenTree));
   const paramTypes: ValueType[] = [];
   const paramNames: string[] = [];
   const resultTypes: ValueType[] = [];
@@ -140,6 +144,22 @@ function parseFunctionExpression(tokenTree: TokenTree): FunctionExpression {
   const functionSignature = new FunctionSignature(paramTypes, resultTypes, paramNames);
   return new FunctionExpression(functionSignature, functionBody);
 }
+
+function parseModuleExpression(tokenTree: TokenTree): ModuleExpression {
+  assert(isModuleDeclaration(tokenTree));
+
+  let functions = [];
+  for (let i = 1; i < tokenTree.length; i++) {
+    const tokenTreeNode = tokenTree[i];
+    assert(!(tokenTreeNode instanceof Token));
+
+    if (isFunctionExpression(tokenTreeNode)) {
+      functions.push(parseFunctionExpression(tokenTreeNode));
+    }
+  }
+
+  return new ModuleExpression(functions);
+}
 /*
   Checks for TokenTree
 */
@@ -158,13 +178,13 @@ function isStackExpression(tokenTree: TokenTree): boolean {
   return (
     tokenHeader instanceof Token
     && tokenHeader.isOpcodeToken()
-    && !isFunctionDeclaration(tokenTree)
+    && !isFunctionExpression(tokenTree)
     && !isSExpression(tokenTree)
     // && !isModuleDeclaration(tokenTree)
   );
 }
 
-function isFunctionDeclaration(tokenTree: TokenTree): boolean {
+function isFunctionExpression(tokenTree: TokenTree): boolean {
   const tokenHeader = tokenTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === TokenType.Func;
 }
@@ -181,7 +201,7 @@ function isFunctionResultDeclaration(tokenTree:TokenTree): boolean {
 
 function isModuleDeclaration(tokenTree: TokenTree): boolean {
   const tokenHeader = tokenTree[0];
-  return tokenHeader instanceof Token && isReservedType(tokenHeader, 'module');
+  return tokenHeader instanceof Token && tokenHeader.type === TokenType.Module;
 }
 
 function isReservedType(token: Token, lexeme: string) {

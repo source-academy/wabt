@@ -5,7 +5,7 @@ import { FunctionBody, FunctionExpression, FunctionSignature, OperationTree, Unf
 import { Tree } from '../../src/parser/tree_types';
 import { getSampleToken as t } from './resolved_tokens';
 
-interface TestCaseData {
+export interface TestCaseData {
   str: string;
   tokens: Array<Token>;
   tokenTree: Tree<Token>;
@@ -134,13 +134,13 @@ export const simple_add_function_no_param_names: TestCaseData = {
   str: `
   (func (param i32) (param i32) (result i32)
     local.get 0
-    local.get 0
+    local.get 1
     i32.add)
     `,
   tokens: [
     ...['(', 'func', '(', 'param', 'i32', ')', '(', 'param', 'i32', ')', '(', 'result', 'i32', ')'],
     ...['local.get', '0'],
-    ...['local.get', '0'],
+    ...['local.get', '1'],
     ...['i32.add', ')'],
   ].map(t),
 
@@ -151,13 +151,13 @@ export const simple_add_function_no_param_names: TestCaseData = {
     'local.get',
     '0',
     'local.get',
-    '0',
+    '1',
     'i32.add']
   , t),
   ir: new FunctionExpression(
     new FunctionSignature([ValueType.I32, ValueType.I32], [ValueType.I32], []),
     new FunctionBody(
-      new UnfoldedTokenExpression(['local.get', '0', 'local.get', '0', 'i32.add'].map(t)),
+      new UnfoldedTokenExpression(['local.get', '0', 'local.get', '1', 'i32.add'].map(t)),
     ),
   ),
   minimal_binary: undefined,

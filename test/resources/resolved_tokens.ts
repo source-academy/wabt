@@ -26,6 +26,7 @@ export namespace TokenData {
 
 
 namespace TokenObjects {
+  export const isNatToken = (lexeme: string) => /^\d+$/u.test(lexeme);
   export const getNatToken = (n: number) => {
     assert(Number.isInteger(n));
     return {
@@ -35,6 +36,18 @@ namespace TokenObjects {
       valueType: null,
     };
   };
+
+  export const isVarToken = (lexeme: string) => /^\$\w+$/u.test(lexeme);
+  export const getVarToken = (lexeme: string) => {
+    assert(isVarToken(lexeme));
+    return {
+      type: TokenType.Var,
+      lexeme,
+      opcodeType: null,
+      valueType: null,
+    };
+  };
+
   export const LPAR: TokenData = {
     type: TokenType.Lpar,
     lexeme: '(',
@@ -113,6 +126,12 @@ namespace TokenObjects {
     opcodeType: null,
     valueType: null,
   };
+  export const MODULE: TokenData = {
+    type: TokenType.Module,
+    lexeme: 'module',
+    opcodeType: null,
+    valueType: null,
+  };
 
 }
 const resolvedTokens: Record<string, TokenData> = {
@@ -129,11 +148,16 @@ const resolvedTokens: Record<string, TokenData> = {
   'func': TokenObjects.FUNC,
   'param': TokenObjects.PARAM,
   'result': TokenObjects.RESULT,
+  'module': TokenObjects.MODULE,
 };
 
 export function getExpectedTokenData(lexeme: string): TokenData {
-  if (/^\d+$/u.test(lexeme)) {
+  if (TokenObjects.isNatToken(lexeme)) {
     return TokenObjects.getNatToken(Number.parseInt(lexeme));
+  }
+
+  if (TokenObjects.isVarToken(lexeme)) {
+    return TokenObjects.getVarToken(lexeme);
   }
   return resolvedTokens[lexeme];
 }

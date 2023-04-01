@@ -4,6 +4,7 @@ import {
   PureUnfoldedTokenExpression,
   UnfoldedTokenExpression,
   FunctionExpression,
+  ModuleExpression,
 } from '../../src/parser/ir';
 import { getIntermediateRepresentation } from '../../src/parser/parser';
 import { isEqual as isDeepEqual, isEqual } from 'lodash';
@@ -18,6 +19,7 @@ import {
 } from '../resources/program_fragments';
 import { TokenData } from '../resources/resolved_tokens';
 import { Token } from '../../src/common/token';
+import { module_with_one_simple_add_function_with_param_names } from '../resources/module_program_fragments';
 
 test('convert simple_addition_sexpr into ir', () => {
   const tokenTree = simple_addition_sexpr.tokenTree;
@@ -66,6 +68,16 @@ test('convert simple_add_function_no_param_names into ir', () => {
   expect(ir)
     .toEqual(expectedIR);
 });
+
+test('convert module_with_one_simple_add_function_no_param_names into ir', () => {
+  const tokenTree = module_with_one_simple_add_function_with_param_names.tokenTree;
+  const ir = getIntermediateRepresentation(tokenTree);
+  const expectedIR = module_with_one_simple_add_function_with_param_names.ir!;
+  expect(ir)
+    .toEqual(expectedIR);
+});
+
+
 
 /**
  * Custom equality comparison between tokens/intermediate representations for testing purposes
@@ -136,6 +148,21 @@ function isIREqual(
   ) {
     return isIREqual(lhs.functionBody.body, rhs.functionBody.body)
     && isEqual(lhs.functionSignature, rhs.functionSignature);
+  }
+
+  if (
+    lhs instanceof ModuleExpression
+      && rhs instanceof ModuleExpression
+  ) {
+    if (lhs.functionDeclarations.length !== rhs.functionDeclarations.length) {
+      return false;
+    }
+    for (let i = 0; i < lhs.functionDeclarations.length; i++) {
+      if (!isIREqual(lhs.functionDeclarations[i], rhs.functionDeclarations[i])) {
+        return false;
+      }
+    }
+    return true;
   }
 
   return false;

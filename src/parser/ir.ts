@@ -25,20 +25,11 @@ export class ModuleExpression extends IntermediateRepresentation {
   */
 
   // Type Section
-  functionSignatures: FunctionSignature[] = [];
+  functionDeclarations: FunctionExpression[] = [];
 
-  // Func Section
-  functionBodies: FunctionBody[] = [];
-
-  constructor(body: IntermediateRepresentation[]) {
+  constructor(functionDeclarations: FunctionExpression[]) {
     super();
-
-    body.forEach((node) => {
-      if (node instanceof FunctionExpression) {
-        this.functionSignatures.push(node.functionSignature);
-        this.functionBodies.push(node.functionBody);
-      }
-    });
+    this.functionDeclarations = functionDeclarations;
   }
 }
 
