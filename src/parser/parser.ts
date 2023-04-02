@@ -2,7 +2,7 @@ import {
   FunctionExpression,
   OperationTree,
   UnfoldedTokenExpression,
-  type IntermediateRepresentation, FunctionBody, FunctionSignature, ModuleExpression, type TokenExpression,
+  type IntermediateRepresentation, FunctionBody, FunctionSignature, ModuleExpression, type TokenExpression, ExportExpression, ExportObject,
 } from './ir';
 import { Token, TokenType } from '../common/token';
 import { type TokenTree } from './tree_types';
@@ -23,6 +23,10 @@ export function getIntermediateRepresentation(
 
   if (isModuleDeclaration(tokenTree)) {
     return parseModuleExpression(tokenTree);
+  }
+
+  if (isExportDeclaration(tokenTree)) {
+    return parseExportDeclaration(tokenTree);
   }
 
   throw new Error(
@@ -159,6 +163,25 @@ function parseModuleExpression(tokenTree: TokenTree): ModuleExpression {
 
   return new ModuleExpression(functions);
 }
+
+function parseExportDeclaration(tokenTree: TokenTree): ExportExpression {
+  assert(isExportDeclaration(tokenTree));
+
+  const exportObjects: ExportObject[] = [];
+
+  for (let i = 1; i < tokenTree.length; i += 2) {
+    const exportName = tokenTree[i];
+    assert(exportName instanceof Token); // TODO better error messages
+    const exportInfo = tokenTree[i + 1];
+    assert(exportInfo instanceof Array<Token>); // TODO better error messages
+    const [exportType, exportIndex] = exportInfo;
+    assert(exportType instanceof Token && exportIndex instanceof Token);
+
+    exportObjects.push(new ExportObject(exportName, exportType, exportIndex));
+  }
+
+  return new ExportExpression(exportObjects);
+}
 /*
   Checks for TokenTree
 */
@@ -202,6 +225,11 @@ function isFunctionResultDeclaration(tokenTree:TokenTree): boolean {
 function isModuleDeclaration(tokenTree: TokenTree): boolean {
   const tokenHeader = tokenTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === TokenType.Module;
+}
+
+function isExportDeclaration(tokenTree: TokenTree): boolean {
+  const tokenHeader = tokenTree[0];
+  return tokenHeader instanceof Token && tokenHeader.type === TokenType.Export;
 }
 
 function isReservedType(token: Token, lexeme: string) {

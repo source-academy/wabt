@@ -5,6 +5,7 @@ import {
   UnfoldedTokenExpression,
   FunctionExpression,
   ModuleExpression,
+  ExportExpression,
 } from '../../src/parser/ir';
 import { getIntermediateRepresentation } from '../../src/parser/parser';
 import { isEqual as isDeepEqual, isEqual } from 'lodash';
@@ -106,7 +107,7 @@ test('convert module_with_one_simple_add_function_no_param_names into ir', () =>
 function isIREqual(
   lhs: IntermediateRepresentation | Token | Token[],
   rhs: IntermediateRepresentation | Token | Token[],
-): boolean {
+): boolean | undefined {
   if (lhs instanceof Token && rhs instanceof Token) {
     return isDeepEqual(TokenData.fromToken(lhs), TokenData.fromToken(rhs));
   }
@@ -182,7 +183,7 @@ function isIREqual(
     return true;
   }
 
-  return false;
+  return isDeepEqual(lhs, rhs);
 }
 
 expect.addEqualityTesters([isIREqual]);

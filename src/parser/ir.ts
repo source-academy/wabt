@@ -52,11 +52,11 @@ export class ExportExpression extends IntermediateRepresentation {
 }
 
 export class ExportObject {
-  exportName: string;
-  exportType: ExportType;
-  exportIndex: number;
+  exportName: Token;
+  exportType: Token;
+  exportIndex: Token;
 
-  constructor(exportName: string, exportType: ExportType, exportIndex: number) {
+  constructor(exportName: Token, exportType: Token, exportIndex: Token) {
     this.exportName = exportName;
     this.exportType = exportType;
     this.exportIndex = exportIndex;
