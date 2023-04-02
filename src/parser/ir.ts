@@ -28,9 +28,13 @@ export class ModuleExpression extends IntermediateRepresentation {
   // Type Section
   functionDeclarations: FunctionExpression[] = [];
 
-  constructor(functionDeclarations: FunctionExpression[]) {
+  // Export section
+  exportDeclarations?: ExportExpression; // TODO add support for multiple export expressions
+
+  constructor(functionDeclarations: FunctionExpression[], exportDeclarations?: ExportExpression) {
     super();
     this.functionDeclarations = functionDeclarations;
+    this.exportDeclarations = exportDeclarations;
   }
 
   getFunctionSignatures(): FunctionSignature[] {
