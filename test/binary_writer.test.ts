@@ -1,7 +1,7 @@
 import { encode, NumberEncoder, TEST_EXPORTS } from '../src/binary_writer';
 import { type FunctionExpression } from '../src/parser/ir';
 import { module_with_one_simple_add_function_with_param_names } from './resources/module_program_fragments';
-import { nested_addition_sexpr, nested_addition_stack, simple_addition_sexpr, simple_addition_stack, simple_function_sexpr_with_param_names } from './resources/program_fragments';
+import { export_func_add_by_index, nested_addition_sexpr, nested_addition_stack, simple_addition_sexpr, simple_addition_stack, simple_function_sexpr_with_param_names } from './resources/program_fragments';
 
 describe('Encode const numbers', () => {
   test('encode 1.0 (f64)', () => {
@@ -61,6 +61,13 @@ describe('Encode program fragments', () => {
   test('Encode function body: simple_function_sexpr_with_param_names', () => {
     const encoding = encode((simple_function_sexpr_with_param_names.ir as FunctionExpression).functionBody);
     const expectedEncoding = simple_function_sexpr_with_param_names.minimal_binary_function_body;
+    expect(encoding)
+      .toEqual(expectedEncoding);
+  });
+
+  test('Encode exports: export_func_add_by_index', () => {
+    const encoding = encode(export_func_add_by_index.ir);
+    const expectedEncoding = export_func_add_by_index.minimal_binary;
     expect(encoding)
       .toEqual(expectedEncoding);
   });

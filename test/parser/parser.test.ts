@@ -17,6 +17,7 @@ import {
   simple_add_function_no_param_names,
   simple_function_sexpr_with_param_names,
   simple_addition_sexpr_without_argument_bracket_fails,
+  export_func_add_by_index,
 } from '../resources/program_fragments';
 import { TokenData } from '../resources/resolved_tokens';
 import { Token } from '../../src/common/token';
@@ -73,6 +74,14 @@ test('convert simple_add_function_no_param_names into ir', () => {
   const tokenTree = simple_add_function_no_param_names.tokenTree;
   const ir = getIntermediateRepresentation(tokenTree);
   const expectedIR = simple_add_function_no_param_names.ir!;
+  expect(ir)
+    .toEqual(expectedIR);
+});
+
+test('convert export_func_add_by_index into ir', () => {
+  const tokenTree = export_func_add_by_index.tokenTree;
+  const ir = getIntermediateRepresentation(tokenTree);
+  const expectedIR = export_func_add_by_index.ir!;
   expect(ir)
     .toEqual(expectedIR);
 });

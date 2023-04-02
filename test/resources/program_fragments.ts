@@ -227,9 +227,9 @@ export const simple_add_function_no_param_names: TestCaseData = {
 //   minimal_binary: undefined,
 // };
 
-export const export_func_add_as_add = {
+export const export_func_add_by_index = {
   str: '(export "add" (func 0))',
-  tokens: ['(', 'export', '"', 'add', '"', '(', 'func', '0', ')', ')'],
+  tokens: ['(', 'export', '"add"', '(', 'func', '0', ')', ')'].map(t),
   tokenTree: Tree.treeMap(['export', '"add"', ['func', '0']], t),
   ir: new ExportExpression([new ExportObject('add', ExportType.Func, 0)]),
   minimal_binary: [
