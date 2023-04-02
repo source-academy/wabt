@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { type ValueType } from '../common/type';
-import { Token } from '../common/token';
-import { type ExportType } from '../common/export_types';
+import { Token, TokenType } from '../common/token';
+import { ExportType } from '../common/export_types';
 
 export abstract class IntermediateRepresentation {
 
@@ -52,14 +52,25 @@ export class ExportExpression extends IntermediateRepresentation {
 }
 
 export class ExportObject {
-  exportName: Token;
-  exportType: Token;
-  exportIndex: Token;
+  exportName: string;
+  exportType: ExportType;
+  exportIndex: number;
 
   constructor(exportName: Token, exportType: Token, exportIndex: Token) {
-    this.exportName = exportName;
-    this.exportType = exportType;
-    this.exportIndex = exportIndex;
+    if (exportName.type !== TokenType.Text) {
+      throw new Error(`unexpected export name: ${exportName}`); // TODO better errors
+    }
+    this.exportName = exportName.lexeme.slice(1, exportName.lexeme.length - 1);
+
+    if (exportIndex.type !== TokenType.Nat) { // TODO implement named exports
+      throw new Error(`unexpected export ID: ${exportIndex}. If this is meant to be a $identifier, then it is not implemented yet.`);
+    }
+    this.exportIndex = Number.parseInt(exportIndex.lexeme);
+
+    if (exportType.type !== TokenType.Func) {
+      throw new Error(`unexpected export type: ${exportType}`); // TODO better errors
+    }
+    this.exportType = ExportType.Func;
   }
 }
 /*

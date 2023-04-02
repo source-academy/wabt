@@ -6,16 +6,16 @@ export enum ExportType {
 }
 
 export namespace ExportType {
-  export function getEncoding(e: ExportType): Uint8Array {
+  export function getEncoding(e: ExportType): number {
     switch (e) {
       case ExportType.Func:
-        return new Uint8Array([0]);
+        return 0;
       case ExportType.Table:
-        return new Uint8Array([1]);
+        return 1;
       case ExportType.Mem:
-        return new Uint8Array([2]);
+        return 2;
       case ExportType.Global:
-        return new Uint8Array([3]);
+        return 3;
 
       default:
         throw new Error(`ExportType ${e} not recognized`);

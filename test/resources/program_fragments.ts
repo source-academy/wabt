@@ -437,10 +437,11 @@ export const export_func_add_by_index = {
   tokens: ['(', 'export', '"add"', '(', 'func', '0', ')', ')'].map(t),
   tokenTree: Tree.treeMap(['export', '"add"', ['func', '0']], t),
   ir: new ExportExpression([new ExportObject(t('"add"'), t('func'), t('0'))]),
-  minimal_binary: [
+  minimal_binary: new Uint8Array([
+    0x01, // num exports
     0x03, // string length
     ...[0x61, 0x64, 0x64], // "add" export name
     0x00, // export kind
     0x00, // export func index
-  ],
+  ]),
 };

@@ -1,9 +1,10 @@
 /* eslint-disable array-element-newline */ // (array formatting)
-import { FunctionBody, FunctionSignature, type ModuleExpression, PureUnfoldedTokenExpression, Unfoldable, type IntermediateRepresentation } from './parser/ir';
+import { FunctionBody, FunctionSignature, type ModuleExpression, PureUnfoldedTokenExpression, Unfoldable, type IntermediateRepresentation, ExportExpression, type ExportObject } from './parser/ir';
 import { ValueType } from './common/type';
 import { Token, TokenType } from './common/token';
 import { Opcode, OpcodeType } from './common/opcode';
 import assert from 'assert';
+import { ExportType } from './common/export_types';
 
 namespace SectionCode {
   export const Type = 1;
@@ -35,6 +36,10 @@ export function encode(ir: IntermediateRepresentation): Uint8Array {
   }
   if (ir instanceof FunctionBody) {
     return encodeFunctionBody(ir);
+  }
+
+  if (ir instanceof ExportExpression) {
+    return encodeExportExpression(ir);
   }
 
   throw new Error(`Unexpected Intermediate Representation: ${ir.constructor.name}, ${JSON.stringify(ir, undefined, 2)}`);
@@ -142,6 +147,33 @@ function encodePureUnfoldedTokenExpression(ir: PureUnfoldedTokenExpression): Uin
   return new Uint8Array(binary);
 }
 
+/**
+ * Encode an export expression.
+ * TODO this does not work for multiple exports.
+ * @param ir export expression to encode
+ */
+function encodeExportExpression(ir: ExportExpression): Uint8Array {
+  const { exportObjects } = ir;
+
+  const exportNum = exportObjects.length;
+
+  const exportEncodings: number[] = [];
+  for (const exportObj of exportObjects) {
+    exportEncodings.push(...encodeExportObject(exportObj));
+  }
+
+  return new Uint8Array([exportNum, ...exportEncodings]);
+}
+
+function encodeExportObject(obj: ExportObject): Uint8Array {
+  const { exportIndex, exportName, exportType } = obj;
+  const exportNameEncoding = [];
+
+  for (let i = 0; i < exportName.length; i++) {
+    exportNameEncoding.push(exportName.charCodeAt(i));
+  }
+  return new Uint8Array([exportName.length, ...exportNameEncoding, ExportType.getEncoding(exportType), exportIndex]);
+}
 /**
  * Encode the function signature of a FunctionSignature intermediate representation.
  * This function encodes a function signature to be used in the "Type" (1) section of a Module encoding.
