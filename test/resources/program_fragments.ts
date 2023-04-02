@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { type Token } from '../../src/common/token';
 import { ValueType } from '../../src/common/type';
-import { FunctionBody, FunctionExpression, FunctionSignature, OperationTree, UnfoldedTokenExpression, type IntermediateRepresentation } from '../../src/parser/ir';
+import { FunctionBody, FunctionExpression, FunctionSignature, OperationTree, PureUnfoldedTokenExpression, UnfoldedTokenExpression, type IntermediateRepresentation } from '../../src/parser/ir';
 import { Tree } from '../../src/parser/tree_types';
 import { getSampleToken as t } from './resolved_tokens';
 
@@ -10,10 +10,10 @@ export interface TestCaseData {
   tokens: Array<Token>;
   tokenTree: Tree<Token>;
   ir: IntermediateRepresentation;
+  unfolded_ir?: IntermediateRepresentation;
   minimal_binary?: Uint8Array;
 }
 
-// TODO note that the brackets around f64.const are necessary. Add a test case that fails when there are no brackets.
 export const simple_addition_sexpr: TestCaseData = {
   str: `
   (f64.add
@@ -27,7 +27,8 @@ export const simple_addition_sexpr: TestCaseData = {
     new UnfoldedTokenExpression([t('f64.const'), t('1')]),
     new UnfoldedTokenExpression([t('f64.const'), t('1.5')]),
   ]),
-  minimal_binary: undefined,
+  unfolded_ir: new PureUnfoldedTokenExpression(['f64.const', '1', 'f64.const', '1.5', 'f64.add'].map(t)),
+  minimal_binary: new Uint8Array([0x44, 0, 0, 0, 0, 0, 0, 0xf0, 0x3f, 0x44, 0, 0, 0, 0, 0, 0, 0xf8, 0x3f, 0xa0]),
 };
 
 export const simple_addition_sexpr_without_argument_bracket_fails = {
@@ -50,7 +51,8 @@ export const simple_addition_stack: TestCaseData = {
   tokens: ['(', 'f64.const', '1', 'f64.const', '1.5', 'f64.add', ')'].map(t),
   tokenTree: ['f64.const', '1', 'f64.const', '1.5', 'f64.add'].map(t),
   ir: new UnfoldedTokenExpression(['f64.const', '1', 'f64.const', '1.5', 'f64.add'].map(t)),
-  minimal_binary: undefined,
+  unfolded_ir: new PureUnfoldedTokenExpression(['f64.const', '1', 'f64.const', '1.5', 'f64.add'].map(t)),
+  minimal_binary: new Uint8Array([0x44, 0, 0, 0, 0, 0, 0, 0xf0, 0x3f, 0x44, 0, 0, 0, 0, 0, 0, 0xf8, 0x3f, 0xa0]),
 };
 
 export const nested_addition_stack: TestCaseData = {
@@ -66,7 +68,8 @@ export const nested_addition_stack: TestCaseData = {
   tokens: ['f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.add'].map(t),
   tokenTree: ['f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.add'].map(t),
   ir: new UnfoldedTokenExpression(['f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.add'].map(t)),
-  minimal_binary: undefined,
+  unfolded_ir: new PureUnfoldedTokenExpression(['f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.add'].map(t)),
+  minimal_binary: new Uint8Array([0x44, 0, 0, 0, 0, 0, 0, 0xf0, 0x3f, 0x44, 0, 0, 0, 0, 0, 0, 0xf0, 0x3f, 0xa0, 0x44, 0, 0, 0, 0, 0, 0, 0xf0, 0x3f, 0x44, 0, 0, 0, 0, 0, 0, 0xf0, 0x3f, 0xa0, 0xa0]),
 };
 
 export const nested_addition_sexpr: TestCaseData = {
@@ -112,7 +115,8 @@ export const nested_addition_sexpr: TestCaseData = {
       ),
     ],
   ),
-  minimal_binary: undefined,
+  unfolded_ir: new PureUnfoldedTokenExpression(['f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.const', '1', 'f64.const', '1', 'f64.add', 'f64.add'].map(t)),
+  minimal_binary: new Uint8Array([0x44, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0x44, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0xa0, 0x44, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0x44, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0xa0, 0xa0]),
 };
 
 export const simple_function_sexpr_with_param_names: TestCaseData = {

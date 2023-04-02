@@ -145,8 +145,8 @@ namespace Program1 {
 // console.log(JSON.stringify(ir, undefined, 2));
 // });
 
-console.log(Opcode.getParamLength(OpcodeType.F64Const));
-console.log(Opcode.getParamTypes(OpcodeType.F64Const));
+// console.log(Opcode.getParamLength(OpcodeType.F64Const));
+// console.log(Opcode.getParamTypes(OpcodeType.F64Const));
 
 /*
 [

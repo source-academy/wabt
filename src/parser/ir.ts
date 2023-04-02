@@ -91,8 +91,14 @@ export type TokenExpression = OperationTree | UnfoldedTokenExpression;
  * Interface indicating that the particular intermediate representation
  * may contain s-expressions, and can therefore be 'unfolded'.
  */
-interface Unfoldable {
+export interface Unfoldable {
   unfold(): PureUnfoldedTokenExpression;
+}
+
+export namespace Unfoldable {
+  export function instanceOf(obj: object): obj is Unfoldable {
+    return 'unfold' in obj;
+  }
 }
 
 /**
@@ -147,11 +153,11 @@ export class UnfoldedTokenExpression extends IntermediateRepresentation implemen
 /**
  * Class representing a stack token expression. May NOT have s-expressions inside.
  */
-export class PureUnfoldedTokenExpression extends UnfoldedTokenExpression {
+export class PureUnfoldedTokenExpression extends IntermediateRepresentation {
   tokens: Token[];
 
   constructor(tokens: Token[]) {
-    super(tokens);
+    super();
     this.tokens = tokens;
   }
 }
