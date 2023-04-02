@@ -1,5 +1,5 @@
 /* eslint-disable array-element-newline */ // (array formatting)
-import { FunctionBody, FunctionSignature, type ModuleExpression, PureUnfoldedTokenExpression, Unfoldable, type IntermediateRepresentation, ExportExpression, type ExportObject } from './parser/ir';
+import { FunctionBody, FunctionSignature, ModuleExpression, PureUnfoldedTokenExpression, Unfoldable, type IntermediateRepresentation, ExportExpression, type ExportObject } from './parser/ir';
 import { ValueType } from './common/type';
 import { Token, TokenType } from './common/token';
 import { Opcode, OpcodeType } from './common/opcode';
@@ -40,6 +40,10 @@ export function encode(ir: IntermediateRepresentation): Uint8Array {
 
   if (ir instanceof ExportExpression) {
     return encodeExportExpression(ir);
+  }
+
+  if (ir instanceof ModuleExpression) {
+    return encodeModule(ir);
   }
 
   throw new Error(`Unexpected Intermediate Representation: ${ir.constructor.name}, ${JSON.stringify(ir, undefined, 2)}`);
@@ -86,6 +90,7 @@ function encodeModuleTypeSection(ir: ModuleExpression): Uint8Array {
 function encodeModuleImportSection(ir: ModuleExpression): Uint8Array {
   return new Uint8Array([]);
 }
+
 function encodeModuleFunctionSection(ir: ModuleExpression): Uint8Array {
   const functions = ir.getFunctionSignatures();
   const num_fns = functions.length;

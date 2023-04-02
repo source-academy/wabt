@@ -151,17 +151,22 @@ function parseFunctionExpression(tokenTree: TokenTree): FunctionExpression {
 function parseModuleExpression(tokenTree: TokenTree): ModuleExpression {
   assert(isModuleDeclaration(tokenTree));
 
-  let functions = [];
+  const functionExps: FunctionExpression[] = [];
+  const exportExps: ExportExpression[] = [];
   for (let i = 1; i < tokenTree.length; i++) {
     const tokenTreeNode = tokenTree[i];
     assert(!(tokenTreeNode instanceof Token));
 
     if (isFunctionExpression(tokenTreeNode)) {
-      functions.push(parseFunctionExpression(tokenTreeNode));
+      functionExps.push(parseFunctionExpression(tokenTreeNode));
+    }
+
+    if (isExportDeclaration(tokenTreeNode)) {
+      exportExps.push(parseExportDeclaration(tokenTreeNode));
     }
   }
 
-  return new ModuleExpression(functions);
+  return new ModuleExpression(functionExps, exportExps[0]); // TODO fix this: only first export experssion is passed
 }
 
 function parseExportDeclaration(tokenTree: TokenTree): ExportExpression {
