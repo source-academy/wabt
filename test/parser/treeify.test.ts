@@ -10,7 +10,7 @@ import {
 } from '../resources/program_fragments';
 import { Tree } from '../../src/parser/tree_types';
 import { getTokenTree } from '../../src/parser/treeify';
-import { module_with_one_simple_add_function_with_param_names } from '../resources/module_program_fragments';
+import { module_with_exported_add_function_no_names, module_with_one_simple_add_function_with_param_names } from '../resources/module_program_fragments';
 
 
 
@@ -88,6 +88,14 @@ test('treeify export_func_add_by_index', () => {
 test('treeify module_with_one_simple_add_function_no_param_names', () => {
   const tree = Tree.treeMap(getTokenTree(module_with_one_simple_add_function_with_param_names.tokens), TokenData.fromToken);
   const expectedTree = Tree.treeMap(module_with_one_simple_add_function_with_param_names.tokenTree, TokenData.fromToken);
+
+  expect(tree)
+    .toEqual(expectedTree);
+});
+
+test('treeify module_with_exported_add_function_no_names', () => {
+  const tree = Tree.treeMap(getTokenTree(module_with_exported_add_function_no_names.tokens), TokenData.fromToken);
+  const expectedTree = Tree.treeMap(module_with_exported_add_function_no_names.tokenTree, TokenData.fromToken);
 
   expect(tree)
     .toEqual(expectedTree);

@@ -22,7 +22,7 @@ import {
 } from '../resources/program_fragments';
 import { TokenData } from '../resources/resolved_tokens';
 import { Token } from '../../src/common/token';
-import { module_with_one_simple_add_function_with_param_names } from '../resources/module_program_fragments';
+import { module_with_exported_add_function_no_names, module_with_one_simple_add_function_with_param_names } from '../resources/module_program_fragments';
 
 test('convert simple_addition_sexpr into ir', () => {
   const tokenTree = simple_addition_sexpr.tokenTree;
@@ -90,7 +90,15 @@ test('convert export_func_add_by_index into ir', () => {
 test('convert module_with_one_simple_add_function_no_param_names into ir', () => {
   const tokenTree = module_with_one_simple_add_function_with_param_names.tokenTree;
   const ir = getIntermediateRepresentation(tokenTree);
-  const expectedIR = module_with_one_simple_add_function_with_param_names.ir!;
+  const expectedIR = module_with_one_simple_add_function_with_param_names.ir;
+  expect(ir)
+    .toEqual(expectedIR);
+});
+
+test('convert module_with_exported_add_function_no_names into ir', () => {
+  const tokenTree = module_with_exported_add_function_no_names.tokenTree;
+  const ir = getIntermediateRepresentation(tokenTree);
+  const expectedIR = module_with_exported_add_function_no_names.ir;
   expect(ir)
     .toEqual(expectedIR);
 });

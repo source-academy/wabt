@@ -9,7 +9,7 @@ import {
   simple_add_function_no_param_names,
   export_func_add_by_index,
 } from '../resources/program_fragments';
-import { module_with_one_simple_add_function_with_param_names } from '../resources/module_program_fragments';
+import { module_with_exported_add_function_no_names, module_with_one_simple_add_function_with_param_names } from '../resources/module_program_fragments';
 
 test('tokenize simple_addition_sexpr', () => {
   const tokens = tokenize(simple_addition_sexpr.str)
@@ -81,6 +81,15 @@ test('tokenize module_with_one_simple_add_function_no_param_names', () => {
   const tokens = tokenize(module_with_one_simple_add_function_with_param_names.str)
     .map(TokenData.fromToken);
   const expectedTokenData = module_with_one_simple_add_function_with_param_names.tokens.map(TokenData.fromToken);
+
+  expect(tokens)
+    .toEqual(expectedTokenData);
+});
+
+test('tokenize module_with_exported_add_function_no_names', () => {
+  const tokens = tokenize(module_with_exported_add_function_no_names.str)
+    .map(TokenData.fromToken);
+  const expectedTokenData = module_with_exported_add_function_no_names.tokens.map(TokenData.fromToken);
 
   expect(tokens)
     .toEqual(expectedTokenData);
