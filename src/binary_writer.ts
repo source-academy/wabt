@@ -299,6 +299,7 @@ export namespace NumberEncoder {
 }
 
 export const TEST_EXPORTS = {
+  encodeModule,
   encodeModuleTypeSection,
   encodeModuleFunctionSection,
   encodeModuleExportSection,

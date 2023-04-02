@@ -122,6 +122,18 @@ describe('encode modules', () => {
       expect(encoding)
         .toEqual(expected);
     });
+
+    test('Encode entire module: module_with_one_simple_add_function_with_param_names', () => {
+      const encode_fn = TEST_EXPORTS.encodeModule;
+      const encoding = encode_fn(
+        module_with_one_simple_add_function_with_param_names.ir,
+      );
+      const expected
+        = module_with_one_simple_add_function_with_param_names.minimal_module_encoding;
+
+      expect(encoding)
+        .toEqual(expected);
+    });
   });
 
 
@@ -169,6 +181,18 @@ describe('encode modules', () => {
       );
       const expected
         = module_with_exported_add_function_no_names.code_section_encoding;
+
+      expect(encoding)
+        .toEqual(expected);
+    });
+
+    test('Encode module: module_with_exported_add_function_no_names', () => {
+      const encode_fn = TEST_EXPORTS.encodeModule;
+      const encoding = encode_fn(
+        module_with_exported_add_function_no_names.ir,
+      );
+      const expected
+        = module_with_exported_add_function_no_names.minimal_module_encoding;
 
       expect(encoding)
         .toEqual(expected);
