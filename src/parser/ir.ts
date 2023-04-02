@@ -31,6 +31,14 @@ export class ModuleExpression extends IntermediateRepresentation {
     super();
     this.functionDeclarations = functionDeclarations;
   }
+
+  getFunctionSignatures(): FunctionSignature[] {
+    return this.functionDeclarations.map((func) => func.functionSignature);
+  }
+
+  getFunctionBody(): FunctionBody[] {
+    return this.functionDeclarations.map((func) => func.functionBody);
+  }
 }
 
 /*

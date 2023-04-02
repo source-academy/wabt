@@ -1,5 +1,5 @@
 /* eslint-disable array-element-newline */ // (array formatting)
-import { FunctionBody, FunctionSignature, PureUnfoldedTokenExpression, Unfoldable, type IntermediateRepresentation } from './parser/ir';
+import { FunctionBody, FunctionSignature, type ModuleExpression, PureUnfoldedTokenExpression, Unfoldable, type IntermediateRepresentation } from './parser/ir';
 import { ValueType } from './common/type';
 import { Token, TokenType } from './common/token';
 import { Opcode, OpcodeType } from './common/opcode';
@@ -40,6 +40,74 @@ export function encode(ir: IntermediateRepresentation): Uint8Array {
   throw new Error(`Unexpected Intermediate Representation: ${ir.constructor.name}, ${JSON.stringify(ir, undefined, 2)}`);
 }
 
+/**
+ * Get
+ * @param ir
+ * @returns
+ */
+function encodeModule(ir: ModuleExpression): Uint8Array {
+  return new Uint8Array([
+    ...[0, 'a'.charCodeAt(0), 's'.charCodeAt(0), 'm'.charCodeAt(0)], // magic number
+    ...[1, 0, 0, 0], // version number
+    ...encodeModuleTypeSection(ir),
+    ...encodeModuleImportSection(ir),
+    ...encodeModuleFunctionSection(ir),
+    ...encodeModuleTableSection(ir),
+    ...encodeModuleMemorySection(ir),
+    ...encodeModuleGlobalSection(ir),
+    ...encodeModuleExportSection(ir),
+    ...encodeModuleStartSection(ir),
+    ...encodeModuleElementSection(ir),
+    ...encodeModuleCodeSection(ir),
+    ...encodeModuleDataSection(ir),
+  ]);
+}
+
+function encodeModuleTypeSection(ir: ModuleExpression): Uint8Array {
+  const functions = ir.getFunctionSignatures();
+
+  const numTypes = functions.length;
+
+  let funcSignatureEncodings: number[] = [];
+  functions.map(encode)
+    .forEach((arr) => {
+      funcSignatureEncodings = funcSignatureEncodings.concat(...arr);
+    });
+
+  const sectionSize = funcSignatureEncodings.length + 1;
+  return new Uint8Array([SectionCode.Type, sectionSize, numTypes, ...funcSignatureEncodings]);
+}
+
+function encodeModuleImportSection(ir: ModuleExpression): Uint8Array {
+  return new Uint8Array([]);
+}
+function encodeModuleFunctionSection(ir: ModuleExpression): Uint8Array {
+  return new Uint8Array([]);
+}
+function encodeModuleTableSection(ir: ModuleExpression): Uint8Array {
+  return new Uint8Array([]);
+}
+function encodeModuleMemorySection(ir: ModuleExpression): Uint8Array {
+  return new Uint8Array([]);
+}
+function encodeModuleGlobalSection(ir: ModuleExpression): Uint8Array {
+  return new Uint8Array([]);
+}
+function encodeModuleExportSection(ir: ModuleExpression): Uint8Array {
+  return new Uint8Array([]);
+}
+function encodeModuleStartSection(ir: ModuleExpression): Uint8Array {
+  return new Uint8Array([]);
+}
+function encodeModuleElementSection(ir: ModuleExpression): Uint8Array {
+  return new Uint8Array([]);
+}
+function encodeModuleCodeSection(ir: ModuleExpression): Uint8Array {
+  return new Uint8Array([]);
+}
+function encodeModuleDataSection(ir: ModuleExpression): Uint8Array {
+  return new Uint8Array([]);
+}
 /**
  * Encode a completely unfolded token expression
  * @param ir a PureUnfoldedTokenExpression
@@ -159,105 +227,6 @@ function encodeLiteralToken(prevToken: Token, token: Token): Uint8Array {
   throw new Error(`Unsuppored literal token type: [${JSON.stringify(prevToken, undefined, 2)}, ${JSON.stringify(token, undefined, 2)}]`);
 }
 
-
-// class BinaryWriter {
-//   readonly module: ModuleExpression;
-
-//   constructor(module: ModuleExpression) {
-//     this.module = module;
-//   }
-
-//   encode(): Uint8Array {
-//     // TODO merge using .set() function https://stackoverflow.com/questions/49129643/how-do-i-merge-an-array-of-uint8arrays
-//     return new Uint8Array([
-//       ...this.encodeModulePrefix(),
-//       ...this.encodeTypeSection(),
-//       ...this.encodeImportSection(),
-//       ...this.encodeFunctionSection(),
-//       ...this.encodeTableSection(),
-//       ...this.encodeMemorySection(),
-//       ...this.encodeGlobalSection(),
-//       ...this.encodeExportSection(),
-//       ...this.encodeStartSection(),
-//       ...this.encodeElementSection(),
-//       ...this.encodeCodeSection(),
-//       ...this.encodeDataSection(),
-//     ]);
-//   }
-
-//   private encodeModulePrefix(): number[] {
-//     return [
-//       ...[0, 'a'.charCodeAt(0), 's'.charCodeAt(0), 'm'.charCodeAt(0)], // magic number
-//       ...[1, 0, 0, 0], // version number
-//     ];
-//   }
-
-//   private encodeTypeSection(): number[] {
-//     const type_number = this.module.functionSignatures.length;
-
-//     // encode functions
-//     let encoded_func_sigs: number[] = this.module.functionSignatures.flatMap((sig) => [
-//       0x60,
-//       sig.paramTypes.length,
-//       ...sig.paramTypes.map(ValueType.getValue),
-//       sig.returnTypes.length,
-//       ...sig.returnTypes.map(ValueType.getValue),
-//     ]);
-
-//     const total_bytes = 1 + encoded_func_sigs.length;
-
-//     return [SectionCode.Type, total_bytes, type_number, ...encoded_func_sigs];
-//   }
-
-//   private encodeImportSection(): number[] {
-//     return [];
-//   }
-
-//   private encodeFunctionSection(): number[] {
-//     let func_length = this.module.functionSignatures.length;
-//     let encoded_func_decls: number[] = [
-//       ...this.module.functionSignatures.map((sig, i) => i),
-//     ];
-
-//     const total_bytes = 1 + encoded_func_decls.length;
-//     return [SectionCode.Function, total_bytes, func_length, ...encoded_func_decls];
-//   }
-
-//   private encodeTableSection(): number[] {
-//     return [];
-//   }
-//   private encodeMemorySection(): number[] {
-//     return [];
-//   }
-//   private encodeGlobalSection(): number[] {
-//     return [];
-//   }
-//   private encodeExportSection(): number[] {
-//     return [];
-//   }
-//   private encodeStartSection(): number[] {
-//     return [];
-//   }
-//   private encodeElementSection(): number[] {
-//     return [];
-//   }
-
-//   private encodeCodeSection(): number[] {
-//     let func_length = this.module.functionBodies.length;
-//     let encoded_func_bodies: number[][]
-//     = this.module.functionBodies.map((body) => {
-//       const contents = body.body.contents;
-//       return contents.map((token) => token.getOpcodeEncoding());
-//     });
-
-//     return [SectionCode.Code];
-//   }
-
-//   private encodeDataSection(): number[] {
-//     return [];
-//   }
-// }
-
 export namespace NumberEncoder {
   /**
    * Get the little-endian binary encoding of a double-precision floating-point number,
@@ -274,3 +243,7 @@ export namespace NumberEncoder {
     return bytes.reverse();
   }
 }
+
+export const TEST_EXPORTS = {
+  encodeModuleTypeSection,
+};

@@ -4,7 +4,7 @@ import { Tree } from '../../src/parser/tree_types';
 import { type TestCaseData } from './program_fragments';
 import { getSampleToken as t } from './resolved_tokens';
 
-export const module_with_one_simple_add_function_with_param_names: TestCaseData = {
+export const module_with_one_simple_add_function_with_param_names = {
   str: `
   (module
     (func (param $lhs i32) (param $rhs i32) (result i32)
@@ -40,5 +40,5 @@ export const module_with_one_simple_add_function_with_param_names: TestCaseData 
       ),
     ],
   ),
-  minimal_binary: undefined,
+  type_section_encoding: new Uint8Array([0x01, 0x07, 0x01, 0x60, 0x02, 0x7f, 0x7f, 0x01, 0x7f]),
 };
