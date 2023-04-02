@@ -38,10 +38,21 @@ namespace TokenObjects {
   };
 
   export const isVarToken = (lexeme: string) => /^\$\w+$/u.test(lexeme);
-  export const getVarToken = (lexeme: string) => {
+  export const getVarToken: ((lexeme: string) => TokenData) = (lexeme: string) => {
     assert(isVarToken(lexeme));
     return {
       type: TokenType.Var,
+      lexeme,
+      opcodeType: null,
+      valueType: null,
+    };
+  };
+
+  export const isTextToken = (lexeme: string) => /^"\w+"$/u.test(lexeme);
+  export const getTextToken: ((lexeme: string) => TokenData) = (lexeme: string) => {
+    assert(isTextToken(lexeme));
+    return {
+      type: TokenType.Text,
       lexeme,
       opcodeType: null,
       valueType: null,
@@ -132,6 +143,12 @@ namespace TokenObjects {
     opcodeType: null,
     valueType: null,
   };
+  export const EXPORT: TokenData = {
+    type: TokenType.Export,
+    lexeme: 'export',
+    opcodeType: null,
+    valueType: null,
+  };
 
 }
 const resolvedTokens: Record<string, TokenData> = {
@@ -149,6 +166,7 @@ const resolvedTokens: Record<string, TokenData> = {
   'param': TokenObjects.PARAM,
   'result': TokenObjects.RESULT,
   'module': TokenObjects.MODULE,
+  'export': TokenObjects.EXPORT,
 };
 
 export function getExpectedTokenData(lexeme: string): TokenData {
@@ -159,7 +177,16 @@ export function getExpectedTokenData(lexeme: string): TokenData {
   if (TokenObjects.isVarToken(lexeme)) {
     return TokenObjects.getVarToken(lexeme);
   }
-  return resolvedTokens[lexeme];
+
+  if (TokenObjects.isTextToken(lexeme)) {
+    return TokenObjects.getTextToken(lexeme);
+  }
+
+  const token = resolvedTokens[lexeme];
+  if (typeof token === 'undefined') {
+    throw new Error(`cannot resolve token ${lexeme}`);
+  }
+  return token;
 }
 
 export function getSampleToken(lexeme: string): Token {

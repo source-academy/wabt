@@ -1,7 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
+import { ExportType } from '../../src/common/export_types';
 import { type Token } from '../../src/common/token';
 import { ValueType } from '../../src/common/type';
-import { FunctionExpression, OperationTree, PureUnfoldedTokenExpression, UnfoldedTokenExpression, type IntermediateRepresentation } from '../../src/parser/ir';
+import { ExportExpression, ExportObject, FunctionExpression, OperationTree, PureUnfoldedTokenExpression, UnfoldedTokenExpression, type IntermediateRepresentation } from '../../src/parser/ir';
 import { Tree } from '../../src/parser/tree_types';
 import { getSampleToken as t } from './resolved_tokens';
 
@@ -189,4 +190,52 @@ export const simple_add_function_no_param_names: TestCaseData = {
     new UnfoldedTokenExpression(['local.get', '0', 'local.get', '1', 'i32.add'].map(t)),
   ),
   minimal_binary: undefined,
+};
+
+// export const simple_named_add_function_no_param_names: TestCaseData = {
+//   str: `
+//   (func $add (param i32) (param i32) (result i32)
+//     local.get 0
+//     local.get 1
+//     i32.add)
+//     `,
+//   tokens: [
+//     ...['(', 'func', '$add', '(', 'param', 'i32', ')', '(', 'param', 'i32', ')', '(', 'result', 'i32', ')'],
+//     ...['local.get', '0'],
+//     ...['local.get', '1'],
+//     ...['i32.add', ')'],
+//   ].map(t),
+//
+//   tokenTree: Tree.treeMap(['func',
+//     '$add',
+//     ['param', 'i32'],
+//     ['param', 'i32'],
+//     ['result', 'i32'],
+//     'local.get',
+//     '0',
+//     'local.get',
+//     '1',
+//     'i32.add']
+//   , t),
+//   ir: new FunctionExpression(
+//     [ValueType.I32, ValueType.I32],
+//     [ValueType.I32],
+//     [],
+//     new UnfoldedTokenExpression(['local.get', '0', 'local.get', '1', 'i32.add'].map(t)),
+//     '$add',
+//   ),
+//   minimal_binary: undefined,
+// };
+
+export const export_func_add_as_add = {
+  str: '(export "add" (func 0))',
+  tokens: ['(', 'export', '"', 'add', '"', '(', 'func', '0', ')', ')'],
+  tokenTree: Tree.treeMap(['export', '"add"', ['func', '0']], t),
+  ir: new ExportExpression([new ExportObject('add', ExportType.Func, 0)]),
+  minimal_binary: [
+    0x03, // string length
+    ...[0x61, 0x64, 0x64], // "add" export name
+    0x00, // export kind
+    0x00, // export func index
+  ],
 };

@@ -75,7 +75,6 @@ test('treeify simple_add_function_no_param_names', () => {
     .toEqual(expectedTree);
 });
 
-
 test('treeify module_with_one_simple_add_function_no_param_names', () => {
   const tree = Tree.treeMap(getTokenTree(module_with_one_simple_add_function_with_param_names.tokens), TokenData.fromToken);
   const expectedTree = Tree.treeMap(module_with_one_simple_add_function_with_param_names.tokenTree, TokenData.fromToken);

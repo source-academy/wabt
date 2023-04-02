@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { type ValueType } from '../common/type';
 import { Token } from '../common/token';
+import { type ExportType } from '../common/export_types';
 
 export abstract class IntermediateRepresentation {
 
@@ -41,6 +42,26 @@ export class ModuleExpression extends IntermediateRepresentation {
   }
 }
 
+export class ExportExpression extends IntermediateRepresentation {
+  exportObjects: ExportObject[];
+
+  constructor(exportObjects: ExportObject[]) {
+    super();
+    this.exportObjects = exportObjects;
+  }
+}
+
+export class ExportObject {
+  exportName: string;
+  exportType: ExportType;
+  exportIndex: number;
+
+  constructor(exportName: string, exportType: ExportType, exportIndex: number) {
+    this.exportName = exportName;
+    this.exportType = exportType;
+    this.exportIndex = exportIndex;
+  }
+}
 /*
 FUNCTIONS
 */
@@ -52,11 +73,13 @@ FUNCTIONS
 export class FunctionExpression extends IntermediateRepresentation {
   functionSignature: FunctionSignature;
   functionBody: FunctionBody;
+  functionName?: string;
 
-  constructor(paramTypes: ValueType[], returnTypes: ValueType[], paramNames: string[], body: TokenExpression) {
+  constructor(paramTypes: ValueType[], returnTypes: ValueType[], paramNames: string[], body: TokenExpression, functionName?: string) {
     super();
     this.functionSignature = new FunctionSignature(paramTypes, returnTypes, paramNames);
     this.functionBody = new FunctionBody(body, paramNames);
+    this.functionName = functionName;
   }
 }
 
@@ -64,11 +87,13 @@ export class FunctionSignature {
   paramTypes: ValueType[];
   paramNames: string[];
   returnTypes: ValueType[];
+  functionName?: string;
 
-  constructor(paramTypes: ValueType[], returnTypes: ValueType[], paramNames: string[]) {
+  constructor(paramTypes: ValueType[], returnTypes: ValueType[], paramNames: string[], functionName?: string) {
     this.paramTypes = paramTypes;
     this.returnTypes = returnTypes;
     this.paramNames = paramNames;
+    this.functionName = functionName;
   }
 }
 
