@@ -1,8 +1,9 @@
 /* eslint-disable array-element-newline */ // (array formatting)
-import { PureUnfoldedTokenExpression, Unfoldable, type IntermediateRepresentation } from './parser/ir';
+import { FunctionBody, FunctionSignature, PureUnfoldedTokenExpression, Unfoldable, type IntermediateRepresentation } from './parser/ir';
 import { ValueType } from './common/type';
-import { TokenType, type Token } from './common/token';
+import { Token, TokenType } from './common/token';
 import { Opcode, OpcodeType } from './common/opcode';
+import assert from 'assert';
 
 namespace SectionCode {
   export const Type = 1;
@@ -26,24 +27,97 @@ export function encode(ir: IntermediateRepresentation): Uint8Array {
   }
 
   if (ir instanceof PureUnfoldedTokenExpression) {
-    const binary: number[] = [];
-    for (const [index, token] of ir.tokens.entries()) {
-      if (!isLiteralToken(token)) {
-        binary.push(...encodeNonLiteralToken(token));
-      } else {
-        const prevToken = ir.tokens[index - 1];
-        binary.push(...encodeLiteralToken(prevToken, token));
-      }
-    }
-    return new Uint8Array(binary);
+    return encodePureUnfoldedTokenExpression(ir);
+  }
+
+  if (ir instanceof FunctionSignature) {
+    return encodeFunctionSignature(ir);
+  }
+  if (ir instanceof FunctionBody) {
+    return encodeFunctionBody(ir);
   }
 
   throw new Error(`Unexpected Intermediate Representation: ${ir.constructor.name}, ${JSON.stringify(ir, undefined, 2)}`);
 }
 
+/**
+ * Encode a completely unfolded token expression
+ * @param ir a PureUnfoldedTokenExpression
+ * @returns a Uint8Array binary encoding
+ */
+function encodePureUnfoldedTokenExpression(ir: PureUnfoldedTokenExpression): Uint8Array {
+  const binary: number[] = [];
+  for (const [index, token] of ir.tokens.entries()) {
+    if (!isLiteralToken(token)) {
+      binary.push(...encodeNonLiteralToken(token));
+    } else {
+      const prevToken = ir.tokens[index - 1];
+      binary.push(...encodeLiteralToken(prevToken, token));
+    }
+  }
+  return new Uint8Array(binary);
+}
+
+/**
+ * Encode the function signature of a FunctionSignature intermediate representation.
+ * This function encodes a function signature to be used in the "Type" (1) section of a Module encoding.
+ * @param ir function signature to encode
+ * @returns a Uint8Array binary encoding.
+ */
+function encodeFunctionSignature(ir: FunctionSignature): Uint8Array {
+  const FUNCTION_SIG_PREFIX = 0x60;
+
+  const param_encoding = ir.paramTypes.map((type) => ValueType.getValue(type));
+  const param_len = param_encoding.length;
+
+  const result_encoding = ir.returnTypes.map((type) => ValueType.getValue(type));
+  const result_len = result_encoding.length;
+
+  return new Uint8Array([FUNCTION_SIG_PREFIX, param_len, ...param_encoding, result_len, ...result_encoding]);
+}
+
+/**
+ * Encode the function bidt of a FunctionBody intermediate representation.
+ * This function encodes a function body to be used in the "Code" (10 / 0x0a) section of a Module encoding.
+ * @param ir function body to encode
+ * @returns a Uint8Array binary encoding.
+ */
+function encodeFunctionBody(ir: FunctionBody): Uint8Array {
+  const unfoldedBody = ir.body.unfold();
+  const paramNames = ir.paramNames;
+
+  // Replace parameter names with index.
+  for (let i = 0; i < unfoldedBody.tokens.length; i++) {
+    const token = unfoldedBody.tokens[i];
+    if (token.type === TokenType.Var) {
+      const index = paramNames.indexOf(token.lexeme);
+      if (index === -1) { // TODO proper error message
+        throw new Error(`Parameter name not found in function body: ${JSON.stringify(ir, undefined, 2)}`);
+      }
+
+      unfoldedBody.tokens[i] = convertVarToIndexToken(token, index);
+    }
+  }
+
+  const encodedBody = encode(unfoldedBody);
+  const FUNCTION_END = 0x0b;
+
+  // The random 0 there is the local declaration count. Not yet implemented, so it is 0 for now.
+  return new Uint8Array([encodedBody.length + 2, 0, ...encodedBody, FUNCTION_END]);
+}
+
+function convertVarToIndexToken(varToken: Token, index: number): Token {
+  assert(Number.isInteger(index));
+  assert(index >= 0);
+
+  return new Token(
+    TokenType.Nat, index.toString(), varToken.line, varToken.col, varToken.indexInSource, null, null,
+  );
+}
 function isLiteralToken(token: Token): boolean {
   return token.type === TokenType.Nat || token.type === TokenType.Float;
 }
+
 /**
  * Encode an individual token.
  * @param token token to encode
@@ -68,18 +142,24 @@ function encodeNonLiteralToken(token: Token): Uint8Array {
  * @param token token
  */
 function encodeLiteralToken(prevToken: Token, token: Token): Uint8Array {
-  if (prevToken.isOpcodeToken()) {
-    if (prevToken.opcodeType! === OpcodeType.F64Const) {
-      return NumberEncoder.encodeF64Const(
-        /^\d+$/u.test(token.lexeme)
-          ? Number.parseInt(token.lexeme)
-          : Number.parseFloat(token.lexeme),
-      );
-    }
+  if (prevToken.isOpcodeType(OpcodeType.F64Const)) {
+    return NumberEncoder.encodeF64Const(
+      /^\d+$/u.test(token.lexeme)
+        ? Number.parseInt(token.lexeme)
+        : Number.parseFloat(token.lexeme),
+    );
   }
 
-  throw new Error(`Unsuppored literal token type: [${JSON.stringify(prevToken, undefined, 2)}, ${JSON.stringify(token, undefined, 2)}]`); // TODO custom error
+  if (prevToken.type === TokenType.LocalGet) {
+    assert(token.type === TokenType.Nat); // TODO proper error
+    return new Uint8Array([Number.parseInt(token.lexeme)]);
+  }
+
+  // TODO custom error
+  throw new Error(`Unsuppored literal token type: [${JSON.stringify(prevToken, undefined, 2)}, ${JSON.stringify(token, undefined, 2)}]`);
 }
+
+
 // class BinaryWriter {
 //   readonly module: ModuleExpression;
 

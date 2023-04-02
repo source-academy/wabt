@@ -45,24 +45,22 @@ export class FunctionExpression extends IntermediateRepresentation {
   functionSignature: FunctionSignature;
   functionBody: FunctionBody;
 
-  constructor(signature: FunctionSignature, body: FunctionBody) {
+  constructor(paramTypes: ValueType[], returnTypes: ValueType[], paramNames: string[], body: TokenExpression) {
     super();
-    this.functionSignature = signature;
-    this.functionBody = body;
+    this.functionSignature = new FunctionSignature(paramTypes, returnTypes, paramNames);
+    this.functionBody = new FunctionBody(body, paramNames);
   }
 }
 
 export class FunctionSignature {
   paramTypes: ValueType[];
-  paramNames?: string[];
+  paramNames: string[];
   returnTypes: ValueType[];
-  hasParamNames: boolean;
 
   constructor(paramTypes: ValueType[], returnTypes: ValueType[], paramNames: string[]) {
     this.paramTypes = paramTypes;
     this.returnTypes = returnTypes;
     this.paramNames = paramNames;
-    this.hasParamNames = paramNames.length === 0;
   }
 }
 
@@ -74,9 +72,11 @@ export class FunctionSignature {
  */
 export class FunctionBody {
   body: TokenExpression;
+  paramNames: string[];
 
-  constructor(body: TokenExpression) {
+  constructor(body: TokenExpression, paramNames: string[]) {
     this.body = body;
+    this.paramNames = paramNames;
   }
 }
 

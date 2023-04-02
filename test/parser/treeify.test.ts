@@ -6,7 +6,6 @@ import {
   nested_addition_sexpr,
   simple_function_sexpr_with_param_names,
   simple_add_function_no_param_names,
-  simple_addition_sexpr_without_argument_bracket_fails,
 } from '../resources/program_fragments';
 import { Tree } from '../../src/parser/tree_types';
 import { getTokenTree } from '../../src/parser/treeify';

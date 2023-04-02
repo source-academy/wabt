@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { type Token } from '../../src/common/token';
 import { ValueType } from '../../src/common/type';
-import { FunctionBody, FunctionExpression, FunctionSignature, OperationTree, PureUnfoldedTokenExpression, UnfoldedTokenExpression, type IntermediateRepresentation } from '../../src/parser/ir';
+import { FunctionExpression, OperationTree, PureUnfoldedTokenExpression, UnfoldedTokenExpression, type IntermediateRepresentation } from '../../src/parser/ir';
 import { Tree } from '../../src/parser/tree_types';
 import { getSampleToken as t } from './resolved_tokens';
 
@@ -12,6 +12,8 @@ export interface TestCaseData {
   ir: IntermediateRepresentation;
   unfolded_ir?: IntermediateRepresentation;
   minimal_binary?: Uint8Array;
+  minimal_binary_function_signature?: Uint8Array,
+  minimal_binary_function_body?: Uint8Array,
 }
 
 export const simple_addition_sexpr: TestCaseData = {
@@ -143,18 +145,17 @@ export const simple_function_sexpr_with_param_names: TestCaseData = {
     ['f64.add', ['local.get', '$p'], ['local.get', '$p']]]
   , t),
   ir: new FunctionExpression(
-    new FunctionSignature([ValueType.F64], [ValueType.F64], ['$p']),
-    new FunctionBody(
-      new OperationTree(
-        t('f64.add'),
-        [
-          new UnfoldedTokenExpression([t('local.get'), t('$p')]),
-          new UnfoldedTokenExpression([t('local.get'), t('$p')]),
-        ],
-      ),
+    [ValueType.F64], [ValueType.F64], ['$p'], new OperationTree(
+      t('f64.add'),
+      [
+        new UnfoldedTokenExpression([t('local.get'), t('$p')]),
+        new UnfoldedTokenExpression([t('local.get'), t('$p')]),
+      ],
     ),
   ),
-  minimal_binary: undefined,
+  minimal_binary_function_signature: new Uint8Array([0x60, 0x01, 0x7c, 0x01, 0x7c]),
+  minimal_binary_function_body: new Uint8Array([0x07, 0x00, 0x20, 0x00, 0x20, 0x00, 0xa0, 0x0b]),
+
 };
 
 export const simple_add_function_no_param_names: TestCaseData = {
@@ -182,10 +183,10 @@ export const simple_add_function_no_param_names: TestCaseData = {
     'i32.add']
   , t),
   ir: new FunctionExpression(
-    new FunctionSignature([ValueType.I32, ValueType.I32], [ValueType.I32], []),
-    new FunctionBody(
-      new UnfoldedTokenExpression(['local.get', '0', 'local.get', '1', 'i32.add'].map(t)),
-    ),
+    [ValueType.I32, ValueType.I32],
+    [ValueType.I32],
+    [],
+    new UnfoldedTokenExpression(['local.get', '0', 'local.get', '1', 'i32.add'].map(t)),
   ),
   minimal_binary: undefined,
 };

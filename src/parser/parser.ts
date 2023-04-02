@@ -141,9 +141,7 @@ function parseFunctionExpression(tokenTree: TokenTree): FunctionExpression {
   }
 
   const ir = parseExpression(remainingTree);
-  const functionBody = new FunctionBody(ir);
-  const functionSignature = new FunctionSignature(paramTypes, resultTypes, paramNames);
-  return new FunctionExpression(functionSignature, functionBody);
+  return new FunctionExpression(paramTypes, resultTypes, paramNames, ir);
 }
 
 function parseModuleExpression(tokenTree: TokenTree): ModuleExpression {
