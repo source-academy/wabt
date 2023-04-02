@@ -127,21 +127,19 @@ export const module_with_exported_add_function_no_names: ModuleTestCase = {
   ].map(t),
   tokenTree: Tree.treeMap(
     [
+      'module',
       [
-        'module',
-        [
-          'func',
-          ['param', 'f64'],
-          ['param', 'f64'],
-          ['result', 'f64'],
-          'local.get',
-          '0',
-          'local.get',
-          '0',
-          'f64.add',
-        ],
-        ['export', '"add"', ['func', '0']],
+        'func',
+        ['param', 'f64'],
+        ['param', 'f64'],
+        ['result', 'f64'],
+        'local.get',
+        '0',
+        'local.get',
+        '0',
+        'f64.add',
       ],
+      ['export', '"add"', ['func', '0']],
     ],
     t,
   ),
@@ -150,7 +148,7 @@ export const module_with_exported_add_function_no_names: ModuleTestCase = {
       new FunctionExpression(
         [ValueType.F64, ValueType.F64],
         [ValueType.F64],
-        ['', ''],
+        [],
         new UnfoldedTokenExpression(
           ['local.get', '0', 'local.get', '0', 'f64.add'].map(t),
         ),

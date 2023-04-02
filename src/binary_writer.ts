@@ -105,7 +105,13 @@ function encodeModuleGlobalSection(ir: ModuleExpression): Uint8Array {
   return new Uint8Array([]);
 }
 function encodeModuleExportSection(ir: ModuleExpression): Uint8Array {
-  return new Uint8Array([]);
+  const { exportDeclarations } = ir;
+  if (typeof exportDeclarations === 'undefined') {
+    return new Uint8Array([]);
+  }
+  const exportEncoding = encode(exportDeclarations);
+  const sectionLength = exportEncoding.length;
+  return new Uint8Array([SectionCode.Export, sectionLength, ...exportEncoding]);
 }
 function encodeModuleStartSection(ir: ModuleExpression): Uint8Array {
   return new Uint8Array([]);

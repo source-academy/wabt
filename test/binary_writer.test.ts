@@ -156,7 +156,7 @@ describe('encode modules', () => {
         module_with_exported_add_function_no_names.ir,
       );
       const expected
-        = module_with_exported_add_function_no_names.function_section_encoding;
+        = module_with_exported_add_function_no_names.export_section_encoding;
 
       expect(encoding)
         .toEqual(expected);
