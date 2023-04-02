@@ -41,4 +41,5 @@ export const module_with_one_simple_add_function_with_param_names = {
     ],
   ),
   type_section_encoding: new Uint8Array([0x01, 0x07, 0x01, 0x60, 0x02, 0x7f, 0x7f, 0x01, 0x7f]),
+  function_section_encoding: new Uint8Array([0x03, 0x02, 0x01, 0x00]),
 };

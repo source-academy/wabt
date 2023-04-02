@@ -68,10 +68,20 @@ describe('Encode program fragments', () => {
 
 
 describe('encode modules', () => {
-  test('Encode type section: module_with_one_simple_add_function_with_param_names', () => {
+  test('Encode type section (1): module_with_one_simple_add_function_with_param_names', () => {
     const encode_fn = TEST_EXPORTS.encodeModuleTypeSection;
     const encoding = encode_fn(module_with_one_simple_add_function_with_param_names.ir);
     const expected = module_with_one_simple_add_function_with_param_names.type_section_encoding;
+
+    expect(encoding)
+      .toEqual(expected);
+  });
+
+
+  test('Encode function section (3): module_with_one_simple_add_function_with_param_names', () => {
+    const encode_fn = TEST_EXPORTS.encodeModuleFunctionSection;
+    const encoding = encode_fn(module_with_one_simple_add_function_with_param_names.ir);
+    const expected = module_with_one_simple_add_function_with_param_names.function_section_encoding;
 
     expect(encoding)
       .toEqual(expected);

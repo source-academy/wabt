@@ -82,7 +82,13 @@ function encodeModuleImportSection(ir: ModuleExpression): Uint8Array {
   return new Uint8Array([]);
 }
 function encodeModuleFunctionSection(ir: ModuleExpression): Uint8Array {
-  return new Uint8Array([]);
+  const functions = ir.getFunctionSignatures();
+  const num_fns = functions.length;
+  const section_size = num_fns + 1;
+
+  const function_indices = Array(num_fns)
+    .keys();
+  return new Uint8Array([SectionCode.Function, section_size, num_fns, ...function_indices]);
 }
 function encodeModuleTableSection(ir: ModuleExpression): Uint8Array {
   return new Uint8Array([]);
@@ -246,4 +252,5 @@ export namespace NumberEncoder {
 
 export const TEST_EXPORTS = {
   encodeModuleTypeSection,
+  encodeModuleFunctionSection,
 };
