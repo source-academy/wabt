@@ -86,4 +86,14 @@ describe('encode modules', () => {
     expect(encoding)
       .toEqual(expected);
   });
+
+
+  test('Encode code section (10/0x0a): module_with_one_simple_add_function_with_param_names', () => {
+    const encode_fn = TEST_EXPORTS.encodeModuleCodeSection;
+    const encoding = encode_fn(module_with_one_simple_add_function_with_param_names.ir);
+    const expected = module_with_one_simple_add_function_with_param_names.code_section_encoding;
+
+    expect(encoding)
+      .toEqual(expected);
+  });
 });

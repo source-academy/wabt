@@ -36,7 +36,7 @@ export class ModuleExpression extends IntermediateRepresentation {
     return this.functionDeclarations.map((func) => func.functionSignature);
   }
 
-  getFunctionBody(): FunctionBody[] {
+  getFunctionBodies(): FunctionBody[] {
     return this.functionDeclarations.map((func) => func.functionBody);
   }
 }

@@ -109,7 +109,17 @@ function encodeModuleElementSection(ir: ModuleExpression): Uint8Array {
   return new Uint8Array([]);
 }
 function encodeModuleCodeSection(ir: ModuleExpression): Uint8Array {
-  return new Uint8Array([]);
+  const fnBodies = ir.getFunctionBodies();
+
+  const fnBodyEncodings: number[] = [];
+  fnBodies.forEach((body) => {
+    fnBodyEncodings.push(...encode(body));
+  });
+
+  const sectionSize = fnBodyEncodings.length + 1;
+  const fnNumber = fnBodies.length;
+
+  return new Uint8Array([SectionCode.Code, sectionSize, fnNumber, ...fnBodyEncodings]);
 }
 function encodeModuleDataSection(ir: ModuleExpression): Uint8Array {
   return new Uint8Array([]);
@@ -253,4 +263,5 @@ export namespace NumberEncoder {
 export const TEST_EXPORTS = {
   encodeModuleTypeSection,
   encodeModuleFunctionSection,
+  encodeModuleCodeSection,
 };
