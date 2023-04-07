@@ -1,7 +1,7 @@
 import { type Token } from '../../src/common/token';
 import { OperationTree, PureUnfoldedTokenExpression, UnfoldedTokenExpression, type IntermediateRepresentation } from '../../src/parser/ir';
 import { type Tree } from '../../src/parser/tree_types';
-import { simple_addition_sexpr_without_argument_bracket_fails } from './invalid_function_body_fragments';
+import { simple_addition_sexpr_without_argument_bracket_fails } from './invalid_function_bodies';
 import { getSampleToken as t } from './resolved_tokens';
 
 export interface FunctionBodyTestCaseData {

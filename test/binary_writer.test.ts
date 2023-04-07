@@ -1,11 +1,9 @@
 import { encode, NumberEncoder, TEST_EXPORTS } from '../src/binary_writer';
-import { type FunctionExpression } from '../src/parser/ir';
 import { module_with_exported_add_function_no_names, module_with_one_simple_add_function_with_param_names } from './resources/module_program_fragments';
-import {
-  export_func_add_by_index,
-  simple_function_sexpr_with_param_names,
-} from './resources/program_fragments';
-import { minimalBinaryTestCases as tc1 } from './resources/valid_function_body_fragments';
+
+import { minimalBinaryTestCases as tc1 } from './resources/valid_function_bodies';
+import { validTestCases as tc2 } from './resources/function_expressions';
+import { validTestCases as tc3 } from './resources/export_expressions';
 
 test.each(tc1)('test encode function body expressions', (testCase) => {
   const encoding = encode(testCase.ir!);
@@ -13,6 +11,31 @@ test.each(tc1)('test encode function body expressions', (testCase) => {
   expect(encoding)
     .toEqual(expectedEncoding);
 });
+
+describe('Encode function expresions', () => {
+  test.each(tc2)('test encode function expression signature', (testCase) => {
+    const encoding = encode(testCase.ir.functionSignature);
+    const expectedEncoding = testCase.minimal_binary_function_signature;
+    expect(encoding)
+      .toEqual(expectedEncoding);
+  });
+
+  test.each(tc2)('test encode function expression body', (testCase) => {
+    const encoding = encode(testCase.ir.functionBody);
+    const expectedEncoding = testCase.minimal_binary_function_body;
+    expect(encoding)
+      .toEqual(expectedEncoding);
+  });
+});
+
+
+test.each(tc3)('test encode encode expressions', (testCase) => {
+  const encoding = encode(testCase.ir);
+  const expectedEncoding = testCase.minimal_binary;
+  expect(encoding)
+    .toEqual(expectedEncoding);
+});
+
 
 describe('Encode const numbers', () => {
   test('encode 1.0 (f64)', () => {
@@ -25,37 +48,6 @@ describe('Encode const numbers', () => {
   test('encode 1.5 (f64)', () => {
     const encoding = NumberEncoder.encodeF64Const(1.5);
     const expectedEncoding = new Uint8Array([0, 0, 0, 0, 0, 0, 0xf8, 0x3f]);
-    expect(encoding)
-      .toEqual(expectedEncoding);
-  });
-});
-
-describe('Encode program fragments', () => {
-  test('Encode function signature: simple_function_sexpr_with_param_names', () => {
-    const encoding = encode(
-      (simple_function_sexpr_with_param_names.ir as FunctionExpression)
-        .functionSignature,
-    );
-    const expectedEncoding
-      = simple_function_sexpr_with_param_names.minimal_binary_function_signature;
-    expect(encoding)
-      .toEqual(expectedEncoding);
-  });
-
-  test('Encode function body: simple_function_sexpr_with_param_names', () => {
-    const encoding = encode(
-      (simple_function_sexpr_with_param_names.ir as FunctionExpression)
-        .functionBody,
-    );
-    const expectedEncoding
-      = simple_function_sexpr_with_param_names.minimal_binary_function_body;
-    expect(encoding)
-      .toEqual(expectedEncoding);
-  });
-
-  test('Encode exports: export_func_add_by_index', () => {
-    const encoding = encode(export_func_add_by_index.ir);
-    const expectedEncoding = export_func_add_by_index.minimal_binary;
     expect(encoding)
       .toEqual(expectedEncoding);
   });

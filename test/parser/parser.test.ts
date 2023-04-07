@@ -9,16 +9,14 @@ import {
 import { getIntermediateRepresentation } from '../../src/parser/parser';
 import { isEqual as isDeepEqual, isEqual } from 'lodash';
 import { expect } from '@jest/globals';
-import {
-  simple_add_function_no_param_names,
-  simple_function_sexpr_with_param_names,
-  export_func_add_by_index,
-} from '../resources/program_fragments';
 import { TokenData } from '../resources/resolved_tokens';
 import { Token } from '../../src/common/token';
 import { module_with_exported_add_function_no_names, module_with_one_simple_add_function_with_param_names } from '../resources/module_program_fragments';
-import { irTestCases as tc1 } from '../resources/valid_function_body_fragments';
-import { simple_addition_sexpr_without_argument_bracket_fails } from '../resources/invalid_function_body_fragments';
+import { simple_addition_sexpr_without_argument_bracket_fails } from '../resources/invalid_function_bodies';
+
+import { validTestCases as tc2 } from '../resources/function_expressions';
+import { irTestCases as tc1 } from '../resources/valid_function_bodies';
+import { validTestCases as tc3 } from '../resources/export_expressions';
 
 describe('get intermediate expression of function body expressions', () => {
   test.each(tc1)('test convert function body expressions into ir', (testCase) => {
@@ -38,29 +36,27 @@ describe('get intermediate expression of function body expressions', () => {
   });
 });
 
-test('convert simple_function_sexpr_with_param_names into ir', () => {
-  const tokenTree = simple_function_sexpr_with_param_names.tokenTree;
+
+test.each(tc2)('test convert function expressions into ir', (testCase) => {
+  const tokenTree = testCase.tokenTree!;
   const ir = getIntermediateRepresentation(tokenTree);
-  const expectedIR = simple_function_sexpr_with_param_names.ir!;
+  const expectedIR = testCase.ir!;
+
   expect(ir)
     .toEqual(expectedIR);
 });
 
-test('convert simple_add_function_no_param_names into ir', () => {
-  const tokenTree = simple_add_function_no_param_names.tokenTree;
+
+
+test.each(tc3)('test convert export expressions into ir', (testCase) => {
+  const tokenTree = testCase.tokenTree!;
   const ir = getIntermediateRepresentation(tokenTree);
-  const expectedIR = simple_add_function_no_param_names.ir!;
+  const expectedIR = testCase.ir!;
+
   expect(ir)
     .toEqual(expectedIR);
 });
 
-test('convert export_func_add_by_index into ir', () => {
-  const tokenTree = export_func_add_by_index.tokenTree;
-  const ir = getIntermediateRepresentation(tokenTree);
-  const expectedIR = export_func_add_by_index.ir!;
-  expect(ir)
-    .toEqual(expectedIR);
-});
 
 test('convert module_with_one_simple_add_function_no_param_names into ir', () => {
   const tokenTree = module_with_one_simple_add_function_with_param_names.tokenTree;

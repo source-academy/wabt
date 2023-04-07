@@ -8,7 +8,7 @@ import {
   ExportObject,
 } from '../../src/parser/ir';
 import { type TokenTree, Tree } from '../../src/parser/tree_types';
-import { type TestCaseData } from './program_fragments';
+import { type TestCaseData } from './function_expressions';
 import { getSampleToken as t } from './resolved_tokens';
 
 export interface ModuleTestCase {
