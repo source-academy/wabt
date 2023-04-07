@@ -20,6 +20,6 @@ export class TokenTree extends Tree<Token> {
 
 export namespace TokenTree {
   export function getStringArrayRepr(tree: TokenTree) {
-    return instanceToPlain(Tree.treeMap(tree, (token) => (token.lexeme)));
+    return Tree.treeMap(tree, (token) => (token.lexeme));
   }
 }

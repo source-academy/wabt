@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "preprocess": "ts-node scripts/main.ts -P",
+    "preprocess": "ts-node scripts/main.ts --preprocess",
     "bundle": "ts-node scripts/main.ts --bundle",
     "cpp": "yarn run preprocess"
   },

@@ -53,6 +53,10 @@ export class Token {
     return isTokenTypeOpcode(this.type);
   }
 
+  isOpcodeType(opcodeType: OpcodeType): boolean {
+    return isTokenTypeOpcode(this.type) && this.opcodeType === opcodeType;
+  }
+
   isLiteral(): boolean {
     return isTokenTypeLiteral(this.type);
   }

@@ -586,20 +586,21 @@ export namespace Opcode {
   export function getDecompText(o: OpcodeType): string {
     return opcodeData[o][8];
   }
-  const opcodeData: Record<
-  OpcodeType,
-  [
-    ValueType,
-    ValueType,
-    ValueType,
-    ValueType,
-    number,
-    number,
-    number,
-    string,
-    string,
-  ]
-  > = {
+}
+export const opcodeData: Record<
+OpcodeType,
+[
+ValueType,
+ValueType,
+ValueType,
+ValueType,
+number,
+number,
+number,
+string,
+string,
+]
+> = {
 [OpcodeType.Unreachable]: [ValueType.___, ValueType.___, ValueType.___, ValueType.___, 0, 0, 0x00, "unreachable", ""],
 [OpcodeType.Nop]: [ValueType.___, ValueType.___, ValueType.___, ValueType.___, 0, 0, 0x01, "nop", ""],
 [OpcodeType.Block]: [ValueType.___, ValueType.___, ValueType.___, ValueType.___, 0, 0, 0x02, "block", ""],
@@ -1140,6 +1141,5 @@ export namespace Opcode {
 [OpcodeType.I64AtomicRmw8CmpxchgU]: [ValueType.I64, ValueType.I32, ValueType.I64, ValueType.I64, 1, 0xfe, 0x4c, "i64.atomic.rmw8.cmpxchg_u", ""],
 [OpcodeType.I64AtomicRmw16CmpxchgU]: [ValueType.I64, ValueType.I32, ValueType.I64, ValueType.I64, 2, 0xfe, 0x4d, "i64.atomic.rmw16.cmpxchg_u", ""],
 [OpcodeType.I64AtomicRmw32CmpxchgU]: [ValueType.I64, ValueType.I32, ValueType.I64, ValueType.I64, 4, 0xfe, 0x4e, "i64.atomic.rmw32.cmpxchg_u", ""],
-    [OpcodeType.Invalid]: [ValueType.___, ValueType.___, ValueType.___, ValueType.___, 0, 0, 0, '', ''],
-  };
-}
+[OpcodeType.Invalid]: [ValueType.___, ValueType.___, ValueType.___, ValueType.___, 0, 0, 0, '', ''],
+};

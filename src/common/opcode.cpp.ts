@@ -11,7 +11,7 @@
 // we need non-type imports after preprocessing
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { ValueType } from './type';
-import { OpcodeType } from './opcode';
+import { opcodeData, type OpcodeType } from './opcode';
 
 export namespace Opcode {
   type DataType = {
@@ -56,26 +56,28 @@ export namespace Opcode {
   export function getDecompText(o: OpcodeType): string {
     return opcodeData[o][8];
   }
-
-  const opcodeData: Record<
-  OpcodeType,
-  [
-    ValueType,
-    ValueType,
-    ValueType,
-    ValueType,
-    number,
-    number,
-    number,
-    string,
-    string,
-  ]
-  > = {
-    // / #define WABT_OPCODE(rtype, type1, type2, type3, mem_size, prefix, code, Name, \
-    // / text, decomp) \
-    // / [OpcodeType.Name]: [ValueType.rtype, ValueType.type1, ValueType.type2, ValueType.type3, mem_size, prefix, code, text, decomp],
-    // /     #include "wabt/opcode.def"
-    // / #undef WABT_OPCODE
-    [OpcodeType.Invalid]: [ValueType.___, ValueType.___, ValueType.___, ValueType.___, 0, 0, 0, '', ''],
-  };
 }
+
+
+
+// / export const opcodeData: Record<
+// / OpcodeType,
+// / [
+// /   ValueType,
+// /   ValueType,
+// /   ValueType,
+// /   ValueType,
+// /   number,
+// /   number,
+// /   number,
+// /   string,
+// /   string,
+// / ]
+// / > = {
+// /    #define WABT_OPCODE(rtype, type1, type2, type3, mem_size, prefix, code, Name, \
+// /    text, decomp) \
+// /    [OpcodeType.Name]: [ValueType.rtype, ValueType.type1, ValueType.type2, ValueType.type3, mem_size, prefix, code, text, decomp],
+// /        #include "wabt/opcode.def"
+// /    #undef WABT_OPCODE
+// /   [OpcodeType.Invalid]: [ValueType.___, ValueType.___, ValueType.___, ValueType.___, 0, 0, 0, '', ''],
+// / };
