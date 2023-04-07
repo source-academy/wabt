@@ -6,8 +6,8 @@
       "esModuleInterop": true,
       "skipLibCheck": true,
       "declaration": true,
-      "declarationDir": "./dist",
-      "emitDeclarationOnly": true
+      "emitDeclarationOnly": true,
+      "declarationDir": "./types"
     },
     "$schema": "https://json.schemastore.org/tsconfig",
     "display": "Recommended",

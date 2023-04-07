@@ -718,6 +718,9 @@ var Token = class {
   isOpcodeToken() {
     return isTokenTypeOpcode(this.type);
   }
+  isOpcodeType(opcodeType) {
+    return isTokenTypeOpcode(this.type) && this.opcodeType === opcodeType;
+  }
   isLiteral() {
     return isTokenTypeLiteral(this.type);
   }

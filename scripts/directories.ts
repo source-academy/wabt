@@ -6,4 +6,4 @@ export const SOURCE_FILE_PATH = join(BASE_DIR, 'src');
 export const DIST_FILE_PATH = join(BASE_DIR, 'dist');
 
 export const ENTRY = join(SOURCE_FILE_PATH, 'index.ts');
-export const OUTFILE = join(DIST_FILE_PATH, 'index.js');
+export const OUTFILE = join(BASE_DIR, 'index.js');
