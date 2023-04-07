@@ -18,14 +18,24 @@ import { TokenData } from '../resources/resolved_tokens';
 import { Token } from '../../src/common/token';
 import { module_with_exported_add_function_no_names, module_with_one_simple_add_function_with_param_names } from '../resources/module_program_fragments';
 import { irTestCases as tc1 } from '../resources/valid_function_body_fragments';
+import { simple_addition_sexpr_without_argument_bracket_fails } from '../resources/invalid_function_body_fragments';
 
-test.each(tc1)('test convert function body expressions into ir', (testCase) => {
-  const tokenTree = testCase.tokenTree!;
-  const ir = getIntermediateRepresentation(tokenTree);
-  const expectedIR = testCase.ir!;
+describe('get intermediate expression of function body expressions', () => {
+  test.each(tc1)('test convert function body expressions into ir', (testCase) => {
+    const tokenTree = testCase.tokenTree!;
+    const ir = getIntermediateRepresentation(tokenTree);
+    const expectedIR = testCase.ir!;
 
-  expect(ir)
-    .toEqual(expectedIR);
+    expect(ir)
+      .toEqual(expectedIR);
+  });
+
+  test('expect simple_addition_sexpr_without_argument_bracket_fails to throw', () => {
+    const testCase = simple_addition_sexpr_without_argument_bracket_fails;
+    const tokenTree = testCase.tokenTree!;
+    expect(() => getIntermediateRepresentation(tokenTree))
+      .toThrow();
+  });
 });
 
 test('convert simple_function_sexpr_with_param_names into ir', () => {
