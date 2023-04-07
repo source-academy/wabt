@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "preprocess": "ts-node scripts/main.ts -P",
+    "bundle": "ts-node scripts/main.ts --bundle",
     "cpp": "yarn run preprocess"
   },
   "author": "Kim Yongbeom",
