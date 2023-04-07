@@ -1,6 +1,5 @@
-import { encode, TEST_EXPORTS } from '../src/binary_writer';
+import { encode } from '../src/binary_writer';
 import { tokenize } from '../src/lexer/lexer';
-import { type ModuleExpression } from '../src/parser/ir';
 import { getIntermediateRepresentation } from '../src/parser/parser';
 import { getTokenTree } from '../src/parser/treeify';
 import { module_with_exported_add_function_no_names, module_with_one_simple_add_function_with_param_names } from './resources/module_program_fragments';
