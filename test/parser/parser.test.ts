@@ -5,60 +5,25 @@ import {
   UnfoldedTokenExpression,
   FunctionExpression,
   ModuleExpression,
-  ExportExpression,
 } from '../../src/parser/ir';
 import { getIntermediateRepresentation } from '../../src/parser/parser';
 import { isEqual as isDeepEqual, isEqual } from 'lodash';
 import { expect } from '@jest/globals';
 import {
-  simple_addition_sexpr,
-  simple_addition_stack,
-  nested_addition_stack,
-  nested_addition_sexpr,
   simple_add_function_no_param_names,
   simple_function_sexpr_with_param_names,
-  simple_addition_sexpr_without_argument_bracket_fails,
   export_func_add_by_index,
 } from '../resources/program_fragments';
 import { TokenData } from '../resources/resolved_tokens';
 import { Token } from '../../src/common/token';
 import { module_with_exported_add_function_no_names, module_with_one_simple_add_function_with_param_names } from '../resources/module_program_fragments';
+import { irTestCases as tc1 } from '../resources/valid_function_body_fragments';
 
-test('convert simple_addition_sexpr into ir', () => {
-  const tokenTree = simple_addition_sexpr.tokenTree;
+test.each(tc1)('test convert function body expressions into ir', (testCase) => {
+  const tokenTree = testCase.tokenTree!;
   const ir = getIntermediateRepresentation(tokenTree);
-  const expectedIR = simple_addition_sexpr.ir!;
+  const expectedIR = testCase.ir!;
 
-  expect(ir)
-    .toEqual(expectedIR);
-});
-
-test('convert simple_addition_sexpr into ir without argument bracket fails', () => {
-  const tokenTree = simple_addition_sexpr_without_argument_bracket_fails.tokenTree;
-  expect(() => getIntermediateRepresentation(tokenTree))
-    .toThrow();
-});
-
-test('convert simple_addition_stack into ir', () => {
-  const tokenTree = simple_addition_stack.tokenTree;
-  const ir = getIntermediateRepresentation(tokenTree);
-  const expectedIR = simple_addition_stack.ir!;
-  expect(ir)
-    .toEqual(expectedIR);
-});
-
-test('convert nested_addition_stack into ir', () => {
-  const tokenTree = nested_addition_stack.tokenTree;
-  const ir = getIntermediateRepresentation(tokenTree);
-  const expectedIR = nested_addition_stack.ir!;
-  expect(ir)
-    .toEqual(expectedIR);
-});
-
-test('convert nested_addition_sexpr into ir', () => {
-  const tokenTree = nested_addition_sexpr.tokenTree;
-  const ir = getIntermediateRepresentation(tokenTree);
-  const expectedIR = nested_addition_sexpr.ir!;
   expect(ir)
     .toEqual(expectedIR);
 });

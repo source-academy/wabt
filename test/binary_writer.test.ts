@@ -3,12 +3,16 @@ import { type FunctionExpression } from '../src/parser/ir';
 import { module_with_exported_add_function_no_names, module_with_one_simple_add_function_with_param_names } from './resources/module_program_fragments';
 import {
   export_func_add_by_index,
-  nested_addition_sexpr,
-  nested_addition_stack,
-  simple_addition_sexpr,
-  simple_addition_stack,
   simple_function_sexpr_with_param_names,
 } from './resources/program_fragments';
+import { minimalBinaryTestCases as tc1 } from './resources/valid_function_body_fragments';
+
+test.each(tc1)('test encode function body expressions', (testCase) => {
+  const encoding = encode(testCase.ir!);
+  const expectedEncoding = testCase.minimal_binary;
+  expect(encoding)
+    .toEqual(expectedEncoding);
+});
 
 describe('Encode const numbers', () => {
   test('encode 1.0 (f64)', () => {
@@ -27,34 +31,6 @@ describe('Encode const numbers', () => {
 });
 
 describe('Encode program fragments', () => {
-  test('Encode simple_addition_sexpr', () => {
-    const encoding = encode(simple_addition_sexpr.ir);
-    const expectedEncoding = simple_addition_sexpr.minimal_binary;
-    expect(encoding)
-      .toEqual(expectedEncoding);
-  });
-
-  test('Encode simple_addition_stack', () => {
-    const encoding = encode(simple_addition_stack.ir);
-    const expectedEncoding = simple_addition_stack.minimal_binary;
-    expect(encoding)
-      .toEqual(expectedEncoding);
-  });
-
-  test('Encode nested_addition_stack', () => {
-    const encoding = encode(nested_addition_stack.ir);
-    const expectedEncoding = nested_addition_stack.minimal_binary;
-    expect(encoding)
-      .toEqual(expectedEncoding);
-  });
-
-  test('Encode nested_addition_sexpr', () => {
-    const encoding = encode(nested_addition_sexpr.ir);
-    const expectedEncoding = nested_addition_sexpr.minimal_binary;
-    expect(encoding)
-      .toEqual(expectedEncoding);
-  });
-
   test('Encode function signature: simple_function_sexpr_with_param_names', () => {
     const encoding = encode(
       (simple_function_sexpr_with_param_names.ir as FunctionExpression)
