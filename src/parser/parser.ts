@@ -6,9 +6,10 @@ import {
 } from './ir';
 import { Token, TokenType } from '../common/token';
 import { type TokenTree } from './tree_types';
-import assert from 'assert';
+
 import { Opcode } from '../common/opcode';
 import { type ValueType } from '../common/type';
+import { assert } from '../common/assert';
 
 export function getIntermediateRepresentation(
   tokenTree: TokenTree,
@@ -53,8 +54,9 @@ function parseExpression(tokenTree:TokenTree): TokenExpression {
 }
 
 function parseSExpression(tokenTree: TokenTree): OperationTree {
-  const head = tokenTree[0];
+  let head = tokenTree[0];
   assert(head instanceof Token); // Head should be token here, assert to make typescript happy
+  head = head as Token;
 
   const body: (Token | TokenExpression)[] = [];
   for (let i = 1; i < tokenTree.length; i++) {
@@ -63,7 +65,9 @@ function parseSExpression(tokenTree: TokenTree): OperationTree {
       body.push(token);
     } else {
       const irNode = getIntermediateRepresentation(token);
-      assert(irNode instanceof Token || irNode instanceof OperationTree || irNode instanceof UnfoldedTokenExpression);
+      if (!(irNode instanceof Token || irNode instanceof OperationTree || irNode instanceof UnfoldedTokenExpression)) {
+        throw new Error(); //TODO proper error
+      }
       body.push(irNode);
     }
   }
@@ -79,7 +83,9 @@ function parseStackExpression(tokenTree: TokenTree): UnfoldedTokenExpression {
       nodes.push(tokenNode);
     } else {
       const temp = getIntermediateRepresentation(tokenNode);
-      assert(temp instanceof Token || temp instanceof OperationTree);
+      if (!(temp instanceof Token || temp instanceof OperationTree)) {
+        throw new Error(); // TODO proper error
+      }
       nodes.push(temp);
     }
   });
@@ -96,7 +102,9 @@ function parseFunctionExpression(tokenTree: TokenTree): FunctionExpression {
   const parseParam = (tokenTree: TokenTree) => {
     for (let i = 1; i < tokenTree.length; i++) {
       const tokenTreeNode = tokenTree[i];
-      assert(tokenTreeNode instanceof Token); // TODO this should not be an assertion, raise a specific error.
+      if (!(tokenTreeNode instanceof Token)) {
+        throw new Error(); // TODO better error
+      }
       if (tokenTreeNode.type === TokenType.ValueType) {
         paramTypes.push(tokenTreeNode.valueType!);
       } else if (tokenTreeNode.type === TokenType.Var) {
@@ -110,7 +118,9 @@ function parseFunctionExpression(tokenTree: TokenTree): FunctionExpression {
   const parseResult = (tokenTree: TokenTree) => {
     for (let i = 1; i < tokenTree.length; i++) {
       const tokenTreeNode = tokenTree[i];
-      assert(tokenTreeNode instanceof Token); // TODO this should not be an assertion, raise a specific error.
+      if (!(tokenTreeNode instanceof Token)) {
+        throw new Error();
+      }
       if (tokenTreeNode.type === TokenType.ValueType) {
         resultTypes.push(tokenTreeNode.valueType!);
       } else {
@@ -155,7 +165,9 @@ function parseModuleExpression(tokenTree: TokenTree): ModuleExpression {
   const exportExps: ExportExpression[] = [];
   for (let i = 1; i < tokenTree.length; i++) {
     const tokenTreeNode = tokenTree[i];
-    assert(!(tokenTreeNode instanceof Token));
+    if (tokenTreeNode instanceof Token) {
+      throw new Error(); // Better error mesage
+    }
 
     if (isFunctionExpression(tokenTreeNode)) {
       functionExps.push(parseFunctionExpression(tokenTreeNode));
@@ -176,11 +188,17 @@ function parseExportDeclaration(tokenTree: TokenTree): ExportExpression {
 
   for (let i = 1; i < tokenTree.length; i += 2) {
     const exportName = tokenTree[i];
-    assert(exportName instanceof Token); // TODO better error messages
+    if (!(exportName instanceof Token)) {
+      throw new Error(); // Better error mesage
+    }
     const exportInfo = tokenTree[i + 1];
-    assert(exportInfo instanceof Array<Token>); // TODO better error messages
+    if (!(exportInfo instanceof Array<Token>)) {
+      throw new Error(); // Better error mesage
+    }
     const [exportType, exportIndex] = exportInfo;
-    assert(exportType instanceof Token && exportIndex instanceof Token);
+    if (!(exportType instanceof Token && exportIndex instanceof Token)) {
+      throw new Error(); // Better error mesage
+    }
 
     exportObjects.push(new ExportObject(exportName, exportType, exportIndex));
   }

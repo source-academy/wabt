@@ -1,7 +1,8 @@
 import { TokenType, type Token } from '../common/token';
 import { type TokenTree } from './tree_types';
-import assert from 'assert';
+
 import { tokenize } from '../lexer/lexer';
+import { assert } from '../common/assert';
 
 /**
  * Parse a sequence of tokens to a tree of tokens

@@ -9,9 +9,10 @@ import {
   TokenType,
 } from '../common/token';
 
-import assert from 'assert';
+
 import { LiteralType, parseHexdigit } from '../common/literal';
 import { getOpcodeType, getTokenType, getType, isKeyWord } from '../common/keywords';
+import { assert } from '../common/assert';
 
 export function tokenize(program: string): Token[] {
   // eslint-disable-next-line @typescript-eslint/no-use-before-define

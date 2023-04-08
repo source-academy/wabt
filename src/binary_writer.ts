@@ -3,8 +3,9 @@ import { FunctionBody, FunctionSignature, ModuleExpression, PureUnfoldedTokenExp
 import { ValueType } from './common/type';
 import { Token, TokenType } from './common/token';
 import { Opcode, OpcodeType } from './common/opcode';
-import assert from 'assert';
+
 import { ExportType } from './common/export_types';
+import { assert } from './common/assert';
 
 namespace SectionCode {
   export const Type = 1;
