@@ -1,7 +1,10 @@
+/**
+ * Just a file to write demos and run examples on ts-node
+ */
 import { encode } from './binary_writer';
 import { tokenize } from './lexer/lexer';
 import { getIntermediateRepresentation } from './parser/parser';
-import { getParseTree } from './parser/treeify';
+import { getParseTree } from './parser/parse_tree';
 
 const programAdd = `
 (module

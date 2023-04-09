@@ -2,7 +2,7 @@ import { encode } from './binary_writer';
 import { getSingleToken, tokenize } from './lexer/lexer';
 import { getIntermediateRepresentation } from './parser/parser';
 import { ParseTree, Tree } from './parser/tree_types';
-import { getParseTree as treeify } from './parser/treeify';
+import { getParseTree as treeify } from './parser/parse_tree';
 
 /**
  * Compile a given WebAssembly Binary Text module into a binary.

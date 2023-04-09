@@ -3,8 +3,6 @@ import {
   OperationTree,
   UnfoldedTokenExpression,
   type IntermediateRepresentation,
-  FunctionBody,
-  FunctionSignature,
   ModuleExpression,
   type TokenExpression,
   ExportExpression,

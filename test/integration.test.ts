@@ -1,7 +1,7 @@
 import { encode } from '../src/binary_writer';
 import { tokenize } from '../src/lexer/lexer';
 import { getIntermediateRepresentation } from '../src/parser/parser';
-import { getParseTree } from '../src/parser/treeify';
+import { getParseTree } from '../src/parser/parse_tree';
 import {
   module_with_exported_add_function_no_names,
   module_with_one_simple_add_function_with_param_names,

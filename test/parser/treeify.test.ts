@@ -1,6 +1,6 @@
 import { TokenData } from '../resources/resolved_tokens';
 import { Tree } from '../../src/parser/tree_types';
-import { getParseTree } from '../../src/parser/treeify';
+import { getParseTree } from '../../src/parser/parse_tree';
 import {
   module_with_exported_add_function_no_names,
   module_with_one_simple_add_function_with_param_names,

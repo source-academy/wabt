@@ -1,7 +1,5 @@
 import { TokenType, type Token } from '../common/token';
 import { type ParseTree } from './tree_types';
-
-import { tokenize } from '../lexer/lexer';
 import { assert } from '../common/assert';
 
 /**
