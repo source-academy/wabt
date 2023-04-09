@@ -1,6 +1,6 @@
 {
   "name": "source-academy-wabt",
-  "version": "1.0.3",
+  "version": "1.0.6",
   "description": "This is the WebAssembly Binary Toolkit, specifically designed for Source Academy.",
   "main": "index.js",
   "types": "./types/index.d.ts",
@@ -8,7 +8,8 @@
     "test": "jest",
     "preprocess": "ts-node scripts/main.ts --preprocess",
     "bundle": "ts-node scripts/main.ts --bundle",
-    "cpp": "yarn run preprocess"
+    "cpp": "yarn run preprocess",
+    "publish": "yarn run preprocess && yarn run bundle && npm publish"
   },
   "author": "Kim Yongbeom",
   "license": "ISC",

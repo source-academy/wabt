@@ -11,7 +11,10 @@ import { isEqual as isDeepEqual, isEqual } from 'lodash';
 import { expect } from '@jest/globals';
 import { TokenData } from '../resources/resolved_tokens';
 import { Token } from '../../src/common/token';
-import { module_with_exported_add_function_no_names, module_with_one_simple_add_function_with_param_names } from '../resources/module_program_fragments';
+import {
+  module_with_exported_add_function_no_names,
+  module_with_one_simple_add_function_with_param_names,
+} from '../resources/module_program_fragments';
 import { simple_addition_sexpr_without_argument_bracket_fails } from '../resources/invalid_function_bodies';
 
 import { validTestCases as tc2 } from '../resources/function_expressions';
@@ -19,62 +22,60 @@ import { irTestCases as tc1 } from '../resources/valid_function_bodies';
 import { validTestCases as tc3 } from '../resources/export_expressions';
 
 describe('get intermediate expression of function body expressions', () => {
-  test.each(tc1)('test convert function body expressions into ir', (testCase) => {
-    const tokenTree = testCase.tokenTree!;
-    const ir = getIntermediateRepresentation(tokenTree);
-    const expectedIR = testCase.ir!;
+  test.each(tc1)(
+    'test convert function body expressions into ir',
+    (testCase) => {
+      const parseTree = testCase.parseTree!;
+      const ir = getIntermediateRepresentation(parseTree);
+      const expectedIR = testCase.ir!;
 
-    expect(ir)
-      .toEqual(expectedIR);
-  });
+      expect(ir)
+        .toEqual(expectedIR);
+    },
+  );
 
   test('expect simple_addition_sexpr_without_argument_bracket_fails to throw', () => {
     const testCase = simple_addition_sexpr_without_argument_bracket_fails;
-    const tokenTree = testCase.tokenTree!;
-    expect(() => getIntermediateRepresentation(tokenTree))
+    const parseTree = testCase.parseTree!;
+    expect(() => getIntermediateRepresentation(parseTree))
       .toThrow();
   });
 });
 
-
 test.each(tc2)('test convert function expressions into ir', (testCase) => {
-  const tokenTree = testCase.tokenTree!;
-  const ir = getIntermediateRepresentation(tokenTree);
+  const parseTree = testCase.parseTree!;
+  const ir = getIntermediateRepresentation(parseTree);
   const expectedIR = testCase.ir!;
 
   expect(ir)
     .toEqual(expectedIR);
 });
-
-
 
 test.each(tc3)('test convert export expressions into ir', (testCase) => {
-  const tokenTree = testCase.tokenTree!;
-  const ir = getIntermediateRepresentation(tokenTree);
+  const parseTree = testCase.parseTree!;
+  const ir = getIntermediateRepresentation(parseTree);
   const expectedIR = testCase.ir!;
 
   expect(ir)
     .toEqual(expectedIR);
 });
 
-
 test('convert module_with_one_simple_add_function_no_param_names into ir', () => {
-  const tokenTree = module_with_one_simple_add_function_with_param_names.tokenTree;
-  const ir = getIntermediateRepresentation(tokenTree);
+  const parseTree
+    = module_with_one_simple_add_function_with_param_names.parseTree;
+  const ir = getIntermediateRepresentation(parseTree);
   const expectedIR = module_with_one_simple_add_function_with_param_names.ir;
   expect(ir)
     .toEqual(expectedIR);
 });
 
 test('convert module_with_exported_add_function_no_names into ir', () => {
-  const tokenTree = module_with_exported_add_function_no_names.tokenTree;
-  const ir = getIntermediateRepresentation(tokenTree);
+  const parseTree = module_with_exported_add_function_no_names.parseTree;
+  const ir = getIntermediateRepresentation(parseTree);
   const expectedIR = module_with_exported_add_function_no_names.ir;
   expect(ir)
     .toEqual(expectedIR);
 });
-
-
 
 /**
  * Custom equality comparison between tokens/intermediate representations for testing purposes
@@ -105,7 +106,7 @@ function isIREqual(
 
   if (
     lhs instanceof PureUnfoldedTokenExpression
-      && rhs instanceof PureUnfoldedTokenExpression
+    && rhs instanceof PureUnfoldedTokenExpression
   ) {
     return isIREqual(lhs.tokens, rhs.tokens);
   }
@@ -113,7 +114,7 @@ function isIREqual(
   if (lhs instanceof OperationTree && rhs instanceof OperationTree) {
     if (
       !isIREqual(lhs.operator, rhs.operator)
-        || lhs.operands.length !== rhs.operands.length
+      || lhs.operands.length !== rhs.operands.length
     ) {
       return false;
     }
@@ -128,34 +129,32 @@ function isIREqual(
 
   if (
     lhs instanceof UnfoldedTokenExpression
-      && rhs instanceof UnfoldedTokenExpression
+    && rhs instanceof UnfoldedTokenExpression
   ) {
     return isIREqual(lhs.tokens, rhs.tokens);
   }
   if (
     lhs instanceof PureUnfoldedTokenExpression
-      && rhs instanceof PureUnfoldedTokenExpression
+    && rhs instanceof PureUnfoldedTokenExpression
   ) {
     return isIREqual(lhs.tokens, rhs.tokens);
   }
 
-  if (
-    lhs instanceof FunctionExpression
-      && rhs instanceof FunctionExpression
-  ) {
-    return isIREqual(lhs.functionBody.body, rhs.functionBody.body)
-    && isEqual(lhs.functionSignature, rhs.functionSignature);
+  if (lhs instanceof FunctionExpression && rhs instanceof FunctionExpression) {
+    return (
+      isIREqual(lhs.functionBody.body, rhs.functionBody.body)
+      && isEqual(lhs.functionSignature, rhs.functionSignature)
+    );
   }
 
-  if (
-    lhs instanceof ModuleExpression
-      && rhs instanceof ModuleExpression
-  ) {
+  if (lhs instanceof ModuleExpression && rhs instanceof ModuleExpression) {
     if (lhs.functionDeclarations.length !== rhs.functionDeclarations.length) {
       return false;
     }
     for (let i = 0; i < lhs.functionDeclarations.length; i++) {
-      if (!isIREqual(lhs.functionDeclarations[i], rhs.functionDeclarations[i])) {
+      if (
+        !isIREqual(lhs.functionDeclarations[i], rhs.functionDeclarations[i])
+      ) {
         return false;
       }
     }

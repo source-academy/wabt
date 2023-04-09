@@ -1,3 +1,5 @@
+import { assert } from './assert';
+
 // eslint-disable-next-line complexity
 export function parseHexdigit(c: string): number {
   assert(c.length === 1);

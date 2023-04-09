@@ -1,9 +1,7 @@
 "use strict";
-var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
@@ -17,14 +15,6 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/index.ts
@@ -35,6 +25,18 @@ __export(src_exports, {
   getParseTree: () => getParseTree
 });
 module.exports = __toCommonJS(src_exports);
+
+// src/common/assert.ts
+var AssertError = class extends Error {
+  constructor() {
+    super("Assertion Error");
+  }
+};
+var assert = (b) => {
+  if (!b) {
+    throw new AssertError();
+  }
+};
 
 // src/common/type.ts
 var ValueType = /* @__PURE__ */ ((ValueType2) => {
@@ -692,7 +694,6 @@ var opcodeData = {
 };
 
 // src/common/token.ts
-var import_assert = __toESM(require("assert"));
 var Token = class {
   constructor(type, lexeme, line, col, indexInSource, opcodeType = null, valueType = null) {
     this.type = type;
@@ -728,11 +729,11 @@ var Token = class {
     return isTokenTypeRefKind(this.type);
   }
   getOpcodeParamLength() {
-    (0, import_assert.default)(this.opcodeType !== null);
+    assert(this.opcodeType !== null);
     return Opcode.getParamLength(this.opcodeType);
   }
   getOpcodeEncoding() {
-    (0, import_assert.default)(this.opcodeType !== null);
+    assert(this.opcodeType !== null);
     return Opcode.getCode(this.opcodeType);
   }
 };
@@ -918,7 +919,6 @@ var PureUnfoldedTokenExpression = class extends IntermediateRepresentation {
 };
 
 // src/binary_writer.ts
-var import_assert2 = __toESM(require("assert"));
 var SectionCode;
 ((SectionCode2) => {
   SectionCode2.Type = 1;
@@ -1086,8 +1086,8 @@ function encodeFunctionBody(ir) {
   return new Uint8Array([encodedBody.length + 2, 0, ...encodedBody, FUNCTION_END]);
 }
 function convertVarToIndexToken(varToken, index) {
-  (0, import_assert2.default)(Number.isInteger(index));
-  (0, import_assert2.default)(index >= 0);
+  assert(Number.isInteger(index));
+  assert(index >= 0);
   return new Token(
     "NAT" /* Nat */,
     index.toString(),
@@ -1117,7 +1117,7 @@ function encodeLiteralToken(prevToken, token) {
     );
   }
   if (prevToken.type === "local.get" /* LocalGet */) {
-    (0, import_assert2.default)(token.type === "NAT" /* Nat */);
+    assert(token.type === "NAT" /* Nat */);
     return new Uint8Array([Number.parseInt(token.lexeme)]);
   }
   throw new Error(`Unsuppored literal token type: [${JSON.stringify(prevToken, void 0, 2)}, ${JSON.stringify(token, void 0, 2)}]`);
@@ -1133,13 +1133,9 @@ var NumberEncoder;
   NumberEncoder2.encodeF64Const = encodeF64Const;
 })(NumberEncoder || (NumberEncoder = {}));
 
-// src/lexer/lexer.ts
-var import_assert4 = __toESM(require("assert"));
-
 // src/common/literal.ts
-var import_assert3 = __toESM(require("assert"));
 function parseHexdigit(c) {
-  (0, import_assert3.default)(c.length === 1);
+  assert(c.length === 1);
   switch (c) {
     case "0":
     case "1":
@@ -1789,19 +1785,19 @@ function getSingleToken(token) {
   return new Lexer(token).getToken();
 }
 function isDigit(c) {
-  (0, import_assert4.default)(c.length === 1);
+  assert(c.length === 1);
   return /[0-9]/u.test(c);
 }
 function isHexDigit(c) {
-  (0, import_assert4.default)(c.length === 1);
+  assert(c.length === 1);
   return /[0-9a-f]/iu.test(c);
 }
 function isKeyword(c) {
-  (0, import_assert4.default)(c.length === 1);
+  assert(c.length === 1);
   return /[a-z]/u.test(c);
 }
 function isIdChar(c) {
-  (0, import_assert4.default)(c.length === 1);
+  assert(c.length === 1);
   return /[!-~]/u.test(c) && /[^"(),;=[\]{}]/u.test(c);
 }
 var Lexer = class {
@@ -1933,7 +1929,7 @@ var Lexer = class {
     return this.cursor < this.source.length ? this.source[this.cursor++] : kEof;
   }
   matchChar(c) {
-    (0, import_assert4.default)(c.length === 1);
+    assert(c.length === 1);
     if (this.peekChar() === c) {
       this.readChar();
       return true;
@@ -2074,7 +2070,7 @@ var Lexer = class {
   }
   getReservedToken() {
     this.readReservedChars();
-    (0, import_assert4.default)(false);
+    assert(false);
     return this.textToken("Reserved" /* Reserved */);
   }
   // eslint-disable-next-line complexity
@@ -2290,176 +2286,198 @@ var Lexer = class {
     if (isTokenTypeType(tokenType) || isTokenTypeRefKind(tokenType)) {
       return new Token(tokenType, text, this.line, this.col, this.cursor, null, valueType);
     }
-    (0, import_assert4.default)(isTokenTypeOpcode(tokenType));
+    assert(isTokenTypeOpcode(tokenType));
     return new Token(tokenType, text, this.line, this.col, this.cursor, opcodeType);
   }
 };
 
 // src/parser/parser.ts
-var import_assert5 = __toESM(require("assert"));
-function getIntermediateRepresentation(tokenTree) {
-  if (isSExpression(tokenTree) || isStackExpression(tokenTree)) {
-    return parseExpression(tokenTree);
+function getIntermediateRepresentation(parseTree) {
+  if (isSExpression(parseTree) || isStackExpression(parseTree)) {
+    return parseExpression(parseTree);
   }
-  if (isFunctionExpression(tokenTree)) {
-    return parseFunctionExpression(tokenTree);
+  if (isFunctionExpression(parseTree)) {
+    return parseFunctionExpression(parseTree);
   }
-  if (isModuleDeclaration(tokenTree)) {
-    return parseModuleExpression(tokenTree);
+  if (isModuleDeclaration(parseTree)) {
+    return parseModuleExpression(parseTree);
   }
-  if (isExportDeclaration(tokenTree)) {
-    return parseExportDeclaration(tokenTree);
+  if (isExportDeclaration(parseTree)) {
+    return parseExportDeclaration(parseTree);
   }
   throw new Error(
-    `Unexpected token type to parse: ${JSON.stringify(tokenTree, void 0, 2)}`
+    `Unexpected token type to parse: ${JSON.stringify(parseTree, void 0, 2)}`
   );
 }
-function parseExpression(tokenTree) {
-  if (isSExpression(tokenTree)) {
-    return parseSExpression(tokenTree);
+function parseExpression(parseTree) {
+  if (isSExpression(parseTree)) {
+    return parseSExpression(parseTree);
   }
-  if (isStackExpression(tokenTree)) {
-    return parseStackExpression(tokenTree);
+  if (isStackExpression(parseTree)) {
+    return parseStackExpression(parseTree);
   }
-  throw new Error(`Cannot parse into function expression: ${JSON.stringify(tokenTree, void 0, 2)}`);
+  throw new Error(
+    `Cannot parse into function expression: ${JSON.stringify(
+      parseTree,
+      void 0,
+      2
+    )}`
+  );
 }
-function parseSExpression(tokenTree) {
-  const head = tokenTree[0];
-  (0, import_assert5.default)(head instanceof Token);
+function parseSExpression(parseTree) {
+  let head = parseTree[0];
+  assert(head instanceof Token);
+  head = head;
   const body = [];
-  for (let i = 1; i < tokenTree.length; i++) {
-    const token = tokenTree[i];
+  for (let i = 1; i < parseTree.length; i++) {
+    const token = parseTree[i];
     if (token instanceof Token) {
       body.push(token);
     } else {
       const irNode = getIntermediateRepresentation(token);
-      (0, import_assert5.default)(irNode instanceof Token || irNode instanceof OperationTree || irNode instanceof UnfoldedTokenExpression);
+      if (!(irNode instanceof Token || irNode instanceof OperationTree || irNode instanceof UnfoldedTokenExpression)) {
+        throw new Error();
+      }
       body.push(irNode);
     }
   }
-  (0, import_assert5.default)(Opcode.getParamLength(head.opcodeType) === body.length);
+  assert(Opcode.getParamLength(head.opcodeType) === body.length);
   return new OperationTree(head, body);
 }
-function parseStackExpression(tokenTree) {
+function parseStackExpression(parseTree) {
   const nodes = [];
-  tokenTree.forEach((tokenNode) => {
+  parseTree.forEach((tokenNode) => {
     if (tokenNode instanceof Token) {
       nodes.push(tokenNode);
     } else {
       const temp = getIntermediateRepresentation(tokenNode);
-      (0, import_assert5.default)(temp instanceof Token || temp instanceof OperationTree);
+      if (!(temp instanceof Token || temp instanceof OperationTree)) {
+        throw new Error();
+      }
       nodes.push(temp);
     }
   });
   return new UnfoldedTokenExpression(nodes);
 }
-function parseFunctionExpression(tokenTree) {
-  (0, import_assert5.default)(isFunctionExpression(tokenTree));
+function parseFunctionExpression(parseTree) {
+  assert(isFunctionExpression(parseTree));
   const paramTypes = [];
   const paramNames = [];
   const resultTypes = [];
-  const parseParam = (tokenTree2) => {
-    for (let i = 1; i < tokenTree2.length; i++) {
-      const tokenTreeNode = tokenTree2[i];
-      (0, import_assert5.default)(tokenTreeNode instanceof Token);
-      if (tokenTreeNode.type === "VALUETYPE" /* ValueType */) {
-        paramTypes.push(tokenTreeNode.valueType);
-      } else if (tokenTreeNode.type === "VAR" /* Var */) {
-        paramNames.push(tokenTreeNode.lexeme);
+  const parseParam = (parseTree2) => {
+    for (let i = 1; i < parseTree2.length; i++) {
+      const parseTreeNode = parseTree2[i];
+      if (!(parseTreeNode instanceof Token)) {
+        throw new Error();
+      }
+      if (parseTreeNode.type === "VALUETYPE" /* ValueType */) {
+        paramTypes.push(parseTreeNode.valueType);
+      } else if (parseTreeNode.type === "VAR" /* Var */) {
+        paramNames.push(parseTreeNode.lexeme);
       } else {
-        throw new Error(`Unexpected token, bla bla ${tokenTreeNode}`);
+        throw new Error(`Unexpected token, bla bla ${parseTreeNode}`);
       }
     }
   };
-  const parseResult = (tokenTree2) => {
-    for (let i = 1; i < tokenTree2.length; i++) {
-      const tokenTreeNode = tokenTree2[i];
-      (0, import_assert5.default)(tokenTreeNode instanceof Token);
-      if (tokenTreeNode.type === "VALUETYPE" /* ValueType */) {
-        resultTypes.push(tokenTreeNode.valueType);
+  const parseResult = (parseTree2) => {
+    for (let i = 1; i < parseTree2.length; i++) {
+      const parseTreeNode = parseTree2[i];
+      if (!(parseTreeNode instanceof Token)) {
+        throw new Error();
+      }
+      if (parseTreeNode.type === "VALUETYPE" /* ValueType */) {
+        resultTypes.push(parseTreeNode.valueType);
       } else {
-        throw new Error(`Unexpected token, bla bla ${tokenTreeNode}`);
+        throw new Error(`Unexpected token, bla bla ${parseTreeNode}`);
       }
     }
   };
   let cursor;
-  for (cursor = 1; cursor < tokenTree.length; cursor++) {
-    const tokenTreeNode = tokenTree[cursor];
-    if (tokenTreeNode instanceof Token) {
+  for (cursor = 1; cursor < parseTree.length; cursor++) {
+    const parseTreeNode = parseTree[cursor];
+    if (parseTreeNode instanceof Token) {
       break;
     }
-    if (isFunctionParamDeclaration(tokenTreeNode)) {
-      parseParam(tokenTreeNode);
-    } else if (isFunctionResultDeclaration(tokenTreeNode)) {
-      parseResult(tokenTreeNode);
+    if (isFunctionParamDeclaration(parseTreeNode)) {
+      parseParam(parseTreeNode);
+    } else if (isFunctionResultDeclaration(parseTreeNode)) {
+      parseResult(parseTreeNode);
     } else {
       break;
     }
   }
-  let remainingTree = tokenTree.slice(cursor);
+  let remainingTree = parseTree.slice(cursor);
   if (remainingTree.length === 1 && !(remainingTree[0] instanceof Token)) {
     remainingTree = remainingTree[0];
   }
   const ir = parseExpression(remainingTree);
   return new FunctionExpression(paramTypes, resultTypes, paramNames, ir);
 }
-function parseModuleExpression(tokenTree) {
-  (0, import_assert5.default)(isModuleDeclaration(tokenTree));
+function parseModuleExpression(parseTree) {
+  assert(isModuleDeclaration(parseTree));
   const functionExps = [];
   const exportExps = [];
-  for (let i = 1; i < tokenTree.length; i++) {
-    const tokenTreeNode = tokenTree[i];
-    (0, import_assert5.default)(!(tokenTreeNode instanceof Token));
-    if (isFunctionExpression(tokenTreeNode)) {
-      functionExps.push(parseFunctionExpression(tokenTreeNode));
+  for (let i = 1; i < parseTree.length; i++) {
+    const parseTreeNode = parseTree[i];
+    if (parseTreeNode instanceof Token) {
+      throw new Error();
     }
-    if (isExportDeclaration(tokenTreeNode)) {
-      exportExps.push(parseExportDeclaration(tokenTreeNode));
+    if (isFunctionExpression(parseTreeNode)) {
+      functionExps.push(parseFunctionExpression(parseTreeNode));
+    }
+    if (isExportDeclaration(parseTreeNode)) {
+      exportExps.push(parseExportDeclaration(parseTreeNode));
     }
   }
   return new ModuleExpression(functionExps, exportExps[0]);
 }
-function parseExportDeclaration(tokenTree) {
-  (0, import_assert5.default)(isExportDeclaration(tokenTree));
+function parseExportDeclaration(parseTree) {
+  assert(isExportDeclaration(parseTree));
   const exportObjects = [];
-  for (let i = 1; i < tokenTree.length; i += 2) {
-    const exportName = tokenTree[i];
-    (0, import_assert5.default)(exportName instanceof Token);
-    const exportInfo = tokenTree[i + 1];
-    (0, import_assert5.default)(exportInfo instanceof Array);
+  for (let i = 1; i < parseTree.length; i += 2) {
+    const exportName = parseTree[i];
+    if (!(exportName instanceof Token)) {
+      throw new Error();
+    }
+    const exportInfo = parseTree[i + 1];
+    if (!(exportInfo instanceof Array)) {
+      throw new Error();
+    }
     const [exportType, exportIndex] = exportInfo;
-    (0, import_assert5.default)(exportType instanceof Token && exportIndex instanceof Token);
+    if (!(exportType instanceof Token && exportIndex instanceof Token)) {
+      throw new Error();
+    }
     exportObjects.push(new ExportObject(exportName, exportType, exportIndex));
   }
   return new ExportExpression(exportObjects);
 }
-function isSExpression(tokenTree) {
-  const tokenHeader = tokenTree[0];
-  (0, import_assert5.default)(tokenHeader instanceof Token);
+function isSExpression(parseTree) {
+  const tokenHeader = parseTree[0];
+  assert(tokenHeader instanceof Token);
   return tokenHeader instanceof Token && tokenHeader.isOpcodeToken() && Opcode.getParamLength(tokenHeader.opcodeType) > 0;
 }
-function isStackExpression(tokenTree) {
-  const tokenHeader = tokenTree[0];
-  return tokenHeader instanceof Token && tokenHeader.isOpcodeToken() && !isFunctionExpression(tokenTree) && !isSExpression(tokenTree);
+function isStackExpression(parseTree) {
+  const tokenHeader = parseTree[0];
+  return tokenHeader instanceof Token && tokenHeader.isOpcodeToken() && !isFunctionExpression(parseTree) && !isSExpression(parseTree);
 }
-function isFunctionExpression(tokenTree) {
-  const tokenHeader = tokenTree[0];
+function isFunctionExpression(parseTree) {
+  const tokenHeader = parseTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === "func" /* Func */;
 }
-function isFunctionParamDeclaration(tokenTree) {
-  const tokenHeader = tokenTree[0];
+function isFunctionParamDeclaration(parseTree) {
+  const tokenHeader = parseTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === "param" /* Param */;
 }
-function isFunctionResultDeclaration(tokenTree) {
-  const tokenHeader = tokenTree[0];
+function isFunctionResultDeclaration(parseTree) {
+  const tokenHeader = parseTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === "result" /* Result */;
 }
-function isModuleDeclaration(tokenTree) {
-  const tokenHeader = tokenTree[0];
+function isModuleDeclaration(parseTree) {
+  const tokenHeader = parseTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === "module" /* Module */;
 }
-function isExportDeclaration(tokenTree) {
-  const tokenHeader = tokenTree[0];
+function isExportDeclaration(parseTree) {
+  const tokenHeader = parseTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === "export" /* Export */;
 }
 
@@ -3268,62 +3286,20 @@ var Tree = class extends Array {
   }
   Tree2.treeMap = treeMap;
 })(Tree || (Tree = {}));
-var TokenTree = class extends Tree {
+var ParseTree = class extends Tree {
 };
-((TokenTree2) => {
+((ParseTree2) => {
   function getStringArrayRepr(tree) {
     return Tree.treeMap(tree, (token) => token.lexeme);
   }
-  TokenTree2.getStringArrayRepr = getStringArrayRepr;
-})(TokenTree || (TokenTree = {}));
-
-// src/parser/treeify.ts
-var import_assert6 = __toESM(require("assert"));
-function getTokenTree(tokenList) {
-  if (tokenList[0].type === "(" /* Lpar */) {
-    tokenList = tokenList.slice(1);
-  }
-  return new Parser(tokenList).getGrouping();
-}
-var Parser = class {
-  constructor(tokens) {
-    this.cursor = 0;
-    this.tokens = tokens;
-  }
-  peek() {
-    return this.tokens[this.cursor];
-  }
-  read() {
-    return this.tokens[this.cursor++];
-  }
-  peekOffset(i) {
-    (0, import_assert6.default)(this.cursor + i >= 0 && this.cursor + i < this.tokens.length);
-    return this.tokens[this.cursor + i];
-  }
-  isEof() {
-    return this.cursor >= this.tokens.length;
-  }
-  getGrouping() {
-    const tree = [];
-    while (!this.isEof()) {
-      const token = this.read();
-      if (token.type === "(" /* Lpar */) {
-        tree.push(this.getGrouping());
-      } else if (token.type === ")" /* Rpar */) {
-        return tree;
-      } else {
-        tree.push(token);
-      }
-    }
-    return tree;
-  }
-};
+  ParseTree2.getStringArrayRepr = getStringArrayRepr;
+})(ParseTree || (ParseTree = {}));
 
 // src/index.ts
-var compile = (program) => encode(getIntermediateRepresentation(getTokenTree(tokenize(program))));
-var getParseTree = (program) => TokenTree.getStringArrayRepr(getTokenTree(tokenize(program)));
+var compile = (program) => encode(getIntermediateRepresentation(getParseTree(tokenize(program))));
+var getParseTree = (program) => ParseTree.getStringArrayRepr(getParseTree(tokenize(program)));
 var compileParseTree = (tree) => {
-  if (!(tree instanceof TokenTree)) {
+  if (!(tree instanceof ParseTree)) {
     tree = Tree.treeMap(tree, getSingleToken);
   }
   return encode(getIntermediateRepresentation(tree));

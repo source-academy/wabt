@@ -2,70 +2,85 @@ import {
   FunctionExpression,
   OperationTree,
   UnfoldedTokenExpression,
-  type IntermediateRepresentation, FunctionBody, FunctionSignature, ModuleExpression, type TokenExpression, ExportExpression, ExportObject,
+  type IntermediateRepresentation,
+  FunctionBody,
+  FunctionSignature,
+  ModuleExpression,
+  type TokenExpression,
+  ExportExpression,
+  ExportObject,
 } from './ir';
 import { Token, TokenType } from '../common/token';
-import { type TokenTree } from './tree_types';
+import { type ParseTree } from './tree_types';
 
 import { Opcode } from '../common/opcode';
 import { type ValueType } from '../common/type';
 import { assert } from '../common/assert';
 
 export function getIntermediateRepresentation(
-  tokenTree: TokenTree,
+  parseTree: ParseTree,
 ): IntermediateRepresentation {
-  if (isSExpression(tokenTree) || isStackExpression(tokenTree)) {
-    return parseExpression(tokenTree);
+  if (isSExpression(parseTree) || isStackExpression(parseTree)) {
+    return parseExpression(parseTree);
   }
 
-  if (isFunctionExpression(tokenTree)) {
-    return parseFunctionExpression(tokenTree);
+  if (isFunctionExpression(parseTree)) {
+    return parseFunctionExpression(parseTree);
   }
 
-  if (isModuleDeclaration(tokenTree)) {
-    return parseModuleExpression(tokenTree);
+  if (isModuleDeclaration(parseTree)) {
+    return parseModuleExpression(parseTree);
   }
 
-  if (isExportDeclaration(tokenTree)) {
-    return parseExportDeclaration(tokenTree);
+  if (isExportDeclaration(parseTree)) {
+    return parseExportDeclaration(parseTree);
   }
 
   throw new Error(
-    `Unexpected token type to parse: ${JSON.stringify(tokenTree, undefined, 2)}`,
+    `Unexpected token type to parse: ${JSON.stringify(parseTree, undefined, 2)}`,
   );
 }
 
 /*
   Functions for parsing
 */
-function parseExpression(tokenTree:TokenTree): TokenExpression {
-  // console.log(tokenTree[0]);
-  // console.log(isSExpression(tokenTree));
-  // console.log(isStackExpression(tokenTree));
-  if (isSExpression(tokenTree)) {
-    return parseSExpression(tokenTree);
+function parseExpression(parseTree: ParseTree): TokenExpression {
+  if (isSExpression(parseTree)) {
+    return parseSExpression(parseTree);
   }
 
-  if (isStackExpression(tokenTree)) {
-    return parseStackExpression(tokenTree);
+  if (isStackExpression(parseTree)) {
+    return parseStackExpression(parseTree);
   }
 
-  throw new Error(`Cannot parse into function expression: ${JSON.stringify(tokenTree, undefined, 2)}`); // TODO legit error message when coming from function declarations.
+  throw new Error(
+    `Cannot parse into function expression: ${JSON.stringify(
+      parseTree,
+      undefined,
+      2,
+    )}`,
+  ); // TODO legit error message when coming from function declarations.
 }
 
-function parseSExpression(tokenTree: TokenTree): OperationTree {
-  let head = tokenTree[0];
+function parseSExpression(parseTree: ParseTree): OperationTree {
+  let head = parseTree[0];
   assert(head instanceof Token); // Head should be token here, assert to make typescript happy
   head = head as Token;
 
   const body: (Token | TokenExpression)[] = [];
-  for (let i = 1; i < tokenTree.length; i++) {
-    const token = tokenTree[i];
+  for (let i = 1; i < parseTree.length; i++) {
+    const token = parseTree[i];
     if (token instanceof Token) {
       body.push(token);
     } else {
       const irNode = getIntermediateRepresentation(token);
-      if (!(irNode instanceof Token || irNode instanceof OperationTree || irNode instanceof UnfoldedTokenExpression)) {
+      if (
+        !(
+          irNode instanceof Token
+          || irNode instanceof OperationTree
+          || irNode instanceof UnfoldedTokenExpression
+        )
+      ) {
         throw new Error(); //TODO proper error
       }
       body.push(irNode);
@@ -76,9 +91,9 @@ function parseSExpression(tokenTree: TokenTree): OperationTree {
   return new OperationTree(head, body);
 }
 
-function parseStackExpression(tokenTree: TokenTree): UnfoldedTokenExpression {
+function parseStackExpression(parseTree: ParseTree): UnfoldedTokenExpression {
   const nodes: (Token | OperationTree)[] = [];
-  tokenTree.forEach((tokenNode) => {
+  parseTree.forEach((tokenNode) => {
     if (tokenNode instanceof Token) {
       nodes.push(tokenNode);
     } else {
@@ -93,38 +108,38 @@ function parseStackExpression(tokenTree: TokenTree): UnfoldedTokenExpression {
   return new UnfoldedTokenExpression(nodes);
 }
 
-function parseFunctionExpression(tokenTree: TokenTree): FunctionExpression {
-  assert(isFunctionExpression(tokenTree));
+function parseFunctionExpression(parseTree: ParseTree): FunctionExpression {
+  assert(isFunctionExpression(parseTree));
   const paramTypes: ValueType[] = [];
   const paramNames: string[] = [];
   const resultTypes: ValueType[] = [];
 
-  const parseParam = (tokenTree: TokenTree) => {
-    for (let i = 1; i < tokenTree.length; i++) {
-      const tokenTreeNode = tokenTree[i];
-      if (!(tokenTreeNode instanceof Token)) {
+  const parseParam = (parseTree: ParseTree) => {
+    for (let i = 1; i < parseTree.length; i++) {
+      const parseTreeNode = parseTree[i];
+      if (!(parseTreeNode instanceof Token)) {
         throw new Error(); // TODO better error
       }
-      if (tokenTreeNode.type === TokenType.ValueType) {
-        paramTypes.push(tokenTreeNode.valueType!);
-      } else if (tokenTreeNode.type === TokenType.Var) {
-        paramNames.push(tokenTreeNode.lexeme);
+      if (parseTreeNode.type === TokenType.ValueType) {
+        paramTypes.push(parseTreeNode.valueType!);
+      } else if (parseTreeNode.type === TokenType.Var) {
+        paramNames.push(parseTreeNode.lexeme);
       } else {
-        throw new Error(`Unexpected token, bla bla ${tokenTreeNode}`); // TODO Proper error message and type
+        throw new Error(`Unexpected token, bla bla ${parseTreeNode}`); // TODO Proper error message and type
       }
     }
   };
 
-  const parseResult = (tokenTree: TokenTree) => {
-    for (let i = 1; i < tokenTree.length; i++) {
-      const tokenTreeNode = tokenTree[i];
-      if (!(tokenTreeNode instanceof Token)) {
+  const parseResult = (parseTree: ParseTree) => {
+    for (let i = 1; i < parseTree.length; i++) {
+      const parseTreeNode = parseTree[i];
+      if (!(parseTreeNode instanceof Token)) {
         throw new Error();
       }
-      if (tokenTreeNode.type === TokenType.ValueType) {
-        resultTypes.push(tokenTreeNode.valueType!);
+      if (parseTreeNode.type === TokenType.ValueType) {
+        resultTypes.push(parseTreeNode.valueType!);
       } else {
-        throw new Error(`Unexpected token, bla bla ${tokenTreeNode}`); // TODO Proper error message and type
+        throw new Error(`Unexpected token, bla bla ${parseTreeNode}`); // TODO Proper error message and type
       }
     }
   };
@@ -132,20 +147,20 @@ function parseFunctionExpression(tokenTree: TokenTree): FunctionExpression {
   // Parse function params and declarations first
   // TODO this does not work when the first few function params are not named, and then some are named afterwards.
   let cursor;
-  for (cursor = 1; cursor < tokenTree.length; cursor++) {
-    const tokenTreeNode = tokenTree[cursor];
-    if (tokenTreeNode instanceof Token) {
+  for (cursor = 1; cursor < parseTree.length; cursor++) {
+    const parseTreeNode = parseTree[cursor];
+    if (parseTreeNode instanceof Token) {
       break;
     }
-    if (isFunctionParamDeclaration(tokenTreeNode)) {
-      parseParam(tokenTreeNode);
-    } else if (isFunctionResultDeclaration(tokenTreeNode)) {
-      parseResult(tokenTreeNode);
+    if (isFunctionParamDeclaration(parseTreeNode)) {
+      parseParam(parseTreeNode);
+    } else if (isFunctionResultDeclaration(parseTreeNode)) {
+      parseResult(parseTreeNode);
     } else {
       break;
     }
   }
-  let remainingTree: TokenTree = tokenTree.slice(cursor);
+  let remainingTree: ParseTree = parseTree.slice(cursor);
 
   // If the function body is something like [add 1 0], slicing the tree yields:
   // [[add 1 0]] --> this is not a valid s-expression that can be parsed.
@@ -158,40 +173,40 @@ function parseFunctionExpression(tokenTree: TokenTree): FunctionExpression {
   return new FunctionExpression(paramTypes, resultTypes, paramNames, ir);
 }
 
-function parseModuleExpression(tokenTree: TokenTree): ModuleExpression {
-  assert(isModuleDeclaration(tokenTree));
+function parseModuleExpression(parseTree: ParseTree): ModuleExpression {
+  assert(isModuleDeclaration(parseTree));
 
   const functionExps: FunctionExpression[] = [];
   const exportExps: ExportExpression[] = [];
-  for (let i = 1; i < tokenTree.length; i++) {
-    const tokenTreeNode = tokenTree[i];
-    if (tokenTreeNode instanceof Token) {
+  for (let i = 1; i < parseTree.length; i++) {
+    const parseTreeNode = parseTree[i];
+    if (parseTreeNode instanceof Token) {
       throw new Error(); // Better error mesage
     }
 
-    if (isFunctionExpression(tokenTreeNode)) {
-      functionExps.push(parseFunctionExpression(tokenTreeNode));
+    if (isFunctionExpression(parseTreeNode)) {
+      functionExps.push(parseFunctionExpression(parseTreeNode));
     }
 
-    if (isExportDeclaration(tokenTreeNode)) {
-      exportExps.push(parseExportDeclaration(tokenTreeNode));
+    if (isExportDeclaration(parseTreeNode)) {
+      exportExps.push(parseExportDeclaration(parseTreeNode));
     }
   }
 
   return new ModuleExpression(functionExps, exportExps[0]); // TODO fix this: only first export experssion is passed
 }
 
-function parseExportDeclaration(tokenTree: TokenTree): ExportExpression {
-  assert(isExportDeclaration(tokenTree));
+function parseExportDeclaration(parseTree: ParseTree): ExportExpression {
+  assert(isExportDeclaration(parseTree));
 
   const exportObjects: ExportObject[] = [];
 
-  for (let i = 1; i < tokenTree.length; i += 2) {
-    const exportName = tokenTree[i];
+  for (let i = 1; i < parseTree.length; i += 2) {
+    const exportName = parseTree[i];
     if (!(exportName instanceof Token)) {
       throw new Error(); // Better error mesage
     }
-    const exportInfo = tokenTree[i + 1];
+    const exportInfo = parseTree[i + 1];
     if (!(exportInfo instanceof Array<Token>)) {
       throw new Error(); // Better error mesage
     }
@@ -206,11 +221,11 @@ function parseExportDeclaration(tokenTree: TokenTree): ExportExpression {
   return new ExportExpression(exportObjects);
 }
 /*
-  Checks for TokenTree
+  Checks for Parse Tree
 */
 
-function isSExpression(tokenTree: TokenTree): boolean {
-  const tokenHeader = tokenTree[0];
+function isSExpression(parseTree: ParseTree): boolean {
+  const tokenHeader = parseTree[0];
   assert(tokenHeader instanceof Token);
   return (
     tokenHeader instanceof Token
@@ -219,39 +234,39 @@ function isSExpression(tokenTree: TokenTree): boolean {
   );
 }
 
-function isStackExpression(tokenTree: TokenTree): boolean {
-  const tokenHeader = tokenTree[0];
+function isStackExpression(parseTree: ParseTree): boolean {
+  const tokenHeader = parseTree[0];
   return (
     tokenHeader instanceof Token
     && tokenHeader.isOpcodeToken()
-    && !isFunctionExpression(tokenTree)
-    && !isSExpression(tokenTree)
-    // && !isModuleDeclaration(tokenTree)
+    && !isFunctionExpression(parseTree)
+    && !isSExpression(parseTree)
+    // && !isModuleDeclaration(parseTree)
   );
 }
 
-function isFunctionExpression(tokenTree: TokenTree): boolean {
-  const tokenHeader = tokenTree[0];
+function isFunctionExpression(parseTree: ParseTree): boolean {
+  const tokenHeader = parseTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === TokenType.Func;
 }
 
-function isFunctionParamDeclaration(tokenTree:TokenTree): boolean {
-  const tokenHeader = tokenTree[0];
+function isFunctionParamDeclaration(parseTree: ParseTree): boolean {
+  const tokenHeader = parseTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === TokenType.Param;
 }
 
-function isFunctionResultDeclaration(tokenTree:TokenTree): boolean {
-  const tokenHeader = tokenTree[0];
+function isFunctionResultDeclaration(parseTree: ParseTree): boolean {
+  const tokenHeader = parseTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === TokenType.Result;
 }
 
-function isModuleDeclaration(tokenTree: TokenTree): boolean {
-  const tokenHeader = tokenTree[0];
+function isModuleDeclaration(parseTree: ParseTree): boolean {
+  const tokenHeader = parseTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === TokenType.Module;
 }
 
-function isExportDeclaration(tokenTree: TokenTree): boolean {
-  const tokenHeader = tokenTree[0];
+function isExportDeclaration(parseTree: ParseTree): boolean {
+  const tokenHeader = parseTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === TokenType.Export;
 }
 

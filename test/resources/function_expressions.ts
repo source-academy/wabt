@@ -10,16 +10,14 @@ import {
 import { Tree } from '../../src/parser/tree_types';
 import { getSampleToken as t } from './resolved_tokens';
 
-
 interface TestCaseData {
   str: string;
   tokens: Array<Token>;
-  tokenTree: Tree<Token>;
+  parseTree: Tree<Token>;
   ir: FunctionExpression;
   minimal_binary_function_signature: Uint8Array;
   minimal_binary_function_body: Uint8Array;
 }
-
 
 const simple_function_sexpr_with_param_names: TestCaseData = {
   str: `
@@ -39,7 +37,7 @@ const simple_function_sexpr_with_param_names: TestCaseData = {
     ...[')'],
   ].map(t),
 
-  tokenTree: Tree.treeMap(
+  parseTree: Tree.treeMap(
     [
       'func',
       ['param', '$p', 'f64'],
@@ -73,13 +71,28 @@ const simple_add_function_no_param_names: TestCaseData = {
     i32.add)
     `,
   tokens: [
-    ...['(', 'func', '(', 'param', 'i32', ')', '(', 'param', 'i32', ')', '(', 'result', 'i32', ')'],
+    ...[
+      '(',
+      'func',
+      '(',
+      'param',
+      'i32',
+      ')',
+      '(',
+      'param',
+      'i32',
+      ')',
+      '(',
+      'result',
+      'i32',
+      ')',
+    ],
     ...['local.get', '0'],
     ...['local.get', '1'],
     ...['i32.add', ')'],
   ].map(t),
 
-  tokenTree: Tree.treeMap(
+  parseTree: Tree.treeMap(
     [
       'func',
       ['param', 'i32'],
@@ -101,8 +114,12 @@ const simple_add_function_no_param_names: TestCaseData = {
       ['local.get', '0', 'local.get', '1', 'i32.add'].map(t),
     ),
   ),
-  minimal_binary_function_signature: new Uint8Array([0x60, 0x02, 0x7f, 0x7f, 0x01, 0x7f]),
-  minimal_binary_function_body: new Uint8Array([0x07, 0x00, 0x20, 0x00, 0x20, 0x01, 0x6a, 0x0b]),
+  minimal_binary_function_signature: new Uint8Array([
+    0x60, 0x02, 0x7f, 0x7f, 0x01, 0x7f,
+  ]),
+  minimal_binary_function_body: new Uint8Array([
+    0x07, 0x00, 0x20, 0x00, 0x20, 0x01, 0x6a, 0x0b,
+  ]),
 };
 
 // export const simple_named_add_function_no_param_names: TestCaseData = {
@@ -119,7 +136,7 @@ const simple_add_function_no_param_names: TestCaseData = {
 //     ...['i32.add', ')'],
 //   ].map(t),
 //
-//   tokenTree: Tree.treeMap(['func',
+//   parseTree: Tree.treeMap(['func',
 //     '$add',
 //     ['param', 'i32'],
 //     ['param', 'i32'],
@@ -140,5 +157,7 @@ const simple_add_function_no_param_names: TestCaseData = {
 //   minimal_binary: undefined,
 // };
 
-
-export const validTestCases = [simple_function_sexpr_with_param_names, simple_add_function_no_param_names];
+export const validTestCases = [
+  simple_function_sexpr_with_param_names,
+  simple_add_function_no_param_names,
+];

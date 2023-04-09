@@ -1,22 +1,24 @@
 import { encode } from './binary_writer';
 import { getSingleToken, tokenize } from './lexer/lexer';
 import { getIntermediateRepresentation } from './parser/parser';
-import { TokenTree, Tree } from './parser/tree_types';
-import { getTokenTree } from './parser/treeify';
+import { ParseTree, Tree } from './parser/tree_types';
+import { getParseTree } from './parser/treeify';
 
 /**
  * Compile a given WebAssembly Binary Text module into a binary.
  * @param program program to compile.
  * @returns an 8-bit integer array.
  */
-export const compile: (program: string) => Uint8Array = (program: string) => encode(getIntermediateRepresentation(getTokenTree(tokenize(program))));
+export const compile: (program: string) => Uint8Array = (program: string) => encode(getIntermediateRepresentation(getParseTree(tokenize(program))));
 
 /**
  * Get the parse tree of a given WebAssembly Binary Text expression.
  * @param program program to parse
  * @returns a tree of string tokens.
  */
-export const getParseTree: (program: string) => Tree<string> = (program: string) => TokenTree.getStringArrayRepr(getTokenTree(tokenize(program)));
+export const getParseTree: (program: string) => Tree<string> = (
+  program: string,
+) => ParseTree.getStringArrayRepr(getParseTree(tokenize(program)));
 
 /**
  * Compile a given parse tree of a given WebAssembly Binary Text expression.
@@ -25,8 +27,10 @@ export const getParseTree: (program: string) => Tree<string> = (program: string)
  * @param tree tree to compile.
  * @returns an 8-bit integer array.
  */
-export const compileParseTree: (tree: Tree<string> | TokenTree) => Uint8Array = (tree: Tree<string> | TokenTree) => {
-  if (!(tree instanceof TokenTree)) {
+export const compileParseTree: (
+  tree: Tree<string> | ParseTree
+) => Uint8Array = (tree: Tree<string> | ParseTree) => {
+  if (!(tree instanceof ParseTree)) {
     tree = Tree.treeMap(tree, getSingleToken); // TODO implement decompiler then compile to get token metadata
   }
   return encode(getIntermediateRepresentation(tree));

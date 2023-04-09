@@ -1,5 +1,5 @@
 import { TokenType, type Token } from '../common/token';
-import { type TokenTree } from './tree_types';
+import { type ParseTree } from './tree_types';
 
 import { tokenize } from '../lexer/lexer';
 import { assert } from '../common/assert';
@@ -9,7 +9,7 @@ import { assert } from '../common/assert';
  * @param tokenList an array of tokens to parse
  * @returns a program tree
  */
-export function getTokenTree(tokenList: Token[]): TokenTree {
+export function getParseTree(tokenList: Token[]): ParseTree {
   if (tokenList[0].type === TokenType.Lpar) {
     tokenList = tokenList.slice(1);
   }
@@ -20,7 +20,7 @@ export function getTokenTree(tokenList: Token[]): TokenTree {
 
 class Parser {
   private readonly tokens: Token[];
-  tree: TokenTree | undefined;
+  tree: ParseTree | undefined;
   cursor: number = 0;
 
   constructor(tokens: Token[]) {
@@ -44,8 +44,8 @@ class Parser {
     return this.cursor >= this.tokens.length;
   }
 
-  getGrouping(): TokenTree {
-    const tree: TokenTree = [];
+  getGrouping(): ParseTree {
+    const tree: ParseTree = [];
     while (!this.isEof()) {
       const token = this.read();
       if (token.type === TokenType.Lpar) {

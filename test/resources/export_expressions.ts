@@ -6,7 +6,7 @@ import { getSampleToken as t } from './resolved_tokens';
 interface TestCaseData {
   str: string;
   tokens: Array<Token>;
-  tokenTree: Tree<Token>;
+  parseTree: Tree<Token>;
   ir: ExportExpression;
   minimal_binary: Uint8Array;
 }
@@ -14,7 +14,7 @@ interface TestCaseData {
 export const export_func_add_by_index: TestCaseData = {
   str: '(export "add" (func 0))',
   tokens: ['(', 'export', '"add"', '(', 'func', '0', ')', ')'].map(t),
-  tokenTree: Tree.treeMap(['export', '"add"', ['func', '0']], t),
+  parseTree: Tree.treeMap(['export', '"add"', ['func', '0']], t),
   ir: new ExportExpression([new ExportObject(t('"add"'), t('func'), t('0'))]),
   minimal_binary: new Uint8Array([
     0x01, // num exports
