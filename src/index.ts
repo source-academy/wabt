@@ -2,14 +2,14 @@ import { encode } from './binary_writer';
 import { getSingleToken, tokenize } from './lexer/lexer';
 import { getIntermediateRepresentation } from './parser/parser';
 import { ParseTree, Tree } from './parser/tree_types';
-import { getParseTree } from './parser/treeify';
+import { getParseTree as treeify } from './parser/treeify';
 
 /**
  * Compile a given WebAssembly Binary Text module into a binary.
  * @param program program to compile.
  * @returns an 8-bit integer array.
  */
-export const compile: (program: string) => Uint8Array = (program: string) => encode(getIntermediateRepresentation(getParseTree(tokenize(program))));
+export const compile: (program: string) => Uint8Array = (program: string) => encode(getIntermediateRepresentation(treeify(tokenize(program))));
 
 /**
  * Get the parse tree of a given WebAssembly Binary Text expression.
@@ -18,7 +18,7 @@ export const compile: (program: string) => Uint8Array = (program: string) => enc
  */
 export const getParseTree: (program: string) => Tree<string> = (
   program: string,
-) => ParseTree.getStringArrayRepr(getParseTree(tokenize(program)));
+) => ParseTree.getStringArrayRepr(treeify(tokenize(program)));
 
 /**
  * Compile a given parse tree of a given WebAssembly Binary Text expression.
