@@ -10,7 +10,6 @@ import {
 import { tokenize } from '../src/lexer/lexer';
 import { getParseTree } from '../src/parser/parse_tree';
 import { getIntermediateRepresentation } from '../src/parser/parser';
-import { type Token } from '../src/common/token';
 import { expect } from '@jest/globals';
 import { isTokenEqual } from './resources/resolved_tokens';
 

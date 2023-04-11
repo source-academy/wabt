@@ -1,5 +1,6 @@
 import { ValueType } from '../../src/common/type';
 import {
+  EmptyTokenExpression,
   ExportExpression,
   FunctionExpression,
   ModuleExpression,
@@ -315,8 +316,71 @@ const module_with_two_exports: ModuleTestCase = {
   data_section_encoding: new Uint8Array(),
 };
 
+const function_exports_by_name: ModuleTestCase = {
+  str: `
+  (module
+    (func $first_function (param) (result))
+    (func $second_function (param) (result))
+    (export "second" (func $second_function))
+    (export "first" (func $first_function))
+  )`,
+  ir: new ModuleExpression(
+    // prettier-ignore
+    new FunctionExpression([], [], [], new EmptyTokenExpression(), '$first_function'),
+    // prettier-ignore
+    new FunctionExpression([], [], [], new EmptyTokenExpression(), '$second_function'),
+    new ExportExpression(t('"second"'), t('func'), t('$second_function')),
+    new ExportExpression(t('"first"'), t('func'), t('$first_function')),
+  ),
+  type_section_encoding: new Uint8Array([0x01, 0x04, 0x01, 0x60, 0x00, 0x00]),
+  import_section_encoding: new Uint8Array(),
+  function_section_encoding: new Uint8Array([0x03, 0x03, 0x02, 0x00, 0x00]),
+  table_section_encoding: new Uint8Array(),
+  memory_section_encoding: new Uint8Array(),
+  global_section_encoding: new Uint8Array(),
+  export_section_encoding: new Uint8Array([
+    0x07,
+    0x12,
+    0x02,
+    0x06,
+    ...[0x73, 0x65, 0x63, 0x6f, 0x6e, 0x64],
+    0x00,
+    0x01,
+    0x05,
+    ...[0x66, 0x69, 0x72, 0x73, 0x74],
+    0x00,
+    0x00,
+  ]),
+  start_section_encoding: new Uint8Array(),
+  element_section_encoding: new Uint8Array(),
+  code_section_encoding: new Uint8Array([
+    0x0a, 0x07, 0x02, 0x02, 0x00, 0x0b, 0x02, 0x00, 0x0b,
+  ]),
+  data_section_encoding: new Uint8Array(),
+  minimal_module_encoding: new Uint8Array([
+    ...PREFIX,
+    ...[0x01, 0x04, 0x01, 0x60, 0x00, 0x00],
+    ...[0x03, 0x03, 0x02, 0x00, 0x00],
+    ...[
+      0x07,
+      0x12,
+      0x02,
+      0x06,
+      ...[0x73, 0x65, 0x63, 0x6f, 0x6e, 0x64],
+      0x00,
+      0x01,
+      0x05,
+      ...[0x66, 0x69, 0x72, 0x73, 0x74],
+      0x00,
+      0x00,
+    ],
+    ...[0x0a, 0x07, 0x02, 0x02, 0x00, 0x0b, 0x02, 0x00, 0x0b],
+  ]),
+};
+
 export const moduleTestCases = [
   module_with_one_simple_add_function_with_param_names,
   module_with_exported_add_function_no_names,
   module_with_two_exports,
+  function_exports_by_name,
 ];

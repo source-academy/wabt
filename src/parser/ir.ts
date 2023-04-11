@@ -54,21 +54,26 @@ export class ExportExpression extends IntermediateRepresentation {
   exportName: string;
   exportType: ExportType;
   exportIndex: number;
+  exportReferenceName: string | null = null;
 
-  constructor(exportName: Token, exportType: Token, exportIndex: Token) {
+  constructor(exportName: Token, exportType: Token, exportReference: Token) {
     super();
     if (exportName.type !== TokenType.Text) {
       throw new Error(`unexpected export name: ${exportName}`); // TODO better errors
     }
     this.exportName = exportName.lexeme.slice(1, exportName.lexeme.length - 1);
 
-    if (exportIndex.type !== TokenType.Nat) {
+    if (exportReference.type !== TokenType.Nat) {
       // TODO implement named exports
       throw new Error(
-        `unexpected export ID: ${exportIndex}. If this is meant to be a $identifier, then it is not implemented yet.`,
+        `unexpected export ID: ${JSON.stringify(
+          exportReference,
+          undefined,
+          2,
+        )}. If this is meant to be a $identifier, then it is not implemented yet.`,
       );
     }
-    this.exportIndex = Number.parseInt(exportIndex.lexeme);
+    this.exportIndex = Number.parseInt(exportReference.lexeme);
 
     if (exportType.type !== TokenType.Func) {
       throw new Error(`unexpected export type: ${exportType}`); // TODO better errors
