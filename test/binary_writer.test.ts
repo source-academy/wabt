@@ -1,12 +1,39 @@
-import { encode, NumberEncoder, TEST_EXPORTS } from '../src/binary_writer';
-import { module_with_exported_add_function_no_names, module_with_one_simple_add_function_with_param_names } from './resources/module_program_fragments';
+import { NumberEncoder, TEST_EXPORTS } from '../src/binary_writer';
 
 import { minimalBinaryTestCases as tc1 } from './resources/valid_function_bodies';
 import { validTestCases as tc2 } from './resources/function_expressions';
 import { validTestCases as tc3 } from './resources/export_expressions';
+import {
+  type ModuleTestCase,
+  moduleTestCases,
+} from './resources/module_program_fragments';
+import { tokenize } from '../src/lexer/lexer';
+import { getParseTree } from '../src/parser/parse_tree';
+import { getIntermediateRepresentation } from '../src/parser/parser';
+import { type Token } from '../src/common/token';
+import { expect } from '@jest/globals';
+
+const {
+  encodeFunctionBody,
+  encodeFunctionSignature,
+  encodeExportExpressions,
+  encodePureUnfoldedTokenExpression,
+  encodeModule,
+  encodeModuleTypeSection,
+  encodeModuleImportSection,
+  encodeModuleFunctionSection,
+  encodeModuleTableSection,
+  encodeModuleMemorySection,
+  encodeModuleGlobalSection,
+  encodeModuleExportSection,
+  encodeModuleStartSection,
+  encodeModuleElementSection,
+  encodeModuleCodeSection,
+  encodeModuleDataSection,
+} = TEST_EXPORTS;
 
 test.each(tc1)('test encode function body expressions', (testCase) => {
-  const encoding = encode(testCase.ir!);
+  const encoding = encodePureUnfoldedTokenExpression(testCase.unfolded_ir!);
   const expectedEncoding = testCase.minimal_binary;
   expect(encoding)
     .toEqual(expectedEncoding);
@@ -14,28 +41,26 @@ test.each(tc1)('test encode function body expressions', (testCase) => {
 
 describe('Encode function expresions', () => {
   test.each(tc2)('test encode function expression signature', (testCase) => {
-    const encoding = encode(testCase.ir.functionSignature);
+    const encoding = encodeFunctionSignature(testCase.ir.functionSignature);
     const expectedEncoding = testCase.minimal_binary_function_signature;
     expect(encoding)
       .toEqual(expectedEncoding);
   });
 
   test.each(tc2)('test encode function expression body', (testCase) => {
-    const encoding = encode(testCase.ir.functionBody);
+    const encoding = encodeFunctionBody(testCase.ir.functionBody);
     const expectedEncoding = testCase.minimal_binary_function_body;
     expect(encoding)
       .toEqual(expectedEncoding);
   });
 });
 
-
 test.each(tc3)('test encode encode expressions', (testCase) => {
-  const encoding = encode(testCase.ir);
+  const encoding = encodeExportExpressions(testCase.ir);
   const expectedEncoding = testCase.minimal_binary;
   expect(encoding)
     .toEqual(expectedEncoding);
 });
-
 
 describe('Encode const numbers', () => {
   test('encode 1.0 (f64)', () => {
@@ -53,117 +78,97 @@ describe('Encode const numbers', () => {
   });
 });
 
-describe('encode modules', () => {
-  describe('encode module module_with_one_simple_add_function_with_param_names', () => {
-    test('Encode type section (1): module_with_one_simple_add_function_with_param_names', () => {
-      const encode_fn = TEST_EXPORTS.encodeModuleTypeSection;
-      const encoding = encode_fn(
-        module_with_one_simple_add_function_with_param_names.ir,
-      );
-      const expected
-        = module_with_one_simple_add_function_with_param_names.type_section_encoding;
-
-      expect(encoding)
-        .toEqual(expected);
+describe.each(moduleTestCases)(
+  'encode module sections',
+  (testCase: ModuleTestCase) => {
+    test('Check intermediate representation', () => {
+      expect(
+        getIntermediateRepresentation(getParseTree(tokenize(testCase.str))),
+      )
+        .toEqual(testCase.ir);
     });
-
-    test('Encode function section (3): module_with_one_simple_add_function_with_param_names', () => {
-      const encode_fn = TEST_EXPORTS.encodeModuleFunctionSection;
-      const encoding = encode_fn(
-        module_with_one_simple_add_function_with_param_names.ir,
-      );
-      const expected
-        = module_with_one_simple_add_function_with_param_names.function_section_encoding;
-
-      expect(encoding)
-        .toEqual(expected);
+    test('Encode type_section', () => {
+      expect(encodeModuleTypeSection(testCase.ir))
+        .toEqual(
+          testCase.type_section_encoding,
+        );
     });
-
-    test('Encode code section (10/0x0a): module_with_one_simple_add_function_with_param_names', () => {
-      const encode_fn = TEST_EXPORTS.encodeModuleCodeSection;
-      const encoding = encode_fn(
-        module_with_one_simple_add_function_with_param_names.ir,
-      );
-      const expected
-        = module_with_one_simple_add_function_with_param_names.code_section_encoding;
-
-      expect(encoding)
-        .toEqual(expected);
+    test('Encode import_section', () => {
+      expect(encodeModuleImportSection(testCase.ir))
+        .toEqual(
+          testCase.import_section_encoding,
+        );
     });
-
-    test('Encode entire module: module_with_one_simple_add_function_with_param_names', () => {
-      const encode_fn = TEST_EXPORTS.encodeModule;
-      const encoding = encode_fn(
-        module_with_one_simple_add_function_with_param_names.ir,
-      );
-      const expected
-        = module_with_one_simple_add_function_with_param_names.minimal_module_encoding;
-
-      expect(encoding)
-        .toEqual(expected);
+    test('Encode function_section', () => {
+      expect(encodeModuleFunctionSection(testCase.ir))
+        .toEqual(
+          testCase.function_section_encoding,
+        );
     });
-  });
-
-
-  describe('encode module module_with_exported_add_function_no_names', () => {
-    test('Encode type section (1): module_with_exported_add_function_no_names', () => {
-      const encode_fn = TEST_EXPORTS.encodeModuleTypeSection;
-      const encoding = encode_fn(
-        module_with_exported_add_function_no_names.ir,
-      );
-      const expected
-        = module_with_exported_add_function_no_names.type_section_encoding;
-
-      expect(encoding)
-        .toEqual(expected);
+    test('Encode table_section', () => {
+      expect(encodeModuleTableSection(testCase.ir))
+        .toEqual(
+          testCase.table_section_encoding,
+        );
     });
-
-    test('Encode function section (3): module_with_exported_add_function_no_names', () => {
-      const encode_fn = TEST_EXPORTS.encodeModuleFunctionSection;
-      const encoding = encode_fn(
-        module_with_exported_add_function_no_names.ir,
-      );
-      const expected
-        = module_with_exported_add_function_no_names.function_section_encoding;
-
-      expect(encoding)
-        .toEqual(expected);
+    test('Encode memory_section', () => {
+      expect(encodeModuleMemorySection(testCase.ir))
+        .toEqual(
+          testCase.memory_section_encoding,
+        );
     });
-
-    test('Encode export section (7): module_with_exported_add_function_no_names', () => {
-      const encode_fn = TEST_EXPORTS.encodeModuleExportSection;
-      const encoding = encode_fn(
-        module_with_exported_add_function_no_names.ir,
-      );
-      const expected
-        = module_with_exported_add_function_no_names.export_section_encoding;
-
-      expect(encoding)
-        .toEqual(expected);
+    test('Encode global_section', () => {
+      expect(encodeModuleGlobalSection(testCase.ir))
+        .toEqual(
+          testCase.global_section_encoding,
+        );
     });
-
-    test('Encode code section (10/0x0a): module_with_exported_add_function_no_names', () => {
-      const encode_fn = TEST_EXPORTS.encodeModuleCodeSection;
-      const encoding = encode_fn(
-        module_with_exported_add_function_no_names.ir,
-      );
-      const expected
-        = module_with_exported_add_function_no_names.code_section_encoding;
-
-      expect(encoding)
-        .toEqual(expected);
+    test('Encode export_section', () => {
+      expect(encodeModuleExportSection(testCase.ir))
+        .toEqual(
+          testCase.export_section_encoding,
+        );
     });
-
-    test('Encode module: module_with_exported_add_function_no_names', () => {
-      const encode_fn = TEST_EXPORTS.encodeModule;
-      const encoding = encode_fn(
-        module_with_exported_add_function_no_names.ir,
-      );
-      const expected
-        = module_with_exported_add_function_no_names.minimal_module_encoding;
-
-      expect(encoding)
-        .toEqual(expected);
+    test('Encode start_section', () => {
+      expect(encodeModuleStartSection(testCase.ir))
+        .toEqual(
+          testCase.start_section_encoding,
+        );
     });
-  });
-});
+    test('Encode element_section', () => {
+      expect(encodeModuleElementSection(testCase.ir))
+        .toEqual(
+          testCase.element_section_encoding,
+        );
+    });
+    test('Encode code_section', () => {
+      expect(encodeModuleCodeSection(testCase.ir))
+        .toEqual(
+          testCase.code_section_encoding,
+        );
+    });
+    test('Encode data_section', () => {
+      expect(encodeModuleDataSection(testCase.ir))
+        .toEqual(
+          testCase.data_section_encoding,
+        );
+    });
+    test('Encode minimal_module', () => {
+      expect(encodeModule(testCase.ir))
+        .toEqual(
+          testCase.minimal_module_encoding,
+        );
+    });
+  },
+);
+
+function isTokenEqual(a: Token, b: Token) {
+  return (
+    a.lexeme === b.lexeme
+    && a.opcodeType === b.opcodeType
+    && a.valueType === b.valueType
+    && a.type === b.type
+  );
+}
+
+expect.addEqualityTesters([isTokenEqual]);

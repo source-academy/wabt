@@ -1,15 +1,20 @@
-import { encode } from './binary_writer';
+import { encodeModule } from './binary_writer';
 import { getSingleToken, tokenize } from './lexer/lexer';
 import { getIntermediateRepresentation } from './parser/parser';
 import { ParseTree, Tree } from './parser/tree_types';
 import { getParseTree as treeify } from './parser/parse_tree';
+import { type ModuleExpression } from './parser/ir';
 
 /**
  * Compile a given WebAssembly Binary Text module into a binary.
  * @param program program to compile.
  * @returns an 8-bit integer array.
  */
-export const compile: (program: string) => Uint8Array = (program: string) => encode(getIntermediateRepresentation(treeify(tokenize(program))));
+export const compile: (program: string) => Uint8Array = (program: string) => encodeModule(
+  getIntermediateRepresentation(
+    treeify(tokenize(program)),
+  ) as ModuleExpression,
+);
 
 /**
  * Get the parse tree of a given WebAssembly Binary Text expression.
@@ -33,5 +38,5 @@ export const compileParseTree: (
   if (!(tree instanceof ParseTree)) {
     tree = Tree.treeMap(tree, getSingleToken); // TODO implement decompiler then compile to get token metadata
   }
-  return encode(getIntermediateRepresentation(tree));
+  return encodeModule(getIntermediateRepresentation(tree) as ModuleExpression);
 };

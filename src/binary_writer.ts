@@ -1,5 +1,13 @@
 /* eslint-disable array-element-newline */ // (array formatting)
-import { FunctionBody, FunctionSignature, ModuleExpression, PureUnfoldedTokenExpression, Unfoldable, type IntermediateRepresentation, ExportExpression, type ExportObject } from './parser/ir';
+import {
+  type FunctionBody,
+  type FunctionSignature,
+  type ModuleExpression,
+  type PureUnfoldedTokenExpression,
+  Unfoldable,
+  type IntermediateRepresentation,
+  type ExportExpression,
+} from './parser/ir';
 import { ValueType } from './common/type';
 import { Token, TokenType } from './common/token';
 import { Opcode, OpcodeType } from './common/opcode';
@@ -21,41 +29,12 @@ namespace SectionCode {
   export const Data = 11;
 }
 
-export function encode(ir: IntermediateRepresentation): Uint8Array {
-  if (Unfoldable.instanceOf(ir)) {
-    const unfolded: PureUnfoldedTokenExpression = (ir as Unfoldable).unfold();
-    return encode(unfolded);
-    // ir = unfolded; // with this, we save one recursive call!
-  }
-
-  if (ir instanceof PureUnfoldedTokenExpression) {
-    return encodePureUnfoldedTokenExpression(ir);
-  }
-
-  if (ir instanceof FunctionSignature) {
-    return encodeFunctionSignature(ir);
-  }
-  if (ir instanceof FunctionBody) {
-    return encodeFunctionBody(ir);
-  }
-
-  if (ir instanceof ExportExpression) {
-    return encodeExportExpression(ir);
-  }
-
-  if (ir instanceof ModuleExpression) {
-    return encodeModule(ir);
-  }
-
-  throw new Error(`Unexpected Intermediate Representation: ${ir.constructor.name}, ${JSON.stringify(ir, undefined, 2)}`);
-}
-
 /**
  * Get
  * @param ir
  * @returns
  */
-function encodeModule(ir: ModuleExpression): Uint8Array {
+export function encodeModule(ir: ModuleExpression): Uint8Array {
   return new Uint8Array([
     ...[0, 'a'.charCodeAt(0), 's'.charCodeAt(0), 'm'.charCodeAt(0)], // magic number
     ...[1, 0, 0, 0], // version number
@@ -79,13 +58,18 @@ function encodeModuleTypeSection(ir: ModuleExpression): Uint8Array {
   const numTypes = functions.length;
 
   let funcSignatureEncodings: number[] = [];
-  functions.map(encode)
+  functions.map(encodeFunctionSignature)
     .forEach((arr) => {
       funcSignatureEncodings = funcSignatureEncodings.concat(...arr);
     });
 
   const sectionSize = funcSignatureEncodings.length + 1;
-  return new Uint8Array([SectionCode.Type, sectionSize, numTypes, ...funcSignatureEncodings]);
+  return new Uint8Array([
+    SectionCode.Type,
+    sectionSize,
+    numTypes,
+    ...funcSignatureEncodings,
+  ]);
 }
 
 function encodeModuleImportSection(ir: ModuleExpression): Uint8Array {
@@ -99,7 +83,12 @@ function encodeModuleFunctionSection(ir: ModuleExpression): Uint8Array {
 
   const function_indices = Array(num_fns)
     .keys();
-  return new Uint8Array([SectionCode.Function, section_size, num_fns, ...function_indices]);
+  return new Uint8Array([
+    SectionCode.Function,
+    section_size,
+    num_fns,
+    ...function_indices,
+  ]);
 }
 function encodeModuleTableSection(ir: ModuleExpression): Uint8Array {
   return new Uint8Array([]);
@@ -115,7 +104,7 @@ function encodeModuleExportSection(ir: ModuleExpression): Uint8Array {
   if (typeof exportDeclarations === 'undefined') {
     return new Uint8Array([]);
   }
-  const exportEncoding = encode(exportDeclarations);
+  const exportEncoding = encodeExportExpressions(exportDeclarations);
   const sectionLength = exportEncoding.length;
   return new Uint8Array([SectionCode.Export, sectionLength, ...exportEncoding]);
 }
@@ -130,13 +119,18 @@ function encodeModuleCodeSection(ir: ModuleExpression): Uint8Array {
 
   const fnBodyEncodings: number[] = [];
   fnBodies.forEach((body) => {
-    fnBodyEncodings.push(...encode(body));
+    fnBodyEncodings.push(...encodeFunctionBody(body));
   });
 
   const sectionSize = fnBodyEncodings.length + 1;
   const fnNumber = fnBodies.length;
 
-  return new Uint8Array([SectionCode.Code, sectionSize, fnNumber, ...fnBodyEncodings]);
+  return new Uint8Array([
+    SectionCode.Code,
+    sectionSize,
+    fnNumber,
+    ...fnBodyEncodings,
+  ]);
 }
 function encodeModuleDataSection(ir: ModuleExpression): Uint8Array {
   return new Uint8Array([]);
@@ -146,7 +140,9 @@ function encodeModuleDataSection(ir: ModuleExpression): Uint8Array {
  * @param ir a PureUnfoldedTokenExpression
  * @returns a Uint8Array binary encoding
  */
-function encodePureUnfoldedTokenExpression(ir: PureUnfoldedTokenExpression): Uint8Array {
+function encodePureUnfoldedTokenExpression(
+  ir: PureUnfoldedTokenExpression,
+): Uint8Array {
   const binary: number[] = [];
   for (const [index, token] of ir.tokens.entries()) {
     if (!isLiteralToken(token)) {
@@ -162,30 +158,36 @@ function encodePureUnfoldedTokenExpression(ir: PureUnfoldedTokenExpression): Uin
 /**
  * Encode an export expression.
  * TODO this does not work for multiple exports.
- * @param ir export expression to encode
+ * @param exportExpression export expression to encode
  */
-function encodeExportExpression(ir: ExportExpression): Uint8Array {
-  const { exportObjects } = ir;
+function encodeExportExpressions(
+  exportExpression: ExportExpression[],
+): Uint8Array {
+  function encodeExport(obj: ExportExpression): Uint8Array {
+    const { exportIndex, exportName, exportType } = obj;
+    const exportNameEncoding = [];
 
-  const exportNum = exportObjects.length;
+    for (let i = 0; i < exportName.length; i++) {
+      exportNameEncoding.push(exportName.charCodeAt(i));
+    }
+    return new Uint8Array([
+      exportName.length,
+      ...exportNameEncoding,
+      ExportType.getEncoding(exportType),
+      exportIndex,
+    ]);
+  }
+
+  const exportNum = exportExpression.length;
 
   const exportEncodings: number[] = [];
-  for (const exportObj of exportObjects) {
-    exportEncodings.push(...encodeExportObject(exportObj));
+  for (const exportObj of exportExpression) {
+    exportEncodings.push(...encodeExport(exportObj));
   }
 
   return new Uint8Array([exportNum, ...exportEncodings]);
 }
 
-function encodeExportObject(obj: ExportObject): Uint8Array {
-  const { exportIndex, exportName, exportType } = obj;
-  const exportNameEncoding = [];
-
-  for (let i = 0; i < exportName.length; i++) {
-    exportNameEncoding.push(exportName.charCodeAt(i));
-  }
-  return new Uint8Array([exportName.length, ...exportNameEncoding, ExportType.getEncoding(exportType), exportIndex]);
-}
 /**
  * Encode the function signature of a FunctionSignature intermediate representation.
  * This function encodes a function signature to be used in the "Type" (1) section of a Module encoding.
@@ -201,7 +203,13 @@ function encodeFunctionSignature(ir: FunctionSignature): Uint8Array {
   const result_encoding = ir.returnTypes.map((type) => ValueType.getValue(type));
   const result_len = result_encoding.length;
 
-  return new Uint8Array([FUNCTION_SIG_PREFIX, param_len, ...param_encoding, result_len, ...result_encoding]);
+  return new Uint8Array([
+    FUNCTION_SIG_PREFIX,
+    param_len,
+    ...param_encoding,
+    result_len,
+    ...result_encoding,
+  ]);
 }
 
 /**
@@ -219,19 +227,31 @@ function encodeFunctionBody(ir: FunctionBody): Uint8Array {
     const token = unfoldedBody.tokens[i];
     if (token.type === TokenType.Var) {
       const index = paramNames.indexOf(token.lexeme);
-      if (index === -1) { // TODO proper error message
-        throw new Error(`Parameter name not found in function body: ${JSON.stringify(ir, undefined, 2)}`);
+      if (index === -1) {
+        // TODO proper error message
+        throw new Error(
+          `Parameter name not found in function body: ${JSON.stringify(
+            ir,
+            undefined,
+            2,
+          )}`,
+        );
       }
 
       unfoldedBody.tokens[i] = convertVarToIndexToken(token, index);
     }
   }
 
-  const encodedBody = encode(unfoldedBody);
+  const encodedBody = encodePureUnfoldedTokenExpression(unfoldedBody);
   const FUNCTION_END = 0x0b;
 
   // The random 0 there is the local declaration count. Not yet implemented, so it is 0 for now.
-  return new Uint8Array([encodedBody.length + 2, 0, ...encodedBody, FUNCTION_END]);
+  return new Uint8Array([
+    encodedBody.length + 2,
+    0,
+    ...encodedBody,
+    FUNCTION_END,
+  ]);
 }
 
 function convertVarToIndexToken(varToken: Token, index: number): Token {
@@ -239,7 +259,13 @@ function convertVarToIndexToken(varToken: Token, index: number): Token {
   assert(index >= 0);
 
   return new Token(
-    TokenType.Nat, index.toString(), varToken.line, varToken.col, varToken.indexInSource, null, null,
+    TokenType.Nat,
+    index.toString(),
+    varToken.line,
+    varToken.col,
+    varToken.indexInSource,
+    null,
+    null,
   );
 }
 function isLiteralToken(token: Token): boolean {
@@ -284,7 +310,13 @@ function encodeLiteralToken(prevToken: Token, token: Token): Uint8Array {
   }
 
   // TODO custom error
-  throw new Error(`Unsuppored literal token type: [${JSON.stringify(prevToken, undefined, 2)}, ${JSON.stringify(token, undefined, 2)}]`);
+  throw new Error(
+    `Unsuppored literal token type: [${JSON.stringify(
+      prevToken,
+      undefined,
+      2,
+    )}, ${JSON.stringify(token, undefined, 2)}]`,
+  );
 }
 
 export namespace NumberEncoder {
@@ -305,9 +337,20 @@ export namespace NumberEncoder {
 }
 
 export const TEST_EXPORTS = {
+  encodeFunctionBody,
+  encodeFunctionSignature,
+  encodeExportExpressions,
+  encodePureUnfoldedTokenExpression,
   encodeModule,
   encodeModuleTypeSection,
+  encodeModuleImportSection,
   encodeModuleFunctionSection,
+  encodeModuleTableSection,
+  encodeModuleMemorySection,
+  encodeModuleGlobalSection,
   encodeModuleExportSection,
+  encodeModuleStartSection,
+  encodeModuleElementSection,
   encodeModuleCodeSection,
+  encodeModuleDataSection,
 };

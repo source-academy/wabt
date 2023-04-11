@@ -14,7 +14,7 @@ export interface FunctionBodyTestCaseData {
   tokens?: Array<Token>;
   parseTree?: Tree<Token>;
   ir?: IntermediateRepresentation;
-  unfolded_ir?: IntermediateRepresentation;
+  unfolded_ir?: PureUnfoldedTokenExpression;
   minimal_binary?: Uint8Array;
 }
 

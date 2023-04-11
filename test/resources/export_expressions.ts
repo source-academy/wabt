@@ -1,5 +1,5 @@
 import { type Token } from '../../src/common/token';
-import { ExportExpression, ExportObject } from '../../src/parser/ir';
+import { ExportExpression } from '../../src/parser/ir';
 import { Tree } from '../../src/parser/tree_types';
 import { getSampleToken as t } from './resolved_tokens';
 
@@ -7,7 +7,7 @@ interface TestCaseData {
   str: string;
   tokens: Array<Token>;
   parseTree: Tree<Token>;
-  ir: ExportExpression;
+  ir: ExportExpression[];
   minimal_binary: Uint8Array;
 }
 
@@ -15,7 +15,7 @@ export const export_func_add_by_index: TestCaseData = {
   str: '(export "add" (func 0))',
   tokens: ['(', 'export', '"add"', '(', 'func', '0', ')', ')'].map(t),
   parseTree: Tree.treeMap(['export', '"add"', ['func', '0']], t),
-  ir: new ExportExpression([new ExportObject(t('"add"'), t('func'), t('0'))]),
+  ir: [new ExportExpression(t('"add"'), t('func'), t('0'))],
   minimal_binary: new Uint8Array([
     0x01, // num exports
     0x03, // string length

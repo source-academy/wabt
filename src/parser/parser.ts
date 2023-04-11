@@ -6,7 +6,6 @@ import {
   ModuleExpression,
   type TokenExpression,
   ExportExpression,
-  ExportObject,
 } from './ir';
 import { Token, TokenType } from '../common/token';
 import { type ParseTree } from './tree_types';
@@ -187,17 +186,17 @@ function parseModuleExpression(parseTree: ParseTree): ModuleExpression {
     }
 
     if (isExportDeclaration(parseTreeNode)) {
-      exportExps.push(parseExportDeclaration(parseTreeNode));
+      exportExps.push(...parseExportDeclaration(parseTreeNode));
     }
   }
 
-  return new ModuleExpression(functionExps, exportExps[0]); // TODO fix this: only first export experssion is passed
+  return new ModuleExpression(...functionExps, ...exportExps); // TODO fix this: only first export experssion is passed
 }
 
-function parseExportDeclaration(parseTree: ParseTree): ExportExpression {
+function parseExportDeclaration(parseTree: ParseTree): ExportExpression[] {
   assert(isExportDeclaration(parseTree));
 
-  const exportObjects: ExportObject[] = [];
+  const exportExpressions: ExportExpression[] = [];
 
   for (let i = 1; i < parseTree.length; i += 2) {
     const exportName = parseTree[i];
@@ -213,10 +212,12 @@ function parseExportDeclaration(parseTree: ParseTree): ExportExpression {
       throw new Error(); // Better error mesage
     }
 
-    exportObjects.push(new ExportObject(exportName, exportType, exportIndex));
+    exportExpressions.push(
+      new ExportExpression(exportName, exportType, exportIndex),
+    );
   }
 
-  return new ExportExpression(exportObjects);
+  return exportExpressions;
 }
 /*
   Checks for Parse Tree

@@ -3,9 +3,7 @@ import { type ValueType } from '../common/type';
 import { Token, TokenType } from '../common/token';
 import { ExportType } from '../common/export_types';
 
-export abstract class IntermediateRepresentation {
-
-}
+export abstract class IntermediateRepresentation {}
 
 export class ModuleExpression extends IntermediateRepresentation {
   /*
@@ -29,12 +27,17 @@ export class ModuleExpression extends IntermediateRepresentation {
   functionDeclarations: FunctionExpression[] = [];
 
   // Export section
-  exportDeclarations?: ExportExpression; // TODO add support for multiple export expressions
+  exportDeclarations: ExportExpression[] = []; // TODO add support for multiple export expressions
 
-  constructor(functionDeclarations: FunctionExpression[], exportDeclarations?: ExportExpression) {
+  constructor(...childNodes: (FunctionExpression | ExportExpression)[]) {
     super();
-    this.functionDeclarations = functionDeclarations;
-    this.exportDeclarations = exportDeclarations;
+    for (const child of childNodes) {
+      if (child instanceof FunctionExpression) {
+        this.functionDeclarations.push(child);
+      } else if (child instanceof ExportExpression) {
+        this.exportDeclarations.push(child);
+      }
+    }
   }
 
   getFunctionSignatures(): FunctionSignature[] {
@@ -47,27 +50,22 @@ export class ModuleExpression extends IntermediateRepresentation {
 }
 
 export class ExportExpression extends IntermediateRepresentation {
-  exportObjects: ExportObject[];
-
-  constructor(exportObjects: ExportObject[]) {
-    super();
-    this.exportObjects = exportObjects;
-  }
-}
-
-export class ExportObject {
   exportName: string;
   exportType: ExportType;
   exportIndex: number;
 
   constructor(exportName: Token, exportType: Token, exportIndex: Token) {
+    super();
     if (exportName.type !== TokenType.Text) {
       throw new Error(`unexpected export name: ${exportName}`); // TODO better errors
     }
     this.exportName = exportName.lexeme.slice(1, exportName.lexeme.length - 1);
 
-    if (exportIndex.type !== TokenType.Nat) { // TODO implement named exports
-      throw new Error(`unexpected export ID: ${exportIndex}. If this is meant to be a $identifier, then it is not implemented yet.`);
+    if (exportIndex.type !== TokenType.Nat) {
+      // TODO implement named exports
+      throw new Error(
+        `unexpected export ID: ${exportIndex}. If this is meant to be a $identifier, then it is not implemented yet.`,
+      );
     }
     this.exportIndex = Number.parseInt(exportIndex.lexeme);
 
@@ -90,9 +88,19 @@ export class FunctionExpression extends IntermediateRepresentation {
   functionBody: FunctionBody;
   functionName?: string;
 
-  constructor(paramTypes: ValueType[], returnTypes: ValueType[], paramNames: string[], body: TokenExpression, functionName?: string) {
+  constructor(
+    paramTypes: ValueType[],
+    returnTypes: ValueType[],
+    paramNames: string[],
+    body: TokenExpression,
+    functionName?: string,
+  ) {
     super();
-    this.functionSignature = new FunctionSignature(paramTypes, returnTypes, paramNames);
+    this.functionSignature = new FunctionSignature(
+      paramTypes,
+      returnTypes,
+      paramNames,
+    );
     this.functionBody = new FunctionBody(body, paramNames);
     this.functionName = functionName;
   }
@@ -104,7 +112,12 @@ export class FunctionSignature {
   returnTypes: ValueType[];
   functionName?: string;
 
-  constructor(paramTypes: ValueType[], returnTypes: ValueType[], paramNames: string[], functionName?: string) {
+  constructor(
+    paramTypes: ValueType[],
+    returnTypes: ValueType[],
+    paramNames: string[],
+    functionName?: string,
+  ) {
     this.paramTypes = paramTypes;
     this.returnTypes = returnTypes;
     this.paramNames = paramNames;
@@ -127,7 +140,6 @@ export class FunctionBody {
     this.paramNames = paramNames;
   }
 }
-
 
 /*
   EXPRESSION BODIES
@@ -152,7 +164,9 @@ export namespace Unfoldable {
 /**
  * Class representing operators and operands in an s-expression.
  */
-export class OperationTree extends IntermediateRepresentation implements Unfoldable {
+export class OperationTree
+  extends IntermediateRepresentation
+  implements Unfoldable {
   operator: Token;
   operands: (Token | TokenExpression)[];
 
@@ -171,14 +185,19 @@ export class OperationTree extends IntermediateRepresentation implements Unfolda
       return operand.unfold().tokens;
     });
 
-    return new PureUnfoldedTokenExpression([...unfoldedOperands, this.operator]);
+    return new PureUnfoldedTokenExpression([
+      ...unfoldedOperands,
+      this.operator,
+    ]);
   }
 }
 
 /**
  * Class representing a stack token expression. May have s-expressions inside.
  */
-export class UnfoldedTokenExpression extends IntermediateRepresentation implements Unfoldable {
+export class UnfoldedTokenExpression
+  extends IntermediateRepresentation
+  implements Unfoldable {
   tokens: (Token | OperationTree)[];
 
   constructor(tokens: (Token | OperationTree)[]) {
