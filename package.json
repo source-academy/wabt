@@ -1,6 +1,6 @@
 {
   "name": "source-academy-wabt",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "This is the WebAssembly Binary Toolkit, specifically designed for Source Academy.",
   "main": "index.js",
   "types": "./types/index.d.ts",

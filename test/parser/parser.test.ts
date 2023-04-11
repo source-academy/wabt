@@ -1,15 +1,5 @@
-import {
-  type IntermediateRepresentation,
-  OperationTree,
-  PureUnfoldedTokenExpression,
-  UnfoldedTokenExpression,
-  FunctionExpression,
-  ModuleExpression,
-} from '../../src/parser/ir';
 import { getIntermediateRepresentation } from '../../src/parser/parser';
-import { isEqual as isDeepEqual, isEqual } from 'lodash';
 import { expect } from '@jest/globals';
-import { TokenData } from '../resources/resolved_tokens';
 import { type Token } from '../../src/common/token';
 import { simple_addition_sexpr_without_argument_bracket_fails } from '../resources/invalid_function_bodies';
 

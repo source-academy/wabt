@@ -145,7 +145,10 @@ export class FunctionBody {
   EXPRESSION BODIES
 */
 
-export type TokenExpression = OperationTree | UnfoldedTokenExpression;
+export type TokenExpression =
+  | OperationTree
+  | UnfoldedTokenExpression
+  | EmptyTokenExpression;
 
 /**
  * Interface indicating that the particular intermediate representation
@@ -214,6 +217,17 @@ export class UnfoldedTokenExpression
     });
 
     return new PureUnfoldedTokenExpression(unfoldedOperands);
+  }
+}
+
+/**
+ * Class to represent an empty token expression
+ */
+export class EmptyTokenExpression
+  extends IntermediateRepresentation
+  implements Unfoldable {
+  unfold(): PureUnfoldedTokenExpression {
+    return new PureUnfoldedTokenExpression([]);
   }
 }
 

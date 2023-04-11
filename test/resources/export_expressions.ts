@@ -25,4 +25,6 @@ export const export_func_add_by_index: TestCaseData = {
   ]),
 };
 
+// TODO add function export by name
+
 export const validTestCases = [export_func_add_by_index];

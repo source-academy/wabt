@@ -6,6 +6,7 @@ import {
   ModuleExpression,
   type TokenExpression,
   ExportExpression,
+  EmptyTokenExpression,
 } from './ir';
 import { Token, TokenType } from '../common/token';
 import { type ParseTree } from './tree_types';
@@ -42,6 +43,10 @@ export function getIntermediateRepresentation(
   Functions for parsing
 */
 function parseExpression(parseTree: ParseTree): TokenExpression {
+  if (parseTree.length === 0 || typeof parseTree === 'undefined') {
+    return new EmptyTokenExpression();
+  }
+
   if (isSExpression(parseTree)) {
     return parseSExpression(parseTree);
   }
@@ -110,6 +115,7 @@ function parseFunctionExpression(parseTree: ParseTree): FunctionExpression {
   const paramTypes: ValueType[] = [];
   const paramNames: string[] = [];
   const resultTypes: ValueType[] = [];
+  let functionName: string | undefined;
 
   const parseParam = (parseTree: ParseTree) => {
     for (let i = 1; i < parseTree.length; i++) {
@@ -141,10 +147,18 @@ function parseFunctionExpression(parseTree: ParseTree): FunctionExpression {
     }
   };
 
+  let cursor = 1;
+
+  // Parse function name if necessary
+  const first_token = parseTree[cursor];
+  if (first_token instanceof Token && first_token.type === TokenType.Var) {
+    functionName = first_token.lexeme;
+    cursor += 1;
+  }
+
   // Parse function params and declarations first
   // TODO this does not work when the first few function params are not named, and then some are named afterwards.
-  let cursor;
-  for (cursor = 1; cursor < parseTree.length; cursor++) {
+  for (; cursor < parseTree.length; cursor++) {
     const parseTreeNode = parseTree[cursor];
     if (parseTreeNode instanceof Token) {
       break;
@@ -167,7 +181,13 @@ function parseFunctionExpression(parseTree: ParseTree): FunctionExpression {
   }
 
   const ir = parseExpression(remainingTree);
-  return new FunctionExpression(paramTypes, resultTypes, paramNames, ir);
+  return new FunctionExpression(
+    paramTypes,
+    resultTypes,
+    paramNames,
+    ir,
+    functionName,
+  );
 }
 
 function parseModuleExpression(parseTree: ParseTree): ModuleExpression {
@@ -225,7 +245,10 @@ function parseExportDeclaration(parseTree: ParseTree): ExportExpression[] {
 
 function isSExpression(parseTree: ParseTree): boolean {
   const tokenHeader = parseTree[0];
-  assert(tokenHeader instanceof Token);
+  assert(
+    tokenHeader instanceof Token,
+    `first token of ${parseTree} is not a Token type`,
+  );
   return (
     tokenHeader instanceof Token
     && tokenHeader.isOpcodeToken()
@@ -235,6 +258,10 @@ function isSExpression(parseTree: ParseTree): boolean {
 
 function isStackExpression(parseTree: ParseTree): boolean {
   const tokenHeader = parseTree[0];
+  assert(
+    tokenHeader instanceof Token,
+    `first token of ${parseTree} is not a Token type`,
+  );
   return (
     tokenHeader instanceof Token
     && tokenHeader.isOpcodeToken()
