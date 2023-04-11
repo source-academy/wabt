@@ -12,7 +12,7 @@ import {
 import { Tree } from '../../src/parser/tree_types';
 import { getSampleToken as t } from './resolved_tokens';
 
-interface TestCaseData {
+interface ValidTestCaseData {
   str: string;
   tokens: Array<Token>;
   parseTree: Tree<Token>;
@@ -21,7 +21,11 @@ interface TestCaseData {
   minimal_binary_function_body: Uint8Array;
 }
 
-const simple_function_sexpr_with_param_names: TestCaseData = {
+interface InvalidTestCaseData {
+  str: string;
+}
+
+const simple_function_sexpr_with_param_names: ValidTestCaseData = {
   str: `
     (func (param $p f64)
     (result f64)
@@ -65,7 +69,7 @@ const simple_function_sexpr_with_param_names: TestCaseData = {
   ]),
 };
 
-const simple_add_function_no_param_names: TestCaseData = {
+const simple_add_function_no_param_names: ValidTestCaseData = {
   str: `
   (func (param i32) (param i32) (result i32)
     local.get 0
@@ -124,7 +128,7 @@ const simple_add_function_no_param_names: TestCaseData = {
   ]),
 };
 
-const named_empty_function: TestCaseData = {
+const named_empty_function: ValidTestCaseData = {
   str: '(func $name (param) (result))',
   tokens: [
     '(',
@@ -144,7 +148,7 @@ const named_empty_function: TestCaseData = {
   minimal_binary_function_body: new Uint8Array([0x01, 0x02, 0x00, 0x0b]),
 };
 
-const empty_function_with_combined_params: TestCaseData = {
+const empty_function_with_combined_params: ValidTestCaseData = {
   str: '(func (param f64 f64 f64) (result))',
   tokens: [
     '(',
@@ -177,7 +181,7 @@ const empty_function_with_combined_params: TestCaseData = {
   minimal_binary_function_body: new Uint8Array([0x02, 0x00, 0x0b]),
 };
 
-const function_all_named_params: TestCaseData = {
+const function_all_named_params: ValidTestCaseData = {
   str: `
 ( func (param $one f64) (param $two f64) (param $three f64) (result f64)
   local.get $two
@@ -232,7 +236,7 @@ const function_all_named_params: TestCaseData = {
   minimal_binary_function_body: new Uint8Array([0x04, 0x00, 0x20, 0x01, 0x0b]),
 };
 
-const function_some_named_params: TestCaseData = {
+const function_some_named_params: ValidTestCaseData = {
   str: `
 (func (param f64) (param f64) (param $three f64) (result f64)
   local.get $three
@@ -284,7 +288,7 @@ const function_some_named_params: TestCaseData = {
   minimal_binary_function_body: new Uint8Array([0x04, 0x00, 0x20, 0x02, 0x0b]),
 };
 
-const function_multiple_separate_result: TestCaseData = {
+const function_multiple_separate_result: ValidTestCaseData = {
   str: `
 (func $name (param) (result f64) (result f64)
   f64.const 1
@@ -346,7 +350,7 @@ const function_multiple_separate_result: TestCaseData = {
   ]),
 };
 
-const function_multiple_combined_result: TestCaseData = {
+const function_multiple_combined_result: ValidTestCaseData = {
   str: `
 (func $name (param) (result f64 f64)
   f64.const 1
@@ -404,8 +408,11 @@ const function_multiple_combined_result: TestCaseData = {
   ]),
 };
 
+const function_combined_multiple_named_params: InvalidTestCaseData = {
+  str: '(func (param $one f64 $two f64 $three f64) (result))',
+};
 /*
-(func (param $one f64 $two f64 $three f64) (result)) // throws
+ // throws
 */
 
 export const validTestCases = [
@@ -417,4 +424,8 @@ export const validTestCases = [
   function_some_named_params,
   function_multiple_separate_result,
   function_multiple_combined_result,
+];
+
+export const invalidTestCases = [
+  function_combined_multiple_named_params,
 ];
