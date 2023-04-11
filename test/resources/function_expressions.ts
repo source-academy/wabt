@@ -284,33 +284,125 @@ const function_some_named_params: TestCaseData = {
   minimal_binary_function_body: new Uint8Array([0x04, 0x00, 0x20, 0x02, 0x0b]),
 };
 
-// const function_multiple_separate_result: TestCaseData = {
-//   str: `
-// (func $name (param) (result f64) (result f64)
-//   f64.const 1
-//   f64.const 1
-// )
-// `,
-//   tokens: [],
-//   parseTree: [],
-//   ir: undefined,
-//   minimal_binary_function_signature: undefined,
-//   minimal_binary_function_body: undefined,
-// };
+const function_multiple_separate_result: TestCaseData = {
+  str: `
+(func $name (param) (result f64) (result f64)
+  f64.const 1
+  f64.const 1
+)
+`,
+  tokens: [
+    ...[
+      // '(',
+      'func',
+      '$name',
+      '(',
+      'param',
+      ')',
+      '(',
+      'result',
+      'f64',
+      ')',
+      '(',
+      'result',
+      'f64',
+      ')',
+    ],
+    ...['f64.const', '1'],
+    ...['f64.const', '1'],
+    // ...[')'],
+  ].map(t),
+  parseTree: Tree.treeMap(
+    [
+      'func',
+      '$name',
+      ['param'],
+      ['result', 'f64'],
+      ['result', 'f64'],
+      'f64.const',
+      '1',
+      'f64.const',
+      '1',
+    ],
+    t,
+  ),
+  ir: new FunctionExpression(
+    [],
+    [ValueType.F64, ValueType.F64],
+    [],
+    new UnfoldedTokenExpression(['f64.const', '1', 'f64.const', '1'].map(t)),
+  ),
+  minimal_binary_function_signature: new Uint8Array([
+    0x60, 0x00, 0x02, 0x7c, 0x7c,
+  ]),
+  minimal_binary_function_body: new Uint8Array([
+    0x14,
+    0x00,
+    0x44,
+    ...[0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f],
+    0x44,
+    ...[0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f],
+    0x0b,
+  ]),
+};
 
-// const function_multiple_combined_result: TestCaseData = {
-//   str: `
-// (func $name (param) (result f64 f64)
-//   f64.const 1
-//   f64.const 1
-// )
-// `,
-//   tokens: [],
-//   parseTree: [],
-//   ir: undefined,
-//   minimal_binary_function_signature: undefined,
-//   minimal_binary_function_body: undefined,
-// };
+const function_multiple_combined_result: TestCaseData = {
+  str: `
+(func $name (param) (result f64 f64)
+  f64.const 1
+  f64.const 1
+)
+`,
+  tokens: [
+    ...[
+      // '(',
+      'func',
+      '$name',
+      '(',
+      'param',
+      ')',
+      '(',
+      'result',
+      'f64',
+      'f64',
+      ')',
+    ],
+    ...['f64.const', '1'],
+    ...['f64.const', '1'],
+    // ...[')'],
+  ].map(t),
+  parseTree: Tree.treeMap(
+    [
+      'func',
+      '$name',
+      ['param'],
+      ['result', 'f64', 'f64'],
+      'f64.const',
+      '1',
+      'f64.const',
+      '1',
+    ],
+    t,
+  ),
+  ir: new FunctionExpression(
+    [],
+    [ValueType.F64, ValueType.F64],
+    [],
+    new UnfoldedTokenExpression(['f64.const', '1', 'f64.const', '1'].map(t)),
+  ),
+  minimal_binary_function_signature: new Uint8Array([
+    0x60, 0x00, 0x02, 0x7c, 0x7c,
+  ]),
+  minimal_binary_function_body: new Uint8Array([
+    0x14,
+    0x00,
+    0x44,
+    ...[0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f],
+    0x44,
+    ...[0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f],
+    0x0b,
+  ]),
+};
 
 /*
 (func (param $one f64 $two f64 $three f64) (result)) // throws
@@ -323,4 +415,6 @@ export const validTestCases = [
   empty_function_with_combined_params,
   function_all_named_params,
   function_some_named_params,
+  function_multiple_separate_result,
+  function_multiple_combined_result,
 ];
