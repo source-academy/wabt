@@ -109,7 +109,7 @@ const module_with_exported_add_function_no_names: ModuleTestCase = {
     new FunctionExpression(
       [ValueType.F64, ValueType.F64],
       [ValueType.F64],
-      [],
+      [null, null],
       new UnfoldedTokenExpression(
         ['local.get', '0', 'local.get', '0', 'f64.add'].map(t),
       ),

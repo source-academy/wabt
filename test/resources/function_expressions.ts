@@ -111,7 +111,7 @@ const simple_add_function_no_param_names: TestCaseData = {
   ir: new FunctionExpression(
     [ValueType.I32, ValueType.I32],
     [ValueType.I32],
-    [],
+    [null, null],
     new UnfoldedTokenExpression(
       ['local.get', '0', 'local.get', '1', 'i32.add'].map(t),
     ),
@@ -168,7 +168,7 @@ const empty_function_with_combined_params: TestCaseData = {
   ir: new FunctionExpression(
     [ValueType.F64, ValueType.F64, ValueType.F64],
     [],
-    [],
+    [null, null, null],
     new EmptyTokenExpression(),
   ),
   minimal_binary_function_signature: new Uint8Array([
@@ -177,31 +177,112 @@ const empty_function_with_combined_params: TestCaseData = {
   minimal_binary_function_body: new Uint8Array([0x02, 0x00, 0x0b]),
 };
 
-// const function_all_named_params: TestCaseData = {
-//   str: `
-// (func (param $one f64) (param $two f64) (param $three f64) (result f64)
-//   local.get $two
-// )
-// `,
-//   tokens: [],
-//   parseTree: [],
-//   ir: undefined,
-//   minimal_binary_function_signature: undefined,
-//   minimal_binary_function_body: undefined,
-// };
+const function_all_named_params: TestCaseData = {
+  str: `
+( func (param $one f64) (param $two f64) (param $three f64) (result f64)
+  local.get $two
+)
+`,
+  tokens: [
+    // TODO why are the brackets missing here?
+    'func',
+    '(',
+    'param',
+    '$one',
+    'f64',
+    ')',
+    '(',
+    'param',
+    '$two',
+    'f64',
+    ')',
+    '(',
+    'param',
+    '$three',
+    'f64',
+    ')',
+    '(',
+    'result',
+    'f64',
+    ')',
+    'local.get',
+    '$two',
+  ].map(t),
+  parseTree: Tree.treeMap(
+    [
+      'func',
+      ['param', '$one', 'f64'],
+      ['param', '$two', 'f64'],
+      ['param', '$three', 'f64'],
+      ['result', 'f64'],
+      'local.get',
+      '$two',
+    ],
+    t,
+  ),
+  ir: new FunctionExpression(
+    [ValueType.F64, ValueType.F64, ValueType.F64],
+    [ValueType.F64],
+    ['$one', '$two', '$three'],
+    new UnfoldedTokenExpression([t('local.get'), t('$two')]),
+  ),
+  minimal_binary_function_signature: new Uint8Array([
+    0x60, 0x03, 0x7c, 0x7c, 0x7c, 0x01, 0x7c,
+  ]),
+  minimal_binary_function_body: new Uint8Array([0x04, 0x00, 0x20, 0x01, 0x0b]),
+};
 
-// const function_some_named_params: TestCaseData = {
-//   str: `
-// (func (param f64) (param f64) (param $three f64) (result f64)
-//   local.get $three
-// )
-// `,
-//   tokens: [],
-//   parseTree: [],
-//   ir: undefined,
-//   minimal_binary_function_signature: undefined,
-//   minimal_binary_function_body: undefined,
-// };
+const function_some_named_params: TestCaseData = {
+  str: `
+(func (param f64) (param f64) (param $three f64) (result f64)
+  local.get $three
+)
+`,
+  tokens: [
+    'func',
+    '(',
+    'param',
+    'f64',
+    ')',
+    '(',
+    'param',
+    'f64',
+    ')',
+    '(',
+    'param',
+    '$three',
+    'f64',
+    ')',
+    '(',
+    'result',
+    'f64',
+    ')',
+    'local.get',
+    '$three',
+  ].map(t),
+  parseTree: Tree.treeMap(
+    [
+      'func',
+      ['param', 'f64'],
+      ['param', 'f64'],
+      ['param', '$three', 'f64'],
+      ['result', 'f64'],
+      'local.get',
+      '$three',
+    ],
+    t,
+  ),
+  ir: new FunctionExpression(
+    [ValueType.F64, ValueType.F64, ValueType.F64],
+    [ValueType.F64],
+    [null, null, '$three'],
+    new UnfoldedTokenExpression([t('local.get'), t('$three')]),
+  ),
+  minimal_binary_function_signature: new Uint8Array([
+    0x60, 0x03, 0x7c, 0x7c, 0x7c, 0x01, 0x7c,
+  ]),
+  minimal_binary_function_body: new Uint8Array([0x04, 0x00, 0x20, 0x02, 0x0b]),
+};
 
 // const function_multiple_separate_result: TestCaseData = {
 //   str: `
@@ -240,4 +321,6 @@ export const validTestCases = [
   simple_add_function_no_param_names,
   named_empty_function,
   empty_function_with_combined_params,
+  function_all_named_params,
+  function_some_named_params,
 ];

@@ -2,6 +2,7 @@
 import { type ValueType } from '../common/type';
 import { Token, TokenType } from '../common/token';
 import { ExportType } from '../common/export_types';
+import { assert } from '../common/assert';
 
 export abstract class IntermediateRepresentation {}
 
@@ -86,16 +87,20 @@ FUNCTIONS
 export class FunctionExpression extends IntermediateRepresentation {
   functionSignature: FunctionSignature;
   functionBody: FunctionBody;
-  functionName?: string;
+  functionName?: string | null;
 
   constructor(
     paramTypes: ValueType[],
     returnTypes: ValueType[],
-    paramNames: string[],
+    paramNames: (string | null)[],
     body: TokenExpression,
     functionName?: string,
   ) {
     super();
+    assert(
+      paramTypes.length === paramNames.length,
+      `Function param types and names must have same length: [${paramTypes}], [${paramNames}]`,
+    );
     this.functionSignature = new FunctionSignature(
       paramTypes,
       returnTypes,
@@ -108,14 +113,14 @@ export class FunctionExpression extends IntermediateRepresentation {
 
 export class FunctionSignature {
   paramTypes: ValueType[];
-  paramNames: string[];
+  paramNames: (string | null)[];
   returnTypes: ValueType[];
   functionName?: string;
 
   constructor(
     paramTypes: ValueType[],
     returnTypes: ValueType[],
-    paramNames: string[],
+    paramNames: (string | null)[],
     functionName?: string,
   ) {
     this.paramTypes = paramTypes;
@@ -133,9 +138,9 @@ export class FunctionSignature {
  */
 export class FunctionBody {
   body: TokenExpression;
-  paramNames: string[];
+  paramNames: (string | null)[];
 
-  constructor(body: TokenExpression, paramNames: string[]) {
+  constructor(body: TokenExpression, paramNames: (string | null)[]) {
     this.body = body;
     this.paramNames = paramNames;
   }

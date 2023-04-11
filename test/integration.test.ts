@@ -1,6 +1,3 @@
-import { tokenize } from '../src/lexer/lexer';
-import { getIntermediateRepresentation } from '../src/parser/parser';
-import { getParseTree } from '../src/parser/parse_tree';
 import {
   type ModuleTestCase,
   moduleTestCases,
