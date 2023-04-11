@@ -124,7 +124,7 @@ const simple_add_function_no_param_names: TestCaseData = {
   ]),
 };
 
-const named_function: TestCaseData = {
+const named_empty_function: TestCaseData = {
   str: '(func $name (param) (result))',
   tokens: [
     '(',
@@ -139,32 +139,43 @@ const named_function: TestCaseData = {
     ')',
   ].map(t),
   parseTree: [t('func'), t('$name'), [t('param')], [t('result')]],
-  ir: new FunctionExpression([], [], [], new EmptyTokenExpression([]), '$name'),
+  ir: new FunctionExpression([], [], [], new EmptyTokenExpression(), '$name'),
   minimal_binary_function_signature: new Uint8Array([0x60, 0x00, 0x00]),
   minimal_binary_function_body: new Uint8Array([0x01, 0x02, 0x00, 0x0b]),
 };
 
-// const function_combined_params: TestCaseData = {
-//   str: '(func (param f64 f64 f64) (result))',
-//   tokens: [
-//     '(',
-//     'func',
-//     '(',
-//     'param',
-//     'f64',
-//     'f64',
-//     'f64',
-//     ')',
-//     '(',
-//     'result',
-//     ')',
-//     ')',
-//   ].map(t),
-//   parseTree: [],
-//   ir: undefined,
-//   minimal_binary_function_signature: undefined,
-//   minimal_binary_function_body: undefined,
-// };
+const empty_function_with_combined_params: TestCaseData = {
+  str: '(func (param f64 f64 f64) (result))',
+  tokens: [
+    '(',
+    'func',
+    '(',
+    'param',
+    'f64',
+    'f64',
+    'f64',
+    ')',
+    '(',
+    'result',
+    ')',
+    ')',
+  ].map(t),
+  parseTree: [
+    t('func'),
+    [t('param'), t('f64'), t('f64'), t('f64')],
+    [t('result')],
+  ],
+  ir: new FunctionExpression(
+    [ValueType.F64, ValueType.F64, ValueType.F64],
+    [],
+    [],
+    new EmptyTokenExpression(),
+  ),
+  minimal_binary_function_signature: new Uint8Array([
+    0x60, 0x03, 0x7c, 0x7c, 0x7c, 0x00,
+  ]),
+  minimal_binary_function_body: new Uint8Array([0x02, 0x00, 0x0b]),
+};
 
 // const function_all_named_params: TestCaseData = {
 //   str: `
@@ -227,5 +238,6 @@ const named_function: TestCaseData = {
 export const validTestCases = [
   simple_function_sexpr_with_param_names,
   simple_add_function_no_param_names,
-  named_function,
+  named_empty_function,
+  empty_function_with_combined_params,
 ];
