@@ -12,6 +12,7 @@ import { getParseTree } from '../src/parser/parse_tree';
 import { getIntermediateRepresentation } from '../src/parser/parser';
 import { type Token } from '../src/common/token';
 import { expect } from '@jest/globals';
+import { isTokenEqual } from './resources/resolved_tokens';
 
 const {
   encodeFunctionBody,
@@ -161,14 +162,5 @@ describe.each(moduleTestCases)(
     });
   },
 );
-
-function isTokenEqual(a: Token, b: Token) {
-  return (
-    a.lexeme === b.lexeme
-    && a.opcodeType === b.opcodeType
-    && a.valueType === b.valueType
-    && a.type === b.type
-  );
-}
 
 expect.addEqualityTesters([isTokenEqual]);

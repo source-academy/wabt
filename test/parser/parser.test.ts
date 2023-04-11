@@ -6,6 +6,7 @@ import { simple_addition_sexpr_without_argument_bracket_fails } from '../resourc
 import { validTestCases as tc2 } from '../resources/function_expressions';
 import { irTestCases as tc1 } from '../resources/valid_function_bodies';
 import { validTestCases as tc3 } from '../resources/export_expressions';
+import { isTokenEqual } from '../resources/resolved_tokens';
 
 describe('get intermediate expression of function body expressions', () => {
   test.each(tc1)(
@@ -45,14 +46,5 @@ test.each(tc3)('test convert export expressions into ir', (testCase) => {
   expect(ir)
     .toEqual(expectedIR);
 });
-
-function isTokenEqual(a: Token, b: Token) {
-  return (
-    a.lexeme === b.lexeme
-    && a.opcodeType === b.opcodeType
-    && a.valueType === b.valueType
-    && a.type === b.type
-  );
-}
 
 expect.addEqualityTesters([isTokenEqual]);
