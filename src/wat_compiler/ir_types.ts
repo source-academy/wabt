@@ -20,6 +20,14 @@ export namespace Unfoldable {
 }
 
 /**
+ * An interface for intermediate expressions that can have a name/identifier to be referenced by.
+ * Mainly to be used for global types that can be referenced by name.
+ */
+export interface HasIdentifier {
+  getID(): string | null;
+}
+
+/**
  * Interface indicating that this particular intermediate representation may store variable declarations
  * which have to b
  */
@@ -28,6 +36,8 @@ export interface MayHaveVariables {}
 export abstract class IntermediateRepresentation {}
 
 type GlobalType = FunctionSignature; // TODO add more
+type GlobalExpression = HasIdentifier;
+
 export class ModuleExpression extends IntermediateRepresentation {
   /*
     Sections in modules:
@@ -52,9 +62,19 @@ export class ModuleExpression extends IntermediateRepresentation {
    */
   globalTypes: GlobalType[] = [];
 
+  /**
+   * For the function section.
+   */
   functions: FunctionExpression[] = [];
 
-  // Export section
+  /**
+   * Global variables that can be exported
+   */
+  globals: GlobalExpression[] = [];
+
+  /**
+   * Declarations for export section
+   */
   exportDeclarations: ExportExpression[] = []; // TODO add support for multiple export expressions
 
   constructor(...childNodes: (FunctionExpression | ExportExpression)[]) {
@@ -71,6 +91,7 @@ export class ModuleExpression extends IntermediateRepresentation {
   private addFunctionExpression(functionExpression: FunctionExpression) {
     this.functions.push(functionExpression);
     this.addGlobalType(functionExpression.functionSignature);
+    this.globals.push(functionExpression);
   }
 
   /**
@@ -92,7 +113,7 @@ export class ModuleExpression extends IntermediateRepresentation {
   }
 
   /**
-   * Query and resolve the a given global type.
+   * Query and resolve the index of a given global type.
    * Global type must exist within the module.
    * TODO: This takes O(n) per query, ideally should reduce to O(1)
    * @param type type to query
@@ -110,6 +131,25 @@ export class ModuleExpression extends IntermediateRepresentation {
       `Global type not found! This is an error that should be raised to the developer.
       Please help raise an issue on GitHub.`,
     );
+    return -1; // This will never run, assert throws error
+  }
+
+  /**
+   * Query and resolve the index of a given global expression.
+   * Global expression must exist within the module.
+   * Comparison is made by name.
+   * TODO: This takes O(n) per query, ideally should reduce to O(1)
+   * @param type type to query
+   * @returns index of type in module
+   */
+  resolveGlobalExpressionIndex(name: string) {
+    for (const [i, existing_type] of this.globals.entries()) {
+      if (existing_type.getID() === name) {
+        return i;
+      }
+    }
+
+    assert(false, 'Global not found!'); // TODO better error message
     return -1; // This will never run, assert throws error
   }
 
@@ -177,17 +217,19 @@ FUNCTIONS
  * Intermediate representation of function expression.
  * Note that signature and body will be encoded in different places afterward
  */
-export class FunctionExpression extends IntermediateRepresentation {
+export class FunctionExpression
+  extends IntermediateRepresentation
+  implements HasIdentifier {
   functionSignature: FunctionSignature;
   functionBody: FunctionBody;
-  functionName?: string | null;
+  functionName: string | null;
 
   constructor(
     paramTypes: ValueType[],
     returnTypes: ValueType[],
     paramNames: (string | null)[],
     body: TokenExpression,
-    functionName?: string,
+    functionName: string | null = null,
   ) {
     super();
     assert(
@@ -197,6 +239,10 @@ export class FunctionExpression extends IntermediateRepresentation {
     this.functionSignature = new FunctionSignature(paramTypes, returnTypes);
     this.functionBody = new FunctionBody(body, paramNames);
     this.functionName = functionName;
+  }
+
+  getID(): string | null {
+    return this.functionName;
   }
 }
 

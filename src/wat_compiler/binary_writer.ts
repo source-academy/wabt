@@ -255,27 +255,37 @@ export class BinaryWriter {
       return new Uint8Array();
     }
 
-    function encodeExport(obj: ExportExpression): Uint8Array {
-      const { exportReferenceIndex: exportIndex, exportName, exportType } = obj;
-      const exportNameEncoding = [];
-
-      for (let i = 0; i < exportName.length; i++) {
-        exportNameEncoding.push(exportName.charCodeAt(i));
-      }
-
-      return new Uint8Array([
-        exportName.length,
-        ...exportNameEncoding,
-        ExportType.getEncoding(exportType),
-        exportIndex,
-      ]);
-    }
-
     const exportNum = exportExpressions.length;
 
     const exportEncodings: number[] = [];
-    for (const exportObj of exportExpressions) {
-      exportEncodings.push(...encodeExport(exportObj));
+    for (const exportExp of exportExpressions) {
+      let {
+        exportReferenceIndex,
+        exportName,
+        exportType,
+        exportReferenceName,
+      } = exportExp;
+
+      // Encode export name
+      const exportNameEncoding = [];
+      for (let i = 0; i < exportName.length; i++) {
+        exportNameEncoding.push(exportName.charCodeAt(i));
+      }
+      exportEncodings.push(exportName.length);
+      exportEncodings.push(...exportNameEncoding);
+
+      if (exportReferenceIndex === null && exportReferenceName === null) {
+        throw new Error(
+          `Both export reference index and name cannot be null: ${exportExp}`,
+        );
+      }
+      if (exportReferenceIndex === null) {
+        exportReferenceIndex = this.module.resolveGlobalExpressionIndex(
+          exportReferenceName!,
+        );
+      }
+      exportEncodings.push(ExportType.getEncoding(exportType));
+      exportEncodings.push(exportReferenceIndex);
     }
 
     return new Uint8Array([exportNum, ...exportEncodings]);
