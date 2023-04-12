@@ -1,5 +1,5 @@
 import { compile, parse } from '../src';
-import { TEST_EXPORTS, encodeModule } from '../src/binary_writer';
+import { TEST_EXPORTS, encodeModule } from '../src/wat2wasm/binary_writer';
 import { getIR } from '../src/wat2wasm/ir';
 import { invalidTestCases as invalidFuncExpTestCases } from './resources/function_expressions';
 import {

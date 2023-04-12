@@ -1,4 +1,4 @@
-import { NumberEncoder, TEST_EXPORTS } from '../src/binary_writer';
+import { NumberEncoder, TEST_EXPORTS } from '../src/wat2wasm/binary_writer';
 
 import { validTestCases as tc1 } from './resources/valid_function_bodies';
 import { validTestCases as tc2 } from './resources/function_expressions';
