@@ -1,8 +1,7 @@
+/* eslint-disable @typescript-eslint/dot-notation */
+// This is because we use class['property'] to access private methods to do testing.
 import { compile, parse } from '../../src/wat_compiler';
-import {
-  TEST_EXPORTS,
-  encodeModule,
-} from '../../src/wat_compiler/binary_writer';
+import { BinaryWriter } from '../../src/wat_compiler/binary_writer';
 import { getIR } from '../../src/wat_compiler/ir';
 import { areUint8ArraysEqual } from '../array_buffer_comparison';
 import { invalidTestCases as invalidFuncExpTestCases } from './resources/function_expressions';
@@ -12,24 +11,16 @@ import {
 } from './resources/module_program_fragments';
 import { isTokenEqual } from '../token_comparisons';
 import { expect } from '@jest/globals';
-const {
-  encodeModuleTypeSection,
-  encodeModuleImportSection,
-  encodeModuleFunctionSection,
-  encodeModuleTableSection,
-  encodeModuleMemorySection,
-  encodeModuleGlobalSection,
-  encodeModuleExportSection,
-  encodeModuleStartSection,
-  encodeModuleElementSection,
-  encodeModuleCodeSection,
-  encodeModuleDataSection,
-} = TEST_EXPORTS;
 
 expect.addEqualityTesters([isTokenEqual]);
 // expect.addEqualityTesters([areUint8ArraysEqual]);
 
 describe.each(moduleTestCases)('encode modules', (testCase: ModuleTestCase) => {
+  let binaryWriter: BinaryWriter;
+  beforeEach(() => {
+    binaryWriter = new BinaryWriter(testCase.ir);
+  });
+
   test('Check IR', () => {
     const ir = getIR(parse(testCase.str));
     expect(ir)
@@ -37,73 +28,73 @@ describe.each(moduleTestCases)('encode modules', (testCase: ModuleTestCase) => {
   });
 
   test('Test encode Module Type Section', () => {
-    const encoding = encodeModuleTypeSection(testCase.ir);
+    const encoding = binaryWriter['encodeTypeSection']();
     expect(encoding)
       .toEqual(testCase.type_section_encoding);
   });
 
   test('Test encode Module Import Section', () => {
-    const encoding = encodeModuleImportSection(testCase.ir);
+    const encoding = binaryWriter['encodeImportSection']();
     expect(encoding)
       .toEqual(testCase.import_section_encoding);
   });
 
   test('Test encode Module Function Section', () => {
-    const encoding = encodeModuleFunctionSection(testCase.ir);
+    const encoding = binaryWriter['encodeFunctionSection']();
     expect(encoding)
       .toEqual(testCase.function_section_encoding);
   });
 
   test('Test encode Module Table Section', () => {
-    const encoding = encodeModuleTableSection(testCase.ir);
+    const encoding = binaryWriter['encodeTableSection']();
     expect(encoding)
       .toEqual(testCase.table_section_encoding);
   });
 
   test('Test encode Module Memory Section', () => {
-    const encoding = encodeModuleMemorySection(testCase.ir);
+    const encoding = binaryWriter['encodeMemorySection']();
     expect(encoding)
       .toEqual(testCase.memory_section_encoding);
   });
 
   test('Test encode Module Global Section', () => {
-    const encoding = encodeModuleGlobalSection(testCase.ir);
+    const encoding = binaryWriter['encodeGlobalSection']();
     expect(encoding)
       .toEqual(testCase.global_section_encoding);
   });
 
   test('Test encode Module Export Section', () => {
-    const encoding = encodeModuleExportSection(testCase.ir);
+    const encoding = binaryWriter['encodeExportSection']();
     expect(encoding)
       .toEqual(testCase.export_section_encoding);
   });
 
   test('Test encode Module Start Section', () => {
-    const encoding = encodeModuleStartSection(testCase.ir);
+    const encoding = binaryWriter['encodeStartSection']();
     expect(encoding)
       .toEqual(testCase.start_section_encoding);
   });
 
   test('Test encode Module Element Section', () => {
-    const encoding = encodeModuleElementSection(testCase.ir);
+    const encoding = binaryWriter['encodeElementSection']();
     expect(encoding)
       .toEqual(testCase.element_section_encoding);
   });
 
   test('Test encode Module Code Section', () => {
-    const encoding = encodeModuleCodeSection(testCase.ir);
+    const encoding = binaryWriter['encodeCodeSection']();
     expect(encoding)
       .toEqual(testCase.code_section_encoding);
   });
 
   test('Test encode Module Data Section', () => {
-    const encoding = encodeModuleDataSection(testCase.ir);
+    const encoding = binaryWriter['encodeDataSection']();
     expect(encoding)
       .toEqual(testCase.data_section_encoding);
   });
 
   test('Test overall minimal encoding', () => {
-    const encoding = encodeModule(testCase.ir);
+    const encoding = binaryWriter.encode();
     expect(encoding)
       .toEqual(testCase.minimal_module_encoding);
   });
