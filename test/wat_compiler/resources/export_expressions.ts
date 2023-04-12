@@ -1,6 +1,6 @@
-import { type Token } from '../../src/common/token';
-import { ExportExpression } from '../../src/wat2wasm/ir_types';
-import { Tree } from '../../src/wat2wasm/tree_types';
+import { type Token } from '../../../src/common/token';
+import { ExportExpression } from '../../../src/wat_compiler/ir_types';
+import { Tree } from '../../../src/wat_compiler/tree_types';
 import { getSampleToken as t } from './resolved_tokens';
 
 interface TestCaseData {

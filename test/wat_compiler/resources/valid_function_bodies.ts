@@ -1,11 +1,11 @@
-import { type Token } from '../../src/common/token';
+import { type Token } from '../../../src/common/token';
 import {
   OperationTree,
   PureUnfoldedTokenExpression,
   UnfoldedTokenExpression,
   type IntermediateRepresentation,
-} from '../../src/wat_compiler/ir_types';
-import { type Tree } from '../../src/wat_compiler/tree_types';
+} from '../../../src/wat_compiler/ir_types';
+import { type Tree } from '../../../src/wat_compiler/tree_types';
 import { getSampleToken as t } from './resolved_tokens';
 
 export interface FunctionBodyTestCaseData {

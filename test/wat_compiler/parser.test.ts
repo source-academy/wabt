@@ -1,10 +1,10 @@
-import { TokenData, isTokenEqual } from '../resources/resolved_tokens';
-import { Tree } from '../../src/wat2wasm/tree_types';
+import { TokenData, isTokenEqual } from './resources/resolved_tokens';
+import { Tree } from '../../src/wat_compiler/tree_types';
 
-import { validTestCases as tc1 } from '../resources/valid_function_bodies';
-import { validTestCases as tc2 } from '../resources/function_expressions';
-import { validTestCases as tc3 } from '../resources/export_expressions';
-import { parse } from '../../src/wat2wasm';
+import { validTestCases as tc1 } from './resources/valid_function_bodies';
+import { validTestCases as tc2 } from './resources/function_expressions';
+import { validTestCases as tc3 } from './resources/export_expressions';
+import { parse } from '../../src/wat_compiler';
 
 import { expect } from '@jest/globals';
 

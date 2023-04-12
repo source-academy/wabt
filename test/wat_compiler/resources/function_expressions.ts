@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable import/no-extraneous-dependencies */
-import { type Token } from '../../src/common/token';
-import { ValueType } from '../../src/common/type';
+import { type Token } from '../../../src/common/token';
+import { ValueType } from '../../../src/common/type';
 import {
   EmptyTokenExpression,
   FunctionExpression,
   OperationTree,
   PureUnfoldedTokenExpression,
   UnfoldedTokenExpression,
-} from '../../src/wat_compiler/ir_types';
-import { Tree } from '../../src/wat_compiler/tree_types';
+} from '../../../src/wat_compiler/ir_types';
+import { Tree } from '../../../src/wat_compiler/tree_types';
 import { getSampleToken as t } from './resolved_tokens';
 
 interface ValidTestCaseData {

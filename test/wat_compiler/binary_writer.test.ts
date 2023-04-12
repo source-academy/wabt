@@ -1,4 +1,7 @@
-import { NumberEncoder, TEST_EXPORTS } from '../src/wat2wasm/binary_writer';
+import {
+  NumberEncoder,
+  TEST_EXPORTS,
+} from '../../src/wat_compiler/binary_writer';
 
 import { validTestCases as tc1 } from './resources/valid_function_bodies';
 import { validTestCases as tc2 } from './resources/function_expressions';
@@ -9,8 +12,8 @@ import {
 } from './resources/module_program_fragments';
 import { expect } from '@jest/globals';
 import { isTokenEqual } from './resources/resolved_tokens';
-import { parse } from '../src/wat2wasm';
-import { getIR } from '../src/wat2wasm/ir';
+import { parse } from '../../src/wat_compiler';
+import { getIR } from '../../src/wat_compiler/ir';
 
 const {
   encodeFunctionBody,

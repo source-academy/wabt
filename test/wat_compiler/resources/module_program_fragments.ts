@@ -1,11 +1,11 @@
-import { ValueType } from '../../src/common/type';
+import { ValueType } from '../../../src/common/type';
 import {
   EmptyTokenExpression,
   ExportExpression,
   FunctionExpression,
   ModuleExpression,
   UnfoldedTokenExpression,
-} from '../../src/wat2wasm/ir_types';
+} from '../../../src/wat_compiler/ir_types';
 import { getSampleToken as t } from './resolved_tokens';
 
 export interface ModuleTestCase {

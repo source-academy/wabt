@@ -1,7 +1,7 @@
-import { assert } from '../../src/common/assert';
-import { OpcodeType } from '../../src/common/opcode';
-import { Token, TokenType } from '../../src/common/token';
-import { ValueType } from '../../src/common/type';
+import { assert } from '../../../src/common/assert';
+import { OpcodeType } from '../../../src/common/opcode';
+import { Token, TokenType } from '../../../src/common/token';
+import { ValueType } from '../../../src/common/type';
 
 export interface TokenData {
   type: TokenType;
