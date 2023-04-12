@@ -8,8 +8,8 @@ import {
   OperationTree,
   PureUnfoldedTokenExpression,
   UnfoldedTokenExpression,
-} from '../../src/wat2wasm/ir_types';
-import { Tree } from '../../src/wat2wasm/tree_types';
+} from '../../src/wat_compiler/ir_types';
+import { Tree } from '../../src/wat_compiler/tree_types';
 import { getSampleToken as t } from './resolved_tokens';
 
 interface ValidTestCaseData {

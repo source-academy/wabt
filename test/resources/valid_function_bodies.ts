@@ -4,8 +4,8 @@ import {
   PureUnfoldedTokenExpression,
   UnfoldedTokenExpression,
   type IntermediateRepresentation,
-} from '../../src/wat2wasm/ir_types';
-import { type Tree } from '../../src/wat2wasm/tree_types';
+} from '../../src/wat_compiler/ir_types';
+import { type Tree } from '../../src/wat_compiler/tree_types';
 import { getSampleToken as t } from './resolved_tokens';
 
 export interface FunctionBodyTestCaseData {

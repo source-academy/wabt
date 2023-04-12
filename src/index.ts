@@ -1,7 +1,7 @@
-import { ParseTree } from './wat2wasm/tree_types';
-import { compile as _compileParseTree, parse } from './wat2wasm';
-import { getSingleToken } from './wat2wasm/lexer';
-import { Tree } from './wat2wasm/tree_types';
+import { ParseTree } from './wat_compiler/tree_types';
+import { compile as _compileParseTree, parse } from './wat_compiler';
+import { getSingleToken } from './wat_compiler/lexer';
+import { Tree } from './wat_compiler/tree_types';
 
 /**
  * Compile a given WebAssembly Binary Text module into a binary.
@@ -35,5 +35,5 @@ const compileParseTree: (tree: Tree<string> | ParseTree) => Uint8Array = (
   return _compileParseTree(tree);
 };
 
-export { parse } from './wat2wasm';
+export { parse } from './wat_compiler';
 export { compile, getStringParseTree, compileParseTree };
