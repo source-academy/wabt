@@ -209,6 +209,7 @@ const function_multiple_separate_result: ValidTestCaseData = {
     [ValueType.F64, ValueType.F64],
     [],
     new UnfoldedTokenExpression(['f64.const', '1', 'f64.const', '1'].map(t)),
+    '$name',
   ),
   minimal_binary_function_signature: new Uint8Array([
     0x60, 0x00, 0x02, 0x7c, 0x7c,
@@ -249,6 +250,7 @@ const function_multiple_combined_result: ValidTestCaseData = {
     [ValueType.F64, ValueType.F64],
     [],
     new UnfoldedTokenExpression(['f64.const', '1', 'f64.const', '1'].map(t)),
+    '$name',
   ),
   minimal_binary_function_signature: new Uint8Array([
     0x60, 0x00, 0x02, 0x7c, 0x7c,
