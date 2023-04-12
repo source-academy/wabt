@@ -1,6 +1,6 @@
 import { NumberEncoder, TEST_EXPORTS } from '../src/binary_writer';
 
-import { minimalBinaryTestCases as tc1 } from './resources/valid_function_bodies';
+import { validTestCases as tc1 } from './resources/valid_function_bodies';
 import { validTestCases as tc2 } from './resources/function_expressions';
 import { validTestCases as tc3 } from './resources/export_expressions';
 import {

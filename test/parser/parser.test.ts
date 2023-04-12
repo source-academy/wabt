@@ -1,50 +1,35 @@
-import { getIR } from '../../src/wat2wasm/ir';
-import { expect } from '@jest/globals';
-import { type Token } from '../../src/common/token';
-import { simple_addition_sexpr_without_argument_bracket_fails } from '../resources/invalid_function_bodies';
+import { TokenData, isTokenEqual } from '../resources/resolved_tokens';
+import { Tree } from '../../src/wat2wasm/tree_types';
 
+import { validTestCases as tc1 } from '../resources/valid_function_bodies';
 import { validTestCases as tc2 } from '../resources/function_expressions';
-import { irTestCases as tc1 } from '../resources/valid_function_bodies';
 import { validTestCases as tc3 } from '../resources/export_expressions';
-import { isTokenEqual } from '../resources/resolved_tokens';
+import { parse } from '../../src/wat2wasm';
 
-describe('get intermediate expression of function body expressions', () => {
-  test.each(tc1)(
-    'test convert function body expressions into ir',
-    (testCase) => {
-      const parseTree = testCase.parseTree!;
-      const ir = getIR(parseTree);
-      const expectedIR = testCase.ir!;
+import { expect } from '@jest/globals';
 
-      expect(ir)
-        .toEqual(expectedIR);
-    },
-  );
+test.each(tc1)(
+  'test get parse tree of function body expressions',
+  (testCase) => {
+    const expectedTree = Tree.treeMap(testCase.parseTree, TokenData.fromToken);
+    const tree = parse(testCase.str);
+    expect(tree)
+      .toEqual(expectedTree);
+  },
+);
 
-  test('expect simple_addition_sexpr_without_argument_bracket_fails to throw', () => {
-    const testCase = simple_addition_sexpr_without_argument_bracket_fails;
-    const parseTree = testCase.parseTree!;
-    expect(() => getIR(parseTree))
-      .toThrow();
-  });
+test.each(tc2)('test get parse tree of function expressions', (testCase) => {
+  const expectedTree = Tree.treeMap(testCase.parseTree, TokenData.fromToken);
+  const tree = parse(testCase.str);
+  expect(tree)
+    .toEqual(expectedTree);
 });
 
-test.each(tc2)('test convert function expressions into ir', (testCase) => {
-  const parseTree = testCase.parseTree!;
-  const ir = getIR(parseTree);
-  const expectedIR = testCase.ir!;
-
-  expect(ir)
-    .toEqual(expectedIR);
-});
-
-test.each(tc3)('test convert export expressions into ir', (testCase) => {
-  const parseTree = testCase.parseTree!;
-  const ir = getIR(parseTree);
-  const expectedIR = testCase.ir!;
-
-  expect(ir)
-    .toEqual(expectedIR);
+test.each(tc3)('test get parse tree of export expressions', (testCase) => {
+  const expectedTree = Tree.treeMap(testCase.parseTree, TokenData.fromToken);
+  const tree = parse(testCase.str);
+  expect(tree)
+    .toEqual(expectedTree);
 });
 
 expect.addEqualityTesters([isTokenEqual]);

@@ -1,5 +1,5 @@
-import { type Unfoldable } from '../src/parser/ir';
-import { unfoldIrTestCases as tc1 } from './resources/valid_function_bodies';
+import { type Unfoldable } from '../src/wat2wasm/ir_types';
+import { validTestCases as tc1 } from './resources/valid_function_bodies';
 
 test.each(tc1)('unfold simple_addition_sexpr', (testCase) => {
   const ir = testCase.ir! as Unfoldable;

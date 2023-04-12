@@ -14,7 +14,6 @@ import { getSampleToken as t } from './resolved_tokens';
 
 interface ValidTestCaseData {
   str: string;
-  tokens: Array<Token>;
   parseTree: Tree<Token>;
   ir: FunctionExpression;
   minimal_binary_function_signature: Uint8Array;
@@ -34,15 +33,6 @@ const simple_function_sexpr_with_param_names: ValidTestCaseData = {
       (local.get $p))
     )
       `,
-  tokens: [
-    ...['(', 'func', '(', 'param', '$p', 'f64', ')'],
-    ...['(', 'result', 'f64', ')'],
-    ...['(', 'f64.add'],
-    ...['(', 'local.get', '$p', ')'],
-    ...['(', 'local.get', '$p', ')', ')'],
-    ...[')'],
-  ].map(t),
-
   parseTree: Tree.treeMap(
     [
       'func',
@@ -76,28 +66,6 @@ const simple_add_function_no_param_names: ValidTestCaseData = {
     local.get 1
     i32.add)
     `,
-  tokens: [
-    ...[
-      '(',
-      'func',
-      '(',
-      'param',
-      'i32',
-      ')',
-      '(',
-      'param',
-      'i32',
-      ')',
-      '(',
-      'result',
-      'i32',
-      ')',
-    ],
-    ...['local.get', '0'],
-    ...['local.get', '1'],
-    ...['i32.add', ')'],
-  ].map(t),
-
   parseTree: Tree.treeMap(
     [
       'func',
@@ -130,18 +98,6 @@ const simple_add_function_no_param_names: ValidTestCaseData = {
 
 const named_empty_function: ValidTestCaseData = {
   str: '(func $name (param) (result))',
-  tokens: [
-    '(',
-    'func',
-    '$name',
-    '(',
-    'param',
-    ')',
-    '(',
-    'result',
-    ')',
-    ')',
-  ].map(t),
   parseTree: [t('func'), t('$name'), [t('param')], [t('result')]],
   ir: new FunctionExpression([], [], [], new EmptyTokenExpression(), '$name'),
   minimal_binary_function_signature: new Uint8Array([0x60, 0x00, 0x00]),
@@ -150,20 +106,6 @@ const named_empty_function: ValidTestCaseData = {
 
 const empty_function_with_combined_params: ValidTestCaseData = {
   str: '(func (param f64 f64 f64) (result))',
-  tokens: [
-    '(',
-    'func',
-    '(',
-    'param',
-    'f64',
-    'f64',
-    'f64',
-    ')',
-    '(',
-    'result',
-    ')',
-    ')',
-  ].map(t),
   parseTree: [
     t('func'),
     [t('param'), t('f64'), t('f64'), t('f64')],
@@ -187,31 +129,6 @@ const function_all_named_params: ValidTestCaseData = {
   local.get $two
 )
 `,
-  tokens: [
-    // TODO why are the brackets missing here?
-    'func',
-    '(',
-    'param',
-    '$one',
-    'f64',
-    ')',
-    '(',
-    'param',
-    '$two',
-    'f64',
-    ')',
-    '(',
-    'param',
-    '$three',
-    'f64',
-    ')',
-    '(',
-    'result',
-    'f64',
-    ')',
-    'local.get',
-    '$two',
-  ].map(t),
   parseTree: Tree.treeMap(
     [
       'func',
@@ -242,28 +159,6 @@ const function_some_named_params: ValidTestCaseData = {
   local.get $three
 )
 `,
-  tokens: [
-    'func',
-    '(',
-    'param',
-    'f64',
-    ')',
-    '(',
-    'param',
-    'f64',
-    ')',
-    '(',
-    'param',
-    '$three',
-    'f64',
-    ')',
-    '(',
-    'result',
-    'f64',
-    ')',
-    'local.get',
-    '$three',
-  ].map(t),
   parseTree: Tree.treeMap(
     [
       'func',
@@ -295,27 +190,6 @@ const function_multiple_separate_result: ValidTestCaseData = {
   f64.const 1
 )
 `,
-  tokens: [
-    ...[
-      // '(',
-      'func',
-      '$name',
-      '(',
-      'param',
-      ')',
-      '(',
-      'result',
-      'f64',
-      ')',
-      '(',
-      'result',
-      'f64',
-      ')',
-    ],
-    ...['f64.const', '1'],
-    ...['f64.const', '1'],
-    // ...[')'],
-  ].map(t),
   parseTree: Tree.treeMap(
     [
       'func',
@@ -357,24 +231,6 @@ const function_multiple_combined_result: ValidTestCaseData = {
   f64.const 1
 )
 `,
-  tokens: [
-    ...[
-      // '(',
-      'func',
-      '$name',
-      '(',
-      'param',
-      ')',
-      '(',
-      'result',
-      'f64',
-      'f64',
-      ')',
-    ],
-    ...['f64.const', '1'],
-    ...['f64.const', '1'],
-    // ...[')'],
-  ].map(t),
   parseTree: Tree.treeMap(
     [
       'func',
