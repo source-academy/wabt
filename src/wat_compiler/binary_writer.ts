@@ -105,7 +105,7 @@ export class BinaryWriter {
   }
 
   private encodeExportSection(): Uint8Array {
-    const { exportDeclarations } = this.module;
+    const { exportExpressions: exportDeclarations } = this.module;
     if (typeof exportDeclarations === 'undefined') {
       return new Uint8Array([]);
     }

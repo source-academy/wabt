@@ -378,9 +378,72 @@ const function_exports_by_name: ModuleTestCase = {
   ]),
 };
 
+const unnamed_inline_function_export: ModuleTestCase = {
+  str: '(module (func (export "name") (param) (result)))',
+  ir: new ModuleExpression(
+    new FunctionExpression([], [], [], new EmptyTokenExpression(), null, 'name'),
+  ),
+  type_section_encoding: Uint8Array.from([0x01, 0x04, 0x01, 0x60, 0x00, 0x00]),
+  import_section_encoding: new Uint8Array(),
+  function_section_encoding: Uint8Array.from([0x03, 0x02, 0x01, 0x00]),
+  table_section_encoding: new Uint8Array(),
+  memory_section_encoding: new Uint8Array(),
+  global_section_encoding: new Uint8Array(),
+  export_section_encoding: Uint8Array.from([
+    0x07, 0x08, 0x01, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x00, 0x00,
+  ]),
+  start_section_encoding: new Uint8Array(),
+  element_section_encoding: new Uint8Array(),
+  code_section_encoding: Uint8Array.from([0x0a, 0x04, 0x01, 0x02, 0x00, 0x0b]),
+  data_section_encoding: new Uint8Array(),
+  minimal_module_encoding: Uint8Array.from([
+    ...PREFIX,
+    ...[0x01, 0x04, 0x01, 0x60, 0x00, 0x00],
+    ...[0x03, 0x02, 0x01, 0x00],
+    ...[0x07, 0x08, 0x01, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x00, 0x00],
+    ...[0x0a, 0x04, 0x01, 0x02, 0x00, 0x0b],
+  ]),
+};
+
+const named_inline_function_export: ModuleTestCase = {
+  str: '(module (func $name (export "name") (param) (result)))',
+  ir: new ModuleExpression(
+    new FunctionExpression(
+      [],
+      [],
+      [],
+      new EmptyTokenExpression(),
+      '$name',
+      'name',
+    ),
+  ),
+  type_section_encoding: Uint8Array.from([0x01, 0x04, 0x01, 0x60, 0x00, 0x00]),
+  import_section_encoding: new Uint8Array(),
+  function_section_encoding: Uint8Array.from([0x03, 0x02, 0x01, 0x00]),
+  table_section_encoding: new Uint8Array(),
+  memory_section_encoding: new Uint8Array(),
+  global_section_encoding: new Uint8Array(),
+  export_section_encoding: Uint8Array.from([
+    0x07, 0x08, 0x01, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x00, 0x00,
+  ]),
+  start_section_encoding: new Uint8Array(),
+  element_section_encoding: new Uint8Array(),
+  code_section_encoding: Uint8Array.from([0x0a, 0x04, 0x01, 0x02, 0x00, 0x0b]),
+  data_section_encoding: new Uint8Array(),
+  minimal_module_encoding: Uint8Array.from([
+    ...PREFIX,
+    ...[0x01, 0x04, 0x01, 0x60, 0x00, 0x00],
+    ...[0x03, 0x02, 0x01, 0x00],
+    ...[0x07, 0x08, 0x01, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x00, 0x00],
+    ...[0x0a, 0x04, 0x01, 0x02, 0x00, 0x0b],
+  ]),
+};
+
 export const moduleTestCases = [
   module_with_one_simple_add_function_with_param_names,
   module_with_exported_add_function_no_names,
   module_with_two_exports,
   function_exports_by_name,
+  unnamed_inline_function_export,
+  named_inline_function_export,
 ];

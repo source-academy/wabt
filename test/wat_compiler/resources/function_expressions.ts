@@ -266,6 +266,42 @@ const function_multiple_combined_result: ValidTestCaseData = {
   ]),
 };
 
+const unnamed_function_function_with_inline_export: ValidTestCaseData = {
+  str: '(func (export "name") (param) (result))',
+  parseTree: Tree.treeMap(
+    ['func', ['export', '"name"'], ['param'], ['result']],
+    t,
+  ),
+  ir: new FunctionExpression(
+    [],
+    [],
+    [],
+    new EmptyTokenExpression(),
+    null,
+    'name',
+  ),
+  minimal_binary_function_signature: Uint8Array.from([0x60, 0x00, 0x00]),
+  minimal_binary_function_body: Uint8Array.from([0x02, 0x00, 0x0b]),
+};
+
+const named_function_function_with_inline_export: ValidTestCaseData = {
+  str: '(func $name (export "name") (param) (result))',
+  parseTree: Tree.treeMap(
+    ['func', '$name', ['export', '"name"'], ['param'], ['result']],
+    t,
+  ),
+  ir: new FunctionExpression(
+    [],
+    [],
+    [],
+    new EmptyTokenExpression(),
+    '$name',
+    'name',
+  ),
+  minimal_binary_function_signature: Uint8Array.from([0x60, 0x00, 0x00]),
+  minimal_binary_function_body: Uint8Array.from([0x02, 0x00, 0x0b]),
+};
+
 const function_combined_multiple_named_params: InvalidTestCaseData = {
   str: '(func (param $one f64 $two f64 $three f64) (result))',
 };
@@ -282,6 +318,8 @@ export const validTestCases = [
   function_some_named_params,
   function_multiple_separate_result,
   function_multiple_combined_result,
+  unnamed_function_function_with_inline_export,
+  named_function_function_with_inline_export,
 ];
 
 export const invalidTestCases = [function_combined_multiple_named_params];

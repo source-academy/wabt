@@ -1,7 +1,7 @@
 /**
  * Just a file to write demos and run examples on ts-node
  */
-import { compile, parse } from './index';
+import { compile } from './index';
 const program = `
 (module
   (func $first_function (param) (result))

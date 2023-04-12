@@ -114,16 +114,29 @@ function parseFunctionExpression(parseTree: ParseTree): FunctionExpression {
   const paramNames: (string | null)[] = [];
   const resultTypes: ValueType[] = [];
   let functionName: string | undefined;
+  let inlineExportName: string | null = null;
 
   let cursor = 1;
 
   // Parse function name if necessary
-  const first_token = parseTree[cursor];
-  if (first_token instanceof Token && first_token.type === TokenType.Var) {
-    functionName = first_token.lexeme;
+  let token = parseTree[cursor];
+  if (token instanceof Token && token.type === TokenType.Var) {
+    functionName = token.lexeme;
     cursor += 1;
   }
 
+  // Parse inline export if necessary
+  // Inline exports are in the format of (func $name (export "name"))
+  token = parseTree[cursor];
+  if (
+    token instanceof Array
+    && token[0] instanceof Token
+    && token[0].type === TokenType.Export
+    && token[1] instanceof Token
+  ) {
+    inlineExportName = token[1].extractText();
+    cursor++;
+  }
   // Parse function params and declarations first
   // TODO this does not work when the first few function params are not named, and then some are named afterwards.
   for (; cursor < parseTree.length; cursor++) {
@@ -158,6 +171,7 @@ function parseFunctionExpression(parseTree: ParseTree): FunctionExpression {
     paramNames,
     ir,
     functionName,
+    inlineExportName,
   );
 }
 

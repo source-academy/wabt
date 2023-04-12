@@ -3,7 +3,6 @@ import { Opcode, type OpcodeType } from './opcode';
 import { TokenType } from './token';
 import { type ValueType } from './type';
 
-
 export class Token {
   type: TokenType;
   lexeme: string;
@@ -35,7 +34,15 @@ export class Token {
     col: number,
     indexInSource: number,
   ) {
-    return new Token(TokenType.Eof, lexeme, line, col, indexInSource, null, null);
+    return new Token(
+      TokenType.Eof,
+      lexeme,
+      line,
+      col,
+      indexInSource,
+      null,
+      null,
+    );
   }
 
   isBareToken(): boolean {
@@ -74,6 +81,16 @@ export class Token {
   getOpcodeEncoding(): number {
     assert(this.opcodeType !== null);
     return Opcode.getCode(this.opcodeType!);
+  }
+
+  /**
+   * Extract the text from a text token.
+   * @returns the extracted text
+   * @throws error if text token is not a TokenType.Text type.
+   */
+  extractText(): string {
+    assert(this.type === TokenType.Text);
+    return this.lexeme.slice(1, this.lexeme.length - 1);
   }
 }
 

@@ -4,6 +4,7 @@ import { Token, TokenType } from '../common/token';
 import { ExportType } from '../common/export_types';
 import { assert } from '../common/assert';
 import { isEqual } from 'lodash';
+import { getSingleToken } from './lexer';
 
 /**
  * Interface indicating that the particular intermediate representation
@@ -75,7 +76,7 @@ export class ModuleExpression extends IntermediateRepresentation {
   /**
    * Declarations for export section
    */
-  exportDeclarations: ExportExpression[] = []; // TODO add support for multiple export expressions
+  exportExpressions: ExportExpression[] = []; // TODO add support for multiple export expressions
 
   constructor(...childNodes: (FunctionExpression | ExportExpression)[]) {
     super();
@@ -83,7 +84,7 @@ export class ModuleExpression extends IntermediateRepresentation {
       if (child instanceof FunctionExpression) {
         this.addFunctionExpression(child);
       } else if (child instanceof ExportExpression) {
-        this.exportDeclarations.push(child);
+        this.addExportExpression(child);
       }
     }
   }
@@ -92,6 +93,21 @@ export class ModuleExpression extends IntermediateRepresentation {
     this.functions.push(functionExpression);
     this.addGlobalType(functionExpression.functionSignature);
     this.globals.push(functionExpression);
+
+    // Generate an export expression if it has an inline export.
+    if (functionExpression.hasInlineExport) {
+      this.addExportExpression(
+        new ExportExpression(
+          functionExpression.inlineExportName!,
+          ExportType.Func,
+          this.functions.length - 1,
+        ),
+      );
+    }
+  }
+
+  private addExportExpression(exportExpression: ExportExpression) {
+    this.exportExpressions.push(exportExpression);
   }
 
   /**
@@ -165,22 +181,48 @@ export class ModuleExpression extends IntermediateRepresentation {
 export class ExportExpression extends IntermediateRepresentation {
   exportName: string;
   exportType: ExportType;
-  exportReferenceIndex: number | null;
-  exportReferenceName: string | null;
+  exportReferenceIndex: number | null = null;
+  exportReferenceName: string | null = null;
 
-  constructor(exportName: Token, exportType: Token, exportReference: Token) {
+  // Constructor for inline function exports
+  constructor(
+    exportName: string,
+    exportType: ExportType,
+    exportReference: number
+  );
+  // TODO need to refine this construtor.
+  constructor(exportName: Token, exportType: Token, exportReference: Token);
+  constructor(
+    exportName: string | Token,
+    exportType: ExportType | Token,
+    exportReference: number | Token,
+  ) {
     super();
-    this.exportName = this.getExportName(exportName);
-    this.exportType = this.getExportType(exportType);
-    [this.exportReferenceIndex, this.exportReferenceName]
-      = this.getExportReference(exportReference);
+    if (typeof exportName === 'string') {
+      this.exportName = exportName;
+    } else {
+      this.exportName = this.getExportName(exportName);
+    }
+
+    if (exportType instanceof Token) {
+      this.exportType = this.getExportType(exportType);
+    } else {
+      this.exportType = exportType;
+    }
+
+    if (typeof exportReference === 'number') {
+      this.exportReferenceIndex = exportReference;
+    } else {
+      [this.exportReferenceIndex, this.exportReferenceName]
+        = this.getExportReference(exportReference);
+    }
   }
 
   private getExportName(exportName: Token) {
     if (exportName.type !== TokenType.Text) {
       throw new Error(`unexpected export name: ${exportName}`); // TODO better errors
     }
-    return exportName.lexeme.slice(1, exportName.lexeme.length - 1);
+    return exportName.extractText();
   }
 
   private getExportType(exportType: Token) {
@@ -223,6 +265,8 @@ export class FunctionExpression
   functionSignature: FunctionSignature;
   functionBody: FunctionBody;
   functionName: string | null;
+  hasInlineExport: boolean;
+  inlineExportName: string | null;
 
   constructor(
     paramTypes: ValueType[],
@@ -230,6 +274,7 @@ export class FunctionExpression
     paramNames: (string | null)[],
     body: TokenExpression,
     functionName: string | null = null,
+    inlineExportName: string | null = null,
   ) {
     super();
     assert(
@@ -239,6 +284,8 @@ export class FunctionExpression
     this.functionSignature = new FunctionSignature(paramTypes, returnTypes);
     this.functionBody = new FunctionBody(body, paramNames);
     this.functionName = functionName;
+    this.inlineExportName = inlineExportName;
+    this.hasInlineExport = inlineExportName !== null;
   }
 
   getID(): string | null {

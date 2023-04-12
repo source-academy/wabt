@@ -34,7 +34,15 @@ export class Token {
     col: number,
     indexInSource: number,
   ) {
-    return new Token(TokenType.Eof, lexeme, line, col, indexInSource, null, null);
+    return new Token(
+      TokenType.Eof,
+      lexeme,
+      line,
+      col,
+      indexInSource,
+      null,
+      null,
+    );
   }
   isBareToken(): boolean {
     return isTokenTypeBare(this.type);
@@ -64,6 +72,10 @@ export class Token {
   getOpcodeEncoding(): number {
     assert(this.opcodeType !== null);
     return Opcode.getCode(this.opcodeType!);
+  }
+  extractText(): string {
+    assert(this.type === TokenType.Text);
+    return this.lexeme.slice(1, this.lexeme.length - 1);
   }
 }
 export function isTokenTypeBare(token_type: TokenType | null): boolean {
