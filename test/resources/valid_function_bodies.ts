@@ -6,7 +6,6 @@ import {
   type IntermediateRepresentation,
 } from '../../src/wat2wasm/ir_types';
 import { type Tree } from '../../src/wat2wasm/tree_types';
-import { simple_addition_sexpr_without_argument_bracket_fails } from './invalid_function_bodies';
 import { getSampleToken as t } from './resolved_tokens';
 
 export interface FunctionBodyTestCaseData {
