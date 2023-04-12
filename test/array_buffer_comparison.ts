@@ -3,7 +3,7 @@ import { isEqual } from 'lodash';
 export function areUint8ArraysEqual(a: Uint8Array, b: Uint8Array) {
   try {
     return isEqual([...a], [...b]);
-  } catch (e) {
+  } catch (_) {
     return undefined;
   }
 }

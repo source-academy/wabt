@@ -3,7 +3,6 @@
 import { compile, parse } from '../../src/wat_compiler';
 import { BinaryWriter } from '../../src/wat_compiler/binary_writer';
 import { getIR } from '../../src/wat_compiler/ir';
-import { areUint8ArraysEqual } from '../array_buffer_comparison';
 import { invalidTestCases as invalidFuncExpTestCases } from './resources/function_expressions';
 import {
   type ModuleTestCase,

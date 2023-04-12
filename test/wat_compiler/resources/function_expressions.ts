@@ -6,7 +6,6 @@ import {
   EmptyTokenExpression,
   FunctionExpression,
   OperationTree,
-  PureUnfoldedTokenExpression,
   UnfoldedTokenExpression,
 } from '../../../src/wat_compiler/ir_types';
 import { Tree } from '../../../src/wat_compiler/tree_types';

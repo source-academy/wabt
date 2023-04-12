@@ -4,13 +4,35 @@
 import { compile } from './index';
 const program = `
 (module
-  (func $first_function (param) (result))
-  (func $second_function (param) (result))
-  (export "second" (func $second_function))
-  (export "first" (func $first_function))
-)
+  (func (export "add") (param f64) (param f64) (result f64)
+      local.get 0
+      local.get 1
+      f64.add)
+  (func (export "sub") (param f64) (param f64) (result f64)
+      local.get 0
+      local.get 1
+      f64.sub)
+  (func (export "mul") (param f64) (param f64) (result f64)
+      local.get 0
+      local.get 1
+      f64.mul)
+  (func (export "div") (param f64) (param f64) (result f64)
+      local.get 0
+      local.get 1
+      f64.div)
+) 
 `;
 
 const encoding = compile(program);
 const instance = new WebAssembly.Instance(new WebAssembly.Module(encoding));
-console.log(instance.exports);
+
+const { add, sub, mul, div } = instance.exports;
+
+// @ts-ignore
+console.log(add(1, 12));
+// @ts-ignore
+console.log(sub(1, 12));
+// @ts-ignore
+console.log(mul(1, 12));
+// @ts-ignore
+console.log(div(1, 12));
