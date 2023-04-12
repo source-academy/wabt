@@ -217,16 +217,3 @@ export function hasSameData(lhs: TokenData | Token, rhs: TokenData | Token) {
     && lhs.valueType === rhs.valueType
   );
 }
-
-/**
- * Equality comparison for two tokesn that ignore token's column/line/index in source.
- * To be used as a Jest comparison.
- */
-export function isTokenEqual(a: Token, b: Token) {
-  return (
-    a.lexeme === b.lexeme
-    && a.opcodeType === b.opcodeType
-    && a.valueType === b.valueType
-    && a.type === b.type
-  );
-}

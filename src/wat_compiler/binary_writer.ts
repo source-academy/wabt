@@ -162,7 +162,7 @@ function encodeExportExpressions(
   exportExpression: ExportExpression[],
 ): Uint8Array {
   function encodeExport(obj: ExportExpression): Uint8Array {
-    const { exportIndex, exportName, exportType } = obj;
+    const { exportReferenceIndex: exportIndex, exportName, exportType } = obj;
     const exportNameEncoding = [];
 
     for (let i = 0; i < exportName.length; i++) {

@@ -6,7 +6,7 @@ import { validTestCases as tc2 } from './resources/function_expressions';
 import { validTestCases as tc1 } from './resources/valid_function_bodies';
 import { validTestCases as tc3 } from './resources/export_expressions';
 
-import { isTokenEqual } from './resources/resolved_tokens';
+import { isTokenEqual } from '../token_comparisons';
 import { type Unfoldable } from '../../src/wat_compiler/ir_types';
 
 describe('get IR from parse tree', () => {

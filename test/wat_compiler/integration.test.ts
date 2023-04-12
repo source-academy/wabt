@@ -1,12 +1,16 @@
-import { compile, parse } from '../src';
-import { TEST_EXPORTS, encodeModule } from '../src/wat_compiler/binary_writer';
-import { getIR } from '../src/wat_compiler/ir';
+import { compile, parse } from '../../src/wat_compiler';
+import {
+  TEST_EXPORTS,
+  encodeModule,
+} from '../../src/wat_compiler/binary_writer';
+import { getIR } from '../../src/wat_compiler/ir';
+import { areUint8ArraysEqual } from '../array_buffer_comparison';
 import { invalidTestCases as invalidFuncExpTestCases } from './resources/function_expressions';
 import {
   type ModuleTestCase,
   moduleTestCases,
 } from './resources/module_program_fragments';
-import { isTokenEqual } from './resources/resolved_tokens';
+import { isTokenEqual } from '../token_comparisons';
 import { expect } from '@jest/globals';
 const {
   encodeModuleTypeSection,
@@ -21,6 +25,9 @@ const {
   encodeModuleCodeSection,
   encodeModuleDataSection,
 } = TEST_EXPORTS;
+
+expect.addEqualityTesters([isTokenEqual]);
+// expect.addEqualityTesters([areUint8ArraysEqual]);
 
 describe.each(moduleTestCases)('encode modules', (testCase: ModuleTestCase) => {
   test('Check IR', () => {
@@ -105,9 +112,7 @@ describe.each(moduleTestCases)('encode modules', (testCase: ModuleTestCase) => {
 test.each(invalidFuncExpTestCases)(
   'encode invalid function expression throws',
   (testCase) => {
-    expect(() => compile(testCase.str))
+    expect(() => compile(parse(testCase.str)))
       .toThrow();
   },
 );
-
-expect.addEqualityTesters([isTokenEqual]);

@@ -11,9 +11,10 @@ import {
   moduleTestCases,
 } from './resources/module_program_fragments';
 import { expect } from '@jest/globals';
-import { isTokenEqual } from './resources/resolved_tokens';
 import { parse } from '../../src/wat_compiler';
 import { getIR } from '../../src/wat_compiler/ir';
+import { areUint8ArraysEqual } from '../array_buffer_comparison';
+import { isTokenEqual } from '../token_comparisons';
 
 const {
   encodeFunctionBody,

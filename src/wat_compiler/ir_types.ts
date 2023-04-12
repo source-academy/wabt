@@ -53,32 +53,48 @@ export class ModuleExpression extends IntermediateRepresentation {
 export class ExportExpression extends IntermediateRepresentation {
   exportName: string;
   exportType: ExportType;
-  exportIndex: number;
-  exportReferenceName: string | null = null;
+  exportReferenceIndex: number | null;
+  exportReferenceName: string | null;
 
   constructor(exportName: Token, exportType: Token, exportReference: Token) {
     super();
+    this.exportName = this.getExportName(exportName);
+    this.exportType = this.getExportType(exportType);
+    [this.exportReferenceIndex, this.exportReferenceName]
+      = this.getExportReference(exportReference);
+  }
+
+  private getExportName(exportName: Token) {
     if (exportName.type !== TokenType.Text) {
       throw new Error(`unexpected export name: ${exportName}`); // TODO better errors
     }
-    this.exportName = exportName.lexeme.slice(1, exportName.lexeme.length - 1);
+    return exportName.lexeme.slice(1, exportName.lexeme.length - 1);
+  }
 
-    if (exportReference.type !== TokenType.Nat) {
-      // TODO implement named exports
-      throw new Error(
-        `unexpected export ID: ${JSON.stringify(
-          exportReference,
-          undefined,
-          2,
-        )}. If this is meant to be a $identifier, then it is not implemented yet.`,
-      );
-    }
-    this.exportIndex = Number.parseInt(exportReference.lexeme);
-
+  private getExportType(exportType: Token) {
     if (exportType.type !== TokenType.Func) {
       throw new Error(`unexpected export type: ${exportType}`); // TODO better errors
     }
-    this.exportType = ExportType.Func;
+    return ExportType.Func;
+  }
+
+  private getExportReference(
+    exportReference: Token,
+  ): [number, null] | [null, string] {
+    switch (exportReference.type) {
+      case TokenType.Nat:
+        return [Number.parseInt(exportReference.lexeme), null];
+      case TokenType.Var:
+        return [null, exportReference.lexeme];
+      default:
+        throw new Error(
+          `unexpected export ID: ${JSON.stringify(
+            exportReference,
+            undefined,
+            2,
+          )}.`,
+        );
+    }
   }
 }
 /*
