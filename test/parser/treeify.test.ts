@@ -1,6 +1,6 @@
 import { TokenData } from '../resources/resolved_tokens';
-import { Tree } from '../../src/parser/tree_types';
-import { getParseTree } from '../../src/parser/parse_tree';
+import { Tree } from '../../src/wat2wasm/tree_types';
+import { getParseTree } from '../../src/wat2wasm/parser';
 
 import { parseTreeTestCases as tc1 } from '../resources/valid_function_bodies';
 import { validTestCases as tc2 } from '../resources/function_expressions';

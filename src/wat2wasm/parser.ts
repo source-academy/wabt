@@ -1,6 +1,6 @@
-import { TokenType, type Token } from '../common/token';
-import { type ParseTree } from './tree_types';
 import { assert } from '../common/assert';
+import { type Token, TokenType } from '../common/token';
+import { type ParseTree } from './tree_types';
 
 /**
  * Parse a sequence of tokens to a tree of tokens

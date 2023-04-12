@@ -7,7 +7,7 @@ import {
   type TokenExpression,
   ExportExpression,
   EmptyTokenExpression,
-} from './ir';
+} from './ir_types';
 import { Token, TokenType } from '../common/token';
 import { type ParseTree } from './tree_types';
 
@@ -15,9 +15,7 @@ import { Opcode } from '../common/opcode';
 import { type ValueType } from '../common/type';
 import { assert } from '../common/assert';
 
-export function getIntermediateRepresentation(
-  parseTree: ParseTree,
-): IntermediateRepresentation {
+export function getIR(parseTree: ParseTree): IntermediateRepresentation {
   if (isSExpression(parseTree) || isStackExpression(parseTree)) {
     return parseExpression(parseTree);
   }
@@ -75,7 +73,7 @@ function parseSExpression(parseTree: ParseTree): OperationTree {
     if (token instanceof Token) {
       body.push(token);
     } else {
-      const irNode = getIntermediateRepresentation(token);
+      const irNode = getIR(token);
       if (
         !(
           irNode instanceof Token
@@ -99,7 +97,7 @@ function parseStackExpression(parseTree: ParseTree): UnfoldedTokenExpression {
     if (tokenNode instanceof Token) {
       nodes.push(tokenNode);
     } else {
-      const temp = getIntermediateRepresentation(tokenNode);
+      const temp = getIR(tokenNode);
       if (!(temp instanceof Token || temp instanceof OperationTree)) {
         throw new Error(); // TODO proper error
       }
@@ -180,7 +178,10 @@ function parseFunctionParamExpression(parseTree: ParseTree): {
     } else if (parseTreeNode.type === TokenType.Var) {
       names.push(parseTreeNode.lexeme);
       const nextToken = parseTree[++i];
-      assert(nextToken instanceof Token && nextToken.type === TokenType.ValueType, `Expected Token Type to be a value type: ${nextToken}`);
+      assert(
+        nextToken instanceof Token && nextToken.type === TokenType.ValueType,
+        `Expected Token Type to be a value type: ${nextToken}`,
+      );
       types.push((nextToken as Token).valueType!); // TODO better errors
     } else {
       throw new Error(`Unexpected token, bla bla ${parseTreeNode}`); // TODO Proper error message and type

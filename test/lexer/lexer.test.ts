@@ -1,9 +1,9 @@
-import { tokenize } from '../../src/lexer/lexer';
 import { TokenData } from '../resources/resolved_tokens';
 
 import { tokenizeTestCases as tc1 } from '../resources/valid_function_bodies';
 import { validTestCases as tc2 } from '../resources/function_expressions';
 import { validTestCases as tc3 } from '../resources/export_expressions';
+import { tokenize } from '../../src/wat2wasm/lexer';
 
 test.each(tc1)('test tokenize function body expressions', (testCase) => {
   const tokens = tokenize(testCase.str)

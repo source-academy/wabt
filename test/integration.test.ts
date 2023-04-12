@@ -1,8 +1,6 @@
-import { compile } from '../src';
+import { compile, parse } from '../src';
 import { TEST_EXPORTS, encodeModule } from '../src/binary_writer';
-import { tokenize } from '../src/lexer/lexer';
-import { getParseTree } from '../src/parser/parse_tree';
-import { getIntermediateRepresentation } from '../src/parser/parser';
+import { getIR } from '../src/wat2wasm/ir';
 import { invalidTestCases as invalidFuncExpTestCases } from './resources/function_expressions';
 import {
   type ModuleTestCase,
@@ -26,9 +24,7 @@ const {
 
 describe.each(moduleTestCases)('encode modules', (testCase: ModuleTestCase) => {
   test('Check IR', () => {
-    const ir = getIntermediateRepresentation(
-      getParseTree(tokenize(testCase.str)),
-    );
+    const ir = getIR(parse(testCase.str));
     expect(ir)
       .toEqual(testCase.ir);
   });

@@ -7,11 +7,10 @@ import {
   type ModuleTestCase,
   moduleTestCases,
 } from './resources/module_program_fragments';
-import { tokenize } from '../src/lexer/lexer';
-import { getParseTree } from '../src/parser/parse_tree';
-import { getIntermediateRepresentation } from '../src/parser/parser';
 import { expect } from '@jest/globals';
 import { isTokenEqual } from './resources/resolved_tokens';
+import { parse } from '../src/wat2wasm';
+import { getIR } from '../src/wat2wasm/ir';
 
 const {
   encodeFunctionBody,
@@ -82,9 +81,7 @@ describe.each(moduleTestCases)(
   'encode module sections',
   (testCase: ModuleTestCase) => {
     test('Check intermediate representation', () => {
-      expect(
-        getIntermediateRepresentation(getParseTree(tokenize(testCase.str))),
-      )
+      expect(getIR(parse(testCase.str)))
         .toEqual(testCase.ir);
     });
     test('Encode type_section', () => {

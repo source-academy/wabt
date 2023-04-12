@@ -9,10 +9,15 @@ import {
   TokenType,
 } from '../common/token';
 
-
 import { LiteralType, parseHexdigit } from '../common/literal';
-import { getOpcodeType, getTokenType, getType, isKeyWord } from '../common/keywords';
+import {
+  getOpcodeType,
+  getTokenType,
+  getType,
+  isKeyWord,
+} from '../common/keywords';
 import { assert } from '../common/assert';
+import { type ParseTree } from './tree_types';
 
 export function tokenize(program: string): Token[] {
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -24,7 +29,6 @@ export function getSingleToken(token: string): Token {
   return new Lexer(token)
     .getToken();
 }
-
 
 enum ReservedChars {
   None,
@@ -353,11 +357,20 @@ class Lexer {
   private bareToken(token_type: TokenType): Token {
     // return new Token(token_type, '', this.line, this.col, this.cursor);
     // Originally, lexeme was '' for baretoken - but this doesn't make sense, does it?
-    return new Token(token_type, this.getText(), this.line, this.col, this.cursor);
+    return new Token(
+      token_type,
+      this.getText(),
+      this.line,
+      this.col,
+      this.cursor,
+    );
   }
 
   // TODO: need to do something with literal_type
-  private literalToken(token_type: TokenType, literal_type: LiteralType): Token {
+  private literalToken(
+    token_type: TokenType,
+    literal_type: LiteralType,
+  ): Token {
     // return Token(GetLocation(), token_type, Literal(literal_type, GetText()));
     return new Token(
       token_type,
@@ -631,10 +644,25 @@ class Lexer {
       return this.bareToken(tokenType);
     }
     if (isTokenTypeType(tokenType) || isTokenTypeRefKind(tokenType)) {
-      return new Token(tokenType, text, this.line, this.col, this.cursor, null, valueType);
+      return new Token(
+        tokenType,
+        text,
+        this.line,
+        this.col,
+        this.cursor,
+        null,
+        valueType,
+      );
     }
 
     assert(isTokenTypeOpcode(tokenType));
-    return new Token(tokenType, text, this.line, this.col, this.cursor, opcodeType);
+    return new Token(
+      tokenType,
+      text,
+      this.line,
+      this.col,
+      this.cursor,
+      opcodeType,
+    );
   }
 }

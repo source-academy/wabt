@@ -8,8 +8,8 @@ import {
   OperationTree,
   PureUnfoldedTokenExpression,
   UnfoldedTokenExpression,
-} from '../../src/parser/ir';
-import { Tree } from '../../src/parser/tree_types';
+} from '../../src/wat2wasm/ir_types';
+import { Tree } from '../../src/wat2wasm/tree_types';
 import { getSampleToken as t } from './resolved_tokens';
 
 interface ValidTestCaseData {
@@ -426,6 +426,4 @@ export const validTestCases = [
   function_multiple_combined_result,
 ];
 
-export const invalidTestCases = [
-  function_combined_multiple_named_params,
-];
+export const invalidTestCases = [function_combined_multiple_named_params];

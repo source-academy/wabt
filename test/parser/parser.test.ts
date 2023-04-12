@@ -1,4 +1,4 @@
-import { getIntermediateRepresentation } from '../../src/parser/parser';
+import { getIR } from '../../src/wat2wasm/ir';
 import { expect } from '@jest/globals';
 import { type Token } from '../../src/common/token';
 import { simple_addition_sexpr_without_argument_bracket_fails } from '../resources/invalid_function_bodies';
@@ -13,7 +13,7 @@ describe('get intermediate expression of function body expressions', () => {
     'test convert function body expressions into ir',
     (testCase) => {
       const parseTree = testCase.parseTree!;
-      const ir = getIntermediateRepresentation(parseTree);
+      const ir = getIR(parseTree);
       const expectedIR = testCase.ir!;
 
       expect(ir)
@@ -24,14 +24,14 @@ describe('get intermediate expression of function body expressions', () => {
   test('expect simple_addition_sexpr_without_argument_bracket_fails to throw', () => {
     const testCase = simple_addition_sexpr_without_argument_bracket_fails;
     const parseTree = testCase.parseTree!;
-    expect(() => getIntermediateRepresentation(parseTree))
+    expect(() => getIR(parseTree))
       .toThrow();
   });
 });
 
 test.each(tc2)('test convert function expressions into ir', (testCase) => {
   const parseTree = testCase.parseTree!;
-  const ir = getIntermediateRepresentation(parseTree);
+  const ir = getIR(parseTree);
   const expectedIR = testCase.ir!;
 
   expect(ir)
@@ -40,7 +40,7 @@ test.each(tc2)('test convert function expressions into ir', (testCase) => {
 
 test.each(tc3)('test convert export expressions into ir', (testCase) => {
   const parseTree = testCase.parseTree!;
-  const ir = getIntermediateRepresentation(parseTree);
+  const ir = getIR(parseTree);
   const expectedIR = testCase.ir!;
 
   expect(ir)

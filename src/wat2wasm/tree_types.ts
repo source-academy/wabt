@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { type Token } from '../common/token';
 import 'reflect-metadata';
-import { instanceToPlain } from 'class-transformer';
 
 export class Tree<T> extends Array<T | Tree<T>> {}
 
