@@ -4,6 +4,26 @@ import { Token, TokenType } from '../common/token';
 import { ExportType } from '../common/export_types';
 import { assert } from '../common/assert';
 
+/**
+ * Interface indicating that the particular intermediate representation
+ * may contain s-expressions, and can therefore be 'unfolded'.
+ */
+export interface Unfoldable {
+  unfold(): PureUnfoldedTokenExpression;
+}
+
+export namespace Unfoldable {
+  export function instanceOf(obj: object): obj is Unfoldable {
+    return 'unfold' in obj;
+  }
+}
+
+/**
+ * Interface indicating that this particular intermediate representation may store variable declarations
+ * which have to b
+ */
+export interface MayHaveVariables {}
+
 export abstract class IntermediateRepresentation {}
 
 export class ModuleExpression extends IntermediateRepresentation {
@@ -175,20 +195,6 @@ export type TokenExpression =
   | OperationTree
   | UnfoldedTokenExpression
   | EmptyTokenExpression;
-
-/**
- * Interface indicating that the particular intermediate representation
- * may contain s-expressions, and can therefore be 'unfolded'.
- */
-export interface Unfoldable {
-  unfold(): PureUnfoldedTokenExpression;
-}
-
-export namespace Unfoldable {
-  export function instanceOf(obj: object): obj is Unfoldable {
-    return 'unfold' in obj;
-  }
-}
 
 /**
  * Class representing operators and operands in an s-expression.
