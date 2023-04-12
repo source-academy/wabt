@@ -3,6 +3,7 @@ import { type ValueType } from '../common/type';
 import { Token, TokenType } from '../common/token';
 import { ExportType } from '../common/export_types';
 import { assert } from '../common/assert';
+import { isEqual } from 'lodash';
 
 /**
  * Interface indicating that the particular intermediate representation
@@ -26,6 +27,7 @@ export interface MayHaveVariables {}
 
 export abstract class IntermediateRepresentation {}
 
+type GlobalType = FunctionSignature; // TODO add more
 export class ModuleExpression extends IntermediateRepresentation {
   /*
     Sections in modules:
@@ -44,8 +46,13 @@ export class ModuleExpression extends IntermediateRepresentation {
       12 DataCount
   */
 
-  // Type Section
-  functionDeclarations: FunctionExpression[] = [];
+  /**
+   * Type Section. This stores global types, only function signature for now.
+   * Only UNIQUE types stored here.
+   */
+  globalTypes: GlobalType[] = [];
+
+  functions: FunctionExpression[] = [];
 
   // Export section
   exportDeclarations: ExportExpression[] = []; // TODO add support for multiple export expressions
@@ -54,19 +61,42 @@ export class ModuleExpression extends IntermediateRepresentation {
     super();
     for (const child of childNodes) {
       if (child instanceof FunctionExpression) {
-        this.functionDeclarations.push(child);
+        this.addFunctionExpression(child);
       } else if (child instanceof ExportExpression) {
         this.exportDeclarations.push(child);
       }
     }
   }
 
+  private addFunctionExpression(functionExpression: FunctionExpression) {
+    this.functions.push(functionExpression);
+    this.addGlobalType(functionExpression.functionSignature);
+  }
+
+  /**
+   * Add a type to the list of global types.
+   * Only addes to the list of types if it does not already exist
+   * @param type type to add to global type.
+   */
+  private addGlobalType(type: GlobalType) {
+    for (const existingType of this.globalTypes) {
+      if (isEqual(existingType, type)) {
+        return;
+      }
+    }
+    this.globalTypes.push(type);
+  }
+
+  getGlobalTypes(): GlobalType[] {
+    return this.globalTypes;
+  }
+
   getFunctionSignatures(): FunctionSignature[] {
-    return this.functionDeclarations.map((func) => func.functionSignature);
+    return this.functions.map((func) => func.functionSignature);
   }
 
   getFunctionBodies(): FunctionBody[] {
-    return this.functionDeclarations.map((func) => func.functionBody);
+    return this.functions.map((func) => func.functionBody);
   }
 }
 
@@ -142,32 +172,22 @@ export class FunctionExpression extends IntermediateRepresentation {
       paramTypes.length === paramNames.length,
       `Function param types and names must have same length: [${paramTypes}], [${paramNames}]`,
     );
-    this.functionSignature = new FunctionSignature(
-      paramTypes,
-      returnTypes,
-      paramNames,
-    );
+    this.functionSignature = new FunctionSignature(paramTypes, returnTypes);
     this.functionBody = new FunctionBody(body, paramNames);
     this.functionName = functionName;
   }
 }
 
+/**
+ * The FunctionSignature Type doubles as a class to store Function Type.
+ */
 export class FunctionSignature {
   paramTypes: ValueType[];
-  paramNames: (string | null)[];
   returnTypes: ValueType[];
-  functionName?: string;
 
-  constructor(
-    paramTypes: ValueType[],
-    returnTypes: ValueType[],
-    paramNames: (string | null)[],
-    functionName?: string,
-  ) {
+  constructor(paramTypes: ValueType[], returnTypes: ValueType[]) {
     this.paramTypes = paramTypes;
     this.returnTypes = returnTypes;
-    this.paramNames = paramNames;
-    this.functionName = functionName;
   }
 }
 

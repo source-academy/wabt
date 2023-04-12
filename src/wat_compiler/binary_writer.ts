@@ -53,13 +53,13 @@ export class BinaryWriter {
   }
 
   private encodeTypeSection(): Uint8Array {
-    const functions = this.module.getFunctionSignatures();
+    const types = this.module.getGlobalTypes();
 
-    const numTypes = functions.length;
+    const numTypes = types.length;
 
     let funcSignatureEncodings: number[] = [];
-    functions
-      .map((x) => this.encodeFunctionSignature(x))
+    types
+      .map((func) => this.encodeFunctionSignature(func))
       .forEach((arr) => {
         funcSignatureEncodings = funcSignatureEncodings.concat(...arr);
       });

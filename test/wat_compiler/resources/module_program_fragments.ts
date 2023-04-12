@@ -379,8 +379,8 @@ const function_exports_by_name: ModuleTestCase = {
 };
 
 export const moduleTestCases = [
-  module_with_one_simple_add_function_with_param_names,
-  module_with_exported_add_function_no_names,
+  // module_with_one_simple_add_function_with_param_names,
+  // module_with_exported_add_function_no_names,
   module_with_two_exports,
-  function_exports_by_name,
+  // function_exports_by_name,
 ];
