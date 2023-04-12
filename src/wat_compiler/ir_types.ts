@@ -91,6 +91,28 @@ export class ModuleExpression extends IntermediateRepresentation {
     return this.globalTypes;
   }
 
+  /**
+   * Query and resolve the a given global type.
+   * Global type must exist within the module.
+   * TODO: This takes O(n) per query, ideally should reduce to O(1)
+   * @param type type to query
+   * @returns index of type in module
+   */
+  resolveGlobalTypeIndex(type: GlobalType) {
+    for (const [i, existing_type] of this.globalTypes.entries()) {
+      if (isEqual(existing_type, type)) {
+        return i;
+      }
+    }
+
+    assert(
+      false,
+      `Global type not found! This is an error that should be raised to the developer.
+      Please help raise an issue on GitHub.`,
+    );
+    return -1; // This will never run, assert throws error
+  }
+
   getFunctionSignatures(): FunctionSignature[] {
     return this.functions.map((func) => func.functionSignature);
   }

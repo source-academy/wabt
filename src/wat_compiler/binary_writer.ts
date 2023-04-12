@@ -82,8 +82,8 @@ export class BinaryWriter {
     const num_fns = functions.length;
     const section_size = num_fns + 1;
 
-    const function_indices = Array(num_fns)
-      .keys();
+    const function_indices = functions.map((funcSig) => this.module.resolveGlobalTypeIndex(funcSig));
+
     return new Uint8Array([
       SectionCode.Function,
       section_size,
