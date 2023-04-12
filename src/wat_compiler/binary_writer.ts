@@ -104,6 +104,10 @@ function encodeModuleExportSection(ir: ModuleExpression): Uint8Array {
   }
   const exportEncoding = encodeExportExpressions(exportDeclarations);
   const sectionLength = exportEncoding.length;
+
+  if (sectionLength === 0) {
+    return new Uint8Array();
+  }
   return new Uint8Array([SectionCode.Export, sectionLength, ...exportEncoding]);
 }
 function encodeModuleStartSection(ir: ModuleExpression): Uint8Array {
@@ -156,11 +160,16 @@ function encodePureUnfoldedTokenExpression(
 /**
  * Encode an export expression.
  * TODO this does not work for multiple exports.
- * @param exportExpression export expression to encode
+ * @param exportExpressions export expression to encode
  */
 function encodeExportExpressions(
-  exportExpression: ExportExpression[],
+  exportExpressions: ExportExpression[],
 ): Uint8Array {
+  // If empty, return empty array
+  if (exportExpressions.length === 0) {
+    return new Uint8Array();
+  }
+
   function encodeExport(obj: ExportExpression): Uint8Array {
     const { exportReferenceIndex: exportIndex, exportName, exportType } = obj;
     const exportNameEncoding = [];
@@ -168,6 +177,7 @@ function encodeExportExpressions(
     for (let i = 0; i < exportName.length; i++) {
       exportNameEncoding.push(exportName.charCodeAt(i));
     }
+
     return new Uint8Array([
       exportName.length,
       ...exportNameEncoding,
@@ -176,10 +186,10 @@ function encodeExportExpressions(
     ]);
   }
 
-  const exportNum = exportExpression.length;
+  const exportNum = exportExpressions.length;
 
   const exportEncodings: number[] = [];
-  for (const exportObj of exportExpression) {
+  for (const exportObj of exportExpressions) {
     exportEncodings.push(...encodeExport(exportObj));
   }
 

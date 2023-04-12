@@ -101,7 +101,7 @@ const named_empty_function: ValidTestCaseData = {
   parseTree: [t('func'), t('$name'), [t('param')], [t('result')]],
   ir: new FunctionExpression([], [], [], new EmptyTokenExpression(), '$name'),
   minimal_binary_function_signature: new Uint8Array([0x60, 0x00, 0x00]),
-  minimal_binary_function_body: new Uint8Array([0x01, 0x02, 0x00, 0x0b]),
+  minimal_binary_function_body: new Uint8Array([0x02, 0x00, 0x0b]),
 };
 
 const empty_function_with_combined_params: ValidTestCaseData = {
