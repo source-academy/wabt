@@ -264,32 +264,62 @@ export class FunctionExpression
   implements HasIdentifier {
   functionSignature: FunctionSignature;
   functionBody: FunctionBody;
+
   functionName: string | null;
   hasInlineExport: boolean;
   inlineExportName: string | null;
 
+  paramNames: (string | null)[];
+  localTypes: ValueType[];
+  localNames: (string | null)[];
+
   constructor(
+    functionName: string | null,
+    inlineExportName: string | null,
     paramTypes: ValueType[],
-    returnTypes: ValueType[],
     paramNames: (string | null)[],
+    returnTypes: ValueType[],
+    localTypes: ValueType[],
+    localNames: (string | null)[],
     body: TokenExpression,
-    functionName: string | null = null,
-    inlineExportName: string | null = null,
   ) {
     super();
     assert(
       paramTypes.length === paramNames.length,
       `Function param types and names must have same length: [${paramTypes}], [${paramNames}]`,
     );
-    this.functionSignature = new FunctionSignature(paramTypes, returnTypes);
-    this.functionBody = new FunctionBody(body, paramNames);
+    assert(
+      localTypes.length === localNames.length,
+      `Function local types and names must have same length: [${localTypes}], [${localNames}]`,
+    );
     this.functionName = functionName;
     this.inlineExportName = inlineExportName;
     this.hasInlineExport = inlineExportName !== null;
+    this.functionSignature = new FunctionSignature(paramTypes, returnTypes);
+    this.functionBody = new FunctionBody(body);
+    this.paramNames = paramNames;
+    this.localTypes = localTypes;
+    this.localNames = localNames;
   }
 
   getID(): string | null {
     return this.functionName;
+  }
+
+  resolveVariableIndex(nameToResolve: string) {
+    for (const [i, name] of [
+      ...this.paramNames,
+      ...this.localNames,
+    ].entries()) {
+      if (name === nameToResolve) {
+        return i;
+      }
+    }
+    throw new Error(
+      `Parameter name ${nameToResolve} not found in function. Parameter names available: ${[
+        this.paramNames,
+      ]}, Local Names available: ${this.localNames}`,
+    );
   }
 }
 
@@ -314,11 +344,9 @@ export class FunctionSignature {
  */
 export class FunctionBody {
   body: TokenExpression;
-  paramNames: (string | null)[];
 
-  constructor(body: TokenExpression, paramNames: (string | null)[]) {
+  constructor(body: TokenExpression) {
     this.body = body;
-    this.paramNames = paramNames;
   }
 }
 

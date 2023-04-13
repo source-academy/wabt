@@ -42,9 +42,13 @@ const simple_function_sexpr_with_param_names: ValidTestCaseData = {
     t,
   ),
   ir: new FunctionExpression(
-    [ValueType.F64],
+    null,
+    null,
     [ValueType.F64],
     ['$p'],
+    [ValueType.F64],
+    [],
+    [],
     new OperationTree(t('f64.add'), [
       new UnfoldedTokenExpression([t('local.get'), t('$p')]),
       new UnfoldedTokenExpression([t('local.get'), t('$p')]),
@@ -80,9 +84,13 @@ const simple_add_function_no_param_names: ValidTestCaseData = {
     t,
   ),
   ir: new FunctionExpression(
+    null,
+    null,
     [ValueType.I32, ValueType.I32],
-    [ValueType.I32],
     [null, null],
+    [ValueType.I32],
+    [],
+    [],
     new UnfoldedTokenExpression(
       ['local.get', '0', 'local.get', '1', 'i32.add'].map(t),
     ),
@@ -98,7 +106,16 @@ const simple_add_function_no_param_names: ValidTestCaseData = {
 const named_empty_function: ValidTestCaseData = {
   str: '(func $name (param) (result))',
   parseTree: [t('func'), t('$name'), [t('param')], [t('result')]],
-  ir: new FunctionExpression([], [], [], new EmptyTokenExpression(), '$name'),
+  ir: new FunctionExpression(
+    '$name',
+    null,
+    [],
+    [],
+    [],
+    [],
+    [],
+    new EmptyTokenExpression(),
+  ),
   minimal_binary_function_signature: new Uint8Array([0x60, 0x00, 0x00]),
   minimal_binary_function_body: new Uint8Array([0x02, 0x00, 0x0b]),
 };
@@ -111,9 +128,13 @@ const empty_function_with_combined_params: ValidTestCaseData = {
     [t('result')],
   ],
   ir: new FunctionExpression(
+    null,
+    null,
     [ValueType.F64, ValueType.F64, ValueType.F64],
-    [],
     [null, null, null],
+    [],
+    [],
+    [],
     new EmptyTokenExpression(),
   ),
   minimal_binary_function_signature: new Uint8Array([
@@ -141,9 +162,13 @@ const function_all_named_params: ValidTestCaseData = {
     t,
   ),
   ir: new FunctionExpression(
+    null,
+    null,
     [ValueType.F64, ValueType.F64, ValueType.F64],
-    [ValueType.F64],
     ['$one', '$two', '$three'],
+    [ValueType.F64],
+    [],
+    [],
     new UnfoldedTokenExpression([t('local.get'), t('$two')]),
   ),
   minimal_binary_function_signature: new Uint8Array([
@@ -171,9 +196,13 @@ const function_some_named_params: ValidTestCaseData = {
     t,
   ),
   ir: new FunctionExpression(
+    null,
+    null,
     [ValueType.F64, ValueType.F64, ValueType.F64],
-    [ValueType.F64],
     [null, null, '$three'],
+    [ValueType.F64],
+    [],
+    [],
     new UnfoldedTokenExpression([t('local.get'), t('$three')]),
   ),
   minimal_binary_function_signature: new Uint8Array([
@@ -204,11 +233,14 @@ const function_multiple_separate_result: ValidTestCaseData = {
     t,
   ),
   ir: new FunctionExpression(
+    '$name',
+    null,
+    [],
     [],
     [ValueType.F64, ValueType.F64],
     [],
+    [],
     new UnfoldedTokenExpression(['f64.const', '1', 'f64.const', '1'].map(t)),
-    '$name',
   ),
   minimal_binary_function_signature: new Uint8Array([
     0x60, 0x00, 0x02, 0x7c, 0x7c,
@@ -245,11 +277,14 @@ const function_multiple_combined_result: ValidTestCaseData = {
     t,
   ),
   ir: new FunctionExpression(
+    '$name',
+    null,
+    [],
     [],
     [ValueType.F64, ValueType.F64],
     [],
+    [],
     new UnfoldedTokenExpression(['f64.const', '1', 'f64.const', '1'].map(t)),
-    '$name',
   ),
   minimal_binary_function_signature: new Uint8Array([
     0x60, 0x00, 0x02, 0x7c, 0x7c,
@@ -263,42 +298,6 @@ const function_multiple_combined_result: ValidTestCaseData = {
     ...[0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f],
     0x0b,
   ]),
-};
-
-const unnamed_function_function_with_inline_export: ValidTestCaseData = {
-  str: '(func (export "name") (param) (result))',
-  parseTree: Tree.treeMap(
-    ['func', ['export', '"name"'], ['param'], ['result']],
-    t,
-  ),
-  ir: new FunctionExpression(
-    [],
-    [],
-    [],
-    new EmptyTokenExpression(),
-    null,
-    'name',
-  ),
-  minimal_binary_function_signature: Uint8Array.from([0x60, 0x00, 0x00]),
-  minimal_binary_function_body: Uint8Array.from([0x02, 0x00, 0x0b]),
-};
-
-const named_function_function_with_inline_export: ValidTestCaseData = {
-  str: '(func $name (export "name") (param) (result))',
-  parseTree: Tree.treeMap(
-    ['func', '$name', ['export', '"name"'], ['param'], ['result']],
-    t,
-  ),
-  ir: new FunctionExpression(
-    [],
-    [],
-    [],
-    new EmptyTokenExpression(),
-    '$name',
-    'name',
-  ),
-  minimal_binary_function_signature: Uint8Array.from([0x60, 0x00, 0x00]),
-  minimal_binary_function_body: Uint8Array.from([0x02, 0x00, 0x0b]),
 };
 
 const function_combined_multiple_named_params: InvalidTestCaseData = {
@@ -317,8 +316,6 @@ export const validTestCases = [
   function_some_named_params,
   function_multiple_separate_result,
   function_multiple_combined_result,
-  unnamed_function_function_with_inline_export,
-  named_function_function_with_inline_export,
 ];
 
 export const invalidTestCases = [function_combined_multiple_named_params];

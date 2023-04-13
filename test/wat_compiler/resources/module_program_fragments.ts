@@ -1,3 +1,4 @@
+import { size } from 'lodash';
 import { ValueType } from '../../../src/common/type';
 import {
   EmptyTokenExpression,
@@ -37,9 +38,13 @@ const module_with_one_simple_add_function_with_param_names: ModuleTestCase = {
       `,
   ir: new ModuleExpression(
     new FunctionExpression(
+      null,
+      null,
       [ValueType.I32, ValueType.I32],
-      [ValueType.I32],
       ['$lhs', '$rhs'],
+      [ValueType.I32],
+      [],
+      [],
       new UnfoldedTokenExpression(
         ['local.get', '$lhs', 'local.get', '$rhs', 'i32.add'].map(t),
       ),
@@ -108,9 +113,13 @@ const module_with_exported_add_function_no_names: ModuleTestCase = {
   `,
   ir: new ModuleExpression(
     new FunctionExpression(
+      null,
+      null,
       [ValueType.F64, ValueType.F64],
-      [ValueType.F64],
       [null, null],
+      [ValueType.F64],
+      [],
+      [],
       new UnfoldedTokenExpression(
         ['local.get', '0', 'local.get', '0', 'f64.add'].map(t),
       ),
@@ -222,14 +231,22 @@ const module_with_two_exports: ModuleTestCase = {
   )`,
   ir: new ModuleExpression(
     new FunctionExpression(
+      null,
+      null,
+      [],
       [],
       [ValueType.F64],
+      [],
       [],
       new UnfoldedTokenExpression([t('f64.const'), t('0')]),
     ),
     new FunctionExpression(
+      null,
+      null,
+      [],
       [],
       [ValueType.F64],
+      [],
       [],
       new UnfoldedTokenExpression([t('f64.const'), t('1')]),
     ),
@@ -326,9 +343,9 @@ const function_exports_by_name: ModuleTestCase = {
   )`,
   ir: new ModuleExpression(
     // prettier-ignore
-    new FunctionExpression([], [], [], new EmptyTokenExpression(), '$first_function'),
+    new FunctionExpression('$first_function', null, [], [], [], [], [], new EmptyTokenExpression()),
     // prettier-ignore
-    new FunctionExpression([], [], [], new EmptyTokenExpression(), '$second_function'),
+    new FunctionExpression('$second_function', null, [], [], [], [], [], new EmptyTokenExpression()),
     new ExportExpression(t('"second"'), t('func'), t('$second_function')),
     new ExportExpression(t('"first"'), t('func'), t('$first_function')),
   ),
@@ -381,7 +398,16 @@ const function_exports_by_name: ModuleTestCase = {
 const unnamed_inline_function_export: ModuleTestCase = {
   str: '(module (func (export "name") (param) (result)))',
   ir: new ModuleExpression(
-    new FunctionExpression([], [], [], new EmptyTokenExpression(), null, 'name'),
+    new FunctionExpression(
+      null,
+      'name',
+      [],
+      [],
+      [],
+      [],
+      [],
+      new EmptyTokenExpression(),
+    ),
   ),
   type_section_encoding: Uint8Array.from([0x01, 0x04, 0x01, 0x60, 0x00, 0x00]),
   import_section_encoding: new Uint8Array(),
@@ -409,12 +435,14 @@ const named_inline_function_export: ModuleTestCase = {
   str: '(module (func $name (export "name") (param) (result)))',
   ir: new ModuleExpression(
     new FunctionExpression(
+      '$name',
+      'name',
+      [],
+      [],
       [],
       [],
       [],
       new EmptyTokenExpression(),
-      '$name',
-      'name',
     ),
   ),
   type_section_encoding: Uint8Array.from([0x01, 0x04, 0x01, 0x60, 0x00, 0x00]),
@@ -439,6 +467,210 @@ const named_inline_function_export: ModuleTestCase = {
   ]),
 };
 
+const function_multiple_separate_local_declarations: ModuleTestCase = {
+  str: '(module (func (export "name") (param) (result) (local f64) (local f64)))',
+  ir: new ModuleExpression(
+    new FunctionExpression(
+      null,
+      'name',
+      [],
+      [],
+      [],
+      [ValueType.F64, ValueType.F64],
+      [null, null],
+      new EmptyTokenExpression(),
+    ),
+  ),
+  type_section_encoding: new Uint8Array([0x01, 0x04, 0x01, 0x60, 0x00, 0x00]),
+  import_section_encoding: new Uint8Array(),
+  function_section_encoding: new Uint8Array([0x03, 0x02, 0x01, 0x00]),
+  table_section_encoding: new Uint8Array(),
+  memory_section_encoding: new Uint8Array(),
+  global_section_encoding: new Uint8Array(),
+  export_section_encoding: new Uint8Array([
+    0x07, 0x08, 0x01, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x00, 0x00,
+  ]),
+  start_section_encoding: new Uint8Array(),
+  element_section_encoding: new Uint8Array(),
+  code_section_encoding: new Uint8Array([
+    0x0a, 0x06, 0x01, 0x04, 0x01, 0x02, 0x7c, 0x0b,
+  ]),
+  data_section_encoding: new Uint8Array(),
+  minimal_module_encoding: new Uint8Array([
+    ...PREFIX,
+    ...[0x01, 0x04, 0x01, 0x60, 0x00, 0x00],
+    ...[0x03, 0x02, 0x01, 0x00],
+    ...[0x07, 0x08, 0x01, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x00, 0x00],
+    ...[0x0a, 0x06, 0x01, 0x04, 0x01, 0x02, 0x7c, 0x0b],
+  ]),
+};
+const function_multiple_condensed_local_declarations: ModuleTestCase = {
+  str: '(module (func (export "name") (param) (result) (local f64 f64)))',
+  ir: new ModuleExpression(
+    new FunctionExpression(
+      null,
+      'name',
+      [],
+      [],
+      [],
+      [ValueType.F64, ValueType.F64],
+      [null, null],
+      new EmptyTokenExpression(),
+    ),
+  ),
+  type_section_encoding: new Uint8Array([0x01, 4, 0x01, 0x60, 0x00, 0x00]),
+  import_section_encoding: new Uint8Array(),
+  function_section_encoding: new Uint8Array([0x03, 2, 0x01, 0x00]),
+  table_section_encoding: new Uint8Array(),
+  memory_section_encoding: new Uint8Array(),
+  global_section_encoding: new Uint8Array(),
+  export_section_encoding: new Uint8Array([
+    0x07, 8, 0x01, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x00, 0x00,
+  ]),
+  start_section_encoding: new Uint8Array(),
+  element_section_encoding: new Uint8Array(),
+  code_section_encoding: new Uint8Array([
+    0x0a, 0x06, 0x01, 0x04, 0x01, 0x02, 0x7c, 0x0b,
+  ]),
+  data_section_encoding: new Uint8Array(),
+  minimal_module_encoding: new Uint8Array([
+    ...[0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00],
+    ...[0x01, 4, 0x01, 0x60, 0x00, 0x00],
+    ...[0x03, 2, 0x01, 0x00],
+    ...[0x07, 8, 0x01, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x00, 0x00],
+    ...[0x0a, 0x06, 0x01, 0x04, 0x01, 0x02, 0x7c, 0x0b],
+  ]),
+};
+
+const function_multiple_mixed_local_declarations: ModuleTestCase = {
+  str: '(module (func (export "name") (param) (result) (local f64 f32 f64)))',
+  ir: new ModuleExpression(
+    new FunctionExpression(
+      null,
+      'name',
+      [],
+      [],
+      [],
+      [ValueType.F64, ValueType.F32, ValueType.F64],
+      [null, null, null],
+      new EmptyTokenExpression(),
+    ),
+  ),
+  type_section_encoding: new Uint8Array([0x01, 0x04, 0x01, 0x60, 0x00, 0x00]),
+  import_section_encoding: new Uint8Array(),
+  function_section_encoding: new Uint8Array([0x03, 0x02, 0x01, 0x00]),
+  table_section_encoding: new Uint8Array(),
+  memory_section_encoding: new Uint8Array(),
+  global_section_encoding: new Uint8Array(),
+  export_section_encoding: new Uint8Array([
+    0x07, 0x08, 0x01, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x00, 0x00,
+  ]),
+  start_section_encoding: new Uint8Array(),
+  element_section_encoding: new Uint8Array(),
+  code_section_encoding: new Uint8Array([
+    0x0a, 0x0a, 0x01, 0x08, 0x03, 0x01, 0x7c, 0x01, 0x7d, 0x01, 0x7c, 0x0b,
+  ]),
+  data_section_encoding: new Uint8Array(),
+  minimal_module_encoding: new Uint8Array([
+    ...PREFIX,
+    ...[0x01, 0x04, 0x01, 0x60, 0x00, 0x00],
+    ...[0x03, 0x02, 0x01, 0x00],
+    ...[0x07, 0x08, 0x01, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x00, 0x00],
+    ...[0x0a, 0x0a, 0x01, 0x08, 0x03, 0x01, 0x7c, 0x01, 0x7d, 0x01, 0x7c, 0x0b],
+  ]),
+};
+
+const function_named_local_declarations: ModuleTestCase = {
+  str: `(module
+    (func (export "name") (param $three f64) (result f64) (local $one f64) (local $two f64)
+      local.get $two
+      local.get $one
+      local.get $three
+      f64.add
+      f64.add
+    )
+  )`,
+  ir: new ModuleExpression(
+    new FunctionExpression(
+      null,
+      'name',
+      [ValueType.F64],
+      ['$three'],
+      [ValueType.F64],
+      [ValueType.F64, ValueType.F64],
+      ['$one', '$two'],
+      new UnfoldedTokenExpression(
+        [
+          'local.get',
+          '$two',
+          'local.get',
+          '$one',
+          'local.get',
+          '$three',
+          'f64.add',
+          'f64.add',
+        ].map(t),
+      ),
+    ),
+  ),
+  type_section_encoding: new Uint8Array([
+    0x01, 0x06, 0x01, 0x60, 0x01, 0x7c, 0x01, 0x7c,
+  ]),
+  import_section_encoding: new Uint8Array(),
+  function_section_encoding: new Uint8Array([0x03, 0x02, 0x01, 0x00]),
+  table_section_encoding: new Uint8Array(),
+  memory_section_encoding: new Uint8Array(),
+  global_section_encoding: new Uint8Array(),
+  export_section_encoding: new Uint8Array([
+    0x07, 0x08, 0x01, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x00, 0x00,
+  ]),
+  start_section_encoding: new Uint8Array(),
+  element_section_encoding: new Uint8Array(),
+  code_section_encoding: new Uint8Array([
+    0x0a,
+    0x0e,
+    0x01,
+    0x0c,
+    0x01,
+    0x02,
+    0x7c,
+    0x20,
+    0x02,
+    0x20,
+    0x01,
+    0x20,
+    0x00,
+    0xa0,
+    0xa0,
+    0x0b,
+  ]),
+  data_section_encoding: new Uint8Array(),
+  minimal_module_encoding: new Uint8Array([
+    ...PREFIX,
+    ...[0x01, 0x06, 0x01, 0x60, 0x01, 0x7c, 0x01, 0x7c],
+    ...[0x03, 0x02, 0x01, 0x00],
+    ...[0x07, 0x08, 0x01, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x00, 0x00],
+    ...[
+      0x0a,
+      0x0e,
+      0x01,
+      0x0c,
+      0x01,
+      0x02,
+      0x7c,
+      0x20,
+      0x02,
+      0x20,
+      0x01,
+      0x20,
+      0x00,
+      0xa0,
+      0xa0,
+      0x0b,
+    ],
+  ]),
+};
+
 export const moduleTestCases = [
   module_with_one_simple_add_function_with_param_names,
   module_with_exported_add_function_no_names,
@@ -446,4 +678,8 @@ export const moduleTestCases = [
   function_exports_by_name,
   unnamed_inline_function_export,
   named_inline_function_export,
+  function_multiple_separate_local_declarations,
+  function_multiple_condensed_local_declarations,
+  function_multiple_mixed_local_declarations,
+  function_named_local_declarations,
 ];

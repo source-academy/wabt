@@ -110,11 +110,13 @@ function parseStackExpression(parseTree: ParseTree): UnfoldedTokenExpression {
 
 function parseFunctionExpression(parseTree: ParseTree): FunctionExpression {
   assert(isFunctionExpression(parseTree));
+  let functionName: string | null = null;
+  let inlineExportName: string | null = null;
   const paramTypes: ValueType[] = [];
   const paramNames: (string | null)[] = [];
   const resultTypes: ValueType[] = [];
-  let functionName: string | undefined;
-  let inlineExportName: string | null = null;
+  const localTypes: ValueType[] = [];
+  const localNames: (string | null)[] = [];
 
   let cursor = 1;
 
@@ -137,24 +139,49 @@ function parseFunctionExpression(parseTree: ParseTree): FunctionExpression {
     inlineExportName = token[1].extractText();
     cursor++;
   }
-  // Parse function params and declarations first
-  // TODO this does not work when the first few function params are not named, and then some are named afterwards.
+
+  // Parse function param declaration
   for (; cursor < parseTree.length; cursor++) {
     const parseTreeNode = parseTree[cursor];
-    if (parseTreeNode instanceof Token) {
+    if (
+      parseTreeNode instanceof Token
+      || !isFunctionParamDeclaration(parseTreeNode)
+    ) {
       break;
     }
-    if (isFunctionParamDeclaration(parseTreeNode)) {
-      const { types, names } = parseFunctionParamExpression(parseTreeNode);
-      paramTypes.push(...types);
-      paramNames.push(...names);
-    } else if (isFunctionResultDeclaration(parseTreeNode)) {
-      const types = parseFunctionResultExpression(parseTreeNode);
-      resultTypes.push(...types);
-    } else {
-      break;
-    }
+    const { types, names } = parseFunctionParamExpression(parseTreeNode);
+    paramTypes.push(...types);
+    paramNames.push(...names);
   }
+
+  // Parse function result declaration
+  for (; cursor < parseTree.length; cursor++) {
+    const parseTreeNode = parseTree[cursor];
+    if (
+      parseTreeNode instanceof Token
+      || !isFunctionResultDeclaration(parseTreeNode)
+    ) {
+      break;
+    }
+    const types = parseFunctionResultExpression(parseTreeNode);
+    resultTypes.push(...types);
+  }
+
+  // Parse function local declaration
+  for (; cursor < parseTree.length; cursor++) {
+    const parseTreeNode = parseTree[cursor];
+    if (
+      parseTreeNode instanceof Token
+      || !isFunctionLocalDeclaration(parseTreeNode)
+    ) {
+      break;
+    }
+    const { types, names } = parseFunctionLocalExpression(parseTreeNode);
+    localTypes.push(...types);
+    localNames.push(...names);
+  }
+
+  // Parse function params and declarations first
   let remainingTree: ParseTree = parseTree.slice(cursor);
 
   // If the function body is something like [add 1 0], slicing the tree yields:
@@ -166,12 +193,14 @@ function parseFunctionExpression(parseTree: ParseTree): FunctionExpression {
 
   const ir = parseExpression(remainingTree);
   return new FunctionExpression(
-    paramTypes,
-    resultTypes,
-    paramNames,
-    ir,
     functionName,
     inlineExportName,
+    paramTypes,
+    paramNames,
+    resultTypes,
+    localTypes,
+    localNames,
+    ir,
   );
 }
 
@@ -222,6 +251,39 @@ function parseFunctionResultExpression(parseTree: ParseTree): ValueType[] {
     }
   }
   return types;
+}
+
+function parseFunctionLocalExpression(parseTree: ParseTree): {
+  types: ValueType[];
+  names: (string | null)[];
+} {
+  const types: ValueType[] = [];
+  const names: (string | null)[] = [];
+  for (let i = 1; i < parseTree.length; i++) {
+    const parseTreeNode = parseTree[i];
+    if (!(parseTreeNode instanceof Token)) {
+      throw new Error(); // TODO better error
+    }
+    if (parseTreeNode.type === TokenType.ValueType) {
+      types.push(parseTreeNode.valueType!);
+      names.push(null);
+    } else if (parseTreeNode.type === TokenType.Var) {
+      names.push(parseTreeNode.lexeme);
+      const nextToken = parseTree[++i];
+      assert(
+        nextToken instanceof Token && nextToken.type === TokenType.ValueType,
+        `Expected Token Type to be a value type: ${nextToken}`,
+      );
+      types.push((nextToken as Token).valueType!); // TODO better errors
+    } else {
+      throw new Error(`Unexpected token, bla bla ${parseTreeNode}`); // TODO Proper error message and type
+    }
+  }
+
+  return {
+    types,
+    names,
+  };
 }
 
 function parseModuleExpression(parseTree: ParseTree): ModuleExpression {
@@ -318,6 +380,11 @@ function isFunctionParamDeclaration(parseTree: ParseTree): boolean {
 function isFunctionResultDeclaration(parseTree: ParseTree): boolean {
   const tokenHeader = parseTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === TokenType.Result;
+}
+
+function isFunctionLocalDeclaration(parseTree: ParseTree): boolean {
+  const tokenHeader = parseTree[0];
+  return tokenHeader instanceof Token && tokenHeader.type === TokenType.Local;
 }
 
 function isModuleDeclaration(parseTree: ParseTree): boolean {

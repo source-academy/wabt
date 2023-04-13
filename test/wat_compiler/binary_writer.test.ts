@@ -38,9 +38,7 @@ describe('Encode function expresions', () => {
   });
 
   test.each(tc2)('test encode function expression body', (testCase) => {
-    const encoding = mockBinaryWriter['encodeFunctionBody'](
-      testCase.ir.functionBody,
-    );
+    const encoding = mockBinaryWriter['encodeFunctionBody'](testCase.ir);
     const expectedEncoding = testCase.minimal_binary_function_body;
     expect(encoding)
       .toEqual(expectedEncoding);

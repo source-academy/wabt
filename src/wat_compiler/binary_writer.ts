@@ -5,6 +5,7 @@ import {
   type ModuleExpression,
   type PureUnfoldedTokenExpression,
   type ExportExpression,
+  type FunctionExpression,
 } from './ir_types';
 import { ValueType } from '../common/type';
 import { Token, TokenType } from '../common/token';
@@ -130,15 +131,15 @@ export class BinaryWriter {
   }
 
   private encodeCodeSection(): Uint8Array {
-    const fnBodies = this.module.getFunctionBodies();
+    const fnExps = this.module.functions;
 
     const fnBodyEncodings: number[] = [];
-    fnBodies.forEach((body) => {
+    fnExps.forEach((body) => {
       fnBodyEncodings.push(...this.encodeFunctionBody(body));
     });
 
     const sectionSize = fnBodyEncodings.length + 1;
-    const fnNumber = fnBodies.length;
+    const fnNumber = fnExps.length;
 
     return new Uint8Array([
       SectionCode.Code,
@@ -179,45 +180,74 @@ export class BinaryWriter {
   }
 
   /**
-   * Encode the function bidt of a FunctionBody intermediate representation.
+   * Encode the function bidt of a FunctionExpression intermediate representation.
    * This function encodes a function body to be used in the "Code" (10 / 0x0a) section of a Module encoding.
-   * @param ir function body to encode
+   * @param fnExp function expression to encode
    * @returns a Uint8Array binary encoding.
    */
-  private encodeFunctionBody(ir: FunctionBody): Uint8Array {
-    const unfoldedBody = ir.body.unfold();
-    const paramNames = ir.paramNames;
+  private encodeFunctionBody(fnExp: FunctionExpression): Uint8Array {
+    const fnBody = fnExp.functionBody;
+    const unfoldedBody = fnBody.body.unfold();
 
     // Replace parameter names with index.
     for (let i = 0; i < unfoldedBody.tokens.length; i++) {
       const token = unfoldedBody.tokens[i];
       if (token.type === TokenType.Var) {
-        const index = paramNames.indexOf(token.lexeme);
-        if (index === -1) {
-          // TODO proper error message
-          throw new Error(
-            `Parameter name not found in function body: ${JSON.stringify(
-              ir,
-              undefined,
-              2,
-            )}`,
-          );
-        }
-
-        unfoldedBody.tokens[i] = this.convertVarToIndexToken(token, index);
+        unfoldedBody.tokens[i] = this.convertVarToIndexToken(
+          token,
+          fnExp.resolveVariableIndex(token.lexeme),
+        );
       }
     }
 
+    const encodedLocals = this.encodeFunctionBodyLocalTypeCount(fnExp);
     const encodedBody = this.encodePureUnfoldedTokenExpression(unfoldedBody);
+    const sectionLength = encodedLocals.length + encodedBody.length + 1;
     const FUNCTION_END = 0x0b;
 
     // The random 0 there is the local declaration count. Not yet implemented, so it is 0 for now.
     return new Uint8Array([
-      encodedBody.length + 2,
-      0,
+      sectionLength,
+      ...encodedLocals,
       ...encodedBody,
       FUNCTION_END,
     ]);
+  }
+
+  /**
+   * Encode local type count of function body
+   */
+  private encodeFunctionBodyLocalTypeCount(
+    fnExp: FunctionExpression,
+  ): Uint8Array {
+    const localTypes = fnExp.localTypes;
+    let uniqueConsecutiveType: ValueType | null = null;
+    let uniqueConsecutiveTypeCount: number = 0;
+    let total_types = 0;
+    const encoding: number[] = [];
+
+    for (const type of localTypes) {
+      if (uniqueConsecutiveType === type) {
+        uniqueConsecutiveTypeCount++;
+        continue;
+      }
+      if (uniqueConsecutiveType !== null) {
+        encoding.push(
+          uniqueConsecutiveTypeCount,
+          ValueType.getValue(uniqueConsecutiveType),
+        );
+      }
+      uniqueConsecutiveType = type;
+      uniqueConsecutiveTypeCount = 1;
+      total_types++;
+    }
+    if (uniqueConsecutiveType !== null) {
+      encoding.push(
+        uniqueConsecutiveTypeCount,
+        ValueType.getValue(uniqueConsecutiveType),
+      );
+    }
+    return Uint8Array.from([total_types, ...encoding]);
   }
 
   /**

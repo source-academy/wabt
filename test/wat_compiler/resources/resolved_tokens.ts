@@ -160,6 +160,13 @@ namespace TokenObjects {
     opcodeType: null,
     valueType: null,
   };
+
+  export const LOCAL: TokenData = {
+    type: TokenType.Local,
+    lexeme: 'local',
+    opcodeType: null,
+    valueType: null,
+  };
 }
 const resolvedTokens: Record<string, TokenData> = {
   '(': TokenObjects.LPAR,
@@ -177,6 +184,7 @@ const resolvedTokens: Record<string, TokenData> = {
   'result': TokenObjects.RESULT,
   'module': TokenObjects.MODULE,
   'export': TokenObjects.EXPORT,
+  'local': TokenObjects.LOCAL,
 };
 
 export function getExpectedTokenData(lexeme: string): TokenData {
