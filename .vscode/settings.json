@@ -1,0 +1,11 @@
+{
+  "files.associations": {
+    "utility": "cpp"
+  },
+  "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+  },
+  "eslint.format.enable": true,
+  "javascript.format.enable": false,
+  "typescript.format.enable": false,
+}
