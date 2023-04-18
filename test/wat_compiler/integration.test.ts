@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 // This is because we use class['property'] to access private methods to do testing.
 import { compile, parse } from '../../src/wat_compiler';
-import { positiveFunctionTestCases } from './resources/function_expressions.testcase';
+import { positiveFunctionTestCases } from './resources/functions.testcase';
 import { expect } from '@jest/globals';
 import wabt from 'wabt';
 

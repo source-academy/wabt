@@ -7,7 +7,7 @@ import { getIR } from '../../src/wat_compiler/ir';
 import { tokenize } from '../../src/wat_compiler/lexer';
 import { getParseTree } from '../../src/wat_compiler/parser';
 
-import { positiveFunctionTestCases } from './resources/function_expressions.testcase';
+import { positiveFunctionTestCases } from './resources/functions.testcase';
 
 describe.each(positiveFunctionTestCases)(
   'unit tests for function expressions',
