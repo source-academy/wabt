@@ -374,7 +374,10 @@ export class BinaryWriter {
       );
     }
 
-    if (prevToken.type === TokenType.LocalGet) {
+    if (
+      prevToken.type === TokenType.LocalGet
+      || prevToken.type === TokenType.LocalSet
+    ) {
       assert(token.type === TokenType.Nat); // TODO proper error
       return new Uint8Array([Number.parseInt(token.lexeme)]);
     }
