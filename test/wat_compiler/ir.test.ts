@@ -1,13 +1,12 @@
 import { expect } from '@jest/globals';
 
-import { validTestCases as tc1 } from './resources/valid_function_bodies';
+import { validTestCases as tc1 } from './resources/unfold.testcase';
 
 import { isTokenEqual } from '../token_comparisons';
-import { type Unfoldable } from '../../src/wat_compiler/ir_types';
 
 describe('test unfolding', () => {
   test.each(tc1)('unfold simple_addition_sexpr', (testCase) => {
-    const ir = testCase.ir! as Unfoldable;
+    const ir = testCase.ir;
     const unfolded = ir.unfold();
     const expected = testCase.unfolded_ir!;
     expect(unfolded)
