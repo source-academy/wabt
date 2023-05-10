@@ -1,8 +1,7 @@
 import { expect } from '@jest/globals';
 
 import { validTestCases as tc1 } from './resources/unfold.testcase';
-
-import { isTokenEqual } from '../token_comparisons';
+import { isTokenEqual } from './resources/token_comparisons';
 
 describe('test unfolding', () => {
   test.each(tc1)('unfold simple_addition_sexpr', (testCase) => {

@@ -373,6 +373,27 @@ export class BinaryWriter {
           : Number.parseFloat(token.lexeme),
       );
     }
+    if (prevToken.isOpcodeType(OpcodeType.F32Const)) {
+      return NumberEncoder.encodeF32Const(
+        /^\d+$/u.test(token.lexeme)
+          ? Number.parseInt(token.lexeme)
+          : Number.parseFloat(token.lexeme),
+      );
+    }
+    if (prevToken.isOpcodeType(OpcodeType.I64Const)) {
+      return NumberEncoder.encodeI64Const(
+        /^\d+$/u.test(token.lexeme)
+          ? Number.parseInt(token.lexeme)
+          : Number.parseFloat(token.lexeme),
+      );
+    }
+    if (prevToken.isOpcodeType(OpcodeType.I32Const)) {
+      return NumberEncoder.encodeI32Const(
+        /^\d+$/u.test(token.lexeme)
+          ? Number.parseInt(token.lexeme)
+          : Number.parseFloat(token.lexeme),
+      );
+    }
 
     if (
       prevToken.type === TokenType.LocalGet
@@ -403,7 +424,56 @@ export namespace NumberEncoder {
   export function encodeF64Const(n: number): Uint8Array {
     let buffer = new ArrayBuffer(8);
     new DataView(buffer)
-      .setFloat64(0, n);
+      .setFloat64(0, n, true);
+
+    return new Uint8Array(buffer);
+  }
+
+  /**
+   * Get the little-endian binary encoding of a single-precision floating-point number,
+   * in the IEEE-754 specification.
+   * @param n number to encode
+   * @returns a unsigned-8 bit integer array
+   */
+  export function encodeF32Const(n: number): Uint8Array {
+    let buffer = new ArrayBuffer(8);
+    new DataView(buffer)
+      .setFloat32(0, n, true);
+
+    return new Uint8Array(buffer);
+  }
+
+  export function encodeI64Const(n: number): Uint8Array {
+    let buffer = new ArrayBuffer(8);
+    new DataView(buffer)
+      .setBigInt64(0, BigInt(n), true);
+    let bytes = new Uint8Array(buffer);
+
+    return bytes.reverse();
+  }
+
+  export function encodeI32Const(n: number): Uint8Array {
+    let buffer = new ArrayBuffer(8);
+    new DataView(buffer)
+      .setInt32(0, n, true);
+    let bytes = new Uint8Array(buffer);
+
+    return bytes.reverse();
+  }
+
+  export function encodeU64Const(n: number): Uint8Array {
+    let buffer = new ArrayBuffer(8);
+    new DataView(buffer)
+      .setBigUint64(0, BigInt(n), true);
+    let bytes = new Uint8Array(buffer);
+
+    return bytes.reverse();
+  }
+
+  export function encodeU32Const(n: number): Uint8Array {
+    let buffer = new ArrayBuffer(8);
+    new DataView(buffer)
+      .setUint32(0, n, true);
     let bytes = new Uint8Array(buffer);
 
     return bytes.reverse();
