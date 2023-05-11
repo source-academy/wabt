@@ -14,6 +14,7 @@ test.each(positiveFunctionTestCases)(
         (wabtModule) => wabtModule.parseWat('', testCase)
           .toBinary({}).buffer,
       );
+
     expect(actual)
       .toEqual(expected);
   },

@@ -1,6 +1,5 @@
 /* eslint-disable array-element-newline */ // (array formatting)
 import {
-  type FunctionBody,
   type FunctionSignature,
   type ModuleExpression,
   type PureUnfoldedTokenExpression,
@@ -13,6 +12,7 @@ import { Opcode, OpcodeType } from '../common/opcode';
 
 import { ExportType } from '../common/export_types';
 import { assert } from '../common/assert';
+import { i64_to_leb128, i32_to_leb128 } from '../utils/number_encoder';
 
 namespace SectionCode {
   export const Type = 1;
@@ -381,11 +381,7 @@ export class BinaryWriter {
       );
     }
     if (prevToken.isOpcodeType(OpcodeType.I64Const)) {
-      return NumberEncoder.encodeI64Const(
-        /^\d+$/u.test(token.lexeme)
-          ? Number.parseInt(token.lexeme)
-          : Number.parseFloat(token.lexeme),
-      );
+      return NumberEncoder.encodeI64Const(BigInt(token.lexeme));
     }
     if (prevToken.isOpcodeType(OpcodeType.I32Const)) {
       return NumberEncoder.encodeI32Const(
@@ -440,43 +436,15 @@ export namespace NumberEncoder {
     new DataView(buffer)
       .setFloat32(0, n, true);
 
-    return new Uint8Array(buffer);
+    return new Uint8Array(buffer.slice(0, 4));
   }
 
-  export function encodeI64Const(n: number): Uint8Array {
-    let buffer = new ArrayBuffer(8);
-    new DataView(buffer)
-      .setBigInt64(0, BigInt(n), true);
-    let bytes = new Uint8Array(buffer);
-
-    return bytes.reverse();
+  export function encodeI64Const(n: number | bigint): Uint8Array {
+    return i64_to_leb128(n);
   }
 
-  export function encodeI32Const(n: number): Uint8Array {
-    let buffer = new ArrayBuffer(8);
-    new DataView(buffer)
-      .setInt32(0, n, true);
-    let bytes = new Uint8Array(buffer);
-
-    return bytes.reverse();
-  }
-
-  export function encodeU64Const(n: number): Uint8Array {
-    let buffer = new ArrayBuffer(8);
-    new DataView(buffer)
-      .setBigUint64(0, BigInt(n), true);
-    let bytes = new Uint8Array(buffer);
-
-    return bytes.reverse();
-  }
-
-  export function encodeU32Const(n: number): Uint8Array {
-    let buffer = new ArrayBuffer(8);
-    new DataView(buffer)
-      .setUint32(0, n, true);
-    let bytes = new Uint8Array(buffer);
-
-    return bytes.reverse();
+  export function encodeI32Const(n: number | bigint): Uint8Array {
+    return i32_to_leb128(n);
   }
 }
 

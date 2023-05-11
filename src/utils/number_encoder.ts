@@ -71,7 +71,6 @@ function signed_bigint_to_leb128(value: bigint) {
   while (true) {
     let byte = Number(value & BigInt(0x7f));
     value >>= BigInt(7);
-    console.log({ value });
     if (
       (value === BigInt(0) && (byte & 0x40) === 0)
       || (value === BigInt(-1) && (byte & 0x40) !== 0)
