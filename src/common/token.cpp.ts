@@ -73,6 +73,10 @@ export class Token {
     return isTokenTypeRefKind(this.type);
   }
 
+  isBlock(): boolean {
+    return isTokenTypeBlock(this.type);
+  }
+
   getOpcodeParamLength(): number {
     assert(this.opcodeType !== null);
     return Opcode.getParamLength(this.opcodeType!);
@@ -259,6 +263,15 @@ export function isTokenTypeRefKind(token_type: TokenType | null): boolean {
     token_type === TokenType.Func
     || token_type === TokenType.Extern
     || token_type === TokenType.Exn
+  );
+}
+
+export function isTokenTypeBlock(token_type: TokenType | null): boolean {
+  if (token_type === null) return false;
+  return (
+    token_type === TokenType.Block
+    || token_type === TokenType.If
+    || token_type === TokenType.Loop
   );
 }
 

@@ -2,37 +2,67 @@
  * Just a file to write demos and run examples on ts-node
  */
 import { compile } from './index';
+import { getIR } from './wat_compiler/ir';
+import { type ModuleExpression } from './wat_compiler/ir_types';
+import { tokenize } from './wat_compiler/lexer';
+import { getParseTree } from './wat_compiler/parser';
+import { ParseTree } from './wat_compiler/tree_types';
 const program = `
 (module
-  (func (export "add") (param f64) (param f64) (result f64)
-      local.get 0
-      local.get 1
-      f64.add)
-  (func (export "sub") (param f64) (param f64) (result f64)
-      local.get 0
-      local.get 1
-      f64.sub)
-  (func (export "mul") (param f64) (param f64) (result f64)
-      local.get 0
-      local.get 1
-      f64.mul)
-  (func (export "div") (param f64) (param f64) (result f64)
-      local.get 0
-      local.get 1
-      f64.div)
-) 
+    (func
+        (block $my_block
+            nop
+        )
+    )    
+)
 `;
 
-const encoding = compile(program);
-const instance = new WebAssembly.Instance(new WebAssembly.Module(encoding));
+const programFragment = `
+(block $my_block
+    nop
+)
+`;
 
-const { add, sub, mul, div } = instance.exports;
+const tokens = tokenize(program);
+// console.log(tokens);
+const parseTree = getParseTree(tokens);
+// console.log(JSON.stringify(parseTree, undefined, 2));
+const ir = getIR(parseTree) as ModuleExpression;
+// console.log(ir);
+// console.log(JSON.stringify(ir, undefined, 2));
+console.log(ir.functions[0].functionBody);
+// const encoding = module
+// const program = `
+// (module
+//   (func (export "add") (param f64) (param f64) (result f64)
+//       local.get 0
+//       local.get 1
+//       f64.add)
+//   (func (export "sub") (param f64) (param f64) (result f64)
+//       local.get 0
+//       local.get 1
+//       f64.sub)
+//   (func (export "mul") (param f64) (param f64) (result f64)
+//       local.get 0
+//       local.get 1
+//       f64.mul)
+//   (func (export "div") (param f64) (param f64) (result f64)
+//       local.get 0
+//       local.get 1
+//       f64.div)
+// )
+// `;
 
-// @ts-ignore
-console.log(add(1, 12));
-// @ts-ignore
-console.log(sub(1, 12));
-// @ts-ignore
-console.log(mul(1, 12));
-// @ts-ignore
-console.log(div(1, 12));
+// const encoding = compile(program);
+// const instance = new WebAssembly.Instance(new WebAssembly.Module(encoding));
+
+// const { add, sub, mul, div } = instance.exports;
+
+// // @ts-ignore
+// console.log(add(1, 12));
+// // @ts-ignore
+// console.log(sub(1, 12));
+// // @ts-ignore
+// console.log(mul(1, 12));
+// // @ts-ignore
+// console.log(div(1, 12));

@@ -7,6 +7,7 @@ import {
   type TokenExpression,
   ExportExpression,
   EmptyTokenExpression,
+  BlockExpression,
 } from './ir_types';
 import { Token, TokenType } from '../common/token';
 import { type ParseTree } from './tree_types';
@@ -43,6 +44,10 @@ export function getIR(parseTree: ParseTree): IntermediateRepresentation {
 function parseExpression(parseTree: ParseTree): TokenExpression {
   if (parseTree.length === 0 || typeof parseTree === 'undefined') {
     return new EmptyTokenExpression();
+  }
+
+  if (isBlockExpression(parseTree)) {
+    return parseBlockExpression(parseTree);
   }
 
   if (isSExpression(parseTree)) {
@@ -87,7 +92,7 @@ function parseSExpression(parseTree: ParseTree): OperationTree {
     }
   }
 
-  assert(Opcode.getParamLength(head.opcodeType!) === body.length);
+  assert(Opcode.getParamLength(head.opcodeType!) === body.length); // TODO handle this separately in validation.
   return new OperationTree(head, body);
 }
 
@@ -106,6 +111,20 @@ function parseStackExpression(parseTree: ParseTree): UnfoldedTokenExpression {
   });
 
   return new UnfoldedTokenExpression(nodes);
+}
+
+function parseBlockExpression(parseTree: ParseTree): BlockExpression {
+  if (parseTree[1] instanceof Token && parseTree[1].type === TokenType.Var) {
+    return new BlockExpression(
+      parseTree[0] as Token,
+      parseExpression(parseTree.slice(2)),
+      parseTree[1].lexeme,
+    );
+  }
+  return new BlockExpression(
+    parseTree[0] as Token,
+    parseExpression(parseTree.slice(1)),
+  );
 }
 
 function parseFunctionExpression(parseTree: ParseTree): FunctionExpression {
@@ -345,6 +364,7 @@ function isSExpression(parseTree: ParseTree): boolean {
     tokenHeader instanceof Token,
     `first token of ${parseTree} is not a Token type`,
   );
+
   return (
     tokenHeader instanceof Token
     && tokenHeader.isOpcodeToken()
@@ -397,6 +417,10 @@ function isExportDeclaration(parseTree: ParseTree): boolean {
   return tokenHeader instanceof Token && tokenHeader.type === TokenType.Export;
 }
 
+function isBlockExpression(parseTree: ParseTree): boolean {
+  const tokenHeader = parseTree[0];
+  return tokenHeader instanceof Token && tokenHeader.isBlock();
+}
 function isReservedType(token: Token, lexeme: string) {
   return token.type === TokenType.Reserved && token.lexeme === lexeme;
 }

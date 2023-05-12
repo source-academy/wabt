@@ -4,7 +4,7 @@ import { Token, TokenType } from '../common/token';
 import { ExportType } from '../common/export_types';
 import { assert } from '../common/assert';
 import { isEqual } from 'lodash';
-import { getSingleToken } from './lexer';
+import { OpcodeType } from '../common/opcode';
 
 /**
  * Interface indicating that the particular intermediate representation
@@ -27,13 +27,6 @@ export namespace Unfoldable {
 export interface HasIdentifier {
   getID(): string | null;
 }
-
-/**
- * Interface indicating that this particular intermediate representation may store variable declarations
- * which have to b
- */
-export interface MayHaveVariables {}
-
 export abstract class IntermediateRepresentation {}
 
 type GlobalType = FunctionSignature; // TODO add more
@@ -354,10 +347,14 @@ export class FunctionBody {
   EXPRESSION BODIES
 */
 
+/**
+ * All possible function expressions.
+ */
 export type TokenExpression =
   | OperationTree
   | UnfoldedTokenExpression
-  | EmptyTokenExpression;
+  | EmptyTokenExpression
+  | BlockExpression;
 
 /**
  * Class representing operators and operands in an s-expression.
@@ -435,5 +432,57 @@ export class PureUnfoldedTokenExpression extends IntermediateRepresentation {
   constructor(tokens: Token[]) {
     super();
     this.tokens = tokens;
+  }
+}
+
+/**
+ * Class representing a Block expression that wrap around an expression.
+ * For expressions such as block, if, loop instructions.
+ */
+export class BlockExpression extends IntermediateRepresentation {
+  headerToken: Token;
+  label: string | undefined;
+  blockExpression: TokenExpression;
+
+  constructor(headerToken: Token, blockExpression: TokenExpression);
+  constructor(
+    headerToken: Token,
+    blockExpression: TokenExpression,
+    label: string
+  );
+  constructor(
+    headerToken: Token,
+    blockExpression: TokenExpression,
+    label?: string,
+  ) {
+    super();
+    assert(
+      headerToken.type === TokenType.Block
+        || headerToken.type === TokenType.Loop
+        || headerToken.type === TokenType.If,
+    );
+    this.headerToken = headerToken;
+    this.blockExpression = blockExpression;
+    this.label = label;
+  }
+
+  unfold(): PureUnfoldedTokenExpression {
+    return new PureUnfoldedTokenExpression([
+      this.headerToken,
+      ...this.blockExpression.unfold().tokens,
+      this.createEndToken(),
+    ]);
+  }
+
+  private createEndToken(): Token {
+    return new Token(
+      TokenType.End,
+      'end',
+      this.headerToken.line,
+      this.headerToken.col,
+      this.headerToken.indexInSource, // TODO col and indexinsource should not be headertoken.
+      OpcodeType.End,
+      null,
+    );
   }
 }
