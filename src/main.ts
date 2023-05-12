@@ -2,8 +2,12 @@
  * Just a file to write demos and run examples on ts-node
  */
 import { compile } from './index';
+import { BinaryWriter } from './wat_compiler/binary_writer';
 import { getIR } from './wat_compiler/ir';
-import { type ModuleExpression } from './wat_compiler/ir_types';
+import {
+  type BlockExpression,
+  type ModuleExpression,
+} from './wat_compiler/ir_types';
 import { tokenize } from './wat_compiler/lexer';
 import { getParseTree } from './wat_compiler/parser';
 import { ParseTree } from './wat_compiler/tree_types';
@@ -30,8 +34,11 @@ const parseTree = getParseTree(tokens);
 const ir = getIR(parseTree) as ModuleExpression;
 // console.log(ir);
 // console.log(JSON.stringify(ir, undefined, 2));
-console.log(ir.functions[0].functionBody);
-// const encoding = module
+console.log(ir.functions[0].functionBody.body);
+console.log((ir.functions[0].functionBody.body as BlockExpression).unfold());
+const encoding = new BinaryWriter(ir)
+  .encode();
+console.log(encoding);
 // const program = `
 // (module
 //   (func (export "add") (param f64) (param f64) (result f64)

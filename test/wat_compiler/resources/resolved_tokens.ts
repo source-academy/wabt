@@ -112,6 +112,12 @@ namespace TokenObjects {
     opcodeType: OpcodeType.I32Add,
     valueType: null,
   };
+  export const I32_CONST: TokenData = {
+    type: TokenType.Const,
+    lexeme: 'i32.const',
+    opcodeType: OpcodeType.I32Const,
+    valueType: null,
+  };
   export const ONE_POINT_FIVE: TokenData = {
     type: TokenType.Float,
     lexeme: '1.5',
@@ -176,6 +182,7 @@ const resolvedTokens: Record<string, TokenData> = {
   'f64.const': TokenObjects.F64_CONST,
   'i32': TokenObjects.I32,
   'i32.add': TokenObjects.I32_ADD,
+  'i32.const': TokenObjects.I32_CONST,
   '1.5': TokenObjects.ONE_POINT_FIVE,
   'local.get': TokenObjects.LOCAL_GET,
   '$p': TokenObjects.VAR_P,

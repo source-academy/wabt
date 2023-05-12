@@ -17,12 +17,11 @@
 
 const nop_operation = '(module (func nop) )';
 const unreachable_operation = '(module (func unreachable) )';
-const block_operation = `
+const block_statment = `
 (module
     (func
         (block $my_block
             nop
-            br $my_block
         )
     )    
 )
@@ -31,5 +30,5 @@ const block_operation = `
 export const positiveControlTestCases = [
   nop_operation,
   unreachable_operation,
-  //   block_operation,
+  block_statment,
 ];

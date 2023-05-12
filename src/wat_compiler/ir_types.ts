@@ -7,20 +7,6 @@ import { isEqual } from 'lodash';
 import { OpcodeType } from '../common/opcode';
 
 /**
- * Interface indicating that the particular intermediate representation
- * may contain s-expressions, and can therefore be 'unfolded'.
- */
-export interface Unfoldable {
-  unfold(): PureUnfoldedTokenExpression;
-}
-
-export namespace Unfoldable {
-  export function instanceOf(obj: object): obj is Unfoldable {
-    return 'unfold' in obj;
-  }
-}
-
-/**
  * An interface for intermediate expressions that can have a name/identifier to be referenced by.
  * Mainly to be used for global types that can be referenced by name.
  */
@@ -346,22 +332,40 @@ export class FunctionBody {
 /*
   EXPRESSION BODIES
 */
+/**
+ * Interface indicating that the particular intermediate representation
+ * may contain s-expressions, and can therefore be 'unfolded'.
+ */
+export interface Unfoldable {
+  unfold(): PureUnfoldedTokenExpression;
+}
+
+/**
+ * Interface indicating the resulting type of the particular intermediate representation
+ * can be computed at compile time.
+ */
+export interface Evaluable {
+  getReturnTypes(): ValueType[];
+}
 
 /**
  * All possible function expressions.
  */
-export type TokenExpression =
-  | OperationTree
-  | UnfoldedTokenExpression
-  | EmptyTokenExpression
-  | BlockExpression;
+export abstract class TokenExpression
+  extends IntermediateRepresentation
+  implements Unfoldable, Evaluable {
+  getReturnTypes(): ValueType[] {
+    throw new Error('Abstract method not implemented.');
+  }
+  unfold(): PureUnfoldedTokenExpression {
+    throw new Error('Abstract method not implemented.');
+  }
+}
 
 /**
  * Class representing operators and operands in an s-expression.
  */
-export class OperationTree
-  extends IntermediateRepresentation
-  implements Unfoldable {
+export class OperationTree extends TokenExpression {
   operator: Token;
   operands: (Token | TokenExpression)[];
 
@@ -390,9 +394,7 @@ export class OperationTree
 /**
  * Class representing a stack token expression. May have s-expressions inside.
  */
-export class UnfoldedTokenExpression
-  extends IntermediateRepresentation
-  implements Unfoldable {
+export class UnfoldedTokenExpression extends TokenExpression {
   tokens: (Token | OperationTree)[];
 
   constructor(tokens: (Token | OperationTree)[]) {
@@ -415,9 +417,7 @@ export class UnfoldedTokenExpression
 /**
  * Class to represent an empty token expression
  */
-export class EmptyTokenExpression
-  extends IntermediateRepresentation
-  implements Unfoldable {
+export class EmptyTokenExpression extends TokenExpression {
   unfold(): PureUnfoldedTokenExpression {
     return new PureUnfoldedTokenExpression([]);
   }
@@ -439,7 +439,7 @@ export class PureUnfoldedTokenExpression extends IntermediateRepresentation {
  * Class representing a Block expression that wrap around an expression.
  * For expressions such as block, if, loop instructions.
  */
-export class BlockExpression extends IntermediateRepresentation {
+export class BlockExpression extends TokenExpression {
   headerToken: Token;
   label: string | undefined;
   blockExpression: TokenExpression;

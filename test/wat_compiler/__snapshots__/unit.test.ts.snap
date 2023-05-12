@@ -60,6 +60,38 @@ Uint8Array [
 ]
 `;
 
+exports[`snapshot tests control operations test encoder 3`] = `
+Uint8Array [
+  0,
+  97,
+  115,
+  109,
+  1,
+  0,
+  0,
+  0,
+  1,
+  4,
+  1,
+  96,
+  0,
+  0,
+  3,
+  2,
+  1,
+  0,
+  10,
+  7,
+  1,
+  5,
+  0,
+  2,
+  1,
+  11,
+  11,
+]
+`;
+
 exports[`snapshot tests control operations test intermediate representation 1`] = `
 ModuleExpression {
   "exportExpressions": [],
@@ -183,6 +215,100 @@ ModuleExpression {
               "valueType": null,
             },
           ],
+        },
+      },
+      "functionName": null,
+      "functionSignature": FunctionSignature {
+        "paramTypes": [],
+        "returnTypes": [],
+      },
+      "hasInlineExport": false,
+      "inlineExportName": null,
+      "localNames": [],
+      "localTypes": [],
+      "paramNames": [],
+    },
+  ],
+}
+`;
+
+exports[`snapshot tests control operations test intermediate representation 3`] = `
+ModuleExpression {
+  "exportExpressions": [],
+  "functions": [
+    FunctionExpression {
+      "functionBody": FunctionBody {
+        "body": BlockExpression {
+          "blockExpression": UnfoldedTokenExpression {
+            "tokens": [
+              Token {
+                "col": 0,
+                "indexInSource": 59,
+                "lexeme": "nop",
+                "line": 4,
+                "opcodeType": 1,
+                "type": "nop",
+                "valueType": null,
+              },
+            ],
+          },
+          "headerToken": Token {
+            "col": 0,
+            "indexInSource": 33,
+            "lexeme": "block",
+            "line": 3,
+            "opcodeType": 2,
+            "type": "block",
+            "valueType": null,
+          },
+          "label": "$my_block",
+        },
+      },
+      "functionName": null,
+      "functionSignature": FunctionSignature {
+        "paramTypes": [],
+        "returnTypes": [],
+      },
+      "hasInlineExport": false,
+      "inlineExportName": null,
+      "localNames": [],
+      "localTypes": [],
+      "paramNames": [],
+    },
+  ],
+  "globalTypes": [
+    FunctionSignature {
+      "paramTypes": [],
+      "returnTypes": [],
+    },
+  ],
+  "globals": [
+    FunctionExpression {
+      "functionBody": FunctionBody {
+        "body": BlockExpression {
+          "blockExpression": UnfoldedTokenExpression {
+            "tokens": [
+              Token {
+                "col": 0,
+                "indexInSource": 59,
+                "lexeme": "nop",
+                "line": 4,
+                "opcodeType": 1,
+                "type": "nop",
+                "valueType": null,
+              },
+            ],
+          },
+          "headerToken": Token {
+            "col": 0,
+            "indexInSource": 33,
+            "lexeme": "block",
+            "line": 3,
+            "opcodeType": 2,
+            "type": "block",
+            "valueType": null,
+          },
+          "label": "$my_block",
         },
       },
       "functionName": null,
@@ -336,6 +462,92 @@ exports[`snapshot tests control operations test lexer 2`] = `
 ]
 `;
 
+exports[`snapshot tests control operations test lexer 3`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 14,
+    "lexeme": "(",
+    "line": 2,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 18,
+    "lexeme": "func",
+    "line": 2,
+    "opcodeType": null,
+    "type": "func",
+    "valueType": 7,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 28,
+    "lexeme": "(",
+    "line": 3,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 33,
+    "lexeme": "block",
+    "line": 3,
+    "opcodeType": 2,
+    "type": "block",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 43,
+    "lexeme": "$my_block",
+    "line": 3,
+    "opcodeType": null,
+    "type": "VAR",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 59,
+    "lexeme": "nop",
+    "line": 4,
+    "opcodeType": 1,
+    "type": "nop",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 69,
+    "lexeme": ")",
+    "line": 5,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 75,
+    "lexeme": ")",
+    "line": 6,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+]
+`;
+
 exports[`snapshot tests control operations test parse tree 1`] = `
 [
   Token {
@@ -400,6 +612,60 @@ exports[`snapshot tests control operations test parse tree 2`] = `
       "type": "unreachable",
       "valueType": null,
     },
+  ],
+]
+`;
+
+exports[`snapshot tests control operations test parse tree 3`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  [
+    Token {
+      "col": 0,
+      "indexInSource": 18,
+      "lexeme": "func",
+      "line": 2,
+      "opcodeType": null,
+      "type": "func",
+      "valueType": 7,
+    },
+    [
+      Token {
+        "col": 0,
+        "indexInSource": 33,
+        "lexeme": "block",
+        "line": 3,
+        "opcodeType": 2,
+        "type": "block",
+        "valueType": null,
+      },
+      Token {
+        "col": 0,
+        "indexInSource": 43,
+        "lexeme": "$my_block",
+        "line": 3,
+        "opcodeType": null,
+        "type": "VAR",
+        "valueType": null,
+      },
+      Token {
+        "col": 0,
+        "indexInSource": 59,
+        "lexeme": "nop",
+        "line": 4,
+        "opcodeType": 1,
+        "type": "nop",
+        "valueType": null,
+      },
+    ],
   ],
 ]
 `;
