@@ -2,20 +2,23 @@
 // This is because we use class['property'] to access private methods to do testing.
 import { compile, parse } from '../../src/wat_compiler';
 import { positiveFunctionTestCases } from './resources/functions.testcase';
+import { positiveTestCases as positiveNumOpTestCases } from './resources/numeric_operators.testcase';
 import { expect } from '@jest/globals';
 import wabt from 'wabt';
 
-test.each(positiveFunctionTestCases)(
-  'encode function expressions',
-  async (testCase: string) => {
-    const actual = compile(parse(testCase));
+describe.each([
+  [positiveFunctionTestCases, 'function test cases'],
+  [positiveNumOpTestCases, 'numeric operators'],
+])('integration: encode', (testCase, testCaseLabel) => {
+  test.each(testCase)(testCaseLabel, async (test) => {
+    const actual = compile(parse(test));
     const expected = await wabt()
       .then(
-        (wabtModule) => wabtModule.parseWat('', testCase)
+        (wabtModule) => wabtModule.parseWat('', test)
           .toBinary({}).buffer,
       );
 
     expect(actual)
       .toEqual(expected);
-  },
-);
+  });
+});

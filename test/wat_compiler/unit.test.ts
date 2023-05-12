@@ -8,10 +8,15 @@ import { tokenize } from '../../src/wat_compiler/lexer';
 import { getParseTree } from '../../src/wat_compiler/parser';
 
 import { positiveFunctionTestCases } from './resources/functions.testcase';
+import { positiveTestCases as positiveNumOpTestCases } from './resources/numeric_operators.testcase';
+import { positiveControlTestCases } from './resources/control_instructions.testcase';
 
-describe.each(positiveFunctionTestCases)(
-  'unit tests for function expressions',
-  (testCase: string) => {
+describe.each([
+  [positiveFunctionTestCases, 'function expressions'],
+  [positiveNumOpTestCases, 'numeric operations'],
+  [positiveControlTestCases, 'control operations'],
+])('snapshot tests', (testCases, testCaseLabel) => {
+  describe.each(testCases)(`${testCaseLabel}`, (testCase: string) => {
     let tokens: Token[];
     let parseTree: ParseTree;
     let IR: ModuleExpression;
@@ -39,5 +44,5 @@ describe.each(positiveFunctionTestCases)(
       expect(binary)
         .toMatchSnapshot();
     });
-  },
-);
+  });
+});
