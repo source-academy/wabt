@@ -4,7 +4,7 @@ import { Token, TokenType } from '../common/token';
 import { ExportType } from '../common/export_types';
 import { assert } from '../common/assert';
 import { isEqual } from 'lodash';
-import { OpcodeType } from '../common/opcode';
+import { Opcode, OpcodeType } from '../common/opcode';
 
 /**
  * An interface for intermediate expressions that can have a name/identifier to be referenced by.
@@ -388,6 +388,14 @@ export class OperationTree extends TokenExpression {
       ...unfoldedOperands,
       this.operator,
     ]);
+  }
+  getReturnTypes(): ValueType[] {
+    const opcodeType = this.operator.opcodeType;
+    assert(opcodeType !== null); // This is an assert, not an error by user.
+    const paramTypes = Opcode.getParamTypes(opcodeType!); // TODO: do type checking of parameters
+    const returnTypes = Opcode.getReturnType(opcodeType!);
+
+    return [returnTypes];
   }
 }
 
