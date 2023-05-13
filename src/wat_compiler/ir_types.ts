@@ -420,6 +420,27 @@ export class UnfoldedTokenExpression extends TokenExpression {
 
     return new PureUnfoldedTokenExpression(unfoldedOperands);
   }
+
+  getReturnTypes(): ValueType[] {
+    const stack: ValueType[] = [];
+    for (const token of this.tokens) {
+      if (token instanceof Token && token.isOpcodeToken()) {
+        const consumed = Opcode.getParamTypes(token.opcodeType!);
+        const added = Opcode.getReturnType(token.opcodeType!);
+        for (const consumedValueType of consumed) {
+          if (stack.at(-1) === consumedValueType) {
+            stack.pop();
+          } else {
+            throw new Error('Type mismatch'); // TODO proper error
+          }
+        }
+
+        stack.push(added);
+      }
+    }
+
+    return stack;
+  }
 }
 
 /**

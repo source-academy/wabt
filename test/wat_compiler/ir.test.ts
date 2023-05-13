@@ -32,7 +32,7 @@ const compile_time_type_test_case: [TokenExpression, ValueType[]][] = [
   [new EmptyTokenExpression(), []],
   [
     new UnfoldedTokenExpression(
-      ['f64.add', 'f64.const', '1', 'f64.const', '2'].map(t),
+      ['f64.const', '1', 'f64.const', '2', 'f64.add'].map(t),
     ),
     [ValueType.F64],
   ],
