@@ -345,6 +345,14 @@ export interface Unfoldable {
  * can be computed at compile time.
  */
 export interface Evaluable {
+  /**
+   * Get types consumed by this operand/expression at compile time
+   */
+  getConsumedTypes(): ValueType[];
+
+  /**
+   * Get types returned by this operand/expression at compile time
+   */
   getReturnTypes(): ValueType[];
 }
 
@@ -354,6 +362,9 @@ export interface Evaluable {
 export abstract class TokenExpression
   extends IntermediateRepresentation
   implements Unfoldable, Evaluable {
+  getConsumedTypes(): ValueType[] {
+    throw new Error('Abstract method not implemented.');
+  }
   getReturnTypes(): ValueType[] {
     throw new Error('Abstract method not implemented.');
   }
@@ -390,12 +401,34 @@ export class OperationTree extends TokenExpression {
     ]);
   }
   getReturnTypes(): ValueType[] {
-    const opcodeType = this.operator.opcodeType;
-    assert(opcodeType !== null); // This is an assert, not an error by user.
-    const paramTypes = Opcode.getParamTypes(opcodeType!); // TODO: do type checking of parameters
-    const returnTypes = Opcode.getReturnType(opcodeType!);
+    const consumedTypes = this.operator.getConsumedTypes(); // TODO: do type checking of parameters
+    const returnTypes = this.operator.getReturnTypes();
 
-    return [returnTypes];
+    const stack: ValueType[] = [];
+    for (const operand of this.operands) {
+      const consumed = operand.getConsumedTypes();
+      const added = operand.getReturnTypes();
+      for (const consumedValueType of consumed) {
+        if (stack.at(-1) === consumedValueType) {
+          stack.pop();
+        } else {
+          throw new Error('Type mismatch'); // TODO proper error
+        }
+      }
+      stack.push(...added);
+    }
+
+    if (!isEqual(stack, consumedTypes)) {
+      throw new Error(
+        `Type mismatch, expected ${consumedTypes}, but got ${stack}`,
+      );
+    }
+
+    return returnTypes;
+  }
+
+  getConsumedTypes(): ValueType[] {
+    return [];
   }
 }
 
@@ -424,22 +457,23 @@ export class UnfoldedTokenExpression extends TokenExpression {
   getReturnTypes(): ValueType[] {
     const stack: ValueType[] = [];
     for (const token of this.tokens) {
-      if (token instanceof Token && token.isOpcodeToken()) {
-        const consumed = Opcode.getParamTypes(token.opcodeType!);
-        const added = Opcode.getReturnType(token.opcodeType!);
-        for (const consumedValueType of consumed) {
-          if (stack.at(-1) === consumedValueType) {
-            stack.pop();
-          } else {
-            throw new Error('Type mismatch'); // TODO proper error
-          }
+      const consumed = token.getConsumedTypes();
+      const added = token.getReturnTypes();
+      for (const consumedValueType of consumed) {
+        if (stack.at(-1) === consumedValueType) {
+          stack.pop();
+        } else {
+          throw new Error('Type mismatch'); // TODO proper error
         }
-
-        stack.push(added);
       }
+      stack.push(...added);
     }
 
     return stack;
+  }
+
+  getConsumedTypes(): ValueType[] {
+    return [];
   }
 }
 
@@ -451,6 +485,9 @@ export class EmptyTokenExpression extends TokenExpression {
     return new PureUnfoldedTokenExpression([]);
   }
   getReturnTypes(): ValueType[] {
+    return [];
+  }
+  getConsumedTypes(): ValueType[] {
     return [];
   }
 }
@@ -516,5 +553,9 @@ export class BlockExpression extends TokenExpression {
       OpcodeType.End,
       null,
     );
+  }
+
+  getConsumedTypes(): ValueType[] {
+    return [];
   }
 }

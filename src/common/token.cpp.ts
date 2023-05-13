@@ -1,9 +1,10 @@
+import { type Evaluable } from '../wat_compiler/ir_types';
 import { assert } from './assert';
 import { Opcode, type OpcodeType } from './opcode';
 import { TokenType } from './token';
 import { type ValueType } from './type';
 
-export class Token {
+export class Token implements Evaluable {
   type: TokenType;
   lexeme: string;
   line: number;
@@ -95,6 +96,20 @@ export class Token {
   extractText(): string {
     assert(this.type === TokenType.Text);
     return this.lexeme.slice(1, this.lexeme.length - 1);
+  }
+
+  getReturnTypes(): ValueType[] {
+    if (this.opcodeType === null) {
+      return [];
+    }
+    return [Opcode.getReturnType(this.opcodeType)];
+  }
+
+  getConsumedTypes(): ValueType[] {
+    if (this.opcodeType === null) {
+      return [];
+    }
+    return Opcode.getParamTypes(this.opcodeType);
   }
 }
 

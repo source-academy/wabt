@@ -100,6 +100,18 @@ namespace TokenObjects {
     opcodeType: OpcodeType.F64Const,
     valueType: null,
   };
+  export const F32_CONST: TokenData = {
+    type: TokenType.Const,
+    lexeme: 'f32.const',
+    opcodeType: OpcodeType.F32Const,
+    valueType: null,
+  };
+  export const F32_EQ: TokenData = {
+    type: TokenType.Compare,
+    lexeme: 'f32.eq',
+    opcodeType: OpcodeType.F32Eq,
+    valueType: null,
+  };
   export const I32: TokenData = {
     type: TokenType.ValueType,
     lexeme: 'i32',
@@ -112,10 +124,22 @@ namespace TokenObjects {
     opcodeType: OpcodeType.I32Add,
     valueType: null,
   };
+  export const I64_ADD: TokenData = {
+    type: TokenType.Binary,
+    lexeme: 'i64.add',
+    opcodeType: OpcodeType.I64Add,
+    valueType: null,
+  };
   export const I32_CONST: TokenData = {
     type: TokenType.Const,
     lexeme: 'i32.const',
     opcodeType: OpcodeType.I32Const,
+    valueType: null,
+  };
+  export const I64_CONST: TokenData = {
+    type: TokenType.Const,
+    lexeme: 'i64.const',
+    opcodeType: OpcodeType.I64Const,
     valueType: null,
   };
   export const ONE_POINT_FIVE: TokenData = {
@@ -180,9 +204,13 @@ const resolvedTokens: Record<string, TokenData> = {
   'f64': TokenObjects.F64,
   'f64.add': TokenObjects.F64_ADD,
   'f64.const': TokenObjects.F64_CONST,
+  'f32.const': TokenObjects.F32_CONST,
+  'f32.eq': TokenObjects.F32_EQ,
   'i32': TokenObjects.I32,
   'i32.add': TokenObjects.I32_ADD,
+  'i64.add': TokenObjects.I64_ADD,
   'i32.const': TokenObjects.I32_CONST,
+  'i64.const': TokenObjects.I64_CONST,
   '1.5': TokenObjects.ONE_POINT_FIVE,
   'local.get': TokenObjects.LOCAL_GET,
   '$p': TokenObjects.VAR_P,
