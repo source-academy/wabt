@@ -380,6 +380,9 @@ export class OperationTree extends TokenExpression {
   operator: Token;
   operands: (Token | TokenExpression)[];
 
+  private returnTypes?: ValueType[];
+  private consumedTypes?: ValueType[];
+
   constructor(operator: Token, operands: (Token | TokenExpression)[]) {
     super();
     this.operator = operator;
@@ -400,10 +403,8 @@ export class OperationTree extends TokenExpression {
       this.operator,
     ]);
   }
-  getReturnTypes(): ValueType[] {
-    const consumedTypes = this.operator.getConsumedTypes(); // TODO: do type checking of parameters
-    const returnTypes = this.operator.getReturnTypes();
 
+  private resolveTypes(): void {
     const stack: ValueType[] = [];
     for (const operand of this.operands) {
       const consumed = operand.getConsumedTypes();
@@ -418,17 +419,29 @@ export class OperationTree extends TokenExpression {
       stack.push(...added);
     }
 
+    const consumedTypes = this.operator.getConsumedTypes();
     if (!isEqual(stack, consumedTypes)) {
       throw new Error(
         `Type mismatch, expected ${consumedTypes}, but got ${stack}`,
       );
     }
 
-    return returnTypes;
+    this.returnTypes = this.operator.getReturnTypes();
+    this.consumedTypes = [];
+  }
+
+  getReturnTypes(): ValueType[] {
+    if (typeof this.returnTypes === 'undefined') {
+      this.resolveTypes();
+    }
+    return this.returnTypes!;
   }
 
   getConsumedTypes(): ValueType[] {
-    return [];
+    if (typeof this.consumedTypes === 'undefined') {
+      this.resolveTypes();
+    }
+    return this.consumedTypes!;
   }
 }
 
@@ -437,6 +450,9 @@ export class OperationTree extends TokenExpression {
  */
 export class UnfoldedTokenExpression extends TokenExpression {
   tokens: (Token | OperationTree)[];
+
+  private returnTypes?: ValueType[];
+  private consumedTypes?: ValueType[];
 
   constructor(tokens: (Token | OperationTree)[]) {
     super();
@@ -454,7 +470,7 @@ export class UnfoldedTokenExpression extends TokenExpression {
     return new PureUnfoldedTokenExpression(unfoldedOperands);
   }
 
-  getReturnTypes(): ValueType[] {
+  private resolveTypes(): void {
     const stack: ValueType[] = [];
     for (const token of this.tokens) {
       const consumed = token.getConsumedTypes();
@@ -469,11 +485,18 @@ export class UnfoldedTokenExpression extends TokenExpression {
       stack.push(...added);
     }
 
-    return stack;
+    this.returnTypes = stack;
+    this.consumedTypes = [];
+  }
+
+  getReturnTypes(): ValueType[] {
+    if (typeof this.returnTypes === 'undefined') this.resolveTypes();
+    return this.returnTypes!;
   }
 
   getConsumedTypes(): ValueType[] {
-    return [];
+    if (typeof this.consumedTypes === 'undefined') this.resolveTypes();
+    return this.consumedTypes!;
   }
 }
 
@@ -512,6 +535,9 @@ export class BlockExpression extends TokenExpression {
   headerToken: Token;
   label: string | undefined;
   blockExpression: TokenExpression;
+
+  private returnTypes?: ValueType[];
+  private consumedTypes?: ValueType[];
 
   constructor(headerToken: Token, blockExpression: TokenExpression);
   constructor(
@@ -555,7 +581,17 @@ export class BlockExpression extends TokenExpression {
     );
   }
 
+  private resolveTypes(): void {
+    this.returnTypes = this.blockExpression.getReturnTypes();
+    this.consumedTypes = this.blockExpression.getConsumedTypes();
+  }
+
+  getReturnTypes(): ValueType[] {
+    if (typeof this.returnTypes === 'undefined') this.resolveTypes();
+    return this.returnTypes!;
+  }
   getConsumedTypes(): ValueType[] {
-    return [];
+    if (typeof this.consumedTypes === 'undefined') this.resolveTypes();
+    return this.consumedTypes!;
   }
 }
