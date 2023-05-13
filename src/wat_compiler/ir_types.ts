@@ -450,6 +450,9 @@ export class EmptyTokenExpression extends TokenExpression {
   unfold(): PureUnfoldedTokenExpression {
     return new PureUnfoldedTokenExpression([]);
   }
+  getReturnTypes(): ValueType[] {
+    return [];
+  }
 }
 
 /**
