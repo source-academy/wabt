@@ -13,6 +13,15 @@ import { Opcode, OpcodeType } from '../common/opcode';
 export interface HasIdentifier {
   getID(): string | null;
 }
+
+/**
+ * Interface for intermediate expressions that has a signature.
+ * Used for functions and blocks.
+ */
+export interface HasSignature {
+  getSignature(): FunctionSignature;
+}
+
 export abstract class IntermediateRepresentation {}
 
 type GlobalType = FunctionSignature; // TODO add more
@@ -70,7 +79,7 @@ export class ModuleExpression extends IntermediateRepresentation {
 
   private addFunctionExpression(functionExpression: FunctionExpression) {
     this.functions.push(functionExpression);
-    this.addGlobalType(functionExpression.functionSignature);
+    this.addGlobalType(functionExpression.getSignature());
     this.globals.push(functionExpression);
 
     // Generate an export expression if it has an inline export.
@@ -149,7 +158,7 @@ export class ModuleExpression extends IntermediateRepresentation {
   }
 
   getFunctionSignatures(): FunctionSignature[] {
-    return this.functions.map((func) => func.functionSignature);
+    return this.functions.map((func) => func.getSignature());
   }
 
   getFunctionBodies(): FunctionBody[] {
@@ -240,8 +249,8 @@ FUNCTIONS
  */
 export class FunctionExpression
   extends IntermediateRepresentation
-  implements HasIdentifier {
-  functionSignature: FunctionSignature;
+  implements HasIdentifier, HasSignature {
+  private functionSignature: FunctionSignature;
   functionBody: FunctionBody;
 
   functionName: string | null;
@@ -299,6 +308,10 @@ export class FunctionExpression
         this.paramNames,
       ]}, Local Names available: ${this.localNames}`,
     );
+  }
+
+  getSignature(): FunctionSignature {
+    return this.functionSignature;
   }
 }
 
@@ -531,13 +544,13 @@ export class PureUnfoldedTokenExpression extends IntermediateRepresentation {
  * Class representing a Block expression that wrap around an expression.
  * For expressions such as block, if, loop instructions.
  */
-export class BlockExpression extends TokenExpression {
+export class BlockExpression extends TokenExpression implements HasSignature {
   headerToken: Token;
   label: string | undefined;
   blockExpression: TokenExpression;
 
-  private returnTypes?: ValueType[];
-  private consumedTypes?: ValueType[];
+  private signature: FunctionSignature;
+  blockType?: FunctionSignature;
 
   constructor(headerToken: Token, blockExpression: TokenExpression);
   constructor(
@@ -584,6 +597,10 @@ export class BlockExpression extends TokenExpression {
   private resolveTypes(): void {
     this.returnTypes = this.blockExpression.getReturnTypes();
     this.consumedTypes = this.blockExpression.getConsumedTypes();
+    this.blockType = new FunctionSignature(
+      this.consumedTypes,
+      this.returnTypes,
+    );
   }
 
   getReturnTypes(): ValueType[] {

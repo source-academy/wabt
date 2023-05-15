@@ -262,6 +262,7 @@ ModuleExpression {
               },
             ],
           },
+          "blockType": undefined,
           "consumedTypes": undefined,
           "headerToken": Token {
             "col": 0,
@@ -313,6 +314,7 @@ ModuleExpression {
               },
             ],
           },
+          "blockType": undefined,
           "consumedTypes": undefined,
           "headerToken": Token {
             "col": 0,
