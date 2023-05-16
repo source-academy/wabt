@@ -59,11 +59,60 @@ const block_one_result = `
   )
 `;
 
+const block_multiple_result = `
+(module
+    (func (param i32) (result i32 i32 i32)
+        i32.const 1
+        (block (param i32) (result i32 i32)
+            i32.const 0
+        )
+        i32.const 2
+    )
+)
+`;
+
+/*
+(module
+  (func
+    (block
+    	br 0
+    )
+  )
+)
+(module
+  (func
+    (block
+      (block
+        br 1
+      )
+    )
+  )
+)
+
+(module
+  (func
+    (block $one
+      (block $two
+        br $one
+      )
+    )
+  )
+  (func
+    (block $one
+      (block $two
+        br $two
+      )
+    )
+  )
+)
+
+*/
+
 export const positiveControlTestCases = [
   nop_operation,
   unreachable_operation,
   block_statment,
   empty_explicit_block,
-  //   block_one_param,
-  //   block_one_result,
+  block_one_param,
+  block_one_result,
 ];
