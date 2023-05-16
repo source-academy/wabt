@@ -8,6 +8,7 @@ import {
   ExportExpression,
   EmptyTokenExpression,
   BlockExpression,
+  FunctionSignature,
 } from './ir_types';
 import { Token, TokenType } from '../common/token';
 import { type ParseTree } from './tree_types';
@@ -114,16 +115,64 @@ function parseStackExpression(parseTree: ParseTree): UnfoldedTokenExpression {
 }
 
 function parseBlockExpression(parseTree: ParseTree): BlockExpression {
-  if (parseTree[1] instanceof Token && parseTree[1].type === TokenType.Var) {
-    return new BlockExpression(
-      parseTree[0] as Token,
-      parseExpression(parseTree.slice(2)),
-      parseTree[1].lexeme,
+  let cursor = 0;
+  let current;
+
+  let firstToken;
+  let blockLabel;
+  const paramTypes: ValueType[] = [];
+  const resultTypes: ValueType[] = [];
+
+  // Skip (and collect) block token
+  current = parseTree[cursor];
+  if (!(current instanceof Token) || !current.isBlock()) {
+    throw new Error(
+      `First token of a block expression is not block! Got: ${current}`,
     );
   }
+  firstToken = current;
+  cursor++;
+
+  // parse optional block name
+  current = parseTree[cursor];
+  if (current instanceof Token && current.type === TokenType.Var) {
+    blockLabel = current.lexeme;
+    cursor++;
+  }
+
+  // parse param declaration. Note that params cannot be named here
+  for (; cursor < parseTree.length; cursor++) {
+    const parseTreeNode = parseTree[cursor];
+    if (
+      parseTreeNode instanceof Token
+      || !isFunctionParamDeclaration(parseTreeNode)
+    ) {
+      break;
+    }
+
+    // TODO assert names is all null.
+    const { types, names } = parseFunctionParamExpression(parseTreeNode);
+    paramTypes.push(...types);
+  }
+
+  // Parse result declaration
+  for (; cursor < parseTree.length; cursor++) {
+    const parseTreeNode = parseTree[cursor];
+    if (
+      parseTreeNode instanceof Token
+      || !isFunctionResultDeclaration(parseTreeNode)
+    ) {
+      break;
+    }
+    const types = parseFunctionResultExpression(parseTreeNode);
+    resultTypes.push(...types);
+  }
+
   return new BlockExpression(
-    parseTree[0] as Token,
-    parseExpression(parseTree.slice(1)),
+    firstToken,
+    new FunctionSignature(paramTypes, resultTypes),
+    parseExpression(parseTree.slice(cursor)),
+    blockLabel,
   );
 }
 
@@ -155,7 +204,7 @@ function parseFunctionExpression(parseTree: ParseTree): FunctionExpression {
     && token[0].type === TokenType.Export
     && token[1] instanceof Token
   ) {
-    inlineExportName = token[1].extractText();
+    inlineExportName = token[1].extractName();
     cursor++;
   }
 
@@ -362,7 +411,11 @@ function isSExpression(parseTree: ParseTree): boolean {
   const tokenHeader = parseTree[0];
   assert(
     tokenHeader instanceof Token,
-    `first token of ${parseTree} is not a Token type`,
+    `first token of ${JSON.stringify(
+      parseTree,
+      undefined,
+      2,
+    )} is not a Token type`,
   );
 
   return (
@@ -376,7 +429,11 @@ function isStackExpression(parseTree: ParseTree): boolean {
   const tokenHeader = parseTree[0];
   assert(
     tokenHeader instanceof Token,
-    `first token of ${parseTree} is not a Token type`,
+    `first token of ${JSON.stringify(
+      parseTree,
+      undefined,
+      2,
+    )} is not a Token type`,
   );
   return (
     tokenHeader instanceof Token

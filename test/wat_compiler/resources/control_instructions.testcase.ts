@@ -27,8 +27,43 @@ const block_statment = `
 )
 `;
 
+const empty_explicit_block = `
+(module
+    (func 
+      (block (param) (result)
+          
+      )
+    )
+  )
+`;
+
+const block_one_param = `
+(module
+    (func 
+      i32.const 0
+      (block (param i32) (result)
+          
+      )
+    )
+  )
+`;
+
+// Note: same type as function
+const block_one_result = `
+(module
+    (func (result i32)
+      (block (param) (result i32)
+          i32.const 0    	
+      )
+    )
+  )
+`;
+
 export const positiveControlTestCases = [
   nop_operation,
   unreachable_operation,
   block_statment,
+  empty_explicit_block,
+  //   block_one_param,
+  //   block_one_result,
 ];

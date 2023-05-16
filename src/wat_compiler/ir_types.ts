@@ -210,7 +210,7 @@ export class ExportExpression extends IntermediateRepresentation {
     if (exportName.type !== TokenType.Text) {
       throw new Error(`unexpected export name: ${exportName}`); // TODO better errors
     }
-    return exportName.extractText();
+    return exportName.extractName();
   }
 
   private getExportType(exportType: Token) {
@@ -557,17 +557,11 @@ export class BlockExpression extends TokenExpression implements HasSignature {
   headerToken: Token;
   label: string | undefined;
   blockExpression: TokenExpression;
-
   private signature?: FunctionSignature;
 
-  constructor(headerToken: Token, blockExpression: TokenExpression);
   constructor(
     headerToken: Token,
-    blockExpression: TokenExpression,
-    label: string
-  );
-  constructor(
-    headerToken: Token,
+    signature: FunctionSignature,
     blockExpression: TokenExpression,
     label?: string,
   ) {
@@ -583,13 +577,11 @@ export class BlockExpression extends TokenExpression implements HasSignature {
   }
 
   unfold(): PureUnfoldedBlockExpression {
-    return new PureUnfoldedBlockExpression(
-      this.getSignature(), [
-        this.headerToken,
-        ...this.blockExpression.unfold().tokens,
-        this.createEndToken(),
-      ],
-    );
+    return new PureUnfoldedBlockExpression(this.getSignature(), [
+      this.headerToken,
+      ...this.blockExpression.unfold().tokens,
+      this.createEndToken(),
+    ]);
   }
 
   private createEndToken(): Token {

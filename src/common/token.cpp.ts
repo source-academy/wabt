@@ -93,7 +93,7 @@ export class Token implements Evaluable {
    * @returns the extracted text
    * @throws error if text token is not a TokenType.Text type.
    */
-  extractText(): string {
+  extractName(): string {
     assert(this.type === TokenType.Text);
     return this.lexeme.slice(1, this.lexeme.length - 1);
   }
