@@ -5,6 +5,7 @@ import {
   type PureUnfoldedTokenExpression,
   type ExportExpression,
   type FunctionExpression,
+  PureUnfoldedBlockExpression,
 } from './ir_types';
 import { ValueType } from '../common/type';
 import { Token, TokenType } from '../common/token';
@@ -258,6 +259,9 @@ export class BinaryWriter {
   private encodePureUnfoldedTokenExpression(
     ir: PureUnfoldedTokenExpression,
   ): Uint8Array {
+    if (ir instanceof PureUnfoldedBlockExpression) {
+      return this.encodePureUnfoldedBlockExpression(ir);
+    }
     const binary: number[] = [];
     for (const [index, token] of ir.tokens.entries()) {
       if (!this.isLiteralToken(token)) {
@@ -267,6 +271,24 @@ export class BinaryWriter {
         binary.push(...this.encodeLiteralToken(prevToken, token));
       }
     }
+    return new Uint8Array(binary);
+  }
+
+  private encodePureUnfoldedBlockExpression(
+    ir: PureUnfoldedBlockExpression,
+  ): Uint8Array {
+    const binary: number[] = [];
+    for (const [index, token] of ir.tokens.entries()) {
+      if (!this.isLiteralToken(token)) {
+        binary.push(...this.encodeNonLiteralToken(token));
+      } else {
+        const prevToken = ir.tokens[index - 1];
+        binary.push(...this.encodeLiteralToken(prevToken, token));
+      }
+    }
+
+    // Insert block type
+    binary.splice(1, 0, 0x40);
     return new Uint8Array(binary);
   }
 

@@ -540,6 +540,15 @@ export class PureUnfoldedTokenExpression extends IntermediateRepresentation {
   }
 }
 
+export class PureUnfoldedBlockExpression extends PureUnfoldedTokenExpression {
+  signature: FunctionSignature;
+  tokens: Token[];
+  constructor(signature: FunctionSignature, tokens: Token[]) {
+    super(tokens);
+    this.signature = signature;
+    this.tokens = tokens;
+  }
+}
 /**
  * Class representing a Block expression that wrap around an expression.
  * For expressions such as block, if, loop instructions.
@@ -549,8 +558,7 @@ export class BlockExpression extends TokenExpression implements HasSignature {
   label: string | undefined;
   blockExpression: TokenExpression;
 
-  private signature: FunctionSignature;
-  blockType?: FunctionSignature;
+  private signature?: FunctionSignature;
 
   constructor(headerToken: Token, blockExpression: TokenExpression);
   constructor(
@@ -574,12 +582,14 @@ export class BlockExpression extends TokenExpression implements HasSignature {
     this.label = label;
   }
 
-  unfold(): PureUnfoldedTokenExpression {
-    return new PureUnfoldedTokenExpression([
-      this.headerToken,
-      ...this.blockExpression.unfold().tokens,
-      this.createEndToken(),
-    ]);
+  unfold(): PureUnfoldedBlockExpression {
+    return new PureUnfoldedBlockExpression(
+      this.getSignature(), [
+        this.headerToken,
+        ...this.blockExpression.unfold().tokens,
+        this.createEndToken(),
+      ],
+    );
   }
 
   private createEndToken(): Token {
@@ -595,20 +605,19 @@ export class BlockExpression extends TokenExpression implements HasSignature {
   }
 
   private resolveTypes(): void {
-    this.returnTypes = this.blockExpression.getReturnTypes();
-    this.consumedTypes = this.blockExpression.getConsumedTypes();
-    this.blockType = new FunctionSignature(
-      this.consumedTypes,
-      this.returnTypes,
-    );
+    const returnTypes = this.blockExpression.getReturnTypes();
+    const consumedTypes = this.blockExpression.getConsumedTypes();
+    this.signature = new FunctionSignature(consumedTypes, returnTypes);
   }
 
   getReturnTypes(): ValueType[] {
-    if (typeof this.returnTypes === 'undefined') this.resolveTypes();
-    return this.returnTypes!;
+    return this.getSignature().returnTypes;
   }
   getConsumedTypes(): ValueType[] {
-    if (typeof this.consumedTypes === 'undefined') this.resolveTypes();
-    return this.consumedTypes!;
+    return this.getSignature().paramTypes;
+  }
+  getSignature(): FunctionSignature {
+    if (typeof this.signature === 'undefined') this.resolveTypes();
+    return this.signature!;
   }
 }

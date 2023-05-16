@@ -81,11 +81,12 @@ Uint8Array [
   1,
   0,
   10,
-  7,
+  8,
   1,
-  5,
+  6,
   0,
   2,
+  64,
   1,
   11,
   11,
@@ -248,8 +249,10 @@ ModuleExpression {
       "functionBody": FunctionBody {
         "body": BlockExpression {
           "blockExpression": UnfoldedTokenExpression {
-            "consumedTypes": undefined,
-            "returnTypes": undefined,
+            "consumedTypes": [],
+            "returnTypes": [
+              14,
+            ],
             "tokens": [
               Token {
                 "col": 0,
@@ -262,8 +265,6 @@ ModuleExpression {
               },
             ],
           },
-          "blockType": undefined,
-          "consumedTypes": undefined,
           "headerToken": Token {
             "col": 0,
             "indexInSource": 33,
@@ -274,7 +275,12 @@ ModuleExpression {
             "valueType": null,
           },
           "label": "$my_block",
-          "returnTypes": undefined,
+          "signature": FunctionSignature {
+            "paramTypes": [],
+            "returnTypes": [
+              14,
+            ],
+          },
         },
       },
       "functionName": null,
@@ -300,8 +306,10 @@ ModuleExpression {
       "functionBody": FunctionBody {
         "body": BlockExpression {
           "blockExpression": UnfoldedTokenExpression {
-            "consumedTypes": undefined,
-            "returnTypes": undefined,
+            "consumedTypes": [],
+            "returnTypes": [
+              14,
+            ],
             "tokens": [
               Token {
                 "col": 0,
@@ -314,8 +322,6 @@ ModuleExpression {
               },
             ],
           },
-          "blockType": undefined,
-          "consumedTypes": undefined,
           "headerToken": Token {
             "col": 0,
             "indexInSource": 33,
@@ -326,7 +332,12 @@ ModuleExpression {
             "valueType": null,
           },
           "label": "$my_block",
-          "returnTypes": undefined,
+          "signature": FunctionSignature {
+            "paramTypes": [],
+            "returnTypes": [
+              14,
+            ],
+          },
         },
       },
       "functionName": null,
