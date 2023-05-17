@@ -390,9 +390,6 @@ export abstract class TokenExpression
   unfold(): PureUnfoldedTokenExpression {
     throw new Error('Abstract method not implemented.');
   }
-  getBody(): TokenExpression[] {
-    throw new Error('Abstract method not implemented.');
-  }
 }
 
 /**
@@ -483,27 +480,26 @@ export class PureUnfoldedBlockExpression extends PureUnfoldedTokenExpression {
  * For expressions such as block, if, loop instructions.
  */
 export class BlockExpression extends OperationTree implements HasSignature {
-  headerToken: Token;
-  label: string | undefined;
-  body: TokenExpression;
-  private signature: SignatureType;
+  private body: TokenExpression;
+  private signature: BlockSignature;
+  private headerToken: Token; // First token in block that specifies block type.
 
   constructor(
     headerToken: Token,
-    signature: SignatureType,
+    name: string | null,
+    paramTypes: ValueType[],
+    returnTypes: ValueType[],
     blockExpression: TokenExpression,
-    label?: string,
   ) {
     super(headerToken, []);
-    assert(
-      headerToken.type === TokenType.Block
-        || headerToken.type === TokenType.Loop
-        || headerToken.type === TokenType.If,
+    this.signature = new BlockSignature(
+      headerToken.type,
+      name,
+      paramTypes,
+      returnTypes,
     );
-    this.headerToken = headerToken;
     this.body = blockExpression;
-    this.label = label;
-    this.signature = signature;
+    this.headerToken = headerToken;
   }
 
   unfold(): PureUnfoldedBlockExpression {
@@ -527,6 +523,49 @@ export class BlockExpression extends OperationTree implements HasSignature {
   }
 
   getSignatureType(): SignatureType {
-    return this.signature;
+    return this.signature.signatureType;
+  }
+  getBlockType() {
+    return this.signature.blockType;
+  }
+
+  getName(): string | null {
+    return this.signature.name;
+  }
+
+  hasName(): boolean {
+    return this.signature.name !== null;
+  }
+  getParamTypes() {
+    return this.signature.signatureType.paramTypes;
+  }
+  getReturnTypes() {
+    return this.signature.signatureType.returnTypes;
+  }
+  getBody(): TokenExpression {
+    return this.body;
+  }
+}
+
+class BlockSignature {
+  blockType: TokenType;
+  name: string | null;
+  signatureType: SignatureType;
+
+  constructor(
+    blockType: TokenType,
+    name: string | null,
+    paramTypes: ValueType[],
+    returnTypes: ValueType[],
+  ) {
+    assert(
+      blockType === TokenType.Block
+        || blockType === TokenType.Loop
+        || blockType === TokenType.If,
+      `block type must be Block, Loop or If, but got: ${blockType}. Please report this bug to the developer.`,
+    );
+    this.blockType = blockType;
+    this.name = name;
+    this.signatureType = new SignatureType(paramTypes, returnTypes);
   }
 }

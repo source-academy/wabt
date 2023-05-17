@@ -323,7 +323,6 @@ ModuleExpression {
           "type": "block",
           "valueType": null,
         },
-        "label": "$my_block",
         "operands": [],
         "operator": Token {
           "col": 0,
@@ -334,9 +333,13 @@ ModuleExpression {
           "type": "block",
           "valueType": null,
         },
-        "signature": SignatureType {
-          "paramTypes": [],
-          "returnTypes": [],
+        "signature": BlockSignature {
+          "blockType": "block",
+          "name": "$my_block",
+          "signatureType": SignatureType {
+            "paramTypes": [],
+            "returnTypes": [],
+          },
         },
       },
       "signature": FunctionSignature {
@@ -383,7 +386,6 @@ ModuleExpression {
           "type": "block",
           "valueType": null,
         },
-        "label": "$my_block",
         "operands": [],
         "operator": Token {
           "col": 0,
@@ -394,9 +396,13 @@ ModuleExpression {
           "type": "block",
           "valueType": null,
         },
-        "signature": SignatureType {
-          "paramTypes": [],
-          "returnTypes": [],
+        "signature": BlockSignature {
+          "blockType": "block",
+          "name": "$my_block",
+          "signatureType": SignatureType {
+            "paramTypes": [],
+            "returnTypes": [],
+          },
         },
       },
       "signature": FunctionSignature {
@@ -431,7 +437,6 @@ ModuleExpression {
           "type": "block",
           "valueType": null,
         },
-        "label": undefined,
         "operands": [],
         "operator": Token {
           "col": 0,
@@ -442,9 +447,13 @@ ModuleExpression {
           "type": "block",
           "valueType": null,
         },
-        "signature": SignatureType {
-          "paramTypes": [],
-          "returnTypes": [],
+        "signature": BlockSignature {
+          "blockType": "block",
+          "name": null,
+          "signatureType": SignatureType {
+            "paramTypes": [],
+            "returnTypes": [],
+          },
         },
       },
       "signature": FunctionSignature {
@@ -479,7 +488,6 @@ ModuleExpression {
           "type": "block",
           "valueType": null,
         },
-        "label": undefined,
         "operands": [],
         "operator": Token {
           "col": 0,
@@ -490,9 +498,13 @@ ModuleExpression {
           "type": "block",
           "valueType": null,
         },
-        "signature": SignatureType {
-          "paramTypes": [],
-          "returnTypes": [],
+        "signature": BlockSignature {
+          "blockType": "block",
+          "name": null,
+          "signatureType": SignatureType {
+            "paramTypes": [],
+            "returnTypes": [],
+          },
         },
       },
       "signature": FunctionSignature {
@@ -547,7 +559,6 @@ ModuleExpression {
               "type": "block",
               "valueType": null,
             },
-            "label": undefined,
             "operands": [],
             "operator": Token {
               "col": 0,
@@ -558,13 +569,17 @@ ModuleExpression {
               "type": "block",
               "valueType": null,
             },
-            "signature": SignatureType {
-              "paramTypes": [
-                0,
-              ],
-              "returnTypes": [
-                0,
-              ],
+            "signature": BlockSignature {
+              "blockType": "block",
+              "name": null,
+              "signatureType": SignatureType {
+                "paramTypes": [
+                  0,
+                ],
+                "returnTypes": [
+                  0,
+                ],
+              },
             },
           },
         ],
@@ -625,7 +640,6 @@ ModuleExpression {
               "type": "block",
               "valueType": null,
             },
-            "label": undefined,
             "operands": [],
             "operator": Token {
               "col": 0,
@@ -636,13 +650,17 @@ ModuleExpression {
               "type": "block",
               "valueType": null,
             },
-            "signature": SignatureType {
-              "paramTypes": [
-                0,
-              ],
-              "returnTypes": [
-                0,
-              ],
+            "signature": BlockSignature {
+              "blockType": "block",
+              "name": null,
+              "signatureType": SignatureType {
+                "paramTypes": [
+                  0,
+                ],
+                "returnTypes": [
+                  0,
+                ],
+              },
             },
           },
         ],
