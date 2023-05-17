@@ -19,17 +19,26 @@ export interface HasIdentifier {
  * Used for functions and blocks.
  */
 export interface HasSignature {
-  getSignature(): FunctionSignature;
-}
-
-interface HasBody {
-  getBody(): TokenExpression[];
+  getSignatureType(): SignatureType;
 }
 
 export abstract class IntermediateRepresentation {}
 
-type GlobalType = FunctionSignature; // TODO add more
+type GlobalType = SignatureType; // TODO add more
 type GlobalExpression = HasIdentifier;
+
+/**
+ * Type signatures for functions and blocks.
+ */
+export class SignatureType {
+  paramTypes: ValueType[];
+  returnTypes: ValueType[];
+
+  constructor(paramTypes: ValueType[], returnTypes: ValueType[]) {
+    this.paramTypes = paramTypes;
+    this.returnTypes = returnTypes;
+  }
+}
 
 export class ModuleExpression extends IntermediateRepresentation {
   /*
@@ -83,14 +92,14 @@ export class ModuleExpression extends IntermediateRepresentation {
 
   private addFunctionExpression(functionExpression: FunctionExpression) {
     this.functions.push(functionExpression);
-    this.addGlobalType(functionExpression.getSignature());
+    this.addGlobalType(functionExpression.getSignatureType());
     this.globals.push(functionExpression);
 
     // Generate an export expression if it has an inline export.
-    if (functionExpression.hasInlineExport) {
+    if (functionExpression.hasInlineExport()) {
       this.addExportExpression(
         new ExportExpression(
-          functionExpression.inlineExportName!,
+          functionExpression.getInlineExportName()!,
           ExportType.Func,
           this.functions.length - 1,
         ),
@@ -161,12 +170,12 @@ export class ModuleExpression extends IntermediateRepresentation {
     return -1; // This will never run, assert throws error
   }
 
-  getFunctionSignatures(): FunctionSignature[] {
-    return this.functions.map((func) => func.getSignature());
+  getFunctionSignatureTypes(): SignatureType[] {
+    return this.functions.map((func) => func.getSignatureType());
   }
 
   getFunctionBodies(): TokenExpression[] {
-    return this.functions.map((func) => func.body);
+    return this.functions.map((func) => func.getBody());
   }
 }
 
@@ -243,6 +252,7 @@ export class ExportExpression extends IntermediateRepresentation {
     }
   }
 }
+
 /*
 FUNCTIONS
 */
@@ -255,15 +265,7 @@ export class FunctionExpression
   extends IntermediateRepresentation
   implements HasIdentifier, HasSignature {
   private signature: FunctionSignature;
-  body: TokenExpression;
-
-  functionName: string | null;
-  hasInlineExport: boolean;
-  inlineExportName: string | null;
-
-  paramNames: (string | null)[];
-  localTypes: ValueType[];
-  localNames: (string | null)[];
+  private body: TokenExpression;
 
   constructor(
     functionName: string | null,
@@ -276,6 +278,81 @@ export class FunctionExpression
     body: TokenExpression,
   ) {
     super();
+    this.signature = new FunctionSignature(
+      functionName,
+      paramTypes,
+      paramNames,
+      returnTypes,
+      localTypes,
+      localNames,
+      inlineExportName,
+    );
+    this.body = body;
+  }
+
+  getID(): string | null {
+    return this.signature.functionName;
+  }
+  getParamNames() {
+    return this.signature.paramNames;
+  }
+  getSignatureType() {
+    return this.signature.signatureType;
+  }
+  getLocalTypes() {
+    return this.signature.localTypes;
+  }
+  getLocalNames() {
+    return this.signature.localNames;
+  }
+  getInlineExportName() {
+    return this.signature.inlineExportName;
+  }
+  hasInlineExport() {
+    return this.signature.inlineExportName !== null;
+  }
+  getBody() {
+    return this.body;
+  }
+
+  resolveVariableIndex(nameToResolve: string) {
+    for (const [i, name] of [
+      ...this.getParamNames(),
+      ...this.getLocalNames(),
+    ].entries()) {
+      if (name === nameToResolve) {
+        return i;
+      }
+    }
+    throw new Error(
+      `Parameter name ${nameToResolve} not found in function. Parameter names available: ${[
+        this.getParamNames(),
+      ]}, Local Names available: ${this.getLocalNames()}`,
+    );
+  }
+}
+
+/**
+ * Class for function signature.
+ * This class shoudl contain literally everything to do with function declaration.
+ */
+export class FunctionSignature {
+  functionName: string | null;
+  paramNames: (string | null)[];
+  localTypes: ValueType[];
+  localNames: (string | null)[];
+  inlineExportName: string | null;
+  signatureType: SignatureType;
+
+  constructor(
+    functionName: string | null,
+    paramTypes: ValueType[],
+    paramNames: (string | null)[],
+    returnTypes: ValueType[],
+    localTypes: ValueType[],
+    localNames: (string | null)[],
+    inlineExportName: string | null,
+  ) {
     assert(
       paramTypes.length === paramNames.length,
       `Function param types and names must have same length: [${paramTypes}], [${paramNames}]`,
@@ -285,50 +362,11 @@ export class FunctionExpression
       `Function local types and names must have same length: [${localTypes}], [${localNames}]`,
     );
     this.functionName = functionName;
-    this.inlineExportName = inlineExportName;
-    this.hasInlineExport = inlineExportName !== null;
-    this.signature = new FunctionSignature(paramTypes, returnTypes);
-    this.body = body;
+    this.signatureType = new SignatureType(paramTypes, returnTypes);
     this.paramNames = paramNames;
     this.localTypes = localTypes;
     this.localNames = localNames;
-  }
-
-  getID(): string | null {
-    return this.functionName;
-  }
-
-  resolveVariableIndex(nameToResolve: string) {
-    for (const [i, name] of [
-      ...this.paramNames,
-      ...this.localNames,
-    ].entries()) {
-      if (name === nameToResolve) {
-        return i;
-      }
-    }
-    throw new Error(
-      `Parameter name ${nameToResolve} not found in function. Parameter names available: ${[
-        this.paramNames,
-      ]}, Local Names available: ${this.localNames}`,
-    );
-  }
-
-  getSignature(): FunctionSignature {
-    return this.signature;
-  }
-}
-
-/**
- * The FunctionSignature Type doubles as a class to store Function Type.
- */
-export class FunctionSignature {
-  paramTypes: ValueType[];
-  returnTypes: ValueType[];
-
-  constructor(paramTypes: ValueType[], returnTypes: ValueType[]) {
-    this.paramTypes = paramTypes;
-    this.returnTypes = returnTypes;
+    this.inlineExportName = inlineExportName;
   }
 }
 
@@ -350,6 +388,9 @@ export abstract class TokenExpression
   extends IntermediateRepresentation
   implements Unfoldable {
   unfold(): PureUnfoldedTokenExpression {
+    throw new Error('Abstract method not implemented.');
+  }
+  getBody(): TokenExpression[] {
     throw new Error('Abstract method not implemented.');
   }
 }
@@ -389,13 +430,11 @@ export class OperationTree extends TokenExpression {
 export class UnfoldedTokenExpression extends TokenExpression {
   tokens: (Token | OperationTree)[];
 
-  private returnTypes?: ValueType[];
-  private consumedTypes?: ValueType[];
-
   constructor(tokens: (Token | OperationTree)[]) {
     super();
     this.tokens = tokens;
   }
+
   unfold(): PureUnfoldedTokenExpression {
     const unfoldedOperands: Token[] = this.tokens.flatMap((token) => {
       if (token instanceof Token) {
@@ -431,9 +470,9 @@ export class PureUnfoldedTokenExpression extends IntermediateRepresentation {
 }
 
 export class PureUnfoldedBlockExpression extends PureUnfoldedTokenExpression {
-  signature: FunctionSignature;
+  signature: SignatureType;
   tokens: Token[];
-  constructor(signature: FunctionSignature, tokens: Token[]) {
+  constructor(signature: SignatureType, tokens: Token[]) {
     super(tokens);
     this.signature = signature;
     this.tokens = tokens;
@@ -446,12 +485,12 @@ export class PureUnfoldedBlockExpression extends PureUnfoldedTokenExpression {
 export class BlockExpression extends OperationTree implements HasSignature {
   headerToken: Token;
   label: string | undefined;
-  blockExpression: TokenExpression;
-  private signature: FunctionSignature;
+  body: TokenExpression;
+  private signature: SignatureType;
 
   constructor(
     headerToken: Token,
-    signature: FunctionSignature,
+    signature: SignatureType,
     blockExpression: TokenExpression,
     label?: string,
   ) {
@@ -462,15 +501,15 @@ export class BlockExpression extends OperationTree implements HasSignature {
         || headerToken.type === TokenType.If,
     );
     this.headerToken = headerToken;
-    this.blockExpression = blockExpression;
+    this.body = blockExpression;
     this.label = label;
     this.signature = signature;
   }
 
   unfold(): PureUnfoldedBlockExpression {
-    return new PureUnfoldedBlockExpression(this.getSignature(), [
+    return new PureUnfoldedBlockExpression(this.getSignatureType(), [
       this.headerToken,
-      ...this.blockExpression.unfold().tokens,
+      ...this.body.unfold().tokens,
       this.createEndToken(),
     ]);
   }
@@ -487,7 +526,7 @@ export class BlockExpression extends OperationTree implements HasSignature {
     );
   }
 
-  getSignature(): FunctionSignature {
+  getSignatureType(): SignatureType {
     return this.signature;
   }
 }

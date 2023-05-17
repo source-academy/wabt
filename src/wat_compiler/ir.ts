@@ -8,7 +8,7 @@ import {
   ExportExpression,
   EmptyTokenExpression,
   BlockExpression,
-  FunctionSignature,
+  SignatureType,
 } from './ir_types';
 import { Token, TokenType } from '../common/token';
 import { type ParseTree } from './tree_types';
@@ -171,7 +171,7 @@ function parseBlockExpression(parseTree: ParseTree): BlockExpression {
 
   return new BlockExpression(
     firstToken,
-    new FunctionSignature(paramTypes, resultTypes),
+    new SignatureType(paramTypes, resultTypes),
     parseExpression(parseTree.slice(cursor)),
     blockLabel,
   );

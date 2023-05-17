@@ -165,8 +165,6 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -179,20 +177,21 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [],
       "returnTypes": [],
     },
@@ -200,8 +199,6 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -214,15 +211,16 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
   ],
@@ -235,8 +233,6 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -249,20 +245,21 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [],
       "returnTypes": [],
     },
@@ -270,8 +267,6 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -284,15 +279,16 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
   ],
@@ -305,9 +301,7 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": BlockExpression {
-        "blockExpression": UnfoldedTokenExpression {
-          "consumedTypes": undefined,
-          "returnTypes": undefined,
+        "body": UnfoldedTokenExpression {
           "tokens": [
             Token {
               "col": 0,
@@ -340,25 +334,26 @@ ModuleExpression {
           "type": "block",
           "valueType": null,
         },
-        "signature": FunctionSignature {
+        "signature": SignatureType {
           "paramTypes": [],
           "returnTypes": [],
         },
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [],
       "returnTypes": [],
     },
@@ -366,9 +361,7 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": BlockExpression {
-        "blockExpression": UnfoldedTokenExpression {
-          "consumedTypes": undefined,
-          "returnTypes": undefined,
+        "body": UnfoldedTokenExpression {
           "tokens": [
             Token {
               "col": 0,
@@ -401,20 +394,21 @@ ModuleExpression {
           "type": "block",
           "valueType": null,
         },
-        "signature": FunctionSignature {
+        "signature": SignatureType {
           "paramTypes": [],
           "returnTypes": [],
         },
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
   ],
@@ -427,7 +421,7 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": BlockExpression {
-        "blockExpression": EmptyTokenExpression {},
+        "body": EmptyTokenExpression {},
         "headerToken": Token {
           "col": 0,
           "indexInSource": 32,
@@ -448,25 +442,26 @@ ModuleExpression {
           "type": "block",
           "valueType": null,
         },
-        "signature": FunctionSignature {
+        "signature": SignatureType {
           "paramTypes": [],
           "returnTypes": [],
         },
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [],
       "returnTypes": [],
     },
@@ -474,7 +469,7 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": BlockExpression {
-        "blockExpression": EmptyTokenExpression {},
+        "body": EmptyTokenExpression {},
         "headerToken": Token {
           "col": 0,
           "indexInSource": 32,
@@ -495,20 +490,21 @@ ModuleExpression {
           "type": "block",
           "valueType": null,
         },
-        "signature": FunctionSignature {
+        "signature": SignatureType {
           "paramTypes": [],
           "returnTypes": [],
         },
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
   ],
@@ -521,8 +517,6 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -543,7 +537,7 @@ ModuleExpression {
             "valueType": null,
           },
           BlockExpression {
-            "blockExpression": EmptyTokenExpression {},
+            "body": EmptyTokenExpression {},
             "headerToken": Token {
               "col": 0,
               "indexInSource": 56,
@@ -564,7 +558,7 @@ ModuleExpression {
               "type": "block",
               "valueType": null,
             },
-            "signature": FunctionSignature {
+            "signature": SignatureType {
               "paramTypes": [
                 0,
               ],
@@ -575,22 +569,23 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [],
       "returnTypes": [
         0,
@@ -600,8 +595,6 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -622,7 +615,7 @@ ModuleExpression {
             "valueType": null,
           },
           BlockExpression {
-            "blockExpression": EmptyTokenExpression {},
+            "body": EmptyTokenExpression {},
             "headerToken": Token {
               "col": 0,
               "indexInSource": 56,
@@ -643,7 +636,7 @@ ModuleExpression {
               "type": "block",
               "valueType": null,
             },
-            "signature": FunctionSignature {
+            "signature": SignatureType {
               "paramTypes": [
                 0,
               ],
@@ -654,17 +647,18 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
   ],
@@ -1921,85 +1915,91 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [],
       "returnTypes": [],
     },
@@ -2007,80 +2007,86 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
   ],
@@ -2093,46 +2099,46 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [
-        null,
-        null,
-      ],
       "signature": FunctionSignature {
-        "paramTypes": [
-          3,
-          3,
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [
+          null,
+          null,
         ],
-        "returnTypes": [],
+        "signatureType": SignatureType {
+          "paramTypes": [
+            3,
+            3,
+          ],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [
-        null,
-        null,
-      ],
       "signature": FunctionSignature {
-        "paramTypes": [
-          3,
-          3,
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [
+          null,
+          null,
         ],
-        "returnTypes": [],
+        "signatureType": SignatureType {
+          "paramTypes": [
+            3,
+            3,
+          ],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -2181,35 +2187,36 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [
-        "$pone",
-        "$ptwo",
-      ],
       "signature": FunctionSignature {
-        "paramTypes": [
-          3,
-          3,
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [
+          "$pone",
+          "$ptwo",
         ],
-        "returnTypes": [
-          3,
-        ],
+        "signatureType": SignatureType {
+          "paramTypes": [
+            3,
+            3,
+          ],
+          "returnTypes": [
+            3,
+          ],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [
         3,
         3,
       ],
       "returnTypes": [],
     },
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [
         3,
         3,
@@ -2222,46 +2229,46 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [
-        null,
-        null,
-      ],
       "signature": FunctionSignature {
-        "paramTypes": [
-          3,
-          3,
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [
+          null,
+          null,
         ],
-        "returnTypes": [],
+        "signatureType": SignatureType {
+          "paramTypes": [
+            3,
+            3,
+          ],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [
-        null,
-        null,
-      ],
       "signature": FunctionSignature {
-        "paramTypes": [
-          3,
-          3,
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [
+          null,
+          null,
         ],
-        "returnTypes": [],
+        "signatureType": SignatureType {
+          "paramTypes": [
+            3,
+            3,
+          ],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -2310,23 +2317,24 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [
-        "$pone",
-        "$ptwo",
-      ],
       "signature": FunctionSignature {
-        "paramTypes": [
-          3,
-          3,
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [
+          "$pone",
+          "$ptwo",
         ],
-        "returnTypes": [
-          3,
-        ],
+        "signatureType": SignatureType {
+          "paramTypes": [
+            3,
+            3,
+          ],
+          "returnTypes": [
+            3,
+          ],
+        },
       },
     },
   ],
@@ -2339,8 +2347,6 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -2362,23 +2368,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          3,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            3,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -2418,24 +2423,23 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          3,
-          3,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            3,
+            3,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -2475,29 +2479,30 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          3,
-          3,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            3,
+            3,
+          ],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [],
       "returnTypes": [
         3,
       ],
     },
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [],
       "returnTypes": [
         3,
@@ -2508,8 +2513,6 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -2531,23 +2534,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          3,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            3,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -2587,24 +2589,23 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          3,
-          3,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            3,
+            3,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -2644,18 +2645,19 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          3,
-          3,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            3,
+            3,
+          ],
+        },
       },
     },
   ],
@@ -2668,63 +2670,64 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [
-        null,
-      ],
-      "localTypes": [
-        3,
-      ],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [
+          null,
+        ],
+        "localTypes": [
+          3,
+        ],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [
-        null,
-        null,
-      ],
-      "localTypes": [
-        3,
-        3,
-      ],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [
+          null,
+          null,
+        ],
+        "localTypes": [
+          3,
+          3,
+        ],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [
-        null,
-        null,
-      ],
-      "localTypes": [
-        3,
-        3,
-      ],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [
+          null,
+          null,
+        ],
+        "localTypes": [
+          3,
+          3,
+        ],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -2764,34 +2767,35 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [
-        "$lone",
-        "$ltwo",
-      ],
-      "localTypes": [
-        3,
-        3,
-      ],
-      "paramNames": [
-        "$pone",
-      ],
       "signature": FunctionSignature {
-        "paramTypes": [
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [
+          "$lone",
+          "$ltwo",
+        ],
+        "localTypes": [
+          3,
           3,
         ],
-        "returnTypes": [],
+        "paramNames": [
+          "$pone",
+        ],
+        "signatureType": SignatureType {
+          "paramTypes": [
+            3,
+          ],
+          "returnTypes": [],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [],
       "returnTypes": [],
     },
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [
         3,
       ],
@@ -2801,63 +2805,64 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [
-        null,
-      ],
-      "localTypes": [
-        3,
-      ],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [
+          null,
+        ],
+        "localTypes": [
+          3,
+        ],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [
-        null,
-        null,
-      ],
-      "localTypes": [
-        3,
-        3,
-      ],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [
+          null,
+          null,
+        ],
+        "localTypes": [
+          3,
+          3,
+        ],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [
-        null,
-        null,
-      ],
-      "localTypes": [
-        3,
-        3,
-      ],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [
+          null,
+          null,
+        ],
+        "localTypes": [
+          3,
+          3,
+        ],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -2897,25 +2902,26 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [
-        "$lone",
-        "$ltwo",
-      ],
-      "localTypes": [
-        3,
-        3,
-      ],
-      "paramNames": [
-        "$pone",
-      ],
       "signature": FunctionSignature {
-        "paramTypes": [
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [
+          "$lone",
+          "$ltwo",
+        ],
+        "localTypes": [
+          3,
           3,
         ],
-        "returnTypes": [],
+        "paramNames": [
+          "$pone",
+        ],
+        "signatureType": SignatureType {
+          "paramTypes": [
+            3,
+          ],
+          "returnTypes": [],
+        },
       },
     },
   ],
@@ -2953,59 +2959,63 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": true,
-      "inlineExportName": "fn",
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": "fn",
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": "$fn1",
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": "$fn1",
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": "$fn3",
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": "$fn3",
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": "$fn2",
-      "hasInlineExport": true,
-      "inlineExportName": "fn5",
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": "$fn2",
+        "inlineExportName": "fn5",
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [],
       "returnTypes": [],
     },
@@ -3013,54 +3023,58 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": null,
-      "hasInlineExport": true,
-      "inlineExportName": "fn",
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": null,
+        "inlineExportName": "fn",
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": "$fn1",
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": "$fn1",
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": "$fn3",
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": "$fn3",
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
     FunctionExpression {
       "body": EmptyTokenExpression {},
-      "functionName": "$fn2",
-      "hasInlineExport": true,
-      "inlineExportName": "fn5",
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [],
+        "functionName": "$fn2",
+        "inlineExportName": "fn5",
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [],
+        },
       },
     },
   ],
@@ -3082,8 +3096,6 @@ ModuleExpression {
       "body": OperationTree {
         "operands": [
           UnfoldedTokenExpression {
-            "consumedTypes": undefined,
-            "returnTypes": undefined,
             "tokens": [
               Token {
                 "col": 0,
@@ -3106,8 +3118,6 @@ ModuleExpression {
             ],
           },
           UnfoldedTokenExpression {
-            "consumedTypes": undefined,
-            "returnTypes": undefined,
             "tokens": [
               Token {
                 "col": 0,
@@ -3140,28 +3150,29 @@ ModuleExpression {
           "valueType": null,
         },
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [
-        null,
-        null,
-      ],
       "signature": FunctionSignature {
-        "paramTypes": [
-          3,
-          3,
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [
+          null,
+          null,
         ],
-        "returnTypes": [
-          3,
-        ],
+        "signatureType": SignatureType {
+          "paramTypes": [
+            3,
+            3,
+          ],
+          "returnTypes": [
+            3,
+          ],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [
         3,
         3,
@@ -3176,8 +3187,6 @@ ModuleExpression {
       "body": OperationTree {
         "operands": [
           UnfoldedTokenExpression {
-            "consumedTypes": undefined,
-            "returnTypes": undefined,
             "tokens": [
               Token {
                 "col": 0,
@@ -3200,8 +3209,6 @@ ModuleExpression {
             ],
           },
           UnfoldedTokenExpression {
-            "consumedTypes": undefined,
-            "returnTypes": undefined,
             "tokens": [
               Token {
                 "col": 0,
@@ -3234,23 +3241,24 @@ ModuleExpression {
           "valueType": null,
         },
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [
-        null,
-        null,
-      ],
       "signature": FunctionSignature {
-        "paramTypes": [
-          3,
-          3,
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [
+          null,
+          null,
         ],
-        "returnTypes": [
-          3,
-        ],
+        "signatureType": SignatureType {
+          "paramTypes": [
+            3,
+            3,
+          ],
+          "returnTypes": [
+            3,
+          ],
+        },
       },
     },
   ],
@@ -3270,8 +3278,6 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -3320,28 +3326,29 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [
-        null,
-        null,
-      ],
       "signature": FunctionSignature {
-        "paramTypes": [
-          3,
-          3,
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [
+          null,
+          null,
         ],
-        "returnTypes": [
-          3,
-        ],
+        "signatureType": SignatureType {
+          "paramTypes": [
+            3,
+            3,
+          ],
+          "returnTypes": [
+            3,
+          ],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [
         3,
         3,
@@ -3354,8 +3361,6 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -3404,23 +3409,24 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [
-        null,
-        null,
-      ],
       "signature": FunctionSignature {
-        "paramTypes": [
-          3,
-          3,
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [
+          null,
+          null,
         ],
-        "returnTypes": [
-          3,
-        ],
+        "signatureType": SignatureType {
+          "paramTypes": [
+            3,
+            3,
+          ],
+          "returnTypes": [
+            3,
+          ],
+        },
       },
     },
   ],
@@ -9303,8 +9309,6 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -9353,23 +9357,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -9418,23 +9421,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -9483,23 +9485,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -9548,22 +9549,23 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [],
       "returnTypes": [
         0,
@@ -9573,8 +9575,6 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -9623,23 +9623,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -9688,23 +9687,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -9753,23 +9751,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -9818,17 +9815,18 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
   ],
@@ -9841,8 +9839,6 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -9891,23 +9887,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -9956,23 +9951,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -10021,23 +10015,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -10086,22 +10079,23 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [],
       "returnTypes": [
         0,
@@ -10111,8 +10105,6 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -10161,23 +10153,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -10226,23 +10217,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -10291,23 +10281,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -10356,17 +10345,18 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
   ],
@@ -10379,8 +10369,6 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -10429,23 +10417,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -10494,23 +10481,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -10559,23 +10545,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -10624,23 +10609,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -10689,23 +10673,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -10754,22 +10737,23 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [],
       "returnTypes": [
         0,
@@ -10779,8 +10763,6 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -10829,23 +10811,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -10894,23 +10875,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -10959,23 +10939,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -11024,23 +11003,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -11089,23 +11067,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -11154,17 +11131,18 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
   ],
@@ -11177,8 +11155,6 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -11227,23 +11203,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -11292,23 +11267,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -11357,23 +11331,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -11422,23 +11395,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -11487,23 +11459,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -11552,22 +11523,23 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [],
       "returnTypes": [
         0,
@@ -11577,8 +11549,6 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -11627,23 +11597,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -11692,23 +11661,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -11757,23 +11725,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -11822,23 +11789,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -11887,23 +11853,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -11952,17 +11917,18 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
   ],
@@ -11975,8 +11941,6 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -12025,23 +11989,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -12090,23 +12053,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -12155,23 +12117,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -12220,23 +12181,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -12285,23 +12245,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -12350,22 +12309,23 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [],
       "returnTypes": [
         0,
@@ -12375,8 +12335,6 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -12425,23 +12383,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -12490,23 +12447,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -12555,23 +12511,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -12620,23 +12575,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -12685,23 +12639,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -12750,17 +12703,18 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
   ],
@@ -12773,8 +12727,6 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -12823,23 +12775,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -12888,23 +12839,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -12953,23 +12903,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -13018,23 +12967,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -13083,23 +13031,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -13148,22 +13095,23 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
   ],
   "globalTypes": [
-    FunctionSignature {
+    SignatureType {
       "paramTypes": [],
       "returnTypes": [
         0,
@@ -13173,8 +13121,6 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -13223,23 +13169,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -13288,23 +13233,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -13353,23 +13297,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -13418,23 +13361,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -13483,23 +13425,22 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "consumedTypes": undefined,
-        "returnTypes": undefined,
         "tokens": [
           Token {
             "col": 0,
@@ -13548,17 +13489,18 @@ ModuleExpression {
           },
         ],
       },
-      "functionName": null,
-      "hasInlineExport": false,
-      "inlineExportName": null,
-      "localNames": [],
-      "localTypes": [],
-      "paramNames": [],
       "signature": FunctionSignature {
-        "paramTypes": [],
-        "returnTypes": [
-          0,
-        ],
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
       },
     },
   ],

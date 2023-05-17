@@ -1,6 +1,6 @@
 /* eslint-disable array-element-newline */ // (array formatting)
 import {
-  type FunctionSignature,
+  type SignatureType,
   type ModuleExpression,
   type PureUnfoldedTokenExpression,
   type ExportExpression,
@@ -80,7 +80,7 @@ export class BinaryWriter {
   }
 
   private encodeFunctionSection(): Uint8Array {
-    const functions = this.module.getFunctionSignatures();
+    const functions = this.module.getFunctionSignatureTypes();
     const num_fns = functions.length;
     const section_size = num_fns + 1;
 
@@ -162,7 +162,7 @@ export class BinaryWriter {
    * @param ir function signature to encode
    * @returns a Uint8Array binary encoding.
    */
-  private encodeFunctionSignature(ir: FunctionSignature): Uint8Array {
+  private encodeFunctionSignature(ir: SignatureType): Uint8Array {
     const FUNCTION_SIG_PREFIX = 0x60;
 
     const param_encoding = ir.paramTypes.map((type) => ValueType.getValue(type));
@@ -187,7 +187,7 @@ export class BinaryWriter {
    * @returns a Uint8Array binary encoding.
    */
   private encodeFunctionBody(fnExp: FunctionExpression): Uint8Array {
-    const fnBody = fnExp.body;
+    const fnBody = fnExp.getBody();
     const unfoldedFnBody = fnBody.unfold();
 
     // Replace parameter names with index.
@@ -221,7 +221,7 @@ export class BinaryWriter {
   private encodeFunctionBodyLocalTypeCount(
     fnExp: FunctionExpression,
   ): Uint8Array {
-    const localTypes = fnExp.localTypes;
+    const localTypes = fnExp.getLocalTypes();
     let uniqueConsecutiveType: ValueType | null = null;
     let uniqueConsecutiveTypeCount: number = 0;
     let total_types = 0;
