@@ -20,6 +20,8 @@ describe.each([
           .toBinary({}).buffer,
       );
 
+    console.log({ actual });
+    console.log({ expected });
     expect(actual)
       .toEqual(expected);
   });

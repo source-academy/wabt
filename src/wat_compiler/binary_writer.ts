@@ -187,14 +187,14 @@ export class BinaryWriter {
    * @returns a Uint8Array binary encoding.
    */
   private encodeFunctionBody(fnExp: FunctionExpression): Uint8Array {
-    const fnBody = fnExp.functionBody;
-    const unfoldedBody = fnBody.body.unfold();
+    const fnBody = fnExp.body;
+    const unfoldedFnBody = fnBody.unfold();
 
     // Replace parameter names with index.
-    for (let i = 0; i < unfoldedBody.tokens.length; i++) {
-      const token = unfoldedBody.tokens[i];
+    for (let i = 0; i < unfoldedFnBody.tokens.length; i++) {
+      const token = unfoldedFnBody.tokens[i];
       if (token.type === TokenType.Var) {
-        unfoldedBody.tokens[i] = this.convertVarToIndexToken(
+        unfoldedFnBody.tokens[i] = this.convertVarToIndexToken(
           token,
           fnExp.resolveVariableIndex(token.lexeme),
         );
@@ -202,7 +202,7 @@ export class BinaryWriter {
     }
 
     const encodedLocals = this.encodeFunctionBodyLocalTypeCount(fnExp);
-    const encodedBody = this.encodePureUnfoldedTokenExpression(unfoldedBody);
+    const encodedBody = this.encodePureUnfoldedTokenExpression(unfoldedFnBody);
     const sectionLength = encodedLocals.length + encodedBody.length + 1;
     const FUNCTION_END = 0x0b;
 

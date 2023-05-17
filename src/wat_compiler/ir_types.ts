@@ -22,6 +22,10 @@ export interface HasSignature {
   getSignature(): FunctionSignature;
 }
 
+interface HasBody {
+  getBody(): TokenExpression[];
+}
+
 export abstract class IntermediateRepresentation {}
 
 type GlobalType = FunctionSignature; // TODO add more
@@ -161,8 +165,8 @@ export class ModuleExpression extends IntermediateRepresentation {
     return this.functions.map((func) => func.getSignature());
   }
 
-  getFunctionBodies(): FunctionBody[] {
-    return this.functions.map((func) => func.functionBody);
+  getFunctionBodies(): TokenExpression[] {
+    return this.functions.map((func) => func.body);
   }
 }
 
@@ -250,8 +254,8 @@ FUNCTIONS
 export class FunctionExpression
   extends IntermediateRepresentation
   implements HasIdentifier, HasSignature {
-  private functionSignature: FunctionSignature;
-  functionBody: FunctionBody;
+  private signature: FunctionSignature;
+  body: TokenExpression;
 
   functionName: string | null;
   hasInlineExport: boolean;
@@ -283,8 +287,8 @@ export class FunctionExpression
     this.functionName = functionName;
     this.inlineExportName = inlineExportName;
     this.hasInlineExport = inlineExportName !== null;
-    this.functionSignature = new FunctionSignature(paramTypes, returnTypes);
-    this.functionBody = new FunctionBody(body);
+    this.signature = new FunctionSignature(paramTypes, returnTypes);
+    this.body = body;
     this.paramNames = paramNames;
     this.localTypes = localTypes;
     this.localNames = localNames;
@@ -311,7 +315,7 @@ export class FunctionExpression
   }
 
   getSignature(): FunctionSignature {
-    return this.functionSignature;
+    return this.signature;
   }
 }
 
@@ -328,20 +332,6 @@ export class FunctionSignature {
   }
 }
 
-/**
- * Intermediate representation of function body.
- * We are using a wrapper around TokenExpression because:
- *  (1) WABT function bodies have to be encoded differently from other blocks
- *  (2) WABT function bodies are in a different module section compared to other blocks.
- */
-export class FunctionBody {
-  body: TokenExpression;
-
-  constructor(body: TokenExpression) {
-    this.body = body;
-  }
-}
-
 /*
   EXPRESSION BODIES
 */
@@ -354,33 +344,11 @@ export interface Unfoldable {
 }
 
 /**
- * Interface indicating the resulting type of the particular intermediate representation
- * can be computed at compile time.
- */
-export interface Evaluable {
-  /**
-   * Get types consumed by this operand/expression at compile time
-   */
-  getConsumedTypes(): ValueType[];
-
-  /**
-   * Get types returned by this operand/expression at compile time
-   */
-  getReturnTypes(): ValueType[];
-}
-
-/**
- * All possible function expressions.
+ * All possible token expressions.
  */
 export abstract class TokenExpression
   extends IntermediateRepresentation
-  implements Unfoldable, Evaluable {
-  getConsumedTypes(): ValueType[] {
-    throw new Error('Abstract method not implemented.');
-  }
-  getReturnTypes(): ValueType[] {
-    throw new Error('Abstract method not implemented.');
-  }
+  implements Unfoldable {
   unfold(): PureUnfoldedTokenExpression {
     throw new Error('Abstract method not implemented.');
   }
@@ -392,9 +360,6 @@ export abstract class TokenExpression
 export class OperationTree extends TokenExpression {
   operator: Token;
   operands: (Token | TokenExpression)[];
-
-  private returnTypes?: ValueType[];
-  private consumedTypes?: ValueType[];
 
   constructor(operator: Token, operands: (Token | TokenExpression)[]) {
     super();
@@ -415,46 +380,6 @@ export class OperationTree extends TokenExpression {
       ...unfoldedOperands,
       this.operator,
     ]);
-  }
-
-  private resolveTypes(): void {
-    const stack: ValueType[] = [];
-    for (const operand of this.operands) {
-      const consumed = operand.getConsumedTypes();
-      const added = operand.getReturnTypes();
-      for (const consumedValueType of consumed) {
-        if (stack.at(-1) === consumedValueType) {
-          stack.pop();
-        } else {
-          throw new Error('Type mismatch'); // TODO proper error
-        }
-      }
-      stack.push(...added);
-    }
-
-    const consumedTypes = this.operator.getConsumedTypes();
-    if (!isEqual(stack, consumedTypes)) {
-      throw new Error(
-        `Type mismatch, expected ${consumedTypes}, but got ${stack}`,
-      );
-    }
-
-    this.returnTypes = this.operator.getReturnTypes();
-    this.consumedTypes = [];
-  }
-
-  getReturnTypes(): ValueType[] {
-    if (typeof this.returnTypes === 'undefined') {
-      this.resolveTypes();
-    }
-    return this.returnTypes!;
-  }
-
-  getConsumedTypes(): ValueType[] {
-    if (typeof this.consumedTypes === 'undefined') {
-      this.resolveTypes();
-    }
-    return this.consumedTypes!;
   }
 }
 
@@ -482,35 +407,6 @@ export class UnfoldedTokenExpression extends TokenExpression {
 
     return new PureUnfoldedTokenExpression(unfoldedOperands);
   }
-
-  private resolveTypes(): void {
-    const stack: ValueType[] = [];
-    for (const token of this.tokens) {
-      const consumed = token.getConsumedTypes();
-      const added = token.getReturnTypes();
-      for (const consumedValueType of consumed) {
-        if (stack.at(-1) === consumedValueType) {
-          stack.pop();
-        } else {
-          throw new Error('Type mismatch'); // TODO proper error
-        }
-      }
-      stack.push(...added);
-    }
-
-    this.returnTypes = stack;
-    this.consumedTypes = [];
-  }
-
-  getReturnTypes(): ValueType[] {
-    if (typeof this.returnTypes === 'undefined') this.resolveTypes();
-    return this.returnTypes!;
-  }
-
-  getConsumedTypes(): ValueType[] {
-    if (typeof this.consumedTypes === 'undefined') this.resolveTypes();
-    return this.consumedTypes!;
-  }
 }
 
 /**
@@ -519,12 +415,6 @@ export class UnfoldedTokenExpression extends TokenExpression {
 export class EmptyTokenExpression extends TokenExpression {
   unfold(): PureUnfoldedTokenExpression {
     return new PureUnfoldedTokenExpression([]);
-  }
-  getReturnTypes(): ValueType[] {
-    return [];
-  }
-  getConsumedTypes(): ValueType[] {
-    return [];
   }
 }
 
@@ -553,11 +443,11 @@ export class PureUnfoldedBlockExpression extends PureUnfoldedTokenExpression {
  * Class representing a Block expression that wrap around an expression.
  * For expressions such as block, if, loop instructions.
  */
-export class BlockExpression extends TokenExpression implements HasSignature {
+export class BlockExpression extends OperationTree implements HasSignature {
   headerToken: Token;
   label: string | undefined;
   blockExpression: TokenExpression;
-  private signature?: FunctionSignature;
+  private signature: FunctionSignature;
 
   constructor(
     headerToken: Token,
@@ -565,7 +455,7 @@ export class BlockExpression extends TokenExpression implements HasSignature {
     blockExpression: TokenExpression,
     label?: string,
   ) {
-    super();
+    super(headerToken, []);
     assert(
       headerToken.type === TokenType.Block
         || headerToken.type === TokenType.Loop
@@ -574,6 +464,7 @@ export class BlockExpression extends TokenExpression implements HasSignature {
     this.headerToken = headerToken;
     this.blockExpression = blockExpression;
     this.label = label;
+    this.signature = signature;
   }
 
   unfold(): PureUnfoldedBlockExpression {
@@ -596,20 +487,7 @@ export class BlockExpression extends TokenExpression implements HasSignature {
     );
   }
 
-  private resolveTypes(): void {
-    const returnTypes = this.blockExpression.getReturnTypes();
-    const consumedTypes = this.blockExpression.getConsumedTypes();
-    this.signature = new FunctionSignature(consumedTypes, returnTypes);
-  }
-
-  getReturnTypes(): ValueType[] {
-    return this.getSignature().returnTypes;
-  }
-  getConsumedTypes(): ValueType[] {
-    return this.getSignature().paramTypes;
-  }
   getSignature(): FunctionSignature {
-    if (typeof this.signature === 'undefined') this.resolveTypes();
-    return this.signature!;
+    return this.signature;
   }
 }

@@ -105,7 +105,8 @@ function parseStackExpression(parseTree: ParseTree): UnfoldedTokenExpression {
     } else {
       const temp = getIR(tokenNode);
       if (!(temp instanceof Token || temp instanceof OperationTree)) {
-        throw new Error(); // TODO proper error
+        console.log(`parseTree: ${JSON.stringify(parseTree, undefined, 2)}`);
+        throw new Error(`${temp} - ${JSON.stringify(temp, undefined, 2)}`); // TODO proper error
       }
       nodes.push(temp);
     }
@@ -118,8 +119,8 @@ function parseBlockExpression(parseTree: ParseTree): BlockExpression {
   let cursor = 0;
   let current;
 
-  let firstToken;
-  let blockLabel;
+  let firstToken: Token;
+  let blockLabel: string;
   const paramTypes: ValueType[] = [];
   const resultTypes: ValueType[] = [];
 

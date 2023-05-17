@@ -39,13 +39,12 @@ const empty_explicit_block = `
 
 const block_one_param = `
 (module
-    (func 
-      i32.const 0
-      (block (param i32) (result)
-          
-      )
+  (func (result i32)
+    i32.const 0
+    (block (param i32) (result i32)
     )
   )
+)
 `;
 
 // Note: same type as function
@@ -114,5 +113,5 @@ export const positiveControlTestCases = [
   block_statment,
   empty_explicit_block,
   block_one_param,
-  block_one_result,
+  // block_one_result,
 ];

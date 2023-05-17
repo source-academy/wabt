@@ -34,8 +34,8 @@ const parseTree = getParseTree(tokens);
 const ir = getIR(parseTree) as ModuleExpression;
 // console.log(ir);
 // console.log(JSON.stringify(ir, undefined, 2));
-console.log(ir.functions[0].functionBody.body);
-console.log((ir.functions[0].functionBody.body as BlockExpression).unfold());
+console.log(ir.functions[0].body.body);
+console.log((ir.functions[0].body.body as BlockExpression).unfold());
 const encoding = new BinaryWriter(ir)
   .encode();
 console.log(encoding);
