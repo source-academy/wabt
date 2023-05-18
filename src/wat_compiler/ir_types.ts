@@ -79,18 +79,7 @@ export class ModuleExpression extends IntermediateRepresentation {
    */
   exportExpressions: ExportExpression[] = []; // TODO add support for multiple export expressions
 
-  constructor(...childNodes: (FunctionExpression | ExportExpression)[]) {
-    super();
-    for (const child of childNodes) {
-      if (child instanceof FunctionExpression) {
-        this.addFunctionExpression(child);
-      } else if (child instanceof ExportExpression) {
-        this.addExportExpression(child);
-      }
-    }
-  }
-
-  private addFunctionExpression(functionExpression: FunctionExpression) {
+  addFunctionExpression(functionExpression: FunctionExpression) {
     this.functions.push(functionExpression);
     this.addGlobalType(functionExpression.getSignatureType());
     this.globals.push(functionExpression);
@@ -107,7 +96,7 @@ export class ModuleExpression extends IntermediateRepresentation {
     }
   }
 
-  private addExportExpression(exportExpression: ExportExpression) {
+  addExportExpression(exportExpression: ExportExpression) {
     this.exportExpressions.push(exportExpression);
   }
 
