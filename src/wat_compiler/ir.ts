@@ -7,6 +7,8 @@ import {
   ExportExpression,
   EmptyTokenExpression,
   BlockExpression,
+  SignatureType,
+  FunctionSignature,
 } from './ir_types';
 import { Token, TokenType } from '../common/token';
 import { type ParseTree } from './tree_types';
@@ -16,8 +18,9 @@ import { type ValueType } from '../common/type';
 import { assert } from '../common/assert';
 
 export function getIR(parseTree: ParseTree) {
-  return new IRWriter(parseTree)
+  const ir = new IRWriter(parseTree)
     .parse();
+  return ir;
 }
 
 export class IRWriter {
@@ -175,8 +178,7 @@ export class IRWriter {
       remainingTree = remainingTree[0];
     }
 
-    const ir = this.parseFunctionBodyExpression(remainingTree);
-    return new FunctionExpression(
+    const functionSignature = new FunctionSignature(
       functionName,
       inlineExportName,
       paramTypes,
@@ -184,8 +186,11 @@ export class IRWriter {
       resultTypes,
       localTypes,
       localNames,
-      ir,
     );
+
+    this.module.addGlobalType(functionSignature.signatureType);
+    const ir = this.parseFunctionBodyExpression(remainingTree);
+    return new FunctionExpression(functionSignature, ir);
   }
 
   /*
@@ -322,6 +327,8 @@ export class IRWriter {
       const types = this.parseFunctionSignatureResultExpression(parseTreeNode);
       resultTypes.push(...types);
     }
+
+    this.module.addGlobalType(new SignatureType(paramTypes, resultTypes));
 
     return new BlockExpression(
       firstToken,

@@ -105,7 +105,7 @@ export class ModuleExpression extends IntermediateRepresentation {
    * Only addes to the list of types if it does not already exist
    * @param type type to add to global type.
    */
-  private addGlobalType(type: GlobalType) {
+  addGlobalType(type: GlobalType) {
     for (const existingType of this.globalTypes) {
       if (isEqual(existingType, type)) {
         return;
@@ -256,26 +256,9 @@ export class FunctionExpression
   private signature: FunctionSignature;
   private body: TokenExpression;
 
-  constructor(
-    functionName: string | null,
-    inlineExportName: string | null,
-    paramTypes: ValueType[],
-    paramNames: (string | null)[],
-    returnTypes: ValueType[],
-    localTypes: ValueType[],
-    localNames: (string | null)[],
-    body: TokenExpression,
-  ) {
+  constructor(signature: FunctionSignature, body: TokenExpression) {
     super();
-    this.signature = new FunctionSignature(
-      functionName,
-      paramTypes,
-      paramNames,
-      returnTypes,
-      localTypes,
-      localNames,
-      inlineExportName,
-    );
+    this.signature = signature;
     this.body = body;
   }
 
@@ -335,12 +318,12 @@ export class FunctionSignature {
 
   constructor(
     functionName: string | null,
+    inlineExportName: string | null,
     paramTypes: ValueType[],
     paramNames: (string | null)[],
     returnTypes: ValueType[],
     localTypes: ValueType[],
     localNames: (string | null)[],
-    inlineExportName: string | null,
   ) {
     assert(
       paramTypes.length === paramNames.length,

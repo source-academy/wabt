@@ -287,8 +287,21 @@ export class BinaryWriter {
       }
     }
 
-    // Insert block type
-    binary.splice(1, 0, 0x40);
+    if (
+      ir.signature.paramTypes.length === 0
+      && ir.signature.returnTypes.length === 0
+    ) {
+      // Empty block type
+      binary.splice(1, 0, 0x40);
+    } else {
+      // Else, query block type
+      console.log(
+        `Querying block types: ${this.module.resolveGlobalTypeIndex(
+          ir.signature,
+        )}`,
+      );
+      binary.splice(1, 0, this.module.resolveGlobalTypeIndex(ir.signature));
+    }
     return new Uint8Array(binary);
   }
 
