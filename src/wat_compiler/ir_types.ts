@@ -350,24 +350,28 @@ export class FunctionSignature {
  * may contain s-expressions, and can therefore be 'unfolded'.
  */
 export interface Unfoldable {
-  unfold(): PureUnfoldedTokenExpression;
+  unfold(): UnfoldedTokenExpression;
+}
+export namespace Unfoldable {
+  /**
+   * Check if a JS object is an Unfoldable interface. Note that this is hardly perfect.
+   * @param o object to check
+   * @returns true if unfoldable
+   */
+  export function instanceOf(o: any) {
+    return 'unfold' in o && typeof o.unfold === 'function';
+  }
 }
 
 /**
  * All possible token expressions.
  */
-export abstract class TokenExpression
-  extends IntermediateRepresentation
-  implements Unfoldable {
-  unfold(): PureUnfoldedTokenExpression {
-    throw new Error('Abstract method not implemented.');
-  }
-}
+export abstract class TokenExpression extends IntermediateRepresentation {}
 
 /**
  * Class representing operators and operands in an s-expression.
  */
-export class OperationTree extends TokenExpression {
+export class OperationTree extends TokenExpression implements Unfoldable {
   operator: Token;
   operands: (Token | TokenExpression)[];
 
@@ -377,19 +381,18 @@ export class OperationTree extends TokenExpression {
     this.operands = operands;
   }
 
-  unfold(): PureUnfoldedTokenExpression {
-    const unfoldedOperands: Token[] = this.operands.flatMap((operand) => {
-      if (operand instanceof Token) {
-        return [operand];
-      }
+  unfold(): UnfoldedTokenExpression {
+    const unfoldedOperands: (Token | TokenExpression)[] = this.operands.map(
+      (operand) => {
+        if (operand instanceof Token) {
+          return operand;
+        }
 
-      return operand.unfold().tokens;
-    });
+        return operand;
+      },
+    );
 
-    return new PureUnfoldedTokenExpression([
-      ...unfoldedOperands,
-      this.operator,
-    ]);
+    return new UnfoldedTokenExpression([...unfoldedOperands, this.operator]);
   }
 }
 
@@ -397,23 +400,11 @@ export class OperationTree extends TokenExpression {
  * Class representing a stack token expression. May have s-expressions inside.
  */
 export class UnfoldedTokenExpression extends TokenExpression {
-  tokens: (Token | OperationTree)[];
+  expr: (Token | TokenExpression)[];
 
-  constructor(tokens: (Token | OperationTree)[]) {
+  constructor(expr: (Token | TokenExpression)[]) {
     super();
-    this.tokens = tokens;
-  }
-
-  unfold(): PureUnfoldedTokenExpression {
-    const unfoldedOperands: Token[] = this.tokens.flatMap((token) => {
-      if (token instanceof Token) {
-        return [token];
-      }
-
-      return token.unfold().tokens;
-    });
-
-    return new PureUnfoldedTokenExpression(unfoldedOperands);
+    this.expr = expr;
   }
 }
 
@@ -421,30 +412,18 @@ export class UnfoldedTokenExpression extends TokenExpression {
  * Class to represent an empty token expression
  */
 export class EmptyTokenExpression extends TokenExpression {
-  unfold(): PureUnfoldedTokenExpression {
-    return new PureUnfoldedTokenExpression([]);
+  unfold(): UnfoldedTokenExpression {
+    return new UnfoldedTokenExpression([]);
   }
 }
 
-/**
- * Class representing a stack token expression. May NOT have s-expressions inside.
- */
-export class PureUnfoldedTokenExpression extends IntermediateRepresentation {
-  tokens: Token[];
-
-  constructor(tokens: Token[]) {
-    super();
-    this.tokens = tokens;
-  }
-}
-
-export class PureUnfoldedBlockExpression extends PureUnfoldedTokenExpression {
+export class UnfoldedBlockExpression extends UnfoldedTokenExpression {
   signature: SignatureType;
-  tokens: Token[];
-  constructor(signature: SignatureType, tokens: Token[]) {
+  expr: (Token | TokenExpression)[];
+  constructor(signature: SignatureType, tokens: (Token | TokenExpression)[]) {
     super(tokens);
     this.signature = signature;
-    this.tokens = tokens;
+    this.expr = tokens;
   }
 }
 /**
@@ -474,10 +453,10 @@ export class BlockExpression extends OperationTree implements HasSignature {
     this.headerToken = headerToken;
   }
 
-  unfold(): PureUnfoldedBlockExpression {
-    return new PureUnfoldedBlockExpression(this.getSignatureType(), [
+  unfold(): UnfoldedBlockExpression {
+    return new UnfoldedBlockExpression(this.getSignatureType(), [
       this.headerToken,
-      ...this.body.unfold().tokens,
+      this.body,
       this.createEndToken(),
     ]);
   }

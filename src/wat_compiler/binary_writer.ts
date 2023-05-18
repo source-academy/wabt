@@ -2,10 +2,13 @@
 import {
   type SignatureType,
   type ModuleExpression,
-  type PureUnfoldedTokenExpression,
   type ExportExpression,
   type FunctionExpression,
-  PureUnfoldedBlockExpression,
+  UnfoldedBlockExpression,
+  OperationTree,
+  EmptyTokenExpression,
+  type TokenExpression,
+  UnfoldedTokenExpression,
 } from './ir_types';
 import { ValueType } from '../common/type';
 import { Token, TokenType } from '../common/token';
@@ -187,22 +190,10 @@ export class BinaryWriter {
    * @returns a Uint8Array binary encoding.
    */
   private encodeFunctionBody(fnExp: FunctionExpression): Uint8Array {
-    const fnBody = fnExp.getBody();
-    const unfoldedFnBody = fnBody.unfold();
+    let fnBody = fnExp.getBody();
 
-    // Replace parameter names with index.
-    for (let i = 0; i < unfoldedFnBody.tokens.length; i++) {
-      const token = unfoldedFnBody.tokens[i];
-      if (token.type === TokenType.Var) {
-        unfoldedFnBody.tokens[i] = this.convertVarToIndexToken(
-          token,
-          fnExp.resolveVariableIndex(token.lexeme),
-        );
-      }
-    }
-
+    const encodedBody = this.encodeFunctionBodyExpression(fnBody, fnExp);
     const encodedLocals = this.encodeFunctionBodyLocalTypeCount(fnExp);
-    const encodedBody = this.encodePureUnfoldedTokenExpression(unfoldedFnBody);
     const sectionLength = encodedLocals.length + encodedBody.length + 1;
     const FUNCTION_END = 0x0b;
 
@@ -213,6 +204,54 @@ export class BinaryWriter {
       ...encodedBody,
       FUNCTION_END,
     ]);
+  }
+
+  private encodeFunctionBodyExpression(
+    expr: TokenExpression,
+    fn: FunctionExpression,
+  ): Uint8Array {
+    if (expr instanceof OperationTree) {
+      expr = expr.unfold();
+    }
+
+    if (expr instanceof EmptyTokenExpression) {
+      return new Uint8Array([]);
+    }
+
+    if (expr instanceof UnfoldedTokenExpression) {
+      if (expr instanceof UnfoldedBlockExpression) {
+        return this.encodeUnfoldedBlockExpression(expr, fn);
+      }
+      return this.encodeUnfoldedTokenExpression(expr, fn);
+    }
+
+    throw new Error(`${JSON.stringify(expr, undefined, 2)}`);
+  }
+
+  private encodeUnfoldedTokenExpression(
+    unfoldedTokenExpr: UnfoldedTokenExpression,
+    fnExpr: FunctionExpression,
+  ): Uint8Array {
+    const result: number[] = [];
+    for (let i = 0; i < unfoldedTokenExpr.expr.length; i++) {
+      let currentExpr = unfoldedTokenExpr.expr[i];
+      let prevExpr = unfoldedTokenExpr.expr[i - 1];
+
+      if (currentExpr instanceof Token) {
+        if (currentExpr.type === TokenType.Var) {
+          result.push(fnExpr.resolveVariableIndex(currentExpr.lexeme));
+        } else if (prevExpr instanceof Token) {
+          result.push(...this.encodeToken(currentExpr, prevExpr));
+        } else {
+          result.push(...this.encodeToken(currentExpr));
+        }
+        continue;
+      } else {
+        result.push(...this.encodeFunctionBodyExpression(currentExpr, fnExpr));
+      }
+    }
+
+    return new Uint8Array(result);
   }
 
   /**
@@ -251,41 +290,26 @@ export class BinaryWriter {
     return Uint8Array.from([total_types, ...encoding]);
   }
 
-  /**
-   * Encode a completely unfolded token expression (for function body)
-   * @param ir a PureUnfoldedTokenExpression
-   * @returns a Uint8Array binary encoding
-   */
-  private encodePureUnfoldedTokenExpression(
-    ir: PureUnfoldedTokenExpression,
+  private encodeToken(
+    token: Token,
+    prevToken: Token | undefined = undefined,
   ): Uint8Array {
-    if (ir instanceof PureUnfoldedBlockExpression) {
-      return this.encodePureUnfoldedBlockExpression(ir);
+    if (!this.isLiteralToken(token)) {
+      return this.encodeNonLiteralToken(token);
     }
-    const binary: number[] = [];
-    for (const [index, token] of ir.tokens.entries()) {
-      if (!this.isLiteralToken(token)) {
-        binary.push(...this.encodeNonLiteralToken(token));
-      } else {
-        const prevToken = ir.tokens[index - 1];
-        binary.push(...this.encodeLiteralToken(prevToken, token));
-      }
+    if (typeof prevToken === 'undefined') {
+      throw new Error(`Unable to encode ${token}`);
     }
-    return new Uint8Array(binary);
+    return this.encodeLiteralToken(prevToken, token);
   }
 
-  private encodePureUnfoldedBlockExpression(
-    ir: PureUnfoldedBlockExpression,
+  private encodeUnfoldedBlockExpression(
+    ir: UnfoldedBlockExpression,
+    fnExpr: FunctionExpression,
   ): Uint8Array {
-    const binary: number[] = [];
-    for (const [index, token] of ir.tokens.entries()) {
-      if (!this.isLiteralToken(token)) {
-        binary.push(...this.encodeNonLiteralToken(token));
-      } else {
-        const prevToken = ir.tokens[index - 1];
-        binary.push(...this.encodeLiteralToken(prevToken, token));
-      }
-    }
+    const binary: number[] = [
+      ...this.encodeUnfoldedTokenExpression(ir, fnExpr),
+    ];
 
     if (
       ir.signature.paramTypes.length === 0
@@ -295,11 +319,6 @@ export class BinaryWriter {
       binary.splice(1, 0, 0x40);
     } else {
       // Else, query block type
-      console.log(
-        `Querying block types: ${this.module.resolveGlobalTypeIndex(
-          ir.signature,
-        )}`,
-      );
       binary.splice(1, 0, this.module.resolveGlobalTypeIndex(ir.signature));
     }
     return new Uint8Array(binary);
@@ -391,7 +410,7 @@ export class BinaryWriter {
       return new Uint8Array([Opcode.getCode(token.opcodeType!)]);
     }
 
-    throw new Error(`Unexpected token: ${token}`);
+    throw new Error(`Unexpected token: ${JSON.stringify(token, undefined, 2)}`);
   }
 
   /**
@@ -482,22 +501,3 @@ export namespace NumberEncoder {
     return i32_to_leb128(n);
   }
 }
-
-// export const TEST_EXPORTS = {
-//   encodeFunctionBody,
-//   encodeFunctionSignature,
-//   encodeExportExpressions,
-//   encodePureUnfoldedTokenExpression,
-//   encodeModule,
-//   encodeModuleTypeSection,
-//   encodeModuleImportSection,
-//   encodeModuleFunctionSection,
-//   encodeModuleTableSection,
-//   encodeModuleMemorySection,
-//   encodeModuleGlobalSection,
-//   encodeModuleExportSection,
-//   encodeModuleStartSection,
-//   encodeModuleElementSection,
-//   encodeModuleCodeSection,
-//   encodeModuleDataSection,
-// };

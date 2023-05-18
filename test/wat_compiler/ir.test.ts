@@ -1,15 +1,6 @@
 import { expect } from '@jest/globals';
 
 import { validTestCases as tc1 } from './resources/unfold.testcase';
-import { isTokenEqual } from './resources/token_comparisons';
-import {
-  EmptyTokenExpression,
-  OperationTree,
-  UnfoldedTokenExpression,
-  type TokenExpression,
-} from '../../src/wat_compiler/ir_types';
-import { getSampleToken as t } from './resources/resolved_tokens';
-import { ValueType } from '../../src/common/type';
 
 describe('test unfolding', () => {
   test.each(tc1)('unfold simple_addition_sexpr', (testCase) => {

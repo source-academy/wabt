@@ -328,7 +328,9 @@ export class IRWriter {
       resultTypes.push(...types);
     }
 
-    this.module.addGlobalType(new SignatureType(paramTypes, resultTypes));
+    if (paramTypes.length > 0 && resultTypes.length > 0) {
+      this.module.addGlobalType(new SignatureType(paramTypes, resultTypes));
+    }
 
     return new BlockExpression(
       firstToken,

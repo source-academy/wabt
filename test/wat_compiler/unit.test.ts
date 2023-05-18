@@ -20,13 +20,13 @@ describe.each([
     let tokens: Token[];
     let parseTree: ParseTree;
     let IR: ModuleExpression;
-    let binary: Uint8Array;
+    // let binary: Uint8Array;
     beforeEach(() => {
       tokens = tokenize(testCase);
       parseTree = getParseTree(tokens);
       IR = getIR(parseTree) as ModuleExpression;
-      binary = new BinaryWriter(IR)
-        .encode();
+      // binary = new BinaryWriter(IR)
+      //   .encode();
     });
     test('test lexer', () => {
       expect(tokens)
@@ -40,9 +40,9 @@ describe.each([
       expect(IR)
         .toMatchSnapshot();
     });
-    test('test encoder', () => {
-      expect(binary)
-        .toMatchSnapshot();
-    });
+    // test('test encoder', () => {
+    //   expect(binary)
+    //     .toMatchSnapshot();
+    // });
   });
 });

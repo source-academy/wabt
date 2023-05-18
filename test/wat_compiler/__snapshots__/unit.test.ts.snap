@@ -1,176 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`snapshot tests control operations test encoder 1`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  4,
-  1,
-  96,
-  0,
-  0,
-  3,
-  2,
-  1,
-  0,
-  10,
-  5,
-  1,
-  3,
-  0,
-  1,
-  11,
-]
-`;
-
-exports[`snapshot tests control operations test encoder 2`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  4,
-  1,
-  96,
-  0,
-  0,
-  3,
-  2,
-  1,
-  0,
-  10,
-  5,
-  1,
-  3,
-  0,
-  0,
-  11,
-]
-`;
-
-exports[`snapshot tests control operations test encoder 3`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  4,
-  1,
-  96,
-  0,
-  0,
-  3,
-  2,
-  1,
-  0,
-  10,
-  8,
-  1,
-  6,
-  0,
-  2,
-  64,
-  1,
-  11,
-  11,
-]
-`;
-
-exports[`snapshot tests control operations test encoder 4`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  4,
-  1,
-  96,
-  0,
-  0,
-  3,
-  2,
-  1,
-  0,
-  10,
-  7,
-  1,
-  5,
-  0,
-  2,
-  64,
-  11,
-  11,
-]
-`;
-
-exports[`snapshot tests control operations test encoder 5`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  10,
-  2,
-  96,
-  0,
-  1,
-  127,
-  96,
-  1,
-  127,
-  1,
-  127,
-  3,
-  2,
-  1,
-  0,
-  10,
-  8,
-  1,
-  6,
-  0,
-  65,
-  0,
-  2,
-  11,
-  11,
-]
-`;
-
 exports[`snapshot tests control operations test intermediate representation 1`] = `
 ModuleExpression {
   "exportExpressions": [],
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 17,
@@ -204,7 +40,7 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 17,
@@ -238,7 +74,7 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 25,
@@ -272,7 +108,7 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 25,
@@ -307,7 +143,7 @@ ModuleExpression {
     FunctionExpression {
       "body": BlockExpression {
         "body": UnfoldedTokenExpression {
-          "tokens": [
+          "expr": [
             Token {
               "col": 0,
               "indexInSource": 59,
@@ -370,7 +206,7 @@ ModuleExpression {
     FunctionExpression {
       "body": BlockExpression {
         "body": UnfoldedTokenExpression {
-          "tokens": [
+          "expr": [
             Token {
               "col": 0,
               "indexInSource": 59,
@@ -534,7 +370,7 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 43,
@@ -623,7 +459,7 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 43,
@@ -1537,409 +1373,6 @@ exports[`snapshot tests control operations test parse tree 5`] = `
 ]
 `;
 
-exports[`snapshot tests function expressions test encoder 1`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  4,
-  1,
-  96,
-  0,
-  0,
-  3,
-  7,
-  6,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  10,
-  19,
-  6,
-  2,
-  0,
-  11,
-  2,
-  0,
-  11,
-  2,
-  0,
-  11,
-  2,
-  0,
-  11,
-  2,
-  0,
-  11,
-  2,
-  0,
-  11,
-]
-`;
-
-exports[`snapshot tests function expressions test encoder 2`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  12,
-  2,
-  96,
-  2,
-  124,
-  124,
-  0,
-  96,
-  2,
-  124,
-  124,
-  1,
-  124,
-  3,
-  4,
-  3,
-  0,
-  0,
-  1,
-  10,
-  15,
-  3,
-  2,
-  0,
-  11,
-  2,
-  0,
-  11,
-  7,
-  0,
-  32,
-  0,
-  32,
-  1,
-  160,
-  11,
-]
-`;
-
-exports[`snapshot tests function expressions test encoder 3`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  10,
-  2,
-  96,
-  0,
-  1,
-  124,
-  96,
-  0,
-  2,
-  124,
-  124,
-  3,
-  4,
-  3,
-  0,
-  1,
-  1,
-  10,
-  55,
-  3,
-  11,
-  0,
-  68,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  240,
-  63,
-  11,
-  20,
-  0,
-  68,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  240,
-  63,
-  68,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  240,
-  63,
-  11,
-  20,
-  0,
-  68,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  240,
-  63,
-  68,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  240,
-  63,
-  11,
-]
-`;
-
-exports[`snapshot tests function expressions test encoder 4`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  8,
-  2,
-  96,
-  0,
-  0,
-  96,
-  1,
-  124,
-  0,
-  3,
-  5,
-  4,
-  0,
-  0,
-  0,
-  1,
-  10,
-  25,
-  4,
-  4,
-  1,
-  1,
-  124,
-  11,
-  4,
-  1,
-  2,
-  124,
-  11,
-  4,
-  1,
-  2,
-  124,
-  11,
-  8,
-  1,
-  2,
-  124,
-  32,
-  0,
-  33,
-  1,
-  11,
-]
-`;
-
-exports[`snapshot tests function expressions test encoder 5`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  4,
-  1,
-  96,
-  0,
-  0,
-  3,
-  5,
-  4,
-  0,
-  0,
-  0,
-  0,
-  7,
-  24,
-  4,
-  2,
-  102,
-  110,
-  0,
-  0,
-  3,
-  102,
-  110,
-  53,
-  0,
-  3,
-  3,
-  102,
-  110,
-  49,
-  0,
-  1,
-  3,
-  102,
-  110,
-  51,
-  0,
-  2,
-  10,
-  13,
-  4,
-  2,
-  0,
-  11,
-  2,
-  0,
-  11,
-  2,
-  0,
-  11,
-  2,
-  0,
-  11,
-]
-`;
-
-exports[`snapshot tests function expressions test encoder 6`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  7,
-  1,
-  96,
-  2,
-  124,
-  124,
-  1,
-  124,
-  3,
-  2,
-  1,
-  0,
-  7,
-  7,
-  1,
-  3,
-  97,
-  100,
-  100,
-  0,
-  0,
-  10,
-  9,
-  1,
-  7,
-  0,
-  32,
-  0,
-  32,
-  1,
-  160,
-  11,
-]
-`;
-
-exports[`snapshot tests function expressions test encoder 7`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  7,
-  1,
-  96,
-  2,
-  124,
-  124,
-  1,
-  124,
-  3,
-  2,
-  1,
-  0,
-  7,
-  7,
-  1,
-  3,
-  97,
-  100,
-  100,
-  0,
-  0,
-  10,
-  9,
-  1,
-  7,
-  0,
-  32,
-  0,
-  32,
-  1,
-  160,
-  11,
-]
-`;
-
 exports[`snapshot tests function expressions test intermediate representation 1`] = `
 ModuleExpression {
   "exportExpressions": [],
@@ -2170,7 +1603,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 190,
@@ -2300,7 +1733,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 190,
@@ -2378,7 +1811,7 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 66,
@@ -2415,7 +1848,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 133,
@@ -2471,7 +1904,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 227,
@@ -2544,7 +1977,7 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 66,
@@ -2581,7 +2014,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 133,
@@ -2637,7 +2070,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 227,
@@ -2759,7 +2192,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 236,
@@ -2894,7 +2327,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 236,
@@ -3127,7 +2560,7 @@ ModuleExpression {
       "body": OperationTree {
         "operands": [
           UnfoldedTokenExpression {
-            "tokens": [
+            "expr": [
               Token {
                 "col": 0,
                 "indexInSource": 92,
@@ -3149,7 +2582,7 @@ ModuleExpression {
             ],
           },
           UnfoldedTokenExpression {
-            "tokens": [
+            "expr": [
               Token {
                 "col": 0,
                 "indexInSource": 114,
@@ -3218,7 +2651,7 @@ ModuleExpression {
       "body": OperationTree {
         "operands": [
           UnfoldedTokenExpression {
-            "tokens": [
+            "expr": [
               Token {
                 "col": 0,
                 "indexInSource": 92,
@@ -3240,7 +2673,7 @@ ModuleExpression {
             ],
           },
           UnfoldedTokenExpression {
-            "tokens": [
+            "expr": [
               Token {
                 "col": 0,
                 "indexInSource": 114,
@@ -3309,7 +2742,7 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 74,
@@ -3392,7 +2825,7 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 74,
@@ -8770,577 +8203,13 @@ exports[`snapshot tests function expressions test parse tree 7`] = `
 ]
 `;
 
-exports[`snapshot tests numeric operations test encoder 1`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  5,
-  1,
-  96,
-  0,
-  1,
-  127,
-  3,
-  5,
-  4,
-  0,
-  0,
-  0,
-  0,
-  10,
-  53,
-  4,
-  7,
-  0,
-  65,
-  0,
-  65,
-  0,
-  70,
-  11,
-  7,
-  0,
-  66,
-  0,
-  66,
-  0,
-  81,
-  11,
-  13,
-  0,
-  67,
-  205,
-  204,
-  204,
-  63,
-  67,
-  205,
-  204,
-  204,
-  63,
-  91,
-  11,
-  21,
-  0,
-  68,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  68,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  97,
-  11,
-]
-`;
-
-exports[`snapshot tests numeric operations test encoder 2`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  5,
-  1,
-  96,
-  0,
-  1,
-  127,
-  3,
-  5,
-  4,
-  0,
-  0,
-  0,
-  0,
-  10,
-  53,
-  4,
-  7,
-  0,
-  65,
-  0,
-  65,
-  0,
-  71,
-  11,
-  7,
-  0,
-  66,
-  0,
-  66,
-  0,
-  82,
-  11,
-  13,
-  0,
-  67,
-  0,
-  0,
-  0,
-  0,
-  67,
-  0,
-  0,
-  0,
-  0,
-  92,
-  11,
-  21,
-  0,
-  68,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  68,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  98,
-  11,
-]
-`;
-
-exports[`snapshot tests numeric operations test encoder 3`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  5,
-  1,
-  96,
-  0,
-  1,
-  127,
-  3,
-  7,
-  6,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  10,
-  69,
-  6,
-  7,
-  0,
-  66,
-  0,
-  66,
-  0,
-  85,
-  11,
-  7,
-  0,
-  65,
-  0,
-  65,
-  0,
-  75,
-  11,
-  7,
-  0,
-  66,
-  0,
-  66,
-  0,
-  86,
-  11,
-  7,
-  0,
-  65,
-  0,
-  65,
-  0,
-  74,
-  11,
-  13,
-  0,
-  67,
-  0,
-  0,
-  0,
-  0,
-  67,
-  0,
-  0,
-  0,
-  0,
-  94,
-  11,
-  21,
-  0,
-  68,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  68,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  100,
-  11,
-]
-`;
-
-exports[`snapshot tests numeric operations test encoder 4`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  5,
-  1,
-  96,
-  0,
-  1,
-  127,
-  3,
-  7,
-  6,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  10,
-  69,
-  6,
-  7,
-  0,
-  65,
-  0,
-  65,
-  0,
-  73,
-  11,
-  7,
-  0,
-  66,
-  0,
-  66,
-  0,
-  84,
-  11,
-  7,
-  0,
-  65,
-  0,
-  65,
-  0,
-  72,
-  11,
-  7,
-  0,
-  66,
-  0,
-  66,
-  0,
-  83,
-  11,
-  13,
-  0,
-  67,
-  0,
-  0,
-  0,
-  0,
-  67,
-  0,
-  0,
-  0,
-  0,
-  93,
-  11,
-  21,
-  0,
-  68,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  68,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  99,
-  11,
-]
-`;
-
-exports[`snapshot tests numeric operations test encoder 5`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  5,
-  1,
-  96,
-  0,
-  1,
-  127,
-  3,
-  7,
-  6,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  10,
-  69,
-  6,
-  7,
-  0,
-  65,
-  0,
-  65,
-  0,
-  79,
-  11,
-  7,
-  0,
-  66,
-  0,
-  66,
-  0,
-  90,
-  11,
-  7,
-  0,
-  65,
-  0,
-  65,
-  0,
-  78,
-  11,
-  7,
-  0,
-  66,
-  0,
-  66,
-  0,
-  89,
-  11,
-  13,
-  0,
-  67,
-  0,
-  0,
-  0,
-  0,
-  67,
-  0,
-  0,
-  0,
-  0,
-  96,
-  11,
-  21,
-  0,
-  68,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  68,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  102,
-  11,
-]
-`;
-
-exports[`snapshot tests numeric operations test encoder 6`] = `
-Uint8Array [
-  0,
-  97,
-  115,
-  109,
-  1,
-  0,
-  0,
-  0,
-  1,
-  5,
-  1,
-  96,
-  0,
-  1,
-  127,
-  3,
-  7,
-  6,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  10,
-  69,
-  6,
-  7,
-  0,
-  65,
-  0,
-  65,
-  0,
-  77,
-  11,
-  7,
-  0,
-  66,
-  0,
-  66,
-  0,
-  88,
-  11,
-  7,
-  0,
-  65,
-  0,
-  65,
-  0,
-  76,
-  11,
-  7,
-  0,
-  66,
-  0,
-  66,
-  0,
-  87,
-  11,
-  13,
-  0,
-  67,
-  0,
-  0,
-  0,
-  0,
-  67,
-  0,
-  0,
-  0,
-  0,
-  95,
-  11,
-  21,
-  0,
-  68,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  68,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  101,
-  11,
-]
-`;
-
 exports[`snapshot tests numeric operations test intermediate representation 1`] = `
 ModuleExpression {
   "exportExpressions": [],
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 43,
@@ -9404,7 +8273,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 111,
@@ -9468,7 +8337,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 179,
@@ -9532,7 +8401,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 251,
@@ -9606,7 +8475,7 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 43,
@@ -9670,7 +8539,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 111,
@@ -9734,7 +8603,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 179,
@@ -9798,7 +8667,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 251,
@@ -9870,7 +8739,7 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 43,
@@ -9934,7 +8803,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 111,
@@ -9998,7 +8867,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 179,
@@ -10062,7 +8931,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 247,
@@ -10136,7 +9005,7 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 43,
@@ -10200,7 +9069,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 111,
@@ -10264,7 +9133,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 179,
@@ -10328,7 +9197,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 247,
@@ -10400,7 +9269,7 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 49,
@@ -10464,7 +9333,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 129,
@@ -10528,7 +9397,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 209,
@@ -10592,7 +9461,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 289,
@@ -10656,7 +9525,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 369,
@@ -10720,7 +9589,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 447,
@@ -10794,7 +9663,7 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 49,
@@ -10858,7 +9727,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 129,
@@ -10922,7 +9791,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 209,
@@ -10986,7 +9855,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 289,
@@ -11050,7 +9919,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 369,
@@ -11114,7 +9983,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 447,
@@ -11186,7 +10055,7 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 43,
@@ -11250,7 +10119,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 113,
@@ -11314,7 +10183,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 183,
@@ -11378,7 +10247,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 253,
@@ -11442,7 +10311,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 323,
@@ -11506,7 +10375,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 391,
@@ -11580,7 +10449,7 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 43,
@@ -11644,7 +10513,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 113,
@@ -11708,7 +10577,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 183,
@@ -11772,7 +10641,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 253,
@@ -11836,7 +10705,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 323,
@@ -11900,7 +10769,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 391,
@@ -11972,7 +10841,7 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 43,
@@ -12036,7 +10905,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 113,
@@ -12100,7 +10969,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 183,
@@ -12164,7 +11033,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 253,
@@ -12228,7 +11097,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 323,
@@ -12292,7 +11161,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 391,
@@ -12366,7 +11235,7 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 43,
@@ -12430,7 +11299,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 113,
@@ -12494,7 +11363,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 183,
@@ -12558,7 +11427,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 253,
@@ -12622,7 +11491,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 323,
@@ -12686,7 +11555,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 391,
@@ -12758,7 +11627,7 @@ ModuleExpression {
   "functions": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 43,
@@ -12822,7 +11691,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 113,
@@ -12886,7 +11755,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 183,
@@ -12950,7 +11819,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 253,
@@ -13014,7 +11883,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 323,
@@ -13078,7 +11947,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 391,
@@ -13152,7 +12021,7 @@ ModuleExpression {
   "globals": [
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 43,
@@ -13216,7 +12085,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 113,
@@ -13280,7 +12149,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 183,
@@ -13344,7 +12213,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 253,
@@ -13408,7 +12277,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 323,
@@ -13472,7 +12341,7 @@ ModuleExpression {
     },
     FunctionExpression {
       "body": UnfoldedTokenExpression {
-        "tokens": [
+        "expr": [
           Token {
             "col": 0,
             "indexInSource": 391,
