@@ -311,13 +311,14 @@ export class BinaryWriter {
       ...this.encodeUnfoldedTokenExpression(ir, fnExpr),
     ];
 
+    const signature = ir.signature
+
     if (
-      ir.signature.paramTypes.length === 0
-      && ir.signature.returnTypes.length === 0
+      signature.isEmpty()
     ) {
       // Empty block type
       binary.splice(1, 0, 0x40);
-    } else {
+    } else if (signature.paramTypes.length === 0 && signature.returnTypes.length === 1) {
       // Else, query block type
       binary.splice(1, 0, this.module.resolveGlobalTypeIndex(ir.signature));
     }

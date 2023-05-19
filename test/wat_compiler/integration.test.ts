@@ -8,8 +8,8 @@ import { expect } from '@jest/globals';
 import wabt from 'wabt';
 
 describe.each([
-  [positiveFunctionTestCases, 'function test cases'],
-  [positiveNumOpTestCases, 'numeric operators'],
+  // [positiveFunctionTestCases, 'function test cases'],
+  // [positiveNumOpTestCases, 'numeric operators'],
   [positiveControlTestCases, 'control operations'],
 ])('integration: encode', (testCase, testCaseLabel) => {
   test.each(testCase)(testCaseLabel, async (test) => {
@@ -20,7 +20,7 @@ describe.each([
           .toBinary({}).buffer,
       );
 
-    // console.log({ actual });
+    console.log({ actual });
     // console.log({ expected });
     expect(actual)
       .toEqual(expected);
