@@ -532,6 +532,160 @@ ModuleExpression {
 }
 `;
 
+exports[`snapshot tests control operations test intermediate representation 6`] = `
+ModuleExpression {
+  "exportExpressions": [],
+  "functions": [
+    FunctionExpression {
+      "body": BlockExpression {
+        "body": UnfoldedTokenExpression {
+          "expr": [
+            Token {
+              "col": 0,
+              "indexInSource": 85,
+              "lexeme": "i32.const",
+              "line": 4,
+              "opcodeType": 55,
+              "type": "CONST",
+              "valueType": null,
+            },
+            Token {
+              "col": 0,
+              "indexInSource": 87,
+              "lexeme": "0",
+              "line": 4,
+              "opcodeType": null,
+              "type": "NAT",
+              "valueType": null,
+            },
+          ],
+        },
+        "headerToken": Token {
+          "col": 0,
+          "indexInSource": 44,
+          "lexeme": "block",
+          "line": 3,
+          "opcodeType": 2,
+          "type": "block",
+          "valueType": null,
+        },
+        "operands": [],
+        "operator": Token {
+          "col": 0,
+          "indexInSource": 44,
+          "lexeme": "block",
+          "line": 3,
+          "opcodeType": 2,
+          "type": "block",
+          "valueType": null,
+        },
+        "signature": BlockSignature {
+          "blockType": "block",
+          "name": null,
+          "signatureType": SignatureType {
+            "paramTypes": [],
+            "returnTypes": [
+              0,
+            ],
+          },
+        },
+      },
+      "signature": FunctionSignature {
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
+      },
+    },
+  ],
+  "globalTypes": [
+    SignatureType {
+      "paramTypes": [],
+      "returnTypes": [
+        0,
+      ],
+    },
+  ],
+  "globals": [
+    FunctionExpression {
+      "body": BlockExpression {
+        "body": UnfoldedTokenExpression {
+          "expr": [
+            Token {
+              "col": 0,
+              "indexInSource": 85,
+              "lexeme": "i32.const",
+              "line": 4,
+              "opcodeType": 55,
+              "type": "CONST",
+              "valueType": null,
+            },
+            Token {
+              "col": 0,
+              "indexInSource": 87,
+              "lexeme": "0",
+              "line": 4,
+              "opcodeType": null,
+              "type": "NAT",
+              "valueType": null,
+            },
+          ],
+        },
+        "headerToken": Token {
+          "col": 0,
+          "indexInSource": 44,
+          "lexeme": "block",
+          "line": 3,
+          "opcodeType": 2,
+          "type": "block",
+          "valueType": null,
+        },
+        "operands": [],
+        "operator": Token {
+          "col": 0,
+          "indexInSource": 44,
+          "lexeme": "block",
+          "line": 3,
+          "opcodeType": 2,
+          "type": "block",
+          "valueType": null,
+        },
+        "signature": BlockSignature {
+          "blockType": "block",
+          "name": null,
+          "signatureType": SignatureType {
+            "paramTypes": [],
+            "returnTypes": [
+              0,
+            ],
+          },
+        },
+      },
+      "signature": FunctionSignature {
+        "functionName": null,
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "paramTypes": [],
+          "returnTypes": [
+            0,
+          ],
+        },
+      },
+    },
+  ],
+}
+`;
+
 exports[`snapshot tests control operations test lexer 1`] = `
 [
   Token {
@@ -1079,6 +1233,200 @@ exports[`snapshot tests control operations test lexer 5`] = `
 ]
 `;
 
+exports[`snapshot tests control operations test lexer 6`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 14,
+    "lexeme": "(",
+    "line": 2,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 18,
+    "lexeme": "func",
+    "line": 2,
+    "opcodeType": null,
+    "type": "func",
+    "valueType": 7,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 20,
+    "lexeme": "(",
+    "line": 2,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 26,
+    "lexeme": "result",
+    "line": 2,
+    "opcodeType": null,
+    "type": "result",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 30,
+    "lexeme": "i32",
+    "line": 2,
+    "opcodeType": null,
+    "type": "VALUETYPE",
+    "valueType": 0,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 31,
+    "lexeme": ")",
+    "line": 2,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 39,
+    "lexeme": "(",
+    "line": 3,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 44,
+    "lexeme": "block",
+    "line": 3,
+    "opcodeType": 2,
+    "type": "block",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 46,
+    "lexeme": "(",
+    "line": 3,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 51,
+    "lexeme": "param",
+    "line": 3,
+    "opcodeType": null,
+    "type": "param",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 52,
+    "lexeme": ")",
+    "line": 3,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 54,
+    "lexeme": "(",
+    "line": 3,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 60,
+    "lexeme": "result",
+    "line": 3,
+    "opcodeType": null,
+    "type": "result",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 64,
+    "lexeme": "i32",
+    "line": 3,
+    "opcodeType": null,
+    "type": "VALUETYPE",
+    "valueType": 0,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 65,
+    "lexeme": ")",
+    "line": 3,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 85,
+    "lexeme": "i32.const",
+    "line": 4,
+    "opcodeType": 55,
+    "type": "CONST",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 87,
+    "lexeme": "0",
+    "line": 4,
+    "opcodeType": null,
+    "type": "NAT",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 100,
+    "lexeme": ")",
+    "line": 5,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 106,
+    "lexeme": ")",
+    "line": 6,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 110,
+    "lexeme": ")",
+    "line": 7,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+]
+`;
+
 exports[`snapshot tests control operations test parse tree 1`] = `
 [
   Token {
@@ -1368,6 +1716,111 @@ exports[`snapshot tests control operations test parse tree 5`] = `
           "valueType": 0,
         },
       ],
+    ],
+  ],
+]
+`;
+
+exports[`snapshot tests control operations test parse tree 6`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  [
+    Token {
+      "col": 0,
+      "indexInSource": 18,
+      "lexeme": "func",
+      "line": 2,
+      "opcodeType": null,
+      "type": "func",
+      "valueType": 7,
+    },
+    [
+      Token {
+        "col": 0,
+        "indexInSource": 26,
+        "lexeme": "result",
+        "line": 2,
+        "opcodeType": null,
+        "type": "result",
+        "valueType": null,
+      },
+      Token {
+        "col": 0,
+        "indexInSource": 30,
+        "lexeme": "i32",
+        "line": 2,
+        "opcodeType": null,
+        "type": "VALUETYPE",
+        "valueType": 0,
+      },
+    ],
+    [
+      Token {
+        "col": 0,
+        "indexInSource": 44,
+        "lexeme": "block",
+        "line": 3,
+        "opcodeType": 2,
+        "type": "block",
+        "valueType": null,
+      },
+      [
+        Token {
+          "col": 0,
+          "indexInSource": 51,
+          "lexeme": "param",
+          "line": 3,
+          "opcodeType": null,
+          "type": "param",
+          "valueType": null,
+        },
+      ],
+      [
+        Token {
+          "col": 0,
+          "indexInSource": 60,
+          "lexeme": "result",
+          "line": 3,
+          "opcodeType": null,
+          "type": "result",
+          "valueType": null,
+        },
+        Token {
+          "col": 0,
+          "indexInSource": 64,
+          "lexeme": "i32",
+          "line": 3,
+          "opcodeType": null,
+          "type": "VALUETYPE",
+          "valueType": 0,
+        },
+      ],
+      Token {
+        "col": 0,
+        "indexInSource": 85,
+        "lexeme": "i32.const",
+        "line": 4,
+        "opcodeType": 55,
+        "type": "CONST",
+        "valueType": null,
+      },
+      Token {
+        "col": 0,
+        "indexInSource": 87,
+        "lexeme": "0",
+        "line": 4,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
     ],
   ],
 ]

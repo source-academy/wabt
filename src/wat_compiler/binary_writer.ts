@@ -317,6 +317,11 @@ export class BinaryWriter {
     ) {
       // Empty block type
       binary.splice(1, 0, 0x40);
+    } else if (
+      ir.signature.paramTypes.length === 0
+      && ir.signature.returnTypes.length === 1
+    ) {
+      binary.splice(1, 0, ValueType.getValue(ir.signature.returnTypes[0]));
     } else {
       // Else, query block type
       binary.splice(1, 0, this.module.resolveGlobalTypeIndex(ir.signature));

@@ -113,5 +113,5 @@ export const positiveControlTestCases = [
   block_statment,
   empty_explicit_block,
   block_one_param,
-  // block_one_result,
+  block_one_result,
 ];
