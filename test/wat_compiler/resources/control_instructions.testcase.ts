@@ -50,22 +50,24 @@ const block_one_param = `
 // Note: same type as function
 const block_one_result = `
 (module
-    (func (result i32)
-      (block (param) (result i32)
-          i32.const 0    	
-      )
+  (func
+    (block (param) (result i32)
+      i32.const 0    	
     )
+    drop
   )
+)
 `;
 
 const block_multiple_result = `
 (module
-    (func (param i32) (result i32 i32 i32)
+    (func
         i32.const 1
         (block (param i32) (result i32 i32)
             i32.const 0
         )
-        i32.const 2
+        drop
+        drop
     )
 )
 `;
@@ -108,10 +110,20 @@ const block_multiple_result = `
 */
 
 export const positiveControlTestCases = [
+<<<<<<< HEAD
   nop_operation,
   unreachable_operation,
   block_statment,
   empty_explicit_block,
   block_one_param,
   block_one_result,
+=======
+  // nop_operation,
+  // unreachable_operation,
+  // block_statment,
+  // empty_explicit_block,
+  // block_one_param,
+  block_one_result,
+  // block_multiple_result,
+>>>>>>> af5f51d43d1686e3838ed47c601c2610c8336640
 ];

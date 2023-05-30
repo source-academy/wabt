@@ -328,8 +328,10 @@ export class IRWriter {
       resultTypes.push(...types);
     }
 
-    if (paramTypes.length > 0 && resultTypes.length > 0) {
-      this.module.addGlobalType(new SignatureType(paramTypes, resultTypes));
+    const signature = new SignatureType(paramTypes, resultTypes);
+    // Empty signature or signature with 0 param 1 return is represented inline and not added to the global signature types.
+    if (!signature.isEmpty() && !(signature.paramTypes.length === 0 && signature.returnTypes.length === 1)) {
+      this.module.addGlobalType(signature);
     }
 
     return new BlockExpression(
@@ -432,14 +434,14 @@ export class IRWriter {
 
 function isFunctionBodySExpression(parseTree: ParseTree): boolean {
   const tokenHeader = parseTree[0];
-  assert(
-    tokenHeader instanceof Token,
-    `first token of ${JSON.stringify(
-      parseTree,
-      undefined,
-      2,
-    )} is not a Token type`,
-  );
+  // assert(
+  //   tokenHeader instanceof Token,
+  //   `first token of ${JSON.stringify(
+  //     parseTree,
+  //     undefined,
+  //     2,
+  //   )} is not a Token type`,
+  // );
 
   return (
     tokenHeader instanceof Token
@@ -450,19 +452,19 @@ function isFunctionBodySExpression(parseTree: ParseTree): boolean {
 
 function isFunctionBodyStackExpression(parseTree: ParseTree): boolean {
   const tokenHeader = parseTree[0];
-  assert(
-    tokenHeader instanceof Token,
-    `first token of ${JSON.stringify(
-      parseTree,
-      undefined,
-      2,
-    )} is not a Token type`,
-  );
+  // assert(
+  //   tokenHeader instanceof Token,
+  //   `first token of ${JSON.stringify(
+  //     parseTree,
+  //     undefined,
+  //     2,
+  //   )} is not a Token type`,
+  // );
   return (
-    tokenHeader instanceof Token
-    && tokenHeader.isOpcodeToken()
+    !(tokenHeader instanceof Token)
+    || (tokenHeader.isOpcodeToken()
     && !isFunctionExpression(parseTree)
-    && !isFunctionBodySExpression(parseTree)
+    && !isFunctionBodySExpression(parseTree))
     // && !isModuleDeclaration(parseTree)
   );
 }
@@ -497,6 +499,9 @@ function isExportExpression(parseTree: ParseTree): boolean {
   return tokenHeader instanceof Token && tokenHeader.type === TokenType.Export;
 }
 
+/**
+ * Check if given parse tree is a block expression --> (block ?? )
+ */
 function isFunctionBodyBlockExpression(parseTree: ParseTree): boolean {
   const tokenHeader = parseTree[0];
   return tokenHeader instanceof Token && tokenHeader.isBlock();

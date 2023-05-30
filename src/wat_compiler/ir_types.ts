@@ -38,6 +38,10 @@ export class SignatureType {
     this.paramTypes = paramTypes;
     this.returnTypes = returnTypes;
   }
+
+  isEmpty() {
+    return this.paramTypes.length === 0 && this.returnTypes.length === 0;
+  }
 }
 
 export class ModuleExpression extends IntermediateRepresentation {
@@ -135,7 +139,8 @@ export class ModuleExpression extends IntermediateRepresentation {
     assert(
       false,
       `Global type not found! This is an error that should be raised to the developer.
-      Please help raise an issue on GitHub.`,
+      Please help raise an issue on GitHub. Got: ${JSON.stringify(type, undefined, 2)}.
+      Global types available are: ${JSON.stringify(this.globalTypes.entries(), undefined, 2)}`,
     );
     return -1; // This will never run, assert throws error
   }

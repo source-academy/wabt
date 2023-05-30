@@ -311,10 +311,9 @@ export class BinaryWriter {
       ...this.encodeUnfoldedTokenExpression(ir, fnExpr),
     ];
 
-    if (
-      ir.signature.paramTypes.length === 0
-      && ir.signature.returnTypes.length === 0
-    ) {
+    const signature = ir.signature;
+
+    if (signature.isEmpty()) {
       // Empty block type
       binary.splice(1, 0, 0x40);
     } else if (
