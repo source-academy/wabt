@@ -72,7 +72,7 @@ const block_multiple_result = `
 )
 `;
 
-/*
+const break_with_index_0 = `
 (module
   (func
     (block
@@ -80,6 +80,9 @@ const block_multiple_result = `
     )
   )
 )
+`;
+
+const break_with_index_1 = `
 (module
   (func
     (block
@@ -89,7 +92,9 @@ const block_multiple_result = `
     )
   )
 )
+`;
 
+const break_with_name_1 = `
 (module
   (func
     (block $one
@@ -105,25 +110,21 @@ const block_multiple_result = `
       )
     )
   )
-)
+)`;
+/*
+
 
 */
 
 export const positiveControlTestCases = [
-<<<<<<< HEAD
   nop_operation,
   unreachable_operation,
   block_statment,
   empty_explicit_block,
   block_one_param,
   block_one_result,
-=======
-  // nop_operation,
-  // unreachable_operation,
-  // block_statment,
-  // empty_explicit_block,
-  // block_one_param,
-  block_one_result,
-  // block_multiple_result,
->>>>>>> af5f51d43d1686e3838ed47c601c2610c8336640
+  block_multiple_result,
+  break_with_index_0,
+  break_with_index_1,
+  break_with_name_1,
 ];
