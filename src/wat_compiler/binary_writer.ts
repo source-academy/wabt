@@ -307,6 +307,10 @@ export class BinaryWriter {
     ir: UnfoldedBlockExpression,
     fnExpr: FunctionExpression,
   ): Uint8Array {
+    console.log(JSON.stringify(ir, undefined, 2));
+    // Resolve Br token references to block names
+    this.resolveBlockBrTokens(ir, []);
+
     const binary: number[] = [
       ...this.encodeUnfoldedTokenExpression(ir, fnExpr),
     ];
@@ -326,6 +330,43 @@ export class BinaryWriter {
       binary.splice(1, 0, this.module.resolveGlobalTypeIndex(ir.signature));
     }
     return new Uint8Array(binary);
+  }
+
+  private resolveBlockBrTokens(
+    ir: UnfoldedTokenExpression,
+    block_name_stack: (string | null)[],
+  ) {
+    if (ir instanceof UnfoldedBlockExpression) {
+      block_name_stack.push(ir.name);
+    }
+    console.log(`Resolve block br token: ${block_name_stack}`);
+
+    for (const [i, token] of ir.expr.entries()) {
+      console.log(token.constructor.name);
+      console.log(JSON.stringify(token, undefined, 2));
+      // if (token instanceof UnfoldedTokenExpression) {
+      //   this.resolveBlockBrTokens(token, [...block_name_stack]); // copy
+      // }
+
+      // Replace BR token --> name
+      if (token instanceof Token && token.type === TokenType.Br) {
+        const nextToken = ir.expr[i + 1];
+        if (!(nextToken instanceof Token) || typeof nextToken === 'undefined') {
+          throw new Error(
+            `Expected br token to be followed by a number or name. Got: ${[
+              token,
+              nextToken,
+            ]}`,
+          );
+        }
+        if (nextToken.type === TokenType.Var) {
+          nextToken.type = TokenType.Nat;
+          nextToken.lexeme = block_name_stack
+            .lastIndexOf(nextToken.lexeme)
+            .toString();
+        }
+      }
+    }
   }
 
   // Exports
@@ -453,6 +494,12 @@ export class BinaryWriter {
       prevToken.type === TokenType.LocalGet
       || prevToken.type === TokenType.LocalSet
     ) {
+      assert(token.type === TokenType.Nat); // TODO proper error
+      return new Uint8Array([Number.parseInt(token.lexeme)]);
+    }
+
+    // Br tokens
+    if (prevToken.type === TokenType.Br) {
       assert(token.type === TokenType.Nat); // TODO proper error
       return new Uint8Array([Number.parseInt(token.lexeme)]);
     }
