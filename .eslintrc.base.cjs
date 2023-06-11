@@ -411,7 +411,6 @@ module.exports = {
     // "line-comment-position": 0,
     'linebreak-style': [
       1,
-      'windows', // Was "unix"
     ],
     // "lines-around-comment": 0,
     // "lines-between-class-members": 0,
