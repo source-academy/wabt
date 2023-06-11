@@ -344,22 +344,6 @@ export class FunctionExpression
     return this.body;
   }
 
-  resolveVariableIndex(nameToResolve: string) {
-    for (const [i, name] of [
-      ...this.getParamNames(),
-      ...this.getLocalNames(),
-    ].entries()) {
-      if (name === nameToResolve) {
-        return i;
-      }
-    }
-    throw new Error(
-      `Parameter name ${nameToResolve} not found in function. Parameter names available: ${[
-        this.getParamNames(),
-      ]}, Local Names available: ${this.getLocalNames()}`,
-    );
-  }
-
   get parent(): ModuleExpression {
     if (typeof this._parent === 'undefined') {
       throw new Error(

@@ -255,13 +255,19 @@ export class BinaryWriter {
     return new Uint8Array(result);
   }
 
+  /**
+   * Encode a token of type TokenType.Var
+   * @param token token to encode
+   * @param fnExpr function expression that wraps this token
+   * @returns a number which represents the binary encoding of said token.
+   */
   private encodeVarToken(token: IRToken, fnExpr: FunctionExpression): number {
     switch (token.prevToken?.type) {
       case TokenType.LocalSet:
       case TokenType.LocalGet:
-        return fnExpr.resolveVariableIndex(token.lexeme);
+        return this.encodeFunctionLocalVarToken(token, fnExpr);
       case TokenType.Br:
-        return this.encodeBrVarToken(token);
+        return this.encodeFunctionBrVarToken(token);
 
       default:
         throw new Error(
@@ -274,7 +280,7 @@ export class BinaryWriter {
    * Encode a 'Br $var' token by evaluating the index for $var.
    * @returns a number corresponding to the break stack index.
    */
-  private encodeBrVarToken(token: IRToken): number {
+  private encodeFunctionBrVarToken(token: IRToken): number {
     let parent: IntermediateRepresentation | null = token;
     let stack_count = 0;
     while (parent !== null) {
@@ -297,6 +303,29 @@ export class BinaryWriter {
     }
 
     throw new Error(`Br ${token.lexeme} not found.`);
+  }
+  /**
+   * Encode a 'local.get $var' or 'local.set $var' token by evaluating the index for $var.
+   * @returns a number corresponding to the local variable index.
+   */
+  private encodeFunctionLocalVarToken(
+    token: IRToken,
+    fnExpr: FunctionExpression,
+  ): number {
+    const nameToResolve = token.lexeme;
+    for (const [i, name] of [
+      ...fnExpr.getParamNames(),
+      ...fnExpr.getLocalNames(),
+    ].entries()) {
+      if (name === nameToResolve) {
+        return i;
+      }
+    }
+    throw new Error(
+      `Parameter name ${nameToResolve} not found in function. Parameter names available: ${[
+        fnExpr.getParamNames(),
+      ]}, Local Names available: ${fnExpr.getLocalNames()}`,
+    );
   }
 
   /**
