@@ -225,7 +225,7 @@ export class BinaryWriter {
       return this.encodeUnfoldedTokenExpression(expr, fn);
     }
 
-    throw new Error(`${JSON.stringify(expr, undefined, 2)}`);
+    throw new Error(`${expr.toString()}`);
   }
 
   private encodeUnfoldedTokenExpression(
@@ -307,7 +307,7 @@ export class BinaryWriter {
     ir: UnfoldedBlockExpression,
     fnExpr: FunctionExpression,
   ): Uint8Array {
-    console.log(JSON.stringify(ir, undefined, 2));
+    console.log(ir.toString());
     // Resolve Br token references to block names
     this.resolveBlockBrTokens(ir, []);
 
@@ -343,7 +343,7 @@ export class BinaryWriter {
 
     for (const [i, token] of ir.expr.entries()) {
       console.log(token.constructor.name);
-      console.log(JSON.stringify(token, undefined, 2));
+      // console.log(JSON.stringify(token, undefined, 2));
       // if (token instanceof UnfoldedTokenExpression) {
       //   this.resolveBlockBrTokens(token, [...block_name_stack]); // copy
       // }

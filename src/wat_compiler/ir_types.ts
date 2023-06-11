@@ -6,6 +6,8 @@ import { assert } from '../common/assert';
 import { isEqual } from 'lodash';
 import { Opcode, OpcodeType } from '../common/opcode';
 
+import 'reflect-metadata';
+import { instanceToPlain, Exclude as exclude } from 'class-transformer';
 /**
  * An interface for intermediate expressions that can have a name/identifier to be referenced by.
  * Mainly to be used for global types that can be referenced by name.
@@ -22,7 +24,11 @@ export interface HasSignature {
   getSignatureType(): SignatureType;
 }
 
-export abstract class IntermediateRepresentation {}
+export abstract class IntermediateRepresentation {
+  abstract setParent(parentExpression: IntermediateRepresentation | null): void;
+  abstract getParent(): IntermediateRepresentation | null;
+  abstract toString(): string;
+}
 
 type GlobalType = SignatureType; // TODO add more
 type GlobalExpression = HasIdentifier;
@@ -179,6 +185,17 @@ export class ModuleExpression extends IntermediateRepresentation {
   getFunctionBodies(): TokenExpression[] {
     return this.functions.map((func) => func.getBody());
   }
+
+  setParent(parentExpression: IntermediateRepresentation): void {
+    throw new Error('Module Expression should not have parent.');
+  }
+  getParent(): IntermediateRepresentation | null {
+    return null;
+  }
+
+  toString(): string {
+    return JSON.stringify(this, undefined, 2);
+  }
 }
 
 export class ExportExpression extends IntermediateRepresentation {
@@ -186,6 +203,8 @@ export class ExportExpression extends IntermediateRepresentation {
   exportType: ExportType;
   exportReferenceIndex: number | null = null;
   exportReferenceName: string | null = null;
+
+  parent?: ModuleExpression;
 
   // Constructor for inline function exports
   constructor(
@@ -253,8 +272,26 @@ export class ExportExpression extends IntermediateRepresentation {
         );
     }
   }
-}
 
+  setParent(parent: ModuleExpression): void {
+    this.parent = parent;
+  }
+  getParent(): ModuleExpression {
+    if (typeof this.parent === 'undefined') {
+      throw new Error(
+        `Parent Expression for this Function Expression not set ${this}`,
+      );
+    }
+    return this.parent;
+  }
+
+  /**
+   * Get string representation of object
+   */
+  toString(): string {
+    return `${this.constructor.name}, ${this.exportName}`;
+  }
+}
 /*
 FUNCTIONS
 */
@@ -268,12 +305,13 @@ export class FunctionExpression
   implements HasIdentifier, HasSignature {
   private signature: FunctionSignature;
   private body: TokenExpression;
+  parent?: ModuleExpression;
 
   constructor(signature: FunctionSignature, body: TokenExpression) {
     super();
     this.signature = signature;
     this.body = body;
-    body.setParentExpression(this);
+    body.setParent(this);
   }
 
   getID(): string | null {
@@ -315,6 +353,28 @@ export class FunctionExpression
         this.getParamNames(),
       ]}, Local Names available: ${this.getLocalNames()}`,
     );
+  }
+  setParent(parent: ModuleExpression): void {
+    this.parent = parent;
+  }
+  getParent(): ModuleExpression {
+    if (typeof this.parent === 'undefined') {
+      throw new Error(
+        `Parent Expression for this Function Expression not set ${this}`,
+      );
+    }
+    return this.parent;
+  }
+
+  /**
+   * Get string representation of object
+   */
+  toString(): string {
+    return `${this.constructor.name}, ${JSON.stringify(
+      this.signature,
+      undefined,
+      2,
+    )}`;
   }
 }
 
@@ -380,17 +440,13 @@ export namespace Unfoldable {
 /**
  * All possible token expressions.
  */
-export abstract class TokenExpression extends IntermediateRepresentation {
-  abstract setParentExpression(
-    parentExpression: IntermediateRepresentation
-  ): void;
-}
+export abstract class TokenExpression extends IntermediateRepresentation {}
 
 /**
  * Class representing operators and operands in an s-expression.
  */
 export class OperationTree extends TokenExpression implements Unfoldable {
-  parentExpression!: IntermediateRepresentation;
+  parent?: IntermediateRepresentation;
   operator: Token;
   operands: (Token | TokenExpression)[];
 
@@ -400,16 +456,18 @@ export class OperationTree extends TokenExpression implements Unfoldable {
     this.operands = operands;
     for (const operand of operands) {
       if (operand instanceof TokenExpression) {
-        operand.setParentExpression(this);
+        operand.setParent(this);
       }
     }
   }
 
-  setParentExpression(parentExpression: IntermediateRepresentation) {
-    this.parentExpression = parentExpression;
-  }
-
   unfold(): UnfoldedTokenExpression {
+    if (typeof this.parent === 'undefined') {
+      throw new Error(
+        `Parent Expression for this Function Expression not set ${this}`,
+      );
+    }
+
     const unfoldedOperands: (Token | TokenExpression)[] = this.operands.map(
       (operand) => {
         if (operand instanceof Token) {
@@ -424,9 +482,28 @@ export class OperationTree extends TokenExpression implements Unfoldable {
       ...unfoldedOperands,
       this.operator,
     ]);
-    unfoldedExpression.setParentExpression(this.parentExpression);
+    unfoldedExpression.setParent(this.parent);
 
     return unfoldedExpression;
+  }
+
+  setParent(parent: IntermediateRepresentation): void {
+    this.parent = parent;
+  }
+  getParent(): IntermediateRepresentation {
+    if (typeof this.parent === 'undefined') {
+      throw new Error(
+        `Parent Expression for this Function Expression not set ${this}`,
+      );
+    }
+    return this.parent;
+  }
+
+  /**
+   * Get string representation of object
+   */
+  toString(): string {
+    return `${this.constructor.name}, ${this.operator}`;
   }
 }
 
@@ -434,7 +511,7 @@ export class OperationTree extends TokenExpression implements Unfoldable {
  * Class representing a stack token expression. May have s-expressions inside.
  */
 export class UnfoldedTokenExpression extends TokenExpression {
-  parentExpression!: IntermediateRepresentation;
+  parent?: IntermediateRepresentation;
   expr: (Token | TokenExpression)[];
 
   constructor(expr: (Token | TokenExpression)[]) {
@@ -442,13 +519,28 @@ export class UnfoldedTokenExpression extends TokenExpression {
     this.expr = expr;
     for (const exp of expr) {
       if (exp instanceof TokenExpression) {
-        exp.setParentExpression(this);
+        exp.setParent(this);
       }
     }
   }
 
-  setParentExpression(parentExpression: IntermediateRepresentation) {
-    this.parentExpression = parentExpression;
+  setParent(parent: IntermediateRepresentation): void {
+    this.parent = parent;
+  }
+  getParent(): IntermediateRepresentation {
+    if (typeof this.parent === 'undefined') {
+      throw new Error(
+        `Parent Expression for this Function Expression not set ${this}`,
+      );
+    }
+    return this.parent;
+  }
+
+  /**
+   * Get string representation of object
+   */
+  toString(): string {
+    return `${this.constructor.name}, ${this.expr.toString()}`;
   }
 }
 
@@ -456,21 +548,42 @@ export class UnfoldedTokenExpression extends TokenExpression {
  * Class to represent an empty token expression
  */
 export class EmptyTokenExpression extends TokenExpression {
-  parentExpression!: IntermediateRepresentation;
-
-  setParentExpression(parentExpression: IntermediateRepresentation) {
-    this.parentExpression = parentExpression;
-  }
+  parent?: IntermediateRepresentation;
 
   unfold(): UnfoldedTokenExpression {
+    if (typeof this.parent === 'undefined') {
+      throw new Error(
+        `Parent Expression for this Function Expression not set ${this}`,
+      );
+    }
+
     const unfoldedExpression = new UnfoldedTokenExpression([]);
-    unfoldedExpression.setParentExpression(this.parentExpression);
+    unfoldedExpression.setParent(this.parent);
     return unfoldedExpression;
+  }
+
+  setParent(parent: IntermediateRepresentation): void {
+    this.parent = parent;
+  }
+  getParent(): IntermediateRepresentation {
+    if (typeof this.parent === 'undefined') {
+      throw new Error(
+        `Parent Expression for this Function Expression not set ${this}`,
+      );
+    }
+    return this.parent;
+  }
+
+  /**
+   * Get string representation of object
+   */
+  toString(): string {
+    return `${this.constructor.name}`;
   }
 }
 
 export class UnfoldedBlockExpression extends UnfoldedTokenExpression {
-  parentExpression!: IntermediateRepresentation;
+  parent?: IntermediateRepresentation;
   signature: SignatureType;
   name: string | null;
   expr: (Token | TokenExpression)[];
@@ -486,9 +599,28 @@ export class UnfoldedBlockExpression extends UnfoldedTokenExpression {
 
     for (const token of tokens) {
       if (token instanceof TokenExpression) {
-        token.setParentExpression(this);
+        token.setParent(this);
       }
     }
+  }
+
+  setParent(parent: IntermediateRepresentation): void {
+    this.parent = parent;
+  }
+  getParent(): IntermediateRepresentation {
+    if (typeof this.parent === 'undefined') {
+      throw new Error(
+        `Parent Expression for this Function Expression not set ${this}`,
+      );
+    }
+    return this.parent;
+  }
+
+  /**
+   * Get string representation of object
+   */
+  toString(): string {
+    return `${this.constructor.name}, ${this.name}`;
   }
 }
 /**
@@ -496,7 +628,7 @@ export class UnfoldedBlockExpression extends UnfoldedTokenExpression {
  * For expressions such as block, if, loop instructions.
  */
 export class BlockExpression extends OperationTree implements HasSignature {
-  parentExpression!: IntermediateRepresentation;
+  parent?: IntermediateRepresentation;
   private body: TokenExpression;
   private signature: BlockSignature;
   private headerToken: Token; // First token in block that specifies block type.
@@ -517,20 +649,22 @@ export class BlockExpression extends OperationTree implements HasSignature {
     );
     this.body = blockExpression;
     this.headerToken = headerToken;
-    blockExpression.setParentExpression(this);
-  }
-
-  setParentExpression(parentExpression: IntermediateRepresentation) {
-    this.parentExpression = parentExpression;
+    blockExpression.setParent(this);
   }
 
   unfold(): UnfoldedBlockExpression {
+    if (typeof this.parent === 'undefined') {
+      throw new Error(
+        `Parent Expression for this Function Expression not set ${this}`,
+      );
+    }
+
     const unfoldedExpression = new UnfoldedBlockExpression(
       this.getSignatureType(),
       this.getName(),
       [this.headerToken, this.body, this.createEndToken()],
     );
-    unfoldedExpression.setParentExpression(this.parentExpression);
+    unfoldedExpression.setParent(this.parent);
     return unfoldedExpression;
   }
 
@@ -568,6 +702,29 @@ export class BlockExpression extends OperationTree implements HasSignature {
   }
   getBody(): TokenExpression {
     return this.body;
+  }
+
+  setParent(parent: IntermediateRepresentation): void {
+    this.parent = parent;
+  }
+  getParent(): IntermediateRepresentation {
+    if (typeof this.parent === 'undefined') {
+      throw new Error(
+        `Parent Expression for this Function Expression not set ${this}`,
+      );
+    }
+    return this.parent;
+  }
+
+  /**
+   * Get string representation of object
+   */
+  toString(): string {
+    return `${this.constructor.name}, ${JSON.stringify(
+      this.signature,
+      undefined,
+      2,
+    )}`;
   }
 }
 

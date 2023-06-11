@@ -1,15 +1,18 @@
 {
-    "compilerOptions": {
-      "target": "ES2015",
-      "module": "commonjs",
-      "strict": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "declaration": true,
-      "emitDeclarationOnly": true,
-      "declarationDir": "./types"
-    },
-    "$schema": "https://json.schemastore.org/tsconfig",
-    "display": "Recommended",
-    "include": ["src/**/*"]
-  }
+  "compilerOptions": {
+    "target": "ES2015",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationDir": "./types",
+    "experimentalDecorators": true
+  },
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Recommended",
+  "include": [
+    "src/**/*"
+  ]
+}

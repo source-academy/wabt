@@ -330,7 +330,10 @@ export class IRWriter {
 
     const signature = new SignatureType(paramTypes, resultTypes);
     // Empty signature or signature with 0 param 1 return is represented inline and not added to the global signature types.
-    if (!signature.isEmpty() && !(signature.paramTypes.length === 0 && signature.returnTypes.length === 1)) {
+    if (
+      !signature.isEmpty()
+      && !(signature.paramTypes.length === 0 && signature.returnTypes.length === 1)
+    ) {
       this.module.addGlobalType(signature);
     }
 
@@ -463,8 +466,8 @@ function isFunctionBodyStackExpression(parseTree: ParseTree): boolean {
   return (
     !(tokenHeader instanceof Token)
     || (tokenHeader.isOpcodeToken()
-    && !isFunctionExpression(parseTree)
-    && !isFunctionBodySExpression(parseTree))
+      && !isFunctionExpression(parseTree)
+      && !isFunctionBodySExpression(parseTree))
     // && !isModuleDeclaration(parseTree)
   );
 }
