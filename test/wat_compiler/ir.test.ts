@@ -8,11 +8,11 @@ describe('test unfolding', () => {
     const mock_parent = new EmptyTokenExpression();
 
     const ir = testCase.ir;
-    ir.setParent(mock_parent);
+    ir.parent = mock_parent;
     const unfolded = ir.unfold();
 
     const expected = testCase.unfolded_ir!;
-    expected.setParent(mock_parent);
+    expected.parent = mock_parent;
 
     expect(unfolded)
       .toEqual(expected);
