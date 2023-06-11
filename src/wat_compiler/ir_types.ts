@@ -423,7 +423,7 @@ export class FunctionSignature {
  * Interface indicating that the particular intermediate representation
  * may contain s-expressions, and can therefore be 'unfolded'.
  */
-export interface Unfoldable {
+export interface Unfoldable extends IntermediateRepresentation {
   unfold(): UnfoldedTokenExpression;
 }
 export namespace Unfoldable {
@@ -464,7 +464,7 @@ export class OperationTree extends TokenExpression implements Unfoldable {
   unfold(): UnfoldedTokenExpression {
     if (typeof this.parent === 'undefined') {
       throw new Error(
-        `Parent Expression for this Function Expression not set ${this}`,
+        `Parent Expression for this Function Expression not set for ${this}`,
       );
     }
 

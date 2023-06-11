@@ -307,7 +307,7 @@ export class BinaryWriter {
     ir: UnfoldedBlockExpression,
     fnExpr: FunctionExpression,
   ): Uint8Array {
-    console.log(ir.toString());
+    // console.log(ir.toString());
     // Resolve Br token references to block names
     this.resolveBlockBrTokens(ir, []);
 
@@ -339,10 +339,10 @@ export class BinaryWriter {
     if (ir instanceof UnfoldedBlockExpression) {
       block_name_stack.push(ir.name);
     }
-    console.log(`Resolve block br token: ${block_name_stack}`);
+    // console.log(`Resolve block br token: ${block_name_stack}`);
 
     for (const [i, token] of ir.expr.entries()) {
-      console.log(token.constructor.name);
+      // console.log(token.constructor.name);
       // console.log(JSON.stringify(token, undefined, 2));
       // if (token instanceof UnfoldedTokenExpression) {
       //   this.resolveBlockBrTokens(token, [...block_name_stack]); // copy
