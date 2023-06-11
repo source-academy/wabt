@@ -10,9 +10,11 @@ import {
   type TokenExpression,
   UnfoldedTokenExpression,
   IRToken,
+  type IntermediateRepresentation,
+  BlockExpression,
 } from './ir_types';
 import { ValueType } from '../common/type';
-import { TokenType } from '../common/token';
+import { type Token, TokenType } from '../common/token';
 import { Opcode, OpcodeType } from '../common/opcode';
 
 import { ExportType } from '../common/export_types';
@@ -236,13 +238,11 @@ export class BinaryWriter {
     const result: number[] = [];
     for (let i = 0; i < unfoldedTokenExpr.expr.length; i++) {
       let currentExpr = unfoldedTokenExpr.expr[i];
-      let prevExpr = unfoldedTokenExpr.expr[i - 1];
 
       if (currentExpr instanceof IRToken) {
+        // Variable resolution
         if (currentExpr.type === TokenType.Var) {
-          result.push(fnExpr.resolveVariableIndex(currentExpr.lexeme));
-        } else if (prevExpr instanceof IRToken) {
-          result.push(...this.encodeToken(currentExpr, prevExpr));
+          result.push(this.encodeVarToken(currentExpr, fnExpr));
         } else {
           result.push(...this.encodeToken(currentExpr));
         }
@@ -253,6 +253,50 @@ export class BinaryWriter {
     }
 
     return new Uint8Array(result);
+  }
+
+  private encodeVarToken(token: IRToken, fnExpr: FunctionExpression): number {
+    switch (token.prevToken?.type) {
+      case TokenType.LocalSet:
+      case TokenType.LocalGet:
+        return fnExpr.resolveVariableIndex(token.lexeme);
+      case TokenType.Br:
+        return this.encodeBrVarToken(token);
+
+      default:
+        throw new Error(
+          `Unable to resolve var token ${token.prevToken?.lexeme} ${token.lexeme}`,
+        );
+    }
+  }
+
+  /**
+   * Encode a 'Br $var' token by evaluating the index for $var.
+   * @returns a number corresponding to the break stack index.
+   */
+  private encodeBrVarToken(token: IRToken): number {
+    let parent: IntermediateRepresentation | null = token;
+    let stack_count = 0;
+    while (parent !== null) {
+      if (
+        (parent instanceof BlockExpression
+          && parent.getName() === token.lexeme)
+        || (parent instanceof UnfoldedBlockExpression
+          && parent.name === token.lexeme)
+      ) {
+        return stack_count;
+      }
+
+      if (
+        parent instanceof BlockExpression
+        || parent instanceof UnfoldedBlockExpression
+      ) {
+        stack_count++;
+      }
+      parent = parent.parent;
+    }
+
+    throw new Error(`Br ${token.lexeme} not found.`);
   }
 
   /**
@@ -291,27 +335,20 @@ export class BinaryWriter {
     return Uint8Array.from([total_types, ...encoding]);
   }
 
-  private encodeToken(
-    token: IRToken,
-    prevToken: IRToken | undefined = undefined,
-  ): Uint8Array {
+  private encodeToken(token: IRToken): Uint8Array {
     if (!this.isLiteralToken(token)) {
       return this.encodeNonLiteralToken(token);
     }
-    if (typeof prevToken === 'undefined') {
+    if (token.prevToken === null) {
       throw new Error(`Unable to encode ${token}`);
     }
-    return this.encodeLiteralToken(prevToken, token);
+    return this.encodeLiteralToken(token.prevToken, token);
   }
 
   private encodeUnfoldedBlockExpression(
     ir: UnfoldedBlockExpression,
     fnExpr: FunctionExpression,
   ): Uint8Array {
-    // console.log(ir.toString());
-    // Resolve Br token references to block names
-    this.resolveBlockBrTokens(ir, []);
-
     const binary: number[] = [
       ...this.encodeUnfoldedTokenExpression(ir, fnExpr),
     ];
@@ -331,46 +368,6 @@ export class BinaryWriter {
       binary.splice(1, 0, this.module.resolveGlobalTypeIndex(ir.signature));
     }
     return new Uint8Array(binary);
-  }
-
-  private resolveBlockBrTokens(
-    ir: UnfoldedTokenExpression,
-    block_name_stack: (string | null)[],
-  ) {
-    if (ir instanceof UnfoldedBlockExpression) {
-      block_name_stack.push(ir.name);
-    }
-    // console.log(`Resolve block br token: ${block_name_stack}`);
-
-    for (const [i, token] of ir.expr.entries()) {
-      // console.log(token.constructor.name);
-      // console.log(JSON.stringify(token, undefined, 2));
-      // if (token instanceof UnfoldedTokenExpression) {
-      //   this.resolveBlockBrTokens(token, [...block_name_stack]); // copy
-      // }
-
-      // Replace BR token --> name
-      if (token instanceof IRToken && token.type === TokenType.Br) {
-        const nextToken = ir.expr[i + 1];
-        if (
-          !(nextToken instanceof IRToken)
-          || typeof nextToken === 'undefined'
-        ) {
-          throw new Error(
-            `Expected br token to be followed by a number or name. Got: ${[
-              token,
-              nextToken,
-            ]}`,
-          );
-        }
-        if (nextToken.type === TokenType.Var) {
-          nextToken.type = TokenType.Nat;
-          nextToken.lexeme = block_name_stack
-            .lastIndexOf(nextToken.lexeme)
-            .toString();
-        }
-      }
-    }
   }
 
   // Exports
@@ -471,7 +468,7 @@ export class BinaryWriter {
    * @param prevToken previous token
    * @param token token
    */
-  private encodeLiteralToken(prevToken: IRToken, token: IRToken): Uint8Array {
+  private encodeLiteralToken(prevToken: Token, token: IRToken): Uint8Array {
     if (prevToken.isOpcodeType(OpcodeType.F64Const)) {
       return NumberEncoder.encodeF64Const(
         /^\d+$/u.test(token.lexeme)

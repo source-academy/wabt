@@ -111,10 +111,6 @@ const break_with_name_1 = `
     )
   )
 )`;
-/*
-
-
-*/
 
 export const positiveControlTestCases = [
   nop_operation,
