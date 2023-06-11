@@ -9,9 +9,10 @@ import {
   EmptyTokenExpression,
   type TokenExpression,
   UnfoldedTokenExpression,
+  IRToken,
 } from './ir_types';
 import { ValueType } from '../common/type';
-import { Token, TokenType } from '../common/token';
+import { TokenType } from '../common/token';
 import { Opcode, OpcodeType } from '../common/opcode';
 
 import { ExportType } from '../common/export_types';
@@ -237,10 +238,10 @@ export class BinaryWriter {
       let currentExpr = unfoldedTokenExpr.expr[i];
       let prevExpr = unfoldedTokenExpr.expr[i - 1];
 
-      if (currentExpr instanceof Token) {
+      if (currentExpr instanceof IRToken) {
         if (currentExpr.type === TokenType.Var) {
           result.push(fnExpr.resolveVariableIndex(currentExpr.lexeme));
-        } else if (prevExpr instanceof Token) {
+        } else if (prevExpr instanceof IRToken) {
           result.push(...this.encodeToken(currentExpr, prevExpr));
         } else {
           result.push(...this.encodeToken(currentExpr));
@@ -291,8 +292,8 @@ export class BinaryWriter {
   }
 
   private encodeToken(
-    token: Token,
-    prevToken: Token | undefined = undefined,
+    token: IRToken,
+    prevToken: IRToken | undefined = undefined,
   ): Uint8Array {
     if (!this.isLiteralToken(token)) {
       return this.encodeNonLiteralToken(token);
@@ -349,9 +350,12 @@ export class BinaryWriter {
       // }
 
       // Replace BR token --> name
-      if (token instanceof Token && token.type === TokenType.Br) {
+      if (token instanceof IRToken && token.type === TokenType.Br) {
         const nextToken = ir.expr[i + 1];
-        if (!(nextToken instanceof Token) || typeof nextToken === 'undefined') {
+        if (
+          !(nextToken instanceof IRToken)
+          || typeof nextToken === 'undefined'
+        ) {
           throw new Error(
             `Expected br token to be followed by a number or name. Got: ${[
               token,
@@ -422,22 +426,25 @@ export class BinaryWriter {
 
   // Tokens
 
-  private convertVarToIndexToken(varToken: Token, index: number): Token {
+  private convertVarToIndexToken(varToken: IRToken, index: number): IRToken {
     assert(Number.isInteger(index));
     assert(index >= 0);
 
-    return new Token(
-      TokenType.Nat,
-      index.toString(),
-      varToken.line,
-      varToken.col,
-      varToken.indexInSource,
-      null,
-      null,
-    );
+    varToken.type = TokenType.Nat;
+    varToken.lexeme = index.toString();
+    return varToken;
+    // return new Token(
+    //   TokenType.Nat,
+    //   index.toString(),
+    //   varToken.line,
+    //   varToken.col,
+    //   varToken.indexInSource,
+    //   null,
+    //   null,
+    // );
   }
 
-  private isLiteralToken(token: Token): boolean {
+  private isLiteralToken(token: IRToken): boolean {
     return token.type === TokenType.Nat || token.type === TokenType.Float;
   }
 
@@ -446,7 +453,7 @@ export class BinaryWriter {
    * @param token token to encode
    * @returns a Uint8Array of binary encodings.
    */
-  private encodeNonLiteralToken(token: Token): Uint8Array {
+  private encodeNonLiteralToken(token: IRToken): Uint8Array {
     if (token.isValueToken()) {
       return new Uint8Array([ValueType.getValue(token.valueType!)]);
     }
@@ -464,7 +471,7 @@ export class BinaryWriter {
    * @param prevToken previous token
    * @param token token
    */
-  private encodeLiteralToken(prevToken: Token, token: Token): Uint8Array {
+  private encodeLiteralToken(prevToken: IRToken, token: IRToken): Uint8Array {
     if (prevToken.isOpcodeType(OpcodeType.F64Const)) {
       return NumberEncoder.encodeF64Const(
         /^\d+$/u.test(token.lexeme)

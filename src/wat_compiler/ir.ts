@@ -9,6 +9,7 @@ import {
   BlockExpression,
   SignatureType,
   FunctionSignature,
+  IRToken,
 } from './ir_types';
 import { Token, TokenType } from '../common/token';
 import { type ParseTree } from './tree_types';
@@ -77,7 +78,7 @@ export class IRWriter {
         throw new Error(); // Better error mesage
       }
       const exportInfo = parseTree[i + 1];
-      if (!(exportInfo instanceof Array<Token>)) {
+      if (!(exportInfo instanceof Array)) {
         throw new Error(); // Better error mesage
       }
       const [exportType, exportIndex] = exportInfo;

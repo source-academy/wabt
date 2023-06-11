@@ -453,16 +453,24 @@ export abstract class TokenExpression extends IntermediateRepresentation {}
  */
 export class OperationTree extends TokenExpression implements Unfoldable {
   _parent?: IntermediateRepresentation;
-  operator: Token;
-  operands: (Token | TokenExpression)[];
+  operator: IRToken;
+  operands: (IRToken | TokenExpression)[];
 
   constructor(operator: Token, operands: (Token | TokenExpression)[]) {
     super();
-    this.operator = operator;
-    this.operands = operands;
-    for (const operand of operands) {
+    this.operator = new IRToken(operator, this, null);
+
+    this.operands = [];
+    for (let i = 0; i < operands.length; i++) {
+      const operand = operands[i];
+      let prevOperand = i === 0 ? null : operands[i - 1];
+      prevOperand = prevOperand instanceof TokenExpression ? null : prevOperand;
+
       if (operand instanceof TokenExpression) {
         operand.parent = this;
+        this.operands.push(operand);
+      } else {
+        this.operands.push(new IRToken(operand, this, prevOperand));
       }
     }
   }
@@ -474,9 +482,9 @@ export class OperationTree extends TokenExpression implements Unfoldable {
       );
     }
 
-    const unfoldedOperands: (Token | TokenExpression)[] = this.operands.map(
+    const unfoldedOperands: (IRToken | TokenExpression)[] = this.operands.map(
       (operand) => {
-        if (operand instanceof Token) {
+        if (operand instanceof IRToken) {
           return operand;
         }
 
@@ -518,14 +526,21 @@ export class OperationTree extends TokenExpression implements Unfoldable {
  */
 export class UnfoldedTokenExpression extends TokenExpression {
   _parent?: IntermediateRepresentation;
-  expr: (Token | TokenExpression)[];
+  expr: (IRToken | TokenExpression)[];
 
   constructor(expr: (Token | TokenExpression)[]) {
     super();
-    this.expr = expr;
-    for (const exp of expr) {
+    this.expr = [];
+    for (let i = 0; i < expr.length; i++) {
+      const exp = expr[i];
+      let prevExp = i === 0 ? null : expr[i - 1];
+      prevExp = prevExp instanceof TokenExpression ? null : prevExp;
+
       if (exp instanceof TokenExpression) {
         exp.parent = this;
+        this.expr.push(exp);
+      } else {
+        this.expr.push(new IRToken(exp, this, prevExp));
       }
     }
   }
@@ -592,7 +607,8 @@ export class UnfoldedBlockExpression extends UnfoldedTokenExpression {
   _parent?: IntermediateRepresentation;
   signature: SignatureType;
   name: string | null;
-  expr: (Token | TokenExpression)[];
+  expr: (IRToken | TokenExpression)[];
+
   constructor(
     signature: SignatureType,
     name: string | null,
@@ -601,11 +617,18 @@ export class UnfoldedBlockExpression extends UnfoldedTokenExpression {
     super(tokens);
     this.signature = signature;
     this.name = name;
-    this.expr = tokens;
 
-    for (const token of tokens) {
+    this.expr = [];
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
+      let prevToken = i === 0 ? null : tokens[i - 1];
+      prevToken = prevToken instanceof TokenExpression ? null : prevToken;
+
       if (token instanceof TokenExpression) {
         token.parent = this;
+        this.expr.push(token);
+      } else {
+        this.expr.push(new IRToken(token, this, prevToken));
       }
     }
   }
@@ -637,7 +660,7 @@ export class BlockExpression extends OperationTree implements HasSignature {
   _parent?: IntermediateRepresentation;
   private body: TokenExpression;
   private signature: BlockSignature;
-  private headerToken: Token; // First token in block that specifies block type.
+  private headerToken: IRToken; // First token in block that specifies block type.
 
   constructor(
     headerToken: Token,
@@ -654,7 +677,7 @@ export class BlockExpression extends OperationTree implements HasSignature {
       returnTypes,
     );
     this.body = blockExpression;
-    this.headerToken = headerToken;
+    this.headerToken = new IRToken(headerToken, this, null);
     blockExpression.parent = this;
   }
 
@@ -674,8 +697,8 @@ export class BlockExpression extends OperationTree implements HasSignature {
     return unfoldedExpression;
   }
 
-  private createEndToken(): Token {
-    return new Token(
+  private createEndToken(): IRToken {
+    const token = new Token(
       TokenType.End,
       'end',
       this.headerToken.line,
@@ -684,6 +707,7 @@ export class BlockExpression extends OperationTree implements HasSignature {
       OpcodeType.End,
       null,
     );
+    return new IRToken(token, this, this.headerToken.prevToken);
   }
 
   getSignatureType(): SignatureType {
@@ -754,5 +778,53 @@ class BlockSignature {
     this.blockType = blockType;
     this.name = name;
     this.signatureType = new SignatureType(paramTypes, returnTypes);
+  }
+}
+
+/**
+ * Class that wraps around a token to store IR metadata.
+ * Notably, stores: previous token, parent expression
+ */
+export class IRToken extends Token {
+  private _prevToken: Token | null = null;
+  private _parent: IntermediateRepresentation;
+
+  constructor(
+    token: Token,
+    parent: IntermediateRepresentation,
+    prevToken: Token | null = null,
+  ) {
+    super(
+      token.type,
+      token.lexeme,
+      token.line,
+      token.col,
+      token.indexInSource,
+      token.opcodeType,
+      token.valueType,
+    );
+    this._prevToken = prevToken;
+    this._parent = parent;
+  }
+
+  get prevToken() {
+    return this._prevToken;
+  }
+
+  get parent(): IntermediateRepresentation {
+    if (typeof this._parent === 'undefined' || this._parent === null) {
+      throw new Error(
+        `Parent Expression for this Function Expression not set ${this}`,
+      );
+    }
+    return this._parent;
+  }
+
+  set parent(parent: IntermediateRepresentation) {
+    this._parent = parent;
+  }
+
+  toString(): string {
+    throw new Error('Method not implemented.');
   }
 }
