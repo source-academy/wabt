@@ -112,6 +112,147 @@ const break_with_name_1 = `
   )
 )`;
 
+const return_operation = `
+(module
+  (func (result i32)
+    i32.const 10
+    i32.const 90
+    return
+  )
+)
+`;
+
+const select_simple = `
+(module
+  (func $select_simple (result i32)
+    ;; load two values onto the stack
+    i32.const 10
+    i32.const 20
+
+    ;; change to \`1\` (true) to get the first value (\`10\`)
+    i32.const 0
+    select
+  )
+)
+`;
+
+const select_externref = `
+(module  
+  (func $select_externref (param $value externref) (param $condition i32) (result externref)
+    ;; this is "select t", the explicitly typed variant
+    ref.null extern
+    local.get $value
+    local.get $condition
+    select (result externref)
+  )
+)
+`;
+
+/*
+(module
+  (func
+    i32.const 0
+    (if
+      (then
+        i32.const 1
+        drop
+      )
+      (else
+        i32.const 0
+        drop
+      )
+    )
+  )
+)
+
+
+(module
+  (func (result i32 i32)
+    i32.const 0
+    (if (result i32)
+      (then
+        i32.const 1
+      )
+      (else
+        i32.const 0
+      )
+    )
+  i32.const 1
+  )
+)
+
+
+(module
+  (func (result i32 i32)
+    i32.const 0
+    i32.const 0
+    i32.const 0
+    (if (param i32) (result i32)
+      (then
+        i32.const 1
+        drop
+      )
+      (else
+        i32.const 0
+        drop
+      )
+    )
+  )
+)
+
+(module
+  (func
+  	(loop $outer
+      (loop $inner
+      	br $outer
+      )
+    )
+  )
+)
+(module
+  (func
+  	(loop $outer
+      (loop $inner
+      	br $inner
+      )
+    )
+  )
+)
+
+(module
+  (func
+  	(loop $outer
+      (loop $inner
+      	i32.const 0
+        br_if $outer
+      )
+    )
+  )
+)
+
+(module
+  (func
+  	(loop $outer
+      (loop $inner
+      	i32.const 0
+        br_if $inner
+      )
+    )
+  )
+)
+
+(module
+  (func (result i32 i32)
+  	(loop (result i32)
+      	i32.const 0
+      (loop (param i32) (result i32)
+      )
+    )
+    i32.const 1
+  )
+)
+*/
+
 export const positiveControlTestCases = [
   nop_operation,
   unreachable_operation,
@@ -123,4 +264,7 @@ export const positiveControlTestCases = [
   break_with_index_0,
   break_with_index_1,
   break_with_name_1,
+  return_operation,
+  select_simple,
+  select_externref,
 ];
