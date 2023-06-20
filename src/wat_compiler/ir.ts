@@ -10,9 +10,10 @@ import {
   SignatureType,
   FunctionSignature,
   IRToken,
+  SelectExpression,
 } from './ir_types';
 import { Token, TokenType } from '../common/token';
-import { type ParseTree } from './tree_types';
+import { type Tree, type ParseTree } from './tree_types';
 
 import { Opcode } from '../common/opcode';
 import { type ValueType } from '../common/type';
@@ -144,6 +145,8 @@ export class IRWriter {
     // Parse function result declaration
     for (; cursor < parseTree.length; cursor++) {
       const parseTreeNode = parseTree[cursor];
+      // console.log(parseTreeNode instanceof Token);
+      // console.log(isFunctionSignatureResultExpression(parseTreeNode));
       if (
         parseTreeNode instanceof Token
         || !isFunctionSignatureResultExpression(parseTreeNode)
@@ -213,6 +216,9 @@ export class IRWriter {
     if (isFunctionBodyStackExpression(parseTree)) {
       return this.parseFunctionBodyStackExpression(parseTree);
     }
+    // if (isFunctionBodySelectExpression(parseTree)) {
+    //   return this.parseFunctionBodySelectExpression(parseTree);
+    // }
 
     throw new Error(
       `Cannot parse into function body expression: ${JSON.stringify(
@@ -255,9 +261,15 @@ export class IRWriter {
   private parseFunctionBodyStackExpression(
     parseTree: ParseTree,
   ): UnfoldedTokenExpression {
-    const nodes: (Token | OperationTree)[] = [];
-    parseTree.forEach((tokenNode) => {
-      if (tokenNode instanceof Token) {
+    const nodes: (Token | TokenExpression)[] = [];
+    for (let i = 0; i < parseTree.length; i++) {
+      const tokenNode = parseTree[i];
+      if (isFunctionBodySelectExpression(tokenNode, parseTree[i + 1])) {
+        nodes.push(
+          this.parseFunctionBodySelectExpression(tokenNode, parseTree[i + 1]),
+        );
+        i++;
+      } else if (tokenNode instanceof Token) {
         nodes.push(tokenNode);
       } else {
         const temp = this.parseFunctionBodyExpression(tokenNode);
@@ -267,9 +279,36 @@ export class IRWriter {
         }
         nodes.push(temp);
       }
-    });
+    }
 
     return new UnfoldedTokenExpression(nodes);
+  }
+
+  private parseFunctionBodySelectExpression(
+    headerToken: Token | Tree<Token>,
+    nextToken: Token | Tree<Token> | undefined,
+  ): TokenExpression {
+    if (typeof nextToken === 'undefined') {
+      return new SelectExpression([headerToken]);
+    }
+    if (
+      !(
+        headerToken instanceof Token
+        && nextToken instanceof Array
+        && nextToken[0] instanceof Token
+        && nextToken[1] instanceof Token
+        && nextToken.length === 2
+      )
+    ) {
+      throw new Error(
+        `Cannot convert into Select Expression: [${JSON.stringify(
+          headerToken,
+          undefined,
+          2,
+        )}, ${JSON.stringify(nextToken, undefined, 2)}]`,
+      ); //TODO Proper error
+    }
+    return new SelectExpression([headerToken, nextToken[0], nextToken[1]]);
   }
 
   private parseFunctionBodyBlockExpression(
@@ -464,6 +503,7 @@ function isFunctionBodyStackExpression(parseTree: ParseTree): boolean {
   //     2,
   //   )} is not a Token type`,
   // );
+
   return (
     !(tokenHeader instanceof Token)
     || (tokenHeader.isOpcodeToken()
@@ -471,6 +511,28 @@ function isFunctionBodyStackExpression(parseTree: ParseTree): boolean {
       && !isFunctionBodySExpression(parseTree))
     // && !isModuleDeclaration(parseTree)
   );
+}
+
+function isFunctionBodySelectExpression(
+  token: Token | Tree<Token>,
+  nextToken: Token | Tree<Token> | undefined,
+): boolean {
+  if (!(token instanceof Token) || token.type !== TokenType.Select) {
+    return false;
+  }
+  if (typeof nextToken === 'undefined') {
+    return true;
+  }
+  if (
+    nextToken instanceof Array
+    && nextToken.length === 2
+    && nextToken[0] instanceof Token
+    && nextToken[1] instanceof Token
+    && isFunctionSignatureResultExpression(nextToken)
+  ) {
+    return true;
+  }
+  return false;
 }
 
 function isFunctionExpression(parseTree: ParseTree): boolean {

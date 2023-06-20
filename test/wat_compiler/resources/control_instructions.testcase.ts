@@ -125,13 +125,21 @@ const return_operation = `
 const select_simple = `
 (module
   (func $select_simple (result i32)
-    ;; load two values onto the stack
     i32.const 10
     i32.const 20
-
-    ;; change to \`1\` (true) to get the first value (\`10\`)
     i32.const 0
     select
+  )
+)
+`;
+
+const select_simple_alt_syntax = `
+(module
+  (func $select_simple (result i32)
+    i32.const 10
+    i32.const 20
+    i32.const 0
+    select (result i32)
   )
 )
 `;
@@ -266,5 +274,6 @@ export const positiveControlTestCases = [
   break_with_name_1,
   return_operation,
   select_simple,
+  select_simple_alt_syntax,
   select_externref,
 ];

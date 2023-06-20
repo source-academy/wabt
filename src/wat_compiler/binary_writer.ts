@@ -12,6 +12,7 @@ import {
   IRToken,
   type IntermediateRepresentation,
   BlockExpression,
+  SelectExpression,
 } from './ir_types';
 import { ValueType } from '../common/type';
 import { type Token, TokenType } from '../common/token';
@@ -225,6 +226,9 @@ export class BinaryWriter {
       if (expr instanceof UnfoldedBlockExpression) {
         return this.encodeUnfoldedBlockExpression(expr, fn);
       }
+      if (expr instanceof SelectExpression) {
+        return this.encodeSelectExpression(expr);
+      }
       return this.encodeUnfoldedTokenExpression(expr, fn);
     }
 
@@ -399,6 +403,20 @@ export class BinaryWriter {
     return new Uint8Array(binary);
   }
 
+  private encodeSelectExpression(ir: SelectExpression): Uint8Array {
+    if (!ir.hasExplicitResult) {
+      return this.encodeNonLiteralToken(ir.headerToken);
+    }
+    const valueType = ir.explicitResultType?.valueType ?? null;
+    if (valueType === null) {
+      throw new Error();
+    }
+    return new Uint8Array([
+      ...this.encodeNonLiteralToken(ir.headerToken),
+      1, // FIXME assume 1 result type for select expression.
+      ValueType.getValue(valueType),
+    ]);
+  }
   // Exports
 
   /**
@@ -488,7 +506,12 @@ export class BinaryWriter {
       return new Uint8Array([Opcode.getCode(token.opcodeType!)]);
     }
 
-    throw new Error(`Unexpected token: ${JSON.stringify(token, undefined, 2)}`);
+    if (token.valueType !== null) {
+      // This is a last-ditch attempt to translate a given token. May not be correct.
+      return new Uint8Array([ValueType.getValue(token.valueType!)]);
+    }
+
+    throw new Error(`Unexpected token: ${token.toString()}`);
   }
 
   /**

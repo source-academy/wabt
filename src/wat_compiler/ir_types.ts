@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { type ValueType } from '../common/type';
+import { ValueType } from '../common/type';
 import { Token, TokenType } from '../common/token';
 import { ExportType } from '../common/export_types';
 import { assert } from '../common/assert';
-import { isEqual } from 'lodash';
+import { isEqual, result } from 'lodash';
 import { OpcodeType } from '../common/opcode';
 
 /**
@@ -742,6 +742,31 @@ export class BlockExpression extends OperationTree implements HasSignature {
   }
 }
 
+export class SelectExpression extends UnfoldedTokenExpression {
+  headerToken: IRToken;
+  hasExplicitResult: boolean;
+  explicitResultType: IRToken | null;
+
+  constructor(tokens: Token[]) {
+    super(tokens);
+    if (tokens.length !== 3 && tokens.length !== 1) {
+      throw new Error(`Cannot be select expression: ${tokens}`);
+    }
+    this.headerToken = new IRToken(tokens[0], this, null);
+    this.hasExplicitResult = !(typeof tokens[2] === 'undefined');
+    if (typeof tokens[2] === 'undefined') {
+      this.explicitResultType = null;
+    } else {
+      this.explicitResultType = new IRToken(tokens[2], this, tokens[1]);
+      this.headerToken.opcodeType = OpcodeType.SelectT;
+    }
+  }
+
+  toString(): string {
+    return `[Select (return) ${this.explicitResultType}]`;
+  }
+}
+
 class BlockSignature {
   blockType: TokenType;
   name: string | null;
@@ -809,6 +834,6 @@ export class IRToken extends Token {
   }
 
   toString(): string {
-    throw new Error('Method not implemented.');
+    return `${this.lexeme}: ${ValueType.getValue(this.valueType)}`;
   }
 }
