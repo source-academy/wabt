@@ -235,6 +235,7 @@ const nested_loop_break_outer = `
     )
   )
 )`;
+
 const nested_loop_break_inner = `
 (module
   (func
@@ -284,6 +285,209 @@ const multiple_loop_types = `
 )
 `;
 
+const empty_explicit_block_with_end = `
+(module
+  (func 
+    block (param) (result)
+        
+    end
+  )
+)
+`;
+
+const block_one_param_with_end = `
+(module
+  (func (result i32)
+    i32.const 0
+    block (param i32) (result i32)
+    end
+  )
+)
+`;
+
+// Note: same type as function
+const block_one_result_with_end = `
+(module
+  (func
+    block (param) (result i32)
+      i32.const 0    	
+    end
+    drop
+  )
+)
+`;
+
+const block_multiple_result_with_end = `
+(module
+    (func
+        i32.const 1
+        block (param i32) (result i32 i32)
+            i32.const 0
+        end
+        drop
+        drop
+    )
+)
+`;
+
+const break_with_index_0_with_end = `
+(module
+  (func
+    block
+    	br 0
+    end
+  )
+)
+`;
+
+const break_with_index_1_with_end = `
+(module
+  (func
+    block
+      block
+        br 1
+      end
+    end
+  )
+)
+`;
+
+const break_with_name_1_with_end = `
+(module
+  (func
+    block $one
+      block $two
+        br $one
+      end
+    end
+  )
+  (func
+    block $one
+      block $two
+        br $two
+      end
+    end
+  )
+)`;
+
+const basic_if_then_with_end = `
+(module
+  (func
+    i32.const 0
+    if
+    i32.const 1
+    drop
+    end
+  )
+)
+`;
+
+const basic_if_else_with_end = `
+(module
+  (func
+    i32.const 0
+    if
+    i32.const 1
+    drop
+      else
+    i32.const 0
+    drop
+    end
+  )
+)
+`;
+
+const if_else_with_single_result_with_end = `
+(module
+  (func (result i32 i32)
+    i32.const 0
+    if (result i32)
+    i32.const 1
+    else
+    i32.const 0
+    end
+  i32.const 1
+  )
+)
+`;
+
+const if_else_with_single_param_result_with_end = `
+(module
+  (func (result i32 i32)
+    i32.const 0
+    i32.const 0
+    i32.const 0
+    if (param i32) (result i32)
+    i32.const 1
+    drop
+    else
+    i32.const 0
+    drop
+    end
+  )
+)
+`;
+
+const nested_loop_break_outer_with_end = `
+(module
+  (func
+  	loop $outer
+      loop $inner
+      	br $outer
+      end
+    end
+  )
+)`;
+
+const nested_loop_break_inner_with_end = `
+(module
+  (func
+    loop $outer
+    loop $inner
+    br $inner
+    end
+    end
+  )
+)`;
+
+const nested_loop_brif_outer_with_end = `
+(module
+  (func
+    loop $outer
+    loop $inner
+    i32.const 0
+    br_if $outer
+    end
+    end
+  )
+)
+`;
+
+const nested_loop_brif_inner_with_end = `
+(module
+  (func
+    loop $outer
+    loop $inner
+    i32.const 0
+    br_if $inner
+    end
+    end
+  )
+)`;
+
+const multiple_loop_types_with_end = `
+(module
+  (func (result i32 i32)
+    loop (result i32)
+    i32.const 0
+    loop (param i32) (result i32)
+    end
+    end
+    i32.const 1
+  )
+)
+`;
+
 export const positiveControlTestCases = [
   nop_operation,
   unreachable_operation,
@@ -308,4 +512,20 @@ export const positiveControlTestCases = [
   nested_loop_brif_outer,
   nested_loop_brif_inner,
   multiple_loop_types,
+  empty_explicit_block_with_end,
+  block_one_param_with_end,
+  block_one_result_with_end,
+  block_multiple_result_with_end,
+  break_with_index_0_with_end,
+  break_with_index_1_with_end,
+  break_with_name_1_with_end,
+  basic_if_then_with_end,
+  basic_if_else_with_end,
+  if_else_with_single_result_with_end,
+  if_else_with_single_param_result_with_end,
+  nested_loop_break_outer_with_end,
+  nested_loop_break_inner_with_end,
+  nested_loop_brif_outer_with_end,
+  nested_loop_brif_inner_with_end,
+  multiple_loop_types_with_end,
 ];
