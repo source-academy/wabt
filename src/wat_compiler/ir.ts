@@ -380,7 +380,10 @@ export class IRWriter {
       this.module.addGlobalType(signature);
     }
 
-    if (firstToken.type === TokenType.Block) {
+    if (
+      firstToken.type === TokenType.Block
+      || firstToken.type === TokenType.Loop
+    ) {
       return this.parseFunctionBodyBlockBlockBodyExpression(
         firstToken,
         blockLabel,
@@ -399,7 +402,6 @@ export class IRWriter {
         parseTree.slice(cursor),
       );
     }
-    throw new Error();
   }
 
   /**

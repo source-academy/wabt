@@ -271,6 +271,7 @@ export class BinaryWriter {
       case TokenType.LocalGet:
         return this.encodeFunctionLocalVarToken(token, fnExpr);
       case TokenType.Br:
+      case TokenType.BrIf:
         return this.encodeFunctionBrVarToken(token);
 
       default:

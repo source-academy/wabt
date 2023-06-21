@@ -245,8 +245,8 @@ const nested_loop_break_inner = `
     )
   )
 )`;
-/*
 
+const nested_loop_brif_outer = `
 (module
   (func
   	(loop $outer
@@ -257,7 +257,9 @@ const nested_loop_break_inner = `
     )
   )
 )
+`;
 
+const nested_loop_brif_inner = `
 (module
   (func
   	(loop $outer
@@ -267,8 +269,9 @@ const nested_loop_break_inner = `
       )
     )
   )
-)
+)`;
 
+const multiple_loop_types = `
 (module
   (func (result i32 i32)
   	(loop (result i32)
@@ -279,7 +282,7 @@ const nested_loop_break_inner = `
     i32.const 1
   )
 )
-*/
+`;
 
 export const positiveControlTestCases = [
   nop_operation,
@@ -300,6 +303,9 @@ export const positiveControlTestCases = [
   basic_if_else,
   if_else_with_single_result,
   if_else_with_single_param_result,
-  // nested_loop_break_outer,
-  // nested_loop_break_inner,
+  nested_loop_break_outer,
+  nested_loop_break_inner,
+  nested_loop_brif_outer,
+  nested_loop_brif_inner,
+  multiple_loop_types,
 ];
