@@ -156,7 +156,21 @@ const select_externref = `
 )
 `;
 
-/*
+const basic_if_then = `
+(module
+  (func
+    i32.const 0
+    (if
+      (then
+        i32.const 1
+        drop
+      )
+    )
+  )
+)
+`;
+
+const basic_if_else = `
 (module
   (func
     i32.const 0
@@ -172,8 +186,9 @@ const select_externref = `
     )
   )
 )
+`;
 
-
+const if_else_with_single_result = `
 (module
   (func (result i32 i32)
     i32.const 0
@@ -188,8 +203,9 @@ const select_externref = `
   i32.const 1
   )
 )
+`;
 
-
+const if_else_with_single_param_result = `
 (module
   (func (result i32 i32)
     i32.const 0
@@ -207,7 +223,9 @@ const select_externref = `
     )
   )
 )
+`;
 
+const nested_loop_break_outer = `
 (module
   (func
   	(loop $outer
@@ -216,7 +234,8 @@ const select_externref = `
       )
     )
   )
-)
+)`;
+const nested_loop_break_inner = `
 (module
   (func
   	(loop $outer
@@ -225,7 +244,8 @@ const select_externref = `
       )
     )
   )
-)
+)`;
+/*
 
 (module
   (func
@@ -276,4 +296,10 @@ export const positiveControlTestCases = [
   select_simple,
   select_simple_alt_syntax,
   select_externref,
+  basic_if_then,
+  basic_if_else,
+  if_else_with_single_result,
+  if_else_with_single_param_result,
+  // nested_loop_break_outer,
+  // nested_loop_break_inner,
 ];

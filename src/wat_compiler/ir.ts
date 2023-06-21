@@ -6,11 +6,13 @@ import {
   type TokenExpression,
   ExportExpression,
   EmptyTokenExpression,
-  BlockExpression,
+  type BlockExpression,
   SignatureType,
   FunctionSignature,
   IRToken,
   SelectExpression,
+  BlockBlockExpression,
+  BlockIfExpression,
 } from './ir_types';
 import { Token, TokenType } from '../common/token';
 import { type Tree, type ParseTree } from './tree_types';
@@ -370,6 +372,7 @@ export class IRWriter {
 
     const signature = new SignatureType(paramTypes, resultTypes);
     // Empty signature or signature with 0 param 1 return is represented inline and not added to the global signature types.
+
     if (
       !signature.isEmpty()
       && !(signature.paramTypes.length === 0 && signature.returnTypes.length === 1)
@@ -377,12 +380,85 @@ export class IRWriter {
       this.module.addGlobalType(signature);
     }
 
-    return new BlockExpression(
+    if (firstToken.type === TokenType.Block) {
+      return this.parseFunctionBodyBlockBlockBodyExpression(
+        firstToken,
+        blockLabel,
+        paramTypes,
+        resultTypes,
+        parseTree.slice(cursor),
+      );
+    }
+
+    if (firstToken.type === TokenType.If) {
+      return this.parseFunctionBodyBlockIfBodyExpression(
+        firstToken,
+        blockLabel,
+        paramTypes,
+        resultTypes,
+        parseTree.slice(cursor),
+      );
+    }
+    throw new Error();
+  }
+
+  /**
+   * Parse the body expression of a (block ...) expression
+   */
+  private parseFunctionBodyBlockBlockBodyExpression(
+    firstToken: Token,
+    blockLabel: string | null,
+    paramTypes: ValueType[],
+    resultTypes: ValueType[],
+    body: ParseTree,
+  ) {
+    return new BlockBlockExpression(
       firstToken,
       blockLabel,
       paramTypes,
       resultTypes,
-      this.parseFunctionBodyExpression(parseTree.slice(cursor)),
+      this.parseFunctionBodyExpression(body),
+    );
+  }
+
+  /**
+   * Parse the body expression of a (if ...) expression
+   */
+  private parseFunctionBodyBlockIfBodyExpression(
+    firstToken: Token,
+    blockLabel: string | null,
+    paramTypes: ValueType[],
+    resultTypes: ValueType[],
+    body: ParseTree,
+  ) {
+    const thenExpression = body[0];
+    const elseExpression = body[1] ?? null;
+    if (typeof thenExpression === 'undefined') {
+      throw new Error("If 'then' expression cannot be null!");
+    }
+    if (thenExpression instanceof Token || elseExpression instanceof Token) {
+      throw new Error(
+        `Unexpected tokens: ${thenExpression}, ${elseExpression}`,
+      );
+    }
+    if (elseExpression === null) {
+      return new BlockIfExpression(
+        firstToken,
+        blockLabel,
+        paramTypes,
+        resultTypes,
+        this.parseFunctionBodyExpression(thenExpression.slice(1)),
+      );
+    }
+    return new BlockIfExpression(
+      firstToken,
+      blockLabel,
+      paramTypes,
+      resultTypes,
+      this.parseFunctionBodyExpression([
+        ...thenExpression.slice(1),
+        ...elseExpression,
+      ]),
     );
   }
 

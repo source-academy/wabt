@@ -436,7 +436,7 @@ export abstract class TokenExpression extends IntermediateRepresentation {}
  * Class representing operators and operands in an s-expression.
  */
 export class OperationTree extends TokenExpression implements Unfoldable {
-  _parent?: IntermediateRepresentation;
+  protected _parent?: IntermediateRepresentation;
   operator: IRToken;
   operands: (IRToken | TokenExpression)[];
 
@@ -640,18 +640,18 @@ export class UnfoldedBlockExpression extends UnfoldedTokenExpression {
  * Class representing a Block expression that wrap around an expression.
  * For expressions such as block, if, loop instructions.
  */
-export class BlockExpression extends OperationTree implements HasSignature {
-  _parent?: IntermediateRepresentation;
-  private body: TokenExpression;
+export abstract class BlockExpression
+  extends OperationTree
+  implements HasSignature {
+  protected _parent?: IntermediateRepresentation;
   private signature: BlockSignature;
-  private headerToken: IRToken; // First token in block that specifies block type.
+  private _headerToken: IRToken; // First token in block that specifies block type.
 
   constructor(
     headerToken: Token,
     name: string | null,
     paramTypes: ValueType[],
     returnTypes: ValueType[],
-    blockExpression: TokenExpression,
   ) {
     super(headerToken, []);
     this.signature = new BlockSignature(
@@ -660,38 +660,24 @@ export class BlockExpression extends OperationTree implements HasSignature {
       paramTypes,
       returnTypes,
     );
-    this.body = blockExpression;
-    this.headerToken = new IRToken(headerToken, this, null);
-    blockExpression.parent = this;
+    this._headerToken = new IRToken(headerToken, this, null);
   }
 
-  unfold(): UnfoldedBlockExpression {
-    if (typeof this.parent === 'undefined') {
-      throw new Error(
-        `Parent Expression for this Function Expression not set ${this}`,
-      );
-    }
-
-    const unfoldedExpression = new UnfoldedBlockExpression(
-      this.getSignatureType(),
-      this.getName(),
-      [this.headerToken, this.body, this.createEndToken()],
-    );
-    unfoldedExpression.parent = this.parent;
-    return unfoldedExpression;
-  }
-
-  private createEndToken(): IRToken {
+  protected createEndToken(): IRToken {
     const token = new Token(
       TokenType.End,
       'end',
-      this.headerToken.line,
-      this.headerToken.col,
-      this.headerToken.indexInSource, // TODO col and indexinsource should not be headertoken.
+      this._headerToken.line,
+      this._headerToken.col,
+      this._headerToken.indexInSource, // TODO col and indexinsource should not be headertoken.
       OpcodeType.End,
       null,
     );
-    return new IRToken(token, this, this.headerToken.prevToken);
+    return new IRToken(token, this, this._headerToken.prevToken);
+  }
+
+  get headerToken(): IRToken {
+    return this._headerToken;
   }
 
   getSignatureType(): SignatureType {
@@ -713,9 +699,6 @@ export class BlockExpression extends OperationTree implements HasSignature {
   }
   getReturnTypes() {
     return this.signature.signatureType.returnTypes;
-  }
-  getBody(): TokenExpression {
-    return this.body;
   }
 
   get parent(): IntermediateRepresentation {
@@ -739,6 +722,97 @@ export class BlockExpression extends OperationTree implements HasSignature {
       undefined,
       2,
     )}`;
+  }
+}
+
+/**
+ * Class for a (block ...) block expression
+ */
+export class BlockBlockExpression extends BlockExpression {
+  private _body: TokenExpression;
+
+  constructor(
+    headerToken: Token,
+    name: string | null,
+    paramTypes: ValueType[],
+    returnTypes: ValueType[],
+    blockExpression: TokenExpression,
+  ) {
+    super(headerToken, name, paramTypes, returnTypes);
+    this._body = blockExpression;
+    blockExpression.parent = this;
+  }
+
+  unfold(): UnfoldedBlockExpression {
+    if (typeof this.parent === 'undefined') {
+      throw new Error(
+        `Parent Expression for this Function Expression not set ${this}`,
+      );
+    }
+
+    const unfoldedExpression = new UnfoldedBlockExpression(
+      this.getSignatureType(),
+      this.getName(),
+      [this.headerToken, this._body, this.createEndToken()],
+    );
+    unfoldedExpression.parent = this.parent;
+    return unfoldedExpression;
+  }
+
+  get Body(): TokenExpression {
+    return this._body;
+  }
+}
+
+/**
+ * Class for a (if ...) block expression
+ */
+export class BlockIfExpression extends BlockExpression {
+  // private _thenBody: TokenExpression;
+  // private _elseBody: TokenExpression | null;
+  private _body: TokenExpression;
+
+  constructor(
+    headerToken: Token,
+    name: string | null,
+    paramTypes: ValueType[],
+    returnTypes: ValueType[],
+    body: TokenExpression,
+    // _elseBody: TokenExpression | null,
+  ) {
+    super(headerToken, name, paramTypes, returnTypes);
+    // this._thenBody = this;
+    // this._elseBody = this;
+    // this._thenBody.parent = this;
+    // this._elseBody.parent = this;
+    this._body = body;
+  }
+
+  // get thenBody(): TokenExpression {
+  //   return this._thenBody;
+  // }
+  // get elseBody(): TokenExpression | null {
+  //   return this._elseBody;
+  // }
+
+  get body(): TokenExpression {
+    return this._body;
+  }
+
+  unfold(): UnfoldedBlockExpression {
+    if (typeof this.parent === 'undefined') {
+      throw new Error(
+        `Parent Expression for this Function Expression not set ${this}`,
+      );
+    }
+    // let unfoldedExpression
+    const unfoldedExpression = new UnfoldedBlockExpression(
+      this.getSignatureType(),
+      this.getName(),
+      [this.headerToken, this._body, this.createEndToken()],
+    );
+    unfoldedExpression.parent = this.parent;
+    return unfoldedExpression;
   }
 }
 
