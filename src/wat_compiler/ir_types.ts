@@ -5,6 +5,7 @@ import { ExportType } from '../common/export_types';
 import { assert } from '../common/assert';
 import { isEqual, result } from 'lodash';
 import { OpcodeType } from '../common/opcode';
+import { Tree } from './tree_types';
 
 /**
  * An interface for intermediate expressions that can have a name/identifier to be referenced by.
@@ -52,6 +53,12 @@ export class SignatureType {
   }
   get returnTypes(): ValueType[] {
     return this._returnTypes;
+  }
+
+  toString(): String {
+    return `Signature: ${this._paramTypes.map(
+      (x) => ValueType[x],
+    )} ${this._returnTypes.map((x) => ValueType[x])}`;
   }
 }
 
@@ -192,7 +199,17 @@ export class ModuleExpression extends IntermediateRepresentation {
   }
 
   toString(): string {
-    return JSON.stringify(this, undefined, 2);
+    return `IR: Module {
+      Global Types: ${this.globalTypes.map((x) => x.toString())
+    .join('\n')}
+      Functions: ${this.functions.map((x) => x.toString())
+    .join('\n')}
+      Globals ${this.globals.map((x) => x.toString())
+    .join('\n')}
+      Export Expressions: ${this.exportExpressions
+    .map((x) => x.toString())
+    .join('\n')}
+    }`;
   }
 
   get parent(): IntermediateRepresentation | null {
@@ -294,7 +311,7 @@ export class ExportExpression extends IntermediateRepresentation {
    * Get string representation of object
    */
   toString(): string {
-    return `${this.constructor.name}, ${this.exportName}`;
+    return `Export: ${this.exportName}`;
   }
 }
 /*
@@ -360,11 +377,7 @@ export class FunctionExpression
    * Get string representation of object
    */
   toString(): string {
-    return `${this.constructor.name}, ${JSON.stringify(
-      this.signature,
-      undefined,
-      2,
-    )}`;
+    return `Function: ${this.signature.toString()}, ${this.body.toString()}`;
   }
 }
 
@@ -501,7 +514,10 @@ export class OperationTree extends TokenExpression implements Unfoldable {
    * Get string representation of object
    */
   toString(): string {
-    return `${this.constructor.name}, ${this.operator}`;
+    return `OperationTree: (${this.operator.toString()}, ${Tree.treeMap(
+      this.operands,
+      (x) => x.toString(),
+    )}`;
   }
 }
 
@@ -545,7 +561,7 @@ export class UnfoldedTokenExpression extends TokenExpression {
    * Get string representation of object
    */
   toString(): string {
-    return `${this.constructor.name}, ${this.expr.toString()}`;
+    return `UnfoldedTokenExpression:, ${this.expr.toString()}`;
   }
 }
 
@@ -583,7 +599,7 @@ export class EmptyTokenExpression extends TokenExpression {
    * Get string representation of object
    */
   toString(): string {
-    return `${this.constructor.name}`;
+    return `[Empty]`;
   }
 }
 
@@ -633,7 +649,9 @@ export class UnfoldedBlockExpression extends UnfoldedTokenExpression {
    * Get string representation of object
    */
   toString(): string {
-    return `${this.constructor.name}, ${this.name}`;
+    return `UnfoldedBlockExpression: ${this.name?.toString()} ${this.signature.toString()} ${this.expr.map(
+      (x) => x.toString(),
+    )}`;
   }
 }
 /**
@@ -717,11 +735,8 @@ export abstract class BlockExpression
    * Get string representation of object
    */
   toString(): string {
-    return `${this.constructor.name}, ${JSON.stringify(
-      this.signature,
-      undefined,
-      2,
-    )}`;
+    return `BlockExpression:
+    ${this.signature.toString()}, ${this._headerToken.toString()}`;
   }
 }
 
@@ -750,6 +765,20 @@ export class BlockBlockExpression extends BlockExpression {
       );
     }
 
+    if (
+      this._body instanceof UnfoldedTokenExpression
+      && this._body.expr.at(-1) instanceof Token
+      && (this._body.expr.at(-1) as Token).type === TokenType.End
+    ) {
+      const unfoldedExpression = new UnfoldedBlockExpression(
+        this.getSignatureType(),
+        this.getName(),
+        [this.headerToken, this._body],
+      );
+      unfoldedExpression.parent = this.parent;
+      return unfoldedExpression;
+    }
+
     const unfoldedExpression = new UnfoldedBlockExpression(
       this.getSignatureType(),
       this.getName(),
@@ -759,8 +788,12 @@ export class BlockBlockExpression extends BlockExpression {
     return unfoldedExpression;
   }
 
-  get Body(): TokenExpression {
+  get body(): TokenExpression {
     return this._body;
+  }
+
+  toString(): string {
+    return `${super.toString()} Block: ${this._body.toString()}`;
   }
 }
 
@@ -814,6 +847,10 @@ export class BlockIfExpression extends BlockExpression {
     unfoldedExpression.parent = this.parent;
     return unfoldedExpression;
   }
+
+  toString(): string {
+    return `${super.toString()} If: ${this._body.toString()}`;
+  }
 }
 
 export class SelectExpression extends UnfoldedTokenExpression {
@@ -837,7 +874,7 @@ export class SelectExpression extends UnfoldedTokenExpression {
   }
 
   toString(): string {
-    return `[Select (return) ${this.explicitResultType}]`;
+    return `[Select (return) ${this.explicitResultType?.toString()}]`;
   }
 }
 
@@ -861,6 +898,10 @@ class BlockSignature {
     this.blockType = blockType;
     this.name = name;
     this.signatureType = new SignatureType(paramTypes, returnTypes);
+  }
+
+  toString(): String {
+    return `BlockSignature: ${this.name?.toString()} ${this.blockType?.toString()} ${this.signatureType?.toString()}`;
   }
 }
 
@@ -908,6 +949,6 @@ export class IRToken extends Token {
   }
 
   toString(): string {
-    return `${this.lexeme}: ${ValueType.getValue(this.valueType)}`;
+    return `(${this.lexeme})`;
   }
 }
