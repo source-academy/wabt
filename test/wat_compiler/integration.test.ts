@@ -4,6 +4,7 @@ import { compile, parse } from '../../src/wat_compiler';
 import { positiveControlTestCases } from './resources/control_instructions.testcase';
 import { positiveFunctionTestCases } from './resources/functions.testcase';
 import { positiveTestCases as positiveNumOpTestCases } from './resources/numeric_operators.testcase';
+import { positiveTestCases as positiveStartSectionTestCases } from './resources/start_expression.testcase';
 import { expect } from '@jest/globals';
 import wabt from 'wabt';
 
@@ -11,6 +12,7 @@ describe.each([
   [positiveFunctionTestCases, 'function test cases'],
   [positiveNumOpTestCases, 'numeric operators'],
   [positiveControlTestCases, 'control operations'],
+  [positiveStartSectionTestCases, 'start expression'],
 ])('integration: encode', (testCase, testCaseLabel) => {
   test.each(testCase)(testCaseLabel, async (test) => {
     const actual = compile(parse(test));
