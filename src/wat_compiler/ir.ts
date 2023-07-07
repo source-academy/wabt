@@ -13,6 +13,7 @@ import {
   SelectExpression,
   BlockBlockExpression,
   BlockIfExpression,
+  StartExpression,
 } from './ir_types';
 import { Token, TokenType } from '../common/token';
 import { type Tree, type ParseTree } from './tree_types';
@@ -20,6 +21,7 @@ import { type Tree, type ParseTree } from './tree_types';
 import { Opcode } from '../common/opcode';
 import { type ValueType } from '../common/type';
 import { assert } from '../common/assert';
+import { IllegalStartSection } from './exceptions';
 
 export function getIR(parseTree: ParseTree) {
   const ir = new IRWriter(parseTree)
@@ -53,6 +55,7 @@ export class IRWriter {
         this.module.addFunctionExpression(
           this.parseFunctionExpression(parseTreeNode),
         );
+        continue;
       }
 
       if (isExportExpression(parseTreeNode)) {
@@ -60,7 +63,18 @@ export class IRWriter {
           .forEach((exp) => {
             this.module.addExportExpression(exp);
           });
+        continue;
       }
+
+      if (isStartExpression(parseTreeNode)) {
+        const startExp = this.parseStartExpression(parseTreeNode);
+        this.module.addStartExpression(startExp);
+        continue;
+      }
+
+      console.log(parseTreeNode);
+
+      throw new Error(`Unrecognised Expression: ${parseTreeNode[0]}`);
     }
   }
 
@@ -95,6 +109,18 @@ export class IRWriter {
     }
 
     return exportExpressions;
+  }
+
+  private parseStartExpression(parseTree: ParseTree): StartExpression {
+    if (parseTree.length !== 2) {
+      throw new IllegalStartSection('Illegal Start Section', parseTree);
+    }
+    const [first, second] = parseTree;
+    if (!(first instanceof Token && second instanceof Token)) {
+      throw new IllegalStartSection('Illegal Start Section', parseTree);
+    }
+
+    return new StartExpression(first, second);
   }
 
   private parseFunctionExpression(parseTree: ParseTree): FunctionExpression {
@@ -787,6 +813,11 @@ function isModuleExpression(parseTree: ParseTree): boolean {
 function isExportExpression(parseTree: ParseTree): boolean {
   const tokenHeader = parseTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === TokenType.Export;
+}
+
+function isStartExpression(parseTree: ParseTree): boolean {
+  const tokenHeader = parseTree[0];
+  return tokenHeader instanceof Token && tokenHeader.type === TokenType.Start;
 }
 
 /**

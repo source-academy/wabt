@@ -21,6 +21,8 @@ import { Opcode, OpcodeType } from '../common/opcode';
 import { ExportType } from '../common/export_types';
 import { assert } from '../common/assert';
 import { i64_to_leb128, i32_to_leb128 } from '../utils/number_encoder';
+import { toInteger } from 'lodash';
+import { IllegalStartSection } from './exceptions';
 
 namespace SectionCode {
   export const Type = 1;
@@ -132,7 +134,34 @@ export class BinaryWriter {
   }
 
   private encodeStartSection(): Uint8Array {
-    return new Uint8Array([]);
+    if (this.module.start === null) {
+      return new Uint8Array([]);
+    }
+
+    if (this.module.start.identifier.type === TokenType.Nat) {
+      const startFunctionIndex = toInteger(this.module.start.identifier.lexeme);
+      if (startFunctionIndex >= this.module.functions.length) {
+        throw new IllegalStartSection(
+          `Start function index ${startFunctionIndex} is out of bounds.`
+            + `There are only ${this.module.functions.length} functions.`,
+        );
+      }
+      return new Uint8Array([SectionCode.Start, 1, startFunctionIndex]);
+    }
+
+    if (this.module.start.identifier.type === TokenType.Var) {
+      const startFunctionIndex = this.module.resolveGlobalExpressionIndexByName(
+        this.module.start.identifier.lexeme,
+      );
+      return new Uint8Array([SectionCode.Start, 1, startFunctionIndex]);
+    }
+
+    throw new IllegalStartSection(
+      'Start function identifier is not a valid type.'
+        + `Got ${this.module.start.identifier.lexeme}`,
+    );
+
+    // const startFunctionIndex = this.module.(this.module.start.identifier);
   }
   private encodeElementSection(): Uint8Array {
     return new Uint8Array([]);
@@ -458,7 +487,7 @@ export class BinaryWriter {
         );
       }
       if (exportReferenceIndex === null) {
-        exportReferenceIndex = this.module.resolveGlobalExpressionIndex(
+        exportReferenceIndex = this.module.resolveGlobalExpressionIndexByName(
           exportReferenceName!,
         );
       }

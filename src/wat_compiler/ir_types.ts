@@ -92,6 +92,11 @@ export class ModuleExpression extends IntermediateRepresentation {
   functions: FunctionExpression[] = [];
 
   /**
+   * For start section
+   */
+  start: StartExpression | null = null;
+
+  /**
    * Global variables that can be exported
    */
   globals: GlobalExpression[] = [];
@@ -120,6 +125,10 @@ export class ModuleExpression extends IntermediateRepresentation {
 
   addExportExpression(exportExpression: ExportExpression) {
     this.exportExpressions.push(exportExpression);
+  }
+
+  addStartExpression(startExp: StartExpression) {
+    this.start = startExp;
   }
 
   /**
@@ -179,7 +188,7 @@ export class ModuleExpression extends IntermediateRepresentation {
    * @param type type to query
    * @returns index of type in module
    */
-  resolveGlobalExpressionIndex(name: string) {
+  resolveGlobalExpressionIndexByName(name: string) {
     for (const [i, existing_type] of this.globals.entries()) {
       if (existing_type.getID() === name) {
         return i;
@@ -312,6 +321,29 @@ export class ExportExpression extends IntermediateRepresentation {
    */
   toString(): string {
     return `Export: ${this.exportName}`;
+  }
+}
+
+export class StartExpression extends IntermediateRepresentation {
+  toString(): string {
+    throw new Error('Method not implemented.');
+  }
+  private _identifier: IRToken;
+  private _parent: IntermediateRepresentation | null = null;
+
+  constructor(startToken: Token, identifier: Token) {
+    super();
+    this._identifier = new IRToken(identifier, this, startToken);
+  }
+
+  get parent(): IntermediateRepresentation | null {
+    return this._parent;
+  }
+  set parent(parentExpression: IntermediateRepresentation) {
+    this._parent = parentExpression;
+  }
+  get identifier(): IRToken {
+    return this._identifier;
   }
 }
 /*
