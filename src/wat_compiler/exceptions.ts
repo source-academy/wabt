@@ -12,3 +12,4 @@ export abstract class ParseTreeException extends Error {
   }
 }
 export class IllegalStartSection extends ParseTreeException {}
+export class IllegalMemorySection extends ParseTreeException {}

@@ -13,7 +13,7 @@ import {
   SelectExpression,
   BlockBlockExpression,
   BlockIfExpression,
-  StartExpression,
+  StartExpression, MemoryExpression,
 } from './ir_types';
 import { Token, TokenType } from '../common/token';
 import { type Tree, type ParseTree } from './tree_types';
@@ -21,7 +21,8 @@ import { type Tree, type ParseTree } from './tree_types';
 import { Opcode } from '../common/opcode';
 import { type ValueType } from '../common/type';
 import { assert } from '../common/assert';
-import { IllegalStartSection } from './exceptions';
+import { IllegalMemorySection, IllegalStartSection, ParseTreeException } from './exceptions';
+import { toInteger } from 'lodash';
 
 export function getIR(parseTree: ParseTree) {
   const ir = new IRWriter(parseTree)
@@ -69,6 +70,12 @@ export class IRWriter {
       if (isStartExpression(parseTreeNode)) {
         const startExp = this.parseStartExpression(parseTreeNode);
         this.module.addStartExpression(startExp);
+        continue;
+      }
+
+      if (isMemoryExpression(parseTreeNode)) {
+        const moduleExp = this.parseMemoryExpression(parseTreeNode);
+        this.module.addMemoryExpression(moduleExp);
         continue;
       }
 
@@ -122,6 +129,47 @@ export class IRWriter {
 
     return new StartExpression(first, second);
   }
+
+  private parseMemoryExpression(parseTree: ParseTree): MemoryExpression {
+    assert(isMemoryExpression(parseTree));
+    let memorySize: number | null = null;
+    let memoryLimit: number | null = null;
+    let memoryName: string | null = null;
+    /*
+    Potential syntax:
+    (memory SIZE)
+    (memory SIZE SIZE_LIMIT)
+    */
+    for (let i = 1; i < parseTree.length; i++) {
+      const token = parseTree[i];
+      if (!(token instanceof Token)) {
+        throw new IllegalMemorySection('Illegal Memory Section', parseTree);
+      }
+
+      if (memorySize === null && token.type === TokenType.Var) {
+        memoryName = token.lexeme;
+        continue;
+      }
+
+      if (memorySize === null && token.type === TokenType.Nat) {
+        memorySize = toInteger(token.lexeme);
+        continue;
+      }
+
+      if (memorySize !== null && token.type === TokenType.Nat) {
+        memoryLimit = toInteger(token.lexeme);
+        continue;
+      }
+      throw new IllegalMemorySection('Illegal Memory Section', parseTree);
+    }
+
+    if (memorySize === null) {
+      throw new IllegalMemorySection('Illegal Memory Section', parseTree);
+    }
+
+    return new MemoryExpression(parseTree[0] as Token, memorySize, memoryLimit, memoryName);
+  }
+
 
   private parseFunctionExpression(parseTree: ParseTree): FunctionExpression {
     assert(isFunctionExpression(parseTree));
@@ -818,6 +866,11 @@ function isExportExpression(parseTree: ParseTree): boolean {
 function isStartExpression(parseTree: ParseTree): boolean {
   const tokenHeader = parseTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === TokenType.Start;
+}
+
+function isMemoryExpression(parseTree: ParseTree): boolean {
+  const tokenHeader = parseTree[0];
+  return tokenHeader instanceof Token && tokenHeader.type === TokenType.Memory;
 }
 
 /**

@@ -13,6 +13,7 @@ import {
   type IntermediateRepresentation,
   BlockExpression,
   SelectExpression,
+  type MemoryExpression,
 } from './ir_types';
 import { ValueType } from '../common/type';
 import { type Token, TokenType } from '../common/token';
@@ -64,6 +65,9 @@ export class BinaryWriter {
   }
 
   private encodeTypeSection(): Uint8Array {
+    if (this.module.getGlobalTypes().length === 0) {
+      return new Uint8Array([]);
+    }
     const types = this.module.getGlobalTypes();
 
     const numTypes = types.length;
@@ -91,6 +95,9 @@ export class BinaryWriter {
   private encodeFunctionSection(): Uint8Array {
     const functions = this.module.getFunctionSignatureTypes();
     const num_fns = functions.length;
+    if (num_fns === 0) {
+      return new Uint8Array([]);
+    }
     const section_size = num_fns + 1;
 
     const function_indices = functions.map((funcSig) => this.module.resolveGlobalTypeIndex(funcSig));
@@ -108,7 +115,18 @@ export class BinaryWriter {
   }
 
   private encodeMemorySection(): Uint8Array {
-    return new Uint8Array([]);
+    if (this.module.memory === null) {
+      return new Uint8Array([]);
+    }
+
+    const memorySectionEncoding = this.encodeMemoryExpression(this.module.memory);
+
+    return new Uint8Array([
+      SectionCode.Memory,
+      memorySectionEncoding.length + 1,
+      1,
+      ...memorySectionEncoding,
+    ]);
   }
 
   private encodeGlobalSection(): Uint8Array {
@@ -170,6 +188,10 @@ export class BinaryWriter {
   private encodeCodeSection(): Uint8Array {
     const fnExps = this.module.functions;
 
+    if (fnExps.length === 0) {
+      return new Uint8Array([]);
+    }
+
     const fnBodyEncodings: number[] = [];
     fnExps.forEach((body) => {
       fnBodyEncodings.push(...this.encodeFunctionBody(body));
@@ -190,6 +212,21 @@ export class BinaryWriter {
     return new Uint8Array([]);
   }
 
+  // Memory
+  private encodeMemoryExpression(ir: MemoryExpression): Uint8Array {
+    if (ir.memoryLimit === null) {
+      return new Uint8Array([
+        0,
+        ir.memoryLength,
+      ]);
+    }
+
+    return new Uint8Array([
+      1,
+      ir.memoryLength,
+      ir.memoryLimit,
+    ]);
+  }
   // Functions
 
   /**

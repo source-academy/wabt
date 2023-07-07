@@ -97,6 +97,11 @@ export class ModuleExpression extends IntermediateRepresentation {
   start: StartExpression | null = null;
 
   /**
+   * For memory section
+   */
+  memory: MemoryExpression | null = null;
+
+  /**
    * Global variables that can be exported
    */
   globals: GlobalExpression[] = [];
@@ -129,6 +134,11 @@ export class ModuleExpression extends IntermediateRepresentation {
 
   addStartExpression(startExp: StartExpression) {
     this.start = startExp;
+  }
+
+  addMemoryExpression(memoryExp: MemoryExpression) {
+    this.memory = memoryExp;
+    this.globals.push(memoryExp);
   }
 
   /**
@@ -279,10 +289,14 @@ export class ExportExpression extends IntermediateRepresentation {
   }
 
   private getExportType(exportType: Token) {
-    if (exportType.type !== TokenType.Func) {
-      throw new Error(`unexpected export type: ${exportType}`); // TODO better errors
+    switch (exportType.type) {
+      case TokenType.Func:
+        return ExportType.Func;
+      case TokenType.Memory:
+        return ExportType.Mem;
+      default:
+        throw new Error(`unexpected export type: ${exportType.lexeme}`); // TODO better errors
     }
-    return ExportType.Func;
   }
 
   private getExportReference(
@@ -325,9 +339,6 @@ export class ExportExpression extends IntermediateRepresentation {
 }
 
 export class StartExpression extends IntermediateRepresentation {
-  toString(): string {
-    throw new Error('Method not implemented.');
-  }
   private _identifier: IRToken;
   private _parent: IntermediateRepresentation | null = null;
 
@@ -344,6 +355,48 @@ export class StartExpression extends IntermediateRepresentation {
   }
   get identifier(): IRToken {
     return this._identifier;
+  }
+  toString(): string {
+    return `Start: ${this._identifier.lexeme}`;
+  }
+}
+
+export class MemoryExpression extends IntermediateRepresentation implements HasIdentifier {
+  private _parent: IntermediateRepresentation | null = null;
+  private _startToken: IRToken;
+  private _memoryLength: number;
+  private _memoryLimit: number | null;
+  private _name: string | null;
+
+  constructor(startToken: Token, memoryLength: number, memoryLimit: number | null, name: string | null) {
+    super();
+    this._startToken = new IRToken(startToken, this);
+    this._memoryLength = memoryLength;
+    this._memoryLimit = memoryLimit;
+    this._name = name;
+  }
+
+  get parent(): IntermediateRepresentation | null {
+    return this._parent;
+  }
+  set parent(parentExpression: IntermediateRepresentation) {
+    this._parent = parentExpression;
+  }
+  get memoryLength(): number {
+    return this._memoryLength;
+  }
+  get memoryLimit(): number | null {
+    return this._memoryLimit;
+  }
+  get name(): string | null {
+    return this._name;
+  }
+  getID(): string | null {
+    return this.name;
+  }
+
+  toString(): string {
+    return `Memory: ${this._memoryLength}`;
   }
 }
 /*
