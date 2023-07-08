@@ -44,7 +44,7 @@ const named_memory_function_export = `
 )
 `;
 
-const store_instruction_stack = `
+const i32store_instruction_stack = `
 (module
 	(memory 1)
 
@@ -56,7 +56,7 @@ const store_instruction_stack = `
 )
 `;
 
-const store_instruction_sexpr = `
+const i32store_instruction_sexpr = `
 (module
 	(memory 1)
   (func
@@ -65,7 +65,103 @@ const store_instruction_sexpr = `
 )
 `;
 
-const load_instruction_stack = `
+const i64store = `
+(module
+	(memory 1)
+
+  (func
+  	i32.const 4
+  	i64.const 3
+    i64.store
+  )
+)
+`;
+
+const f32store = `
+(module
+	(memory 1)
+
+  (func
+  	i32.const 4
+  	f32.const 3
+    f32.store
+  )
+)
+`;
+
+const f64store = `
+(module
+	(memory 1)
+
+  (func
+  	i32.const 4
+  	f64.const 3
+    f64.store
+  )
+)
+`;
+
+const i32store8 = `
+(module
+	(memory 1)
+
+  (func
+  	i32.const 4
+  	i32.const 3
+    i32.store8
+  )
+)
+`;
+
+const i32store16 = `
+(module
+	(memory 1)
+
+  (func
+  	i32.const 4
+  	i32.const 3
+    i32.store16
+  )
+)
+`;
+
+const i64store8 = `
+(module
+	(memory 1)
+
+  (func
+  	i32.const 4
+  	i64.const 3
+    i64.store8
+  )
+)
+`;
+
+const i64store16 = `
+(module
+	(memory 1)
+
+  (func
+  	i32.const 4
+  	i64.const 3
+    i64.store16
+  )
+)
+`;
+
+const i64store32 = `
+(module
+	(memory 1)
+
+  (func
+  	i32.const 4
+  	i64.const 3
+    i64.store32
+  )
+)
+`;
+
+const i32load_instruction_stack = `
 (module
 	(memory 1)
 	(func (result i32)
@@ -75,7 +171,7 @@ const load_instruction_stack = `
 )
 `;
 
-const load_instruction_sexpr = `
+const i32load_instruction_sexpr = `
 (module
 	(memory 1)
 	(func (result i32)
@@ -83,6 +179,141 @@ const load_instruction_sexpr = `
 	)
 )
 `;
+
+const i64load = `
+(module
+	(memory 1)
+
+  (func
+    i32.const 0
+    i64.load
+    drop
+  )
+)`;
+
+const f32load = `
+(module
+	(memory 1)
+
+  (func
+    i32.const 0
+    f32.load
+    drop
+  )
+)`;
+
+const f64load = `
+(module
+	(memory 1)
+
+  (func
+    i32.const 0
+    i64.load
+    drop
+  )
+)
+`;
+
+const i32load8_s = `
+(module 
+	(memory 1)
+	(func 
+		i32.const 0
+		i32.load8_s
+		drop
+	)
+)`;
+
+const i32load8_u = `
+(module 
+	(memory 1)
+	(func 
+		i32.const 0
+		i32.load8_u
+		drop
+	)
+)`;
+
+const i32load16_s = `
+(module 
+	(memory 1)
+	(func 
+		i32.const 0
+		i32.load16_s
+		drop
+	)
+)`;
+
+const i32load16_u = `
+(module 
+	(memory 1)
+	(func 
+		i32.const 0
+		i32.load16_u
+		drop
+	)
+)`;
+
+const i64load8_s = `
+(module 
+	(memory 1)
+	(func 
+		i32.const 0
+		i64.load8_s
+		drop
+	)
+)`;
+
+const i64load8_u = `
+(module 
+	(memory 1)
+	(func 
+		i32.const 0
+		i64.load8_u
+		drop
+	)
+)`;
+
+const i64load16_s = `
+(module 
+	(memory 1)
+	(func 
+		i32.const 0
+		i64.load16_s
+		drop
+	)
+)`;
+
+const i64load16_u = `
+(module 
+	(memory 1)
+	(func 
+		i32.const 0
+		i64.load16_u
+		drop
+	)
+)`;
+
+const i64load32_s = `
+(module 
+	(memory 1)
+	(func 
+		i32.const 0
+		i64.load32_s
+		drop
+	)
+)`;
+
+const i64load32_u = `
+(module 
+	(memory 1)
+	(func 
+		i32.const 0
+		i64.load32_u
+		drop
+	)
+)`;
+
 
 const grow_instruction_stack = `
 (module
@@ -112,14 +343,6 @@ const size_instruction = `
 )
 `;
 
-/*
-
-Store:
-https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Memory/Store
-https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Memory/Load
-https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Memory/Grow
-https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Memory/Size
-*/
 
 export const positiveTestCases = [
   basic_zero_page_memory,
@@ -128,14 +351,35 @@ export const positiveTestCases = [
   basic_init_zero_max_three_page_memory,
   named_memory,
   named_memory_export,
-	 named_memory_function_export,
-//   store_instruction_stack,
-//   store_instruction_sexpr,
-//   load_instruction_stack,
-//   load_instruction_sexpr,
-//   grow_instruction_stack,
-//   grow_instruction_sexpr,
-//   size_instruction,
+  named_memory_function_export,
+  i32store_instruction_stack,
+  i32store_instruction_sexpr,
+  i64store,
+  f32store,
+  f64store,
+  i32store8,
+  i32store16,
+  i64store8,
+  i64store16,
+  i64store32,
+  i32load_instruction_stack,
+  i32load_instruction_sexpr,
+  i64load,
+  f32load,
+  f64load,
+  i32load8_s,
+  i32load8_u,
+  i32load16_s,
+  i32load16_u,
+  i64load8_s,
+  i64load8_u,
+  i64load16_s,
+  i64load16_u,
+  i64load32_s,
+  i64load32_u,
+  grow_instruction_stack,
+  grow_instruction_sexpr,
+  size_instruction,
 ];
 
 const invalid_two_memory_block = `

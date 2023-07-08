@@ -30,7 +30,7 @@ export abstract class IntermediateRepresentation {
 }
 
 type GlobalType = SignatureType; // TODO add more
-type GlobalExpression = HasIdentifier;
+type ExportableExpression = HasIdentifier;
 
 /**
  * Type signatures for functions and blocks.
@@ -104,7 +104,10 @@ export class ModuleExpression extends IntermediateRepresentation {
   /**
    * Global variables that can be exported
    */
-  globals: GlobalExpression[] = [];
+  exportableFuncs: ExportableExpression[] = [];
+  exportableGlobals: ExportableExpression[] = [];
+  exportableMems: ExportableExpression[] = [];
+  exportableTables: ExportableExpression[] = [];
 
   /**
    * Declarations for export section
@@ -114,7 +117,7 @@ export class ModuleExpression extends IntermediateRepresentation {
   addFunctionExpression(functionExpression: FunctionExpression) {
     this.functions.push(functionExpression);
     this.addGlobalType(functionExpression.getSignatureType());
-    this.globals.push(functionExpression);
+    this.exportableFuncs.push(functionExpression);
 
     // Generate an export expression if it has an inline export.
     if (functionExpression.hasInlineExport()) {
@@ -138,7 +141,7 @@ export class ModuleExpression extends IntermediateRepresentation {
 
   addMemoryExpression(memoryExp: MemoryExpression) {
     this.memory = memoryExp;
-    this.globals.push(memoryExp);
+    this.exportableMems.push(memoryExp);
   }
 
   /**
@@ -198,8 +201,24 @@ export class ModuleExpression extends IntermediateRepresentation {
    * @param type type to query
    * @returns index of type in module
    */
-  resolveGlobalExpressionIndexByName(name: string) {
-    for (const [i, existing_type] of this.globals.entries()) {
+  resolveExportableExpressionIndexByName(name: string, exportType: ExportType) {
+    let exportArrayToQuery: ExportableExpression[] | null = null;
+    switch (exportType) {
+      case ExportType.Func:
+        exportArrayToQuery = this.exportableFuncs;
+        break;
+      case ExportType.Table:
+        exportArrayToQuery = this.exportableTables;
+        break;
+      case ExportType.Mem:
+        exportArrayToQuery = this.exportableMems;
+        break;
+      case ExportType.Global:
+        exportArrayToQuery = this.exportableGlobals;
+        break;
+    }
+
+    for (const [i, existing_type] of exportArrayToQuery.entries()) {
       if (existing_type.getID() === name) {
         return i;
       }
@@ -684,7 +703,7 @@ export class EmptyTokenExpression extends TokenExpression {
    * Get string representation of object
    */
   toString(): string {
-    return `[Empty]`;
+    return '[Empty]';
   }
 }
 

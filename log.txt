@@ -1,0 +1,245 @@
+yarn run v1.22.19
+$ jest integration
+  console.log
+    {
+      actual: Uint8Array(36) [
+        0, 97, 115, 109, 1,  0,  0, 0,  1,
+        4,  1,  96,   0, 0,  3,  2, 1,  0,
+        5,  3,   1,   0, 1, 10, 11, 1,  9,
+        0, 65,   1,  65, 2, 54,  2, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:27:13
+
+  console.log
+    {
+      expected: Uint8Array(36) [
+        0, 97, 115, 109, 1,  0,  0, 0,  1,
+        4,  1,  96,   0, 0,  3,  2, 1,  0,
+        5,  3,   1,   0, 1, 10, 11, 1,  9,
+        0, 65,   1,  65, 2, 54,  2, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:28:13
+
+  console.log
+    {
+      actual: Uint8Array(36) [
+        0, 97, 115, 109, 1,  0,  0, 0,  1,
+        4,  1,  96,   0, 0,  3,  2, 1,  0,
+        5,  3,   1,   0, 1, 10, 11, 1,  9,
+        0, 65,   2,  65, 1, 54,  2, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:27:13
+
+  console.log
+    {
+      expected: Uint8Array(36) [
+        0, 97, 115, 109, 1,  0,  0, 0,  1,
+        4,  1,  96,   0, 0,  3,  2, 1,  0,
+        5,  3,   1,   0, 1, 10, 11, 1,  9,
+        0, 65,   2,  65, 1, 54,  2, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:28:13
+
+  console.log
+    {
+      actual: Uint8Array(36) [
+        0, 97, 115, 109, 1,  0,  0, 0,  1,
+        4,  1,  96,   0, 0,  3,  2, 1,  0,
+        5,  3,   1,   0, 1, 10, 11, 1,  9,
+        0, 65,   4,  66, 3, 55,  3, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:27:13
+
+  console.log
+    {
+      expected: Uint8Array(36) [
+        0, 97, 115, 109, 1,  0,  0, 0,  1,
+        4,  1,  96,   0, 0,  3,  2, 1,  0,
+        5,  3,   1,   0, 1, 10, 11, 1,  9,
+        0, 65,   4,  66, 3, 55,  3, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:28:13
+
+  console.log
+    {
+      actual: Uint8Array(39) [
+         0, 97, 115, 109,  1,  0,  0, 0,  1, 4,
+         1, 96,   0,   0,  3,  2,  1, 0,  5, 3,
+         1,  0,   1,  10, 14,  1, 12, 0, 65, 4,
+        67,  0,   0,  64, 64, 56,  2, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:27:13
+
+  console.log
+    {
+      expected: Uint8Array(39) [
+         0, 97, 115, 109,  1,  0,  0, 0,  1, 4,
+         1, 96,   0,   0,  3,  2,  1, 0,  5, 3,
+         1,  0,   1,  10, 14,  1, 12, 0, 65, 4,
+        67,  0,   0,  64, 64, 56,  2, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:28:13
+
+  console.log
+    {
+      actual: Uint8Array(43) [
+         0, 97, 115, 109,  1, 0,  0, 0,  1,  4,
+         1, 96,   0,   0,  3, 2,  1, 0,  5,  3,
+         1,  0,   1,  10, 18, 1, 16, 0, 65,  4,
+        68,  0,   0,   0,  0, 0,  0, 8, 64, 57,
+         3,  0,  11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:27:13
+
+  console.log
+    {
+      expected: Uint8Array(43) [
+         0, 97, 115, 109,  1, 0,  0, 0,  1,  4,
+         1, 96,   0,   0,  3, 2,  1, 0,  5,  3,
+         1,  0,   1,  10, 18, 1, 16, 0, 65,  4,
+        68,  0,   0,   0,  0, 0,  0, 8, 64, 57,
+         3,  0,  11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:28:13
+
+  console.log
+    {
+      actual: Uint8Array(36) [
+        0, 97, 115, 109, 1,  0,  0, 0,  1,
+        4,  1,  96,   0, 0,  3,  2, 1,  0,
+        5,  3,   1,   0, 1, 10, 11, 1,  9,
+        0, 65,   4,  65, 3, 58,  0, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:27:13
+
+  console.log
+    {
+      expected: Uint8Array(36) [
+        0, 97, 115, 109, 1,  0,  0, 0,  1,
+        4,  1,  96,   0, 0,  3,  2, 1,  0,
+        5,  3,   1,   0, 1, 10, 11, 1,  9,
+        0, 65,   4,  65, 3, 58,  0, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:28:13
+
+  console.log
+    {
+      actual: Uint8Array(36) [
+        0, 97, 115, 109, 1,  0,  0, 0,  1,
+        4,  1,  96,   0, 0,  3,  2, 1,  0,
+        5,  3,   1,   0, 1, 10, 11, 1,  9,
+        0, 65,   4,  65, 3, 59,  1, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:27:13
+
+  console.log
+    {
+      expected: Uint8Array(36) [
+        0, 97, 115, 109, 1,  0,  0, 0,  1,
+        4,  1,  96,   0, 0,  3,  2, 1,  0,
+        5,  3,   1,   0, 1, 10, 11, 1,  9,
+        0, 65,   4,  65, 3, 59,  1, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:28:13
+
+  console.log
+    {
+      actual: Uint8Array(36) [
+        0, 97, 115, 109, 1,  0,  0, 0,  1,
+        4,  1,  96,   0, 0,  3,  2, 1,  0,
+        5,  3,   1,   0, 1, 10, 11, 1,  9,
+        0, 65,   4,  66, 3, 60,  0, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:27:13
+
+  console.log
+    {
+      expected: Uint8Array(36) [
+        0, 97, 115, 109, 1,  0,  0, 0,  1,
+        4,  1,  96,   0, 0,  3,  2, 1,  0,
+        5,  3,   1,   0, 1, 10, 11, 1,  9,
+        0, 65,   4,  66, 3, 60,  0, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:28:13
+
+  console.log
+    {
+      actual: Uint8Array(36) [
+        0, 97, 115, 109, 1,  0,  0, 0,  1,
+        4,  1,  96,   0, 0,  3,  2, 1,  0,
+        5,  3,   1,   0, 1, 10, 11, 1,  9,
+        0, 65,   4,  66, 3, 61,  1, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:27:13
+
+  console.log
+    {
+      expected: Uint8Array(36) [
+        0, 97, 115, 109, 1,  0,  0, 0,  1,
+        4,  1,  96,   0, 0,  3,  2, 1,  0,
+        5,  3,   1,   0, 1, 10, 11, 1,  9,
+        0, 65,   4,  66, 3, 61,  1, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:28:13
+
+  console.log
+    {
+      actual: Uint8Array(36) [
+        0, 97, 115, 109, 1,  0,  0, 0,  1,
+        4,  1,  96,   0, 0,  3,  2, 1,  0,
+        5,  3,   1,   0, 1, 10, 11, 1,  9,
+        0, 65,   4,  66, 3, 62,  2, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:27:13
+
+  console.log
+    {
+      expected: Uint8Array(36) [
+        0, 97, 115, 109, 1,  0,  0, 0,  1,
+        4,  1,  96,   0, 0,  3,  2, 1,  0,
+        5,  3,   1,   0, 1, 10, 11, 1,  9,
+        0, 65,   4,  66, 3, 62,  2, 0, 11
+      ]
+    }
+
+      at test/wat_compiler/integration.test.ts:28:13
+
+Done in 3.51s.

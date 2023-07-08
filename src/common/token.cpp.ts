@@ -77,6 +77,16 @@ export class Token {
     return isTokenTypeBlock(this.type);
   }
 
+  isMemoryOpcodeToken(): boolean {
+    return this.isOpcodeToken()
+    && (
+      this.type === TokenType.Store
+      || this.type === TokenType.Load
+      || this.type === TokenType.MemoryGrow
+      || this.type === TokenType.MemorySize
+    );
+  }
+
   getOpcodeParamLength(): number {
     assert(this.opcodeType !== null);
     return Opcode.getParamLength(this.opcodeType!);

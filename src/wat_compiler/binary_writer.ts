@@ -168,8 +168,9 @@ export class BinaryWriter {
     }
 
     if (this.module.start.identifier.type === TokenType.Var) {
-      const startFunctionIndex = this.module.resolveGlobalExpressionIndexByName(
+      const startFunctionIndex = this.module.resolveExportableExpressionIndexByName(
         this.module.start.identifier.lexeme,
+        ExportType.Func,
       );
       return new Uint8Array([SectionCode.Start, 1, startFunctionIndex]);
     }
@@ -524,8 +525,9 @@ export class BinaryWriter {
         );
       }
       if (exportReferenceIndex === null) {
-        exportReferenceIndex = this.module.resolveGlobalExpressionIndexByName(
+        exportReferenceIndex = this.module.resolveExportableExpressionIndexByName(
           exportReferenceName!,
+          exportType,
         );
       }
       exportEncodings.push(ExportType.getEncoding(exportType));
@@ -569,8 +571,11 @@ export class BinaryWriter {
       return new Uint8Array([ValueType.getValue(token.valueType!)]);
     }
 
+    if (token.isMemoryOpcodeToken()) {
+      return this.encodeMemoryOperationToken(token);
+    }
     if (token.isOpcodeToken()) {
-      return new Uint8Array([Opcode.getCode(token.opcodeType!)]);
+      return this.encodeOpcodeToken(token);
     }
 
     if (token.valueType !== null) {
@@ -635,6 +640,103 @@ export class BinaryWriter {
         2,
       )}, ${JSON.stringify(token, undefined, 2)}]`,
     );
+  }
+
+  private encodeOpcodeToken(token: IRToken): Uint8Array {
+    return new Uint8Array([Opcode.getCode(token.opcodeType!)]);
+  }
+
+  private encodeMemoryOperationToken(token: IRToken): Uint8Array {
+    if (token.type === TokenType.Store) {
+      return this.encodeMemoryStoreToken(token);
+    }
+    if (token.type === TokenType.Load) {
+      return this.encodeMemoryLoadToken(token);
+    }
+    if (token.type === TokenType.MemoryGrow) {
+      return this.encodeMemoryGrowToken(token);
+    }
+    if (token.type === TokenType.MemorySize) {
+      return this.encodeMemorySizeToken(token);
+    }
+    throw new Error();
+  }
+
+  private encodeMemoryStoreToken(token: IRToken): Uint8Array {
+    let alignment: number | null = null;
+    const storeOffset: number = 0;
+    switch (token.opcodeType) {
+      case OpcodeType.I32Store8:
+      case OpcodeType.I64Store8:
+        alignment = 0;
+        break;
+      case OpcodeType.I32Store16:
+      case OpcodeType.I64Store16:
+        alignment = 1;
+        break;
+      case OpcodeType.F32Store:
+      case OpcodeType.I32Store:
+      case OpcodeType.I64Store32:
+        alignment = 2;
+        break;
+      case OpcodeType.F64Store:
+      case OpcodeType.I64Store:
+        alignment = 3;
+        break;
+      default:
+        throw new Error(`Unexpected opcode: ${token.lexeme}`);
+    }
+    return new Uint8Array([
+      ...this.encodeOpcodeToken(token),
+      alignment,
+      storeOffset,
+    ]);
+  }
+
+  private encodeMemoryLoadToken(token: IRToken): Uint8Array {
+    let alignment: number | null = null;
+    const storeOffset: number = 0;
+    switch (token.opcodeType) {
+      case OpcodeType.I32Load8S:
+      case OpcodeType.I32Load8U:
+      case OpcodeType.I64Load8S:
+      case OpcodeType.I64Load8U:
+        alignment = 0;
+        break;
+      case OpcodeType.I32Load16S:
+      case OpcodeType.I64Load16S:
+      case OpcodeType.I32Load16U:
+      case OpcodeType.I64Load16U:
+        alignment = 1;
+        break;
+      case OpcodeType.F32Load:
+      case OpcodeType.I32Load:
+      case OpcodeType.I64Load32S:
+      case OpcodeType.I64Load32U:
+        alignment = 2;
+        break;
+      case OpcodeType.F64Load:
+      case OpcodeType.I64Load:
+        alignment = 3;
+        break;
+      default:
+        throw new Error(`Unexpected opcode: ${token.lexeme}`);
+    }
+    return new Uint8Array([
+      ...this.encodeOpcodeToken(token),
+      alignment,
+      storeOffset,
+    ]);
+  }
+
+  private encodeMemoryGrowToken(token: IRToken): Uint8Array {
+    const memidx = 0; // This is the only valid memory ID in the current version of WebAssembly.
+    return new Uint8Array([...this.encodeOpcodeToken(token), memidx]);
+  }
+
+  private encodeMemorySizeToken(token: IRToken): Uint8Array {
+    const memidx = 0; // This is the only valid memory ID in the current version of WebAssembly.
+    return new Uint8Array([...this.encodeOpcodeToken(token), memidx]);
   }
 }
 
