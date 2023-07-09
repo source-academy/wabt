@@ -105,14 +105,14 @@ export class ModuleExpression extends IntermediateRepresentation {
    * Global variables that can be exported
    */
   exportableFuncs: ExportableExpression[] = [];
-  exportableGlobals: ExportableExpression[] = [];
+  exportableGlobals: ExportableExpression[] = []; // TODO what are exportable globals?
   exportableMems: ExportableExpression[] = [];
   exportableTables: ExportableExpression[] = [];
 
   /**
    * Declarations for export section
    */
-  exportExpressions: ExportExpression[] = []; // TODO add support for multiple export expressions
+  exportExpressions: ExportExpression[] = []; // TODO add support for multiple export expressions (evaluate whether this is really necesary)
 
   addFunctionExpression(functionExpression: FunctionExpression) {
     this.functions.push(functionExpression);

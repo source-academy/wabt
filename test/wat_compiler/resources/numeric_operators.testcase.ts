@@ -1,4 +1,6 @@
-const eqOperator: string = `
+// COMPARISON OPERATORS
+namespace Comparison {
+  export const eqOperator: string = `
 (module
   (func (result i32)
     i32.const 0
@@ -23,7 +25,7 @@ const eqOperator: string = `
 )
 `;
 
-const neOperator: string = `
+  export const neOperator: string = `
 (module
   (func (result i32)
     i32.const 0
@@ -47,7 +49,7 @@ const neOperator: string = `
   ) 
 )
 `;
-const gtOperators: string = `
+  export const gtOperators: string = `
   (module
     (func (result i32)
       i64.const 0
@@ -81,7 +83,7 @@ const gtOperators: string = `
     )
   )
 `;
-const ltOperators = `
+  export const ltOperators = `
 (module
   (func (result i32)
     i32.const 0
@@ -115,7 +117,7 @@ const ltOperators = `
   )
 )`;
 
-const geOperators = `
+  export const geOperators = `
 (module
   (func (result i32)
     i32.const 0
@@ -149,7 +151,7 @@ const geOperators = `
   )
 )`;
 
-const leOperators = `
+  export const leOperators = `
 (module
   (func (result i32)
     i32.const 0
@@ -182,12 +184,221 @@ const leOperators = `
     f64.le
   )
 )`;
+}
+
+namespace Conversion {
+  export const i64_extend_i32_s = `
+  (module
+    (func $main (result i64)
+      i32.const 10
+      i64.extend_i32_s
+    )
+  )
+  `;
+  export const i64_extend_i32_u = `
+  (module
+    (func $main (result i64)
+      i32.const 10
+      i64.extend_i32_u
+    )
+  )
+  `;
+  export const i32_wrap_i64 = `(module
+    (func $main (result i32)
+      i64.const 10
+      i32.wrap_i64
+    )
+  )
+  `;
+  export const f64_promote_f32 = `
+  (module
+    (func $main (result f64)
+      f32.const 10
+      f64.promote_f32
+    )
+  )
+  `;
+  export const f32_demote_f64 = `
+  (module
+    (func $main (result f32)
+      f64.const 10.5
+      f32.demote_f64
+    )
+  )
+  `;
+  export const f32_convert_i32_s = `
+  (module
+    (func $main (result f32)
+      i32.const 10
+      f32.convert_i32_s
+    )
+  )
+  `;
+  export const f32_convert_i32_u = `
+  (module
+    (func $main (result f32)
+      i32.const 10
+      f32.convert_i32_u
+    )
+  )
+  `;
+  export const f32_convert_i64_s = `
+  (module
+    (func $main (result f32)
+      i64.const 10
+      f32.convert_i64_s
+    )
+  )
+  `;
+  export const f32_convert_i64_u = `
+  (module
+    (func $main (result f32)
+      i64.const 10
+      f32.convert_i64_u
+    )
+  )
+  `;
+  export const f64_convert_i32_s = `
+  (module
+    (func $main (result f64)
+      i32.const 10
+      f64.convert_i32_s
+    )
+  )
+  `;
+  export const f64_convert_i32_u = `
+  (module
+    (func $main (result f64)
+      i32.const 10
+      f64.convert_i32_u
+    )
+  )
+  `;
+  export const f64_convert_i64_s = `
+  (module
+    (func $main (result f64)
+      i64.const 10
+      f64.convert_i64_s
+    )
+  )
+  `;
+  export const f64_convert_i64_u = `
+  (module
+    (func $main (result f64)
+      i64.const 10
+      f64.convert_i64_u
+    )
+  )
+  `;
+  export const i32_trunc_f32_s = `
+  (module
+    (func $main (result i32)
+      f32.const 10
+      i32.trunc_f32_s
+    )
+  )
+  `;
+  export const i32_trunc_f32_u = `
+  (module
+    (func $main (result i32)
+      f32.const 10
+      i32.trunc_f32_u
+    )
+  )
+  `;
+  export const i32_trunc_f64_s = `
+  (module
+    (func $main (result i32)
+      f64.const 10
+      i32.trunc_f64_s
+    )
+  )
+  `;
+  export const i32_trunc_f64_u = `
+  (module
+    (func $main (result i32)
+      f64.const 10
+      i32.trunc_f64_u
+    )
+  )
+  `;
+  export const i64_trunc_f32_s = `
+  (module
+    (func $main (result i64)
+      f32.const 10
+      i64.trunc_f32_s
+    )
+  )
+  `;
+  export const i64_trunc_f32_u = `
+  (module
+    (func $main (result i64)
+      f32.const 10
+      i64.trunc_f32_u
+    )
+  )
+  `;
+  export const i64_trunc_f64_s = `
+  (module
+    (func $main (result i64)
+      f64.const 10
+      i64.trunc_f64_s
+    )
+  )
+  `;
+  export const i64_trunc_f64_u = `
+  (module
+    (func $main (result i64)
+      f64.const 10
+      i64.trunc_f64_u
+    )
+  )
+  `;
+  export const i32_reinterpret_f32 = `
+  (module
+    (func $main (result i32)
+      f32.const 10
+      i32.reinterpret_f32
+    )
+  )
+  `;
+  export const i64_reinterpret_f64 = `
+  (module
+    (func $main (result i64)
+      f64.const 10
+      i64.reinterpret_f64
+    )
+  )
+  `;
+  export const f32_reinterpret_i32 = `
+  (module
+    (func $main (result i32)
+      f32.const 10
+      f32.reinterpret_i32
+    )
+  )
+  `;
+  export const f64_reinterpret_i64 = `
+  (module
+    (func $main (result f64)
+      i64.const 10
+      f64.reinterpret_i64
+    )
+  )
+  `;
+}
+namespace FloatingPoint {
+  // Skipped: https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Numeric
+}
+namespace Bitwise {
+  // Skipped: https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Numeric
+}
 
 export const positiveTestCases = [
-  eqOperator,
-  neOperator,
-  gtOperators,
-  ltOperators,
-  geOperators,
-  leOperators,
+  Comparison.eqOperator,
+  Comparison.neOperator,
+  Comparison.gtOperators,
+  Comparison.ltOperators,
+  Comparison.geOperators,
+  Comparison.leOperators,
 ];

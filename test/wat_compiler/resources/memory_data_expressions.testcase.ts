@@ -1,3 +1,26 @@
+/*
+MEMORY
+
+DATA
+data ::= ('data' id? datastring)
+        | ('data' id? memuse ('offset' expr) datastring)
+
+datastring ::= string
+memuse = ('memory' memidx)
+
+Abbreviations
+(instr) = ('offset' instr)
+\eps = (memory 0) (may be omitted)
+
+(module
+	(data "Hello")
+	(data "Hellod")
+	(data "Hellosd")
+)
+
+*/
+
+
 const basic_zero_page_memory = `
 (module
 	(memory 0)
@@ -43,6 +66,35 @@ const named_memory_function_export = `
 	(export "func" (func $func))
 )
 `;
+
+/*
+
+(module
+  (memory $mem 1 5)
+  (data $data "hello")
+)
+
+(module
+  (memory $mem 1 5)
+  (data $data (memory 0) (offset i32.const 3) "hello")
+)
+
+(module
+  (memory $mem 1 5)
+  (data $data (memory $mem) (offset i32.const 3) "hello")
+)
+
+(module
+  (memory $mem 1 5)
+  (data $data (offset i32.const 3) "hello")
+)
+
+(module
+  (memory $mem 1 5)
+  (data $data (i32.const 3) "hello")
+)
+
+*/
 
 const i32store_instruction_stack = `
 (module
@@ -114,13 +166,11 @@ const i32store8 = `
 `;
 
 const i32store16 = `
-(module
-	(memory 1)
-
-  (func
-  	i32.const 4
-  	i32.const 3
-    i32.store16
+(module(module
+	(memory
+	(data "Hello")	
+)
+)
   )
 )
 `;
@@ -342,6 +392,14 @@ const size_instruction = `
 	)
 )
 `;
+
+/*
+(module
+  	(memory
+  	(data "Hello")
+  )
+)
+*/
 
 
 export const positiveTestCases = [

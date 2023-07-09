@@ -11,7 +11,7 @@ import { positiveFunctionTestCases } from './resources/functions.testcase';
 import { positiveTestCases as positiveNumOpTestCases } from './resources/numeric_operators.testcase';
 import { positiveControlTestCases } from './resources/control_instructions.testcase';
 import { positiveTestCases as positiveStartSectionTestCases } from './resources/start_expression.testcase';
-import { positiveTestCases as positiveMemorySectionTestCases } from './resources/memory_expressions.testcase';
+import { positiveTestCases as positiveMemorySectionTestCases } from './resources/memory_data_expressions.testcase';
 
 describe.each([
   [positiveFunctionTestCases, 'function expressions'],
