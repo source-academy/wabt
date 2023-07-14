@@ -6,6 +6,7 @@ import { positiveFunctionTestCases } from './resources/functions.testcase';
 import { positiveTestCases as positiveNumOpTestCases } from './resources/numeric_operators.testcase';
 import { positiveTestCases as positiveStartSectionTestCases } from './resources/start_expression.testcase';
 import { positiveTestCases as positiveMemorySectionTestCases } from './resources/memory_data_expressions.testcase';
+import { positiveTestCases as positiveGlobalSectionTestCases } from './resources/global_expressions.testcase';
 import { expect } from '@jest/globals';
 import wabt from 'wabt';
 
@@ -15,6 +16,7 @@ describe.each([
   [positiveControlTestCases, 'control operations'],
   [positiveStartSectionTestCases, 'start expression'],
   [positiveMemorySectionTestCases, 'memory expressions'],
+  [positiveGlobalSectionTestCases, 'global expressions'],
 ])('integration: encode', (testCase, testCaseLabel) => {
   test.each(testCase)(testCaseLabel, async (test) => {
     const actual = compile(parse(test));

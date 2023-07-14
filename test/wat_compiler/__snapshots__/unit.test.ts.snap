@@ -76,6 +76,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -157,6 +158,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -306,6 +308,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -429,6 +432,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -644,6 +648,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -867,6 +872,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -1203,6 +1209,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -1390,6 +1397,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -1655,6 +1663,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -2164,6 +2173,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -2403,6 +2413,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -2738,6 +2749,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -3185,6 +3197,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -3647,6 +3660,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -3942,6 +3956,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -4389,6 +4404,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -4833,6 +4849,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -5457,6 +5474,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -5722,6 +5740,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -5987,6 +6006,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -6328,6 +6348,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -6669,6 +6690,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -7029,6 +7051,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -7162,6 +7185,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -7377,6 +7401,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -7600,6 +7625,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -7936,6 +7962,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -8133,6 +8160,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -8408,6 +8436,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -8937,6 +8966,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -9232,6 +9262,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -9679,6 +9710,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -10123,6 +10155,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -10747,6 +10780,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -11022,6 +11056,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -11297,6 +11332,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -11648,6 +11684,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -11999,6 +12036,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -12359,6 +12397,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -23497,6 +23536,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -23850,6 +23890,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -24342,6 +24383,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -24697,6 +24739,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -24883,6 +24926,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -25133,6 +25177,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -25395,6 +25440,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -30706,6 +30752,1957 @@ exports[`snapshot tests function expressions test parse tree 7`] = `
 ]
 `;
 
+exports[`snapshot tests global expressions test intermediate representation 1`] = `
+ModuleExpression {
+  "exportExpressions": [],
+  "exportableFuncs": [],
+  "exportableGlobals": [
+    GlobalExpression {
+      "_parent": null,
+      "globalType": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 39,
+        "lexeme": "i32.const",
+        "line": 2,
+        "opcodeType": 55,
+        "type": "CONST",
+        "valueType": null,
+      },
+      "globalValue": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 41,
+        "lexeme": "0",
+        "line": 2,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 18,
+        "lexeme": "global",
+        "line": 2,
+        "opcodeType": null,
+        "type": "global",
+        "valueType": null,
+      },
+      "name": "$glob",
+      "type": 0,
+    },
+  ],
+  "exportableMems": [],
+  "exportableTables": [],
+  "functions": [],
+  "globalTypes": [],
+  "globals": [
+    GlobalExpression {
+      "_parent": null,
+      "globalType": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 39,
+        "lexeme": "i32.const",
+        "line": 2,
+        "opcodeType": 55,
+        "type": "CONST",
+        "valueType": null,
+      },
+      "globalValue": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 41,
+        "lexeme": "0",
+        "line": 2,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 18,
+        "lexeme": "global",
+        "line": 2,
+        "opcodeType": null,
+        "type": "global",
+        "valueType": null,
+      },
+      "name": "$glob",
+      "type": 0,
+    },
+  ],
+  "memory": null,
+  "start": null,
+}
+`;
+
+exports[`snapshot tests global expressions test intermediate representation 2`] = `
+ModuleExpression {
+  "exportExpressions": [],
+  "exportableFuncs": [],
+  "exportableGlobals": [
+    GlobalExpression {
+      "_parent": null,
+      "globalType": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 39,
+        "lexeme": "i64.const",
+        "line": 2,
+        "opcodeType": 56,
+        "type": "CONST",
+        "valueType": null,
+      },
+      "globalValue": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 41,
+        "lexeme": "0",
+        "line": 2,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 18,
+        "lexeme": "global",
+        "line": 2,
+        "opcodeType": null,
+        "type": "global",
+        "valueType": null,
+      },
+      "name": "$glob",
+      "type": 1,
+    },
+  ],
+  "exportableMems": [],
+  "exportableTables": [],
+  "functions": [],
+  "globalTypes": [],
+  "globals": [
+    GlobalExpression {
+      "_parent": null,
+      "globalType": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 39,
+        "lexeme": "i64.const",
+        "line": 2,
+        "opcodeType": 56,
+        "type": "CONST",
+        "valueType": null,
+      },
+      "globalValue": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 41,
+        "lexeme": "0",
+        "line": 2,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 18,
+        "lexeme": "global",
+        "line": 2,
+        "opcodeType": null,
+        "type": "global",
+        "valueType": null,
+      },
+      "name": "$glob",
+      "type": 1,
+    },
+  ],
+  "memory": null,
+  "start": null,
+}
+`;
+
+exports[`snapshot tests global expressions test intermediate representation 3`] = `
+ModuleExpression {
+  "exportExpressions": [],
+  "exportableFuncs": [],
+  "exportableGlobals": [
+    GlobalExpression {
+      "_parent": null,
+      "globalType": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 39,
+        "lexeme": "f32.const",
+        "line": 2,
+        "opcodeType": 57,
+        "type": "CONST",
+        "valueType": null,
+      },
+      "globalValue": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 41,
+        "lexeme": "0",
+        "line": 2,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 18,
+        "lexeme": "global",
+        "line": 2,
+        "opcodeType": null,
+        "type": "global",
+        "valueType": null,
+      },
+      "name": "$glob",
+      "type": 2,
+    },
+  ],
+  "exportableMems": [],
+  "exportableTables": [],
+  "functions": [],
+  "globalTypes": [],
+  "globals": [
+    GlobalExpression {
+      "_parent": null,
+      "globalType": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 39,
+        "lexeme": "f32.const",
+        "line": 2,
+        "opcodeType": 57,
+        "type": "CONST",
+        "valueType": null,
+      },
+      "globalValue": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 41,
+        "lexeme": "0",
+        "line": 2,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 18,
+        "lexeme": "global",
+        "line": 2,
+        "opcodeType": null,
+        "type": "global",
+        "valueType": null,
+      },
+      "name": "$glob",
+      "type": 2,
+    },
+  ],
+  "memory": null,
+  "start": null,
+}
+`;
+
+exports[`snapshot tests global expressions test intermediate representation 4`] = `
+ModuleExpression {
+  "exportExpressions": [],
+  "exportableFuncs": [],
+  "exportableGlobals": [
+    GlobalExpression {
+      "_parent": null,
+      "globalType": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 39,
+        "lexeme": "f64.const",
+        "line": 2,
+        "opcodeType": 58,
+        "type": "CONST",
+        "valueType": null,
+      },
+      "globalValue": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 41,
+        "lexeme": "0",
+        "line": 2,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 18,
+        "lexeme": "global",
+        "line": 2,
+        "opcodeType": null,
+        "type": "global",
+        "valueType": null,
+      },
+      "name": "$glob",
+      "type": 3,
+    },
+  ],
+  "exportableMems": [],
+  "exportableTables": [],
+  "functions": [],
+  "globalTypes": [],
+  "globals": [
+    GlobalExpression {
+      "_parent": null,
+      "globalType": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 39,
+        "lexeme": "f64.const",
+        "line": 2,
+        "opcodeType": 58,
+        "type": "CONST",
+        "valueType": null,
+      },
+      "globalValue": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 41,
+        "lexeme": "0",
+        "line": 2,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 18,
+        "lexeme": "global",
+        "line": 2,
+        "opcodeType": null,
+        "type": "global",
+        "valueType": null,
+      },
+      "name": "$glob",
+      "type": 3,
+    },
+  ],
+  "memory": null,
+  "start": null,
+}
+`;
+
+exports[`snapshot tests global expressions test intermediate representation 5`] = `
+ModuleExpression {
+  "exportExpressions": [],
+  "exportableFuncs": [],
+  "exportableGlobals": [
+    GlobalExpression {
+      "_parent": null,
+      "globalType": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 44,
+        "lexeme": "ref.null",
+        "line": 2,
+        "opcodeType": 214,
+        "type": "ref.null",
+        "valueType": null,
+      },
+      "globalValue": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 51,
+        "lexeme": "extern",
+        "line": 2,
+        "opcodeType": null,
+        "type": "extern",
+        "valueType": 8,
+      },
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 18,
+        "lexeme": "global",
+        "line": 2,
+        "opcodeType": null,
+        "type": "global",
+        "valueType": null,
+      },
+      "name": "$glob",
+      "type": 8,
+    },
+  ],
+  "exportableMems": [],
+  "exportableTables": [],
+  "functions": [],
+  "globalTypes": [],
+  "globals": [
+    GlobalExpression {
+      "_parent": null,
+      "globalType": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 44,
+        "lexeme": "ref.null",
+        "line": 2,
+        "opcodeType": 214,
+        "type": "ref.null",
+        "valueType": null,
+      },
+      "globalValue": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 51,
+        "lexeme": "extern",
+        "line": 2,
+        "opcodeType": null,
+        "type": "extern",
+        "valueType": 8,
+      },
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 18,
+        "lexeme": "global",
+        "line": 2,
+        "opcodeType": null,
+        "type": "global",
+        "valueType": null,
+      },
+      "name": "$glob",
+      "type": 8,
+    },
+  ],
+  "memory": null,
+  "start": null,
+}
+`;
+
+exports[`snapshot tests global expressions test intermediate representation 6`] = `
+ModuleExpression {
+  "exportExpressions": [],
+  "exportableFuncs": [
+    FunctionExpression {
+      "_parent": undefined,
+      "body": EmptyTokenExpression {
+        "_parent": [Circular],
+      },
+      "signature": FunctionSignature {
+        "functionName": "$func",
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "_paramTypes": [],
+          "_returnTypes": [],
+        },
+      },
+    },
+  ],
+  "exportableGlobals": [
+    GlobalExpression {
+      "_parent": null,
+      "globalType": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 57,
+        "lexeme": "ref.func",
+        "line": 3,
+        "opcodeType": 216,
+        "type": "ref.func",
+        "valueType": null,
+      },
+      "globalValue": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 63,
+        "lexeme": "$func",
+        "line": 3,
+        "opcodeType": null,
+        "type": "VAR",
+        "valueType": null,
+      },
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 33,
+        "lexeme": "global",
+        "line": 3,
+        "opcodeType": null,
+        "type": "global",
+        "valueType": null,
+      },
+      "name": "$glob",
+      "type": 7,
+    },
+  ],
+  "exportableMems": [],
+  "exportableTables": [],
+  "functions": [
+    FunctionExpression {
+      "_parent": undefined,
+      "body": EmptyTokenExpression {
+        "_parent": [Circular],
+      },
+      "signature": FunctionSignature {
+        "functionName": "$func",
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "_paramTypes": [],
+          "_returnTypes": [],
+        },
+      },
+    },
+  ],
+  "globalTypes": [
+    SignatureType {
+      "_paramTypes": [],
+      "_returnTypes": [],
+    },
+  ],
+  "globals": [
+    GlobalExpression {
+      "_parent": null,
+      "globalType": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 57,
+        "lexeme": "ref.func",
+        "line": 3,
+        "opcodeType": 216,
+        "type": "ref.func",
+        "valueType": null,
+      },
+      "globalValue": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 63,
+        "lexeme": "$func",
+        "line": 3,
+        "opcodeType": null,
+        "type": "VAR",
+        "valueType": null,
+      },
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 33,
+        "lexeme": "global",
+        "line": 3,
+        "opcodeType": null,
+        "type": "global",
+        "valueType": null,
+      },
+      "name": "$glob",
+      "type": 7,
+    },
+  ],
+  "memory": null,
+  "start": null,
+}
+`;
+
+exports[`snapshot tests global expressions test intermediate representation 7`] = `
+ModuleExpression {
+  "exportExpressions": [],
+  "exportableFuncs": [
+    FunctionExpression {
+      "_parent": undefined,
+      "body": EmptyTokenExpression {
+        "_parent": [Circular],
+      },
+      "signature": FunctionSignature {
+        "functionName": "$func",
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "_paramTypes": [],
+          "_returnTypes": [],
+        },
+      },
+    },
+  ],
+  "exportableGlobals": [
+    GlobalExpression {
+      "_parent": null,
+      "globalType": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 57,
+        "lexeme": "ref.func",
+        "line": 3,
+        "opcodeType": 216,
+        "type": "ref.func",
+        "valueType": null,
+      },
+      "globalValue": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 59,
+        "lexeme": "0",
+        "line": 3,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 33,
+        "lexeme": "global",
+        "line": 3,
+        "opcodeType": null,
+        "type": "global",
+        "valueType": null,
+      },
+      "name": "$glob",
+      "type": 7,
+    },
+  ],
+  "exportableMems": [],
+  "exportableTables": [],
+  "functions": [
+    FunctionExpression {
+      "_parent": undefined,
+      "body": EmptyTokenExpression {
+        "_parent": [Circular],
+      },
+      "signature": FunctionSignature {
+        "functionName": "$func",
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "_paramTypes": [],
+          "_returnTypes": [],
+        },
+      },
+    },
+  ],
+  "globalTypes": [
+    SignatureType {
+      "_paramTypes": [],
+      "_returnTypes": [],
+    },
+  ],
+  "globals": [
+    GlobalExpression {
+      "_parent": null,
+      "globalType": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 57,
+        "lexeme": "ref.func",
+        "line": 3,
+        "opcodeType": 216,
+        "type": "ref.func",
+        "valueType": null,
+      },
+      "globalValue": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 59,
+        "lexeme": "0",
+        "line": 3,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 33,
+        "lexeme": "global",
+        "line": 3,
+        "opcodeType": null,
+        "type": "global",
+        "valueType": null,
+      },
+      "name": "$glob",
+      "type": 7,
+    },
+  ],
+  "memory": null,
+  "start": null,
+}
+`;
+
+exports[`snapshot tests global expressions test lexer 1`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 12,
+    "lexeme": "(",
+    "line": 2,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 18,
+    "lexeme": "global",
+    "line": 2,
+    "opcodeType": null,
+    "type": "global",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 24,
+    "lexeme": "$glob",
+    "line": 2,
+    "opcodeType": null,
+    "type": "VAR",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 28,
+    "lexeme": "i32",
+    "line": 2,
+    "opcodeType": null,
+    "type": "VALUETYPE",
+    "valueType": 0,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 30,
+    "lexeme": "(",
+    "line": 2,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 39,
+    "lexeme": "i32.const",
+    "line": 2,
+    "opcodeType": 55,
+    "type": "CONST",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 41,
+    "lexeme": "0",
+    "line": 2,
+    "opcodeType": null,
+    "type": "NAT",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 42,
+    "lexeme": ")",
+    "line": 2,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 43,
+    "lexeme": ")",
+    "line": 2,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+]
+`;
+
+exports[`snapshot tests global expressions test lexer 2`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 12,
+    "lexeme": "(",
+    "line": 2,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 18,
+    "lexeme": "global",
+    "line": 2,
+    "opcodeType": null,
+    "type": "global",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 24,
+    "lexeme": "$glob",
+    "line": 2,
+    "opcodeType": null,
+    "type": "VAR",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 28,
+    "lexeme": "i64",
+    "line": 2,
+    "opcodeType": null,
+    "type": "VALUETYPE",
+    "valueType": 1,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 30,
+    "lexeme": "(",
+    "line": 2,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 39,
+    "lexeme": "i64.const",
+    "line": 2,
+    "opcodeType": 56,
+    "type": "CONST",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 41,
+    "lexeme": "0",
+    "line": 2,
+    "opcodeType": null,
+    "type": "NAT",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 42,
+    "lexeme": ")",
+    "line": 2,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 43,
+    "lexeme": ")",
+    "line": 2,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+]
+`;
+
+exports[`snapshot tests global expressions test lexer 3`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 12,
+    "lexeme": "(",
+    "line": 2,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 18,
+    "lexeme": "global",
+    "line": 2,
+    "opcodeType": null,
+    "type": "global",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 24,
+    "lexeme": "$glob",
+    "line": 2,
+    "opcodeType": null,
+    "type": "VAR",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 28,
+    "lexeme": "f32",
+    "line": 2,
+    "opcodeType": null,
+    "type": "VALUETYPE",
+    "valueType": 2,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 30,
+    "lexeme": "(",
+    "line": 2,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 39,
+    "lexeme": "f32.const",
+    "line": 2,
+    "opcodeType": 57,
+    "type": "CONST",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 41,
+    "lexeme": "0",
+    "line": 2,
+    "opcodeType": null,
+    "type": "NAT",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 42,
+    "lexeme": ")",
+    "line": 2,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 43,
+    "lexeme": ")",
+    "line": 2,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+]
+`;
+
+exports[`snapshot tests global expressions test lexer 4`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 12,
+    "lexeme": "(",
+    "line": 2,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 18,
+    "lexeme": "global",
+    "line": 2,
+    "opcodeType": null,
+    "type": "global",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 24,
+    "lexeme": "$glob",
+    "line": 2,
+    "opcodeType": null,
+    "type": "VAR",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 28,
+    "lexeme": "f64",
+    "line": 2,
+    "opcodeType": null,
+    "type": "VALUETYPE",
+    "valueType": 3,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 30,
+    "lexeme": "(",
+    "line": 2,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 39,
+    "lexeme": "f64.const",
+    "line": 2,
+    "opcodeType": 58,
+    "type": "CONST",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 41,
+    "lexeme": "0",
+    "line": 2,
+    "opcodeType": null,
+    "type": "NAT",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 42,
+    "lexeme": ")",
+    "line": 2,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 43,
+    "lexeme": ")",
+    "line": 2,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+]
+`;
+
+exports[`snapshot tests global expressions test lexer 5`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 12,
+    "lexeme": "(",
+    "line": 2,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 18,
+    "lexeme": "global",
+    "line": 2,
+    "opcodeType": null,
+    "type": "global",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 24,
+    "lexeme": "$glob",
+    "line": 2,
+    "opcodeType": null,
+    "type": "VAR",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 34,
+    "lexeme": "externref",
+    "line": 2,
+    "opcodeType": null,
+    "type": "VALUETYPE",
+    "valueType": 8,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 36,
+    "lexeme": "(",
+    "line": 2,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 44,
+    "lexeme": "ref.null",
+    "line": 2,
+    "opcodeType": 214,
+    "type": "ref.null",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 51,
+    "lexeme": "extern",
+    "line": 2,
+    "opcodeType": null,
+    "type": "extern",
+    "valueType": 8,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 52,
+    "lexeme": ")",
+    "line": 2,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 53,
+    "lexeme": ")",
+    "line": 2,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+]
+`;
+
+exports[`snapshot tests global expressions test lexer 6`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 12,
+    "lexeme": "(",
+    "line": 2,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 16,
+    "lexeme": "func",
+    "line": 2,
+    "opcodeType": null,
+    "type": "func",
+    "valueType": 7,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 22,
+    "lexeme": "$func",
+    "line": 2,
+    "opcodeType": null,
+    "type": "VAR",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 23,
+    "lexeme": ")",
+    "line": 2,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 27,
+    "lexeme": "(",
+    "line": 3,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 33,
+    "lexeme": "global",
+    "line": 3,
+    "opcodeType": null,
+    "type": "global",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 39,
+    "lexeme": "$glob",
+    "line": 3,
+    "opcodeType": null,
+    "type": "VAR",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 47,
+    "lexeme": "funcref",
+    "line": 3,
+    "opcodeType": null,
+    "type": "VALUETYPE",
+    "valueType": 7,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 49,
+    "lexeme": "(",
+    "line": 3,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 57,
+    "lexeme": "ref.func",
+    "line": 3,
+    "opcodeType": 216,
+    "type": "ref.func",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 63,
+    "lexeme": "$func",
+    "line": 3,
+    "opcodeType": null,
+    "type": "VAR",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 64,
+    "lexeme": ")",
+    "line": 3,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 65,
+    "lexeme": ")",
+    "line": 3,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+]
+`;
+
+exports[`snapshot tests global expressions test lexer 7`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 12,
+    "lexeme": "(",
+    "line": 2,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 16,
+    "lexeme": "func",
+    "line": 2,
+    "opcodeType": null,
+    "type": "func",
+    "valueType": 7,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 22,
+    "lexeme": "$func",
+    "line": 2,
+    "opcodeType": null,
+    "type": "VAR",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 23,
+    "lexeme": ")",
+    "line": 2,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 27,
+    "lexeme": "(",
+    "line": 3,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 33,
+    "lexeme": "global",
+    "line": 3,
+    "opcodeType": null,
+    "type": "global",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 39,
+    "lexeme": "$glob",
+    "line": 3,
+    "opcodeType": null,
+    "type": "VAR",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 47,
+    "lexeme": "funcref",
+    "line": 3,
+    "opcodeType": null,
+    "type": "VALUETYPE",
+    "valueType": 7,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 49,
+    "lexeme": "(",
+    "line": 3,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 57,
+    "lexeme": "ref.func",
+    "line": 3,
+    "opcodeType": 216,
+    "type": "ref.func",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 59,
+    "lexeme": "0",
+    "line": 3,
+    "opcodeType": null,
+    "type": "NAT",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 60,
+    "lexeme": ")",
+    "line": 3,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 61,
+    "lexeme": ")",
+    "line": 3,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+]
+`;
+
+exports[`snapshot tests global expressions test parse tree 1`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  [
+    Token {
+      "col": 0,
+      "indexInSource": 18,
+      "lexeme": "global",
+      "line": 2,
+      "opcodeType": null,
+      "type": "global",
+      "valueType": null,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 24,
+      "lexeme": "$glob",
+      "line": 2,
+      "opcodeType": null,
+      "type": "VAR",
+      "valueType": null,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 28,
+      "lexeme": "i32",
+      "line": 2,
+      "opcodeType": null,
+      "type": "VALUETYPE",
+      "valueType": 0,
+    },
+    [
+      Token {
+        "col": 0,
+        "indexInSource": 39,
+        "lexeme": "i32.const",
+        "line": 2,
+        "opcodeType": 55,
+        "type": "CONST",
+        "valueType": null,
+      },
+      Token {
+        "col": 0,
+        "indexInSource": 41,
+        "lexeme": "0",
+        "line": 2,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+    ],
+  ],
+]
+`;
+
+exports[`snapshot tests global expressions test parse tree 2`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  [
+    Token {
+      "col": 0,
+      "indexInSource": 18,
+      "lexeme": "global",
+      "line": 2,
+      "opcodeType": null,
+      "type": "global",
+      "valueType": null,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 24,
+      "lexeme": "$glob",
+      "line": 2,
+      "opcodeType": null,
+      "type": "VAR",
+      "valueType": null,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 28,
+      "lexeme": "i64",
+      "line": 2,
+      "opcodeType": null,
+      "type": "VALUETYPE",
+      "valueType": 1,
+    },
+    [
+      Token {
+        "col": 0,
+        "indexInSource": 39,
+        "lexeme": "i64.const",
+        "line": 2,
+        "opcodeType": 56,
+        "type": "CONST",
+        "valueType": null,
+      },
+      Token {
+        "col": 0,
+        "indexInSource": 41,
+        "lexeme": "0",
+        "line": 2,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+    ],
+  ],
+]
+`;
+
+exports[`snapshot tests global expressions test parse tree 3`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  [
+    Token {
+      "col": 0,
+      "indexInSource": 18,
+      "lexeme": "global",
+      "line": 2,
+      "opcodeType": null,
+      "type": "global",
+      "valueType": null,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 24,
+      "lexeme": "$glob",
+      "line": 2,
+      "opcodeType": null,
+      "type": "VAR",
+      "valueType": null,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 28,
+      "lexeme": "f32",
+      "line": 2,
+      "opcodeType": null,
+      "type": "VALUETYPE",
+      "valueType": 2,
+    },
+    [
+      Token {
+        "col": 0,
+        "indexInSource": 39,
+        "lexeme": "f32.const",
+        "line": 2,
+        "opcodeType": 57,
+        "type": "CONST",
+        "valueType": null,
+      },
+      Token {
+        "col": 0,
+        "indexInSource": 41,
+        "lexeme": "0",
+        "line": 2,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+    ],
+  ],
+]
+`;
+
+exports[`snapshot tests global expressions test parse tree 4`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  [
+    Token {
+      "col": 0,
+      "indexInSource": 18,
+      "lexeme": "global",
+      "line": 2,
+      "opcodeType": null,
+      "type": "global",
+      "valueType": null,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 24,
+      "lexeme": "$glob",
+      "line": 2,
+      "opcodeType": null,
+      "type": "VAR",
+      "valueType": null,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 28,
+      "lexeme": "f64",
+      "line": 2,
+      "opcodeType": null,
+      "type": "VALUETYPE",
+      "valueType": 3,
+    },
+    [
+      Token {
+        "col": 0,
+        "indexInSource": 39,
+        "lexeme": "f64.const",
+        "line": 2,
+        "opcodeType": 58,
+        "type": "CONST",
+        "valueType": null,
+      },
+      Token {
+        "col": 0,
+        "indexInSource": 41,
+        "lexeme": "0",
+        "line": 2,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+    ],
+  ],
+]
+`;
+
+exports[`snapshot tests global expressions test parse tree 5`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  [
+    Token {
+      "col": 0,
+      "indexInSource": 18,
+      "lexeme": "global",
+      "line": 2,
+      "opcodeType": null,
+      "type": "global",
+      "valueType": null,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 24,
+      "lexeme": "$glob",
+      "line": 2,
+      "opcodeType": null,
+      "type": "VAR",
+      "valueType": null,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 34,
+      "lexeme": "externref",
+      "line": 2,
+      "opcodeType": null,
+      "type": "VALUETYPE",
+      "valueType": 8,
+    },
+    [
+      Token {
+        "col": 0,
+        "indexInSource": 44,
+        "lexeme": "ref.null",
+        "line": 2,
+        "opcodeType": 214,
+        "type": "ref.null",
+        "valueType": null,
+      },
+      Token {
+        "col": 0,
+        "indexInSource": 51,
+        "lexeme": "extern",
+        "line": 2,
+        "opcodeType": null,
+        "type": "extern",
+        "valueType": 8,
+      },
+    ],
+  ],
+]
+`;
+
+exports[`snapshot tests global expressions test parse tree 6`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  [
+    Token {
+      "col": 0,
+      "indexInSource": 16,
+      "lexeme": "func",
+      "line": 2,
+      "opcodeType": null,
+      "type": "func",
+      "valueType": 7,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 22,
+      "lexeme": "$func",
+      "line": 2,
+      "opcodeType": null,
+      "type": "VAR",
+      "valueType": null,
+    },
+  ],
+  [
+    Token {
+      "col": 0,
+      "indexInSource": 33,
+      "lexeme": "global",
+      "line": 3,
+      "opcodeType": null,
+      "type": "global",
+      "valueType": null,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 39,
+      "lexeme": "$glob",
+      "line": 3,
+      "opcodeType": null,
+      "type": "VAR",
+      "valueType": null,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 47,
+      "lexeme": "funcref",
+      "line": 3,
+      "opcodeType": null,
+      "type": "VALUETYPE",
+      "valueType": 7,
+    },
+    [
+      Token {
+        "col": 0,
+        "indexInSource": 57,
+        "lexeme": "ref.func",
+        "line": 3,
+        "opcodeType": 216,
+        "type": "ref.func",
+        "valueType": null,
+      },
+      Token {
+        "col": 0,
+        "indexInSource": 63,
+        "lexeme": "$func",
+        "line": 3,
+        "opcodeType": null,
+        "type": "VAR",
+        "valueType": null,
+      },
+    ],
+  ],
+]
+`;
+
+exports[`snapshot tests global expressions test parse tree 7`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  [
+    Token {
+      "col": 0,
+      "indexInSource": 16,
+      "lexeme": "func",
+      "line": 2,
+      "opcodeType": null,
+      "type": "func",
+      "valueType": 7,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 22,
+      "lexeme": "$func",
+      "line": 2,
+      "opcodeType": null,
+      "type": "VAR",
+      "valueType": null,
+    },
+  ],
+  [
+    Token {
+      "col": 0,
+      "indexInSource": 33,
+      "lexeme": "global",
+      "line": 3,
+      "opcodeType": null,
+      "type": "global",
+      "valueType": null,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 39,
+      "lexeme": "$glob",
+      "line": 3,
+      "opcodeType": null,
+      "type": "VAR",
+      "valueType": null,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 47,
+      "lexeme": "funcref",
+      "line": 3,
+      "opcodeType": null,
+      "type": "VALUETYPE",
+      "valueType": 7,
+    },
+    [
+      Token {
+        "col": 0,
+        "indexInSource": 57,
+        "lexeme": "ref.func",
+        "line": 3,
+        "opcodeType": 216,
+        "type": "ref.func",
+        "valueType": null,
+      },
+      Token {
+        "col": 0,
+        "indexInSource": 59,
+        "lexeme": "0",
+        "line": 3,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+    ],
+  ],
+]
+`;
+
 exports[`snapshot tests memory expressions test intermediate representation 1`] = `
 ModuleExpression {
   "exportExpressions": [],
@@ -30733,6 +32730,7 @@ ModuleExpression {
   "exportableTables": [],
   "functions": [],
   "globalTypes": [],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 0,
     "_memoryLimit": null,
@@ -30781,6 +32779,7 @@ ModuleExpression {
   "exportableTables": [],
   "functions": [],
   "globalTypes": [],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -30829,6 +32828,7 @@ ModuleExpression {
   "exportableTables": [],
   "functions": [],
   "globalTypes": [],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -30877,6 +32877,7 @@ ModuleExpression {
   "exportableTables": [],
   "functions": [],
   "globalTypes": [],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 0,
     "_memoryLimit": 3,
@@ -30925,6 +32926,7 @@ ModuleExpression {
   "exportableTables": [],
   "functions": [],
   "globalTypes": [],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -30981,6 +32983,7 @@ ModuleExpression {
   "exportableTables": [],
   "functions": [],
   "globalTypes": [],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -31085,6 +33088,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -31352,6 +33356,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -31607,6 +33612,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -31874,6 +33880,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -32141,6 +34148,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -32408,6 +34416,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -32675,6 +34684,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -32942,6 +34952,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -33209,6 +35220,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -33476,6 +35488,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -33743,6 +35756,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -33940,6 +35954,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -34131,6 +36146,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -34360,6 +36376,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -34589,6 +36606,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -34818,6 +36836,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -35047,6 +37066,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -35276,6 +37296,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -35505,6 +37526,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -35734,6 +37756,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -35963,6 +37986,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -36192,6 +38216,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -36421,6 +38446,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -36650,6 +38676,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -36879,6 +38906,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -37108,6 +39136,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -37305,6 +39334,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": 2,
@@ -37496,6 +39526,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": 2,
@@ -37617,6 +39648,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": MemoryExpression {
     "_memoryLength": 1,
     "_memoryLimit": null,
@@ -45494,6 +47526,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -46381,6 +48414,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -47700,6 +49734,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -49019,6 +51054,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -50338,6 +52374,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -51657,6 +53694,7 @@ ModuleExpression {
       ],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": null,
 }
@@ -57922,6 +59960,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": StartExpression {
     "_identifier": IRToken {
@@ -58134,6 +60173,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": StartExpression {
     "_identifier": IRToken {
@@ -58346,6 +60386,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": StartExpression {
     "_identifier": IRToken {
@@ -58558,6 +60599,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": StartExpression {
     "_identifier": IRToken {
@@ -58770,6 +60812,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": StartExpression {
     "_identifier": IRToken {
@@ -58982,6 +61025,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": StartExpression {
     "_identifier": IRToken {
@@ -59194,6 +61238,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": StartExpression {
     "_identifier": IRToken {
@@ -59406,6 +61451,7 @@ ModuleExpression {
       "_returnTypes": [],
     },
   ],
+  "globals": [],
   "memory": null,
   "start": StartExpression {
     "_identifier": IRToken {

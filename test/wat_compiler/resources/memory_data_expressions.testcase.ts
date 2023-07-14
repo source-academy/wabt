@@ -166,11 +166,13 @@ const i32store8 = `
 `;
 
 const i32store16 = `
-(module(module
-	(memory
-	(data "Hello")	
-)
-)
+(module
+	(memory 1)
+
+  (func
+  	i32.const 4
+  	i32.const 3
+    i32.store16
   )
 )
 `;

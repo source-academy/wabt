@@ -102,6 +102,11 @@ export class ModuleExpression extends IntermediateRepresentation {
   memory: MemoryExpression | null = null;
 
   /**
+   * For memory section
+   */
+  globals: GlobalExpression[] = [];
+
+  /**
    * Global variables that can be exported
    */
   exportableFuncs: ExportableExpression[] = [];
@@ -142,6 +147,11 @@ export class ModuleExpression extends IntermediateRepresentation {
   addMemoryExpression(memoryExp: MemoryExpression) {
     this.memory = memoryExp;
     this.exportableMems.push(memoryExp);
+  }
+
+  addGlobalExpression(globalExp: GlobalExpression) {
+    this.globals.push(globalExp);
+    this.exportableGlobals.push(globalExp);
   }
 
   /**
@@ -416,6 +426,38 @@ export class MemoryExpression extends IntermediateRepresentation implements HasI
 
   toString(): string {
     return `Memory: ${this._memoryLength}`;
+  }
+}
+export class GlobalExpression
+  extends IntermediateRepresentation
+  implements HasIdentifier {
+  private _parent: IntermediateRepresentation | null = null;
+  private headerToken: IRToken;
+  type: ValueType;
+  private name: string | null;
+  globalType: IRToken;
+  globalValue: IRToken;
+
+  constructor(headerToken: Token, type: ValueType, globalType: Token, globalValue: Token, name: string | null) {
+    super();
+    this.headerToken = new IRToken(headerToken, this);
+    this.type = type;
+    this.globalType = new IRToken(globalType, this);
+    this.globalValue = new IRToken(globalValue, this);
+    this.name = name;
+  }
+
+  get parent(): IntermediateRepresentation | null {
+    return this._parent;
+  }
+  set parent(parentExpression: IntermediateRepresentation) {
+    this._parent = parentExpression;
+  }
+  toString(): string {
+    return `Global: ${this.name}`;
+  }
+  getID(): string | null {
+    return this.name;
   }
 }
 /*

@@ -12,6 +12,7 @@ import { positiveTestCases as positiveNumOpTestCases } from './resources/numeric
 import { positiveControlTestCases } from './resources/control_instructions.testcase';
 import { positiveTestCases as positiveStartSectionTestCases } from './resources/start_expression.testcase';
 import { positiveTestCases as positiveMemorySectionTestCases } from './resources/memory_data_expressions.testcase';
+import { positiveTestCases as positiveGlobalSectionTestCases } from './resources/global_expressions.testcase';
 
 describe.each([
   [positiveFunctionTestCases, 'function expressions'],
@@ -19,6 +20,7 @@ describe.each([
   [positiveControlTestCases, 'control operations'],
   [positiveStartSectionTestCases, 'start expression'],
   [positiveMemorySectionTestCases, 'memory expressions'],
+  [positiveGlobalSectionTestCases, 'global expressions'],
 ])('snapshot tests', (testCases, testCaseLabel) => {
   describe.each(testCases)(`${testCaseLabel}`, (testCase: string) => {
     let tokens: Token[];

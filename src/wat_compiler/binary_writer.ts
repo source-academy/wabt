@@ -14,6 +14,7 @@ import {
   BlockExpression,
   SelectExpression,
   type MemoryExpression,
+  type GlobalExpression,
 } from './ir_types';
 import { ValueType } from '../common/type';
 import { type Token, TokenType } from '../common/token';
@@ -130,7 +131,22 @@ export class BinaryWriter {
   }
 
   private encodeGlobalSection(): Uint8Array {
-    return new Uint8Array([]);
+    if (this.module.globals.length === 0) {
+      return new Uint8Array([]);
+    }
+    const globalEncoding: number[] = [];
+    let n_globals = 0;
+    this.module.globals.forEach((g) => {
+      globalEncoding.push(...this.encodeGlobalExpression(g));
+      n_globals++;
+    });
+
+    return new Uint8Array([
+      SectionCode.Global,
+      globalEncoding.length + 1,
+      n_globals,
+      ...globalEncoding,
+    ]);
   }
 
   private encodeExportSection(): Uint8Array {
@@ -226,6 +242,53 @@ export class BinaryWriter {
       1,
       ir.memoryLength,
       ir.memoryLimit,
+    ]);
+  }
+
+  private encodeGlobalExpression(ir: GlobalExpression): Uint8Array {
+    const type = ir.type;
+    const globalType = ir.globalType;
+    const globalValue = ir.globalValue;
+
+    const mutability = 0;
+
+    let literal: Uint8Array;
+    switch (type) {
+      case ValueType.I32:
+        literal = NumberEncoder.encodeI32Const(toInteger(globalValue.lexeme));
+        break;
+      case ValueType.I64:
+        literal = NumberEncoder.encodeI64Const(toInteger(globalValue.lexeme));
+        break;
+      case ValueType.F32:
+        literal = NumberEncoder.encodeF32Const(toInteger(globalValue.lexeme));
+        break;
+      case ValueType.F64:
+        literal = NumberEncoder.encodeF64Const(toInteger(globalValue.lexeme));
+        break;
+      case ValueType.FuncRef:
+        if (globalValue.type === TokenType.Var) {
+          literal = new Uint8Array([this.module.resolveExportableExpressionIndexByName(globalValue.lexeme, ExportType.Func)]);
+        } else if (globalValue.type === TokenType.Nat) {
+          literal = new Uint8Array([toInteger(globalValue.lexeme)]);
+        } else {
+          literal = this.encodeToken(globalValue);
+        }
+        break;
+      case ValueType.ExternRef:
+        // throw new Error(`Invalid global type ${globalValue}`);
+        literal = this.encodeToken(globalValue);
+        break;
+      default:
+        throw new Error(`Invalid global type ${globalValue}`);
+    }
+
+    return new Uint8Array([
+      ValueType.getValue(type),
+      mutability,
+      ...this.encodeToken(globalType),
+      ...literal,
+      0x0b, // End token
     ]);
   }
   // Functions

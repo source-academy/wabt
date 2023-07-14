@@ -13,10 +13,10 @@ import {
   SelectExpression,
   BlockBlockExpression,
   BlockIfExpression,
-  StartExpression, MemoryExpression,
+  StartExpression, MemoryExpression, GlobalExpression,
 } from './ir_types';
 import { Token, TokenType } from '../common/token';
-import { type Tree, type ParseTree } from './tree_types';
+import { Tree, type ParseTree } from './tree_types';
 
 import { Opcode } from '../common/opcode';
 import { type ValueType } from '../common/type';
@@ -79,9 +79,15 @@ export class IRWriter {
         continue;
       }
 
+      if (isGlobalExpression(parseTreeNode)) {
+        const globalExp = this.parseGlobalExpression(parseTreeNode);
+        this.module.addGlobalExpression(globalExp);
+        continue;
+      }
+
       console.log(parseTreeNode);
 
-      throw new Error(`Unrecognised Expression: ${parseTreeNode[0]}`);
+      throw new Error(`Unrecognised Expression: ${Tree.treeMap(parseTreeNode, (t) => t.lexeme)}`);
     }
   }
 
@@ -168,6 +174,39 @@ export class IRWriter {
     }
 
     return new MemoryExpression(parseTree[0] as Token, memorySize, memoryLimit, memoryName);
+  }
+
+  private parseGlobalExpression(parseTree:ParseTree): GlobalExpression {
+    let name: string | null = null;
+    let type: ValueType | null = null;
+    let expr: Tree<Token> | null = null;
+    for (let i = 1; i < parseTree.length; i++) {
+      const token = parseTree[i];
+      if (token instanceof Token && token.type === TokenType.Var) {
+        name = token.lexeme;
+        continue;
+      }
+
+      if (token instanceof Token && token.type === TokenType.ValueType) {
+        type = token.valueType;
+        continue;
+      }
+
+      if (type !== null && token instanceof Array) {
+        expr = token;
+      }
+    }
+    if (parseTree[0] instanceof Array) {
+      throw new Error(`Expected Global Expression to start with token: ${Tree.treeMap(parseTree, ((t) => t.lexeme))}`);
+    }
+    if (type === null) {
+      throw new Error(`Expected type in Global Expression: ${Tree.treeMap(parseTree, ((t) => t.lexeme))}`);
+    }
+    if (!(expr instanceof Array && expr.length === 2 && expr[0] instanceof Token && expr[1] instanceof Token)) {
+      throw new Error(`Expected expression in Global Expression: ${Tree.treeMap(parseTree, ((t) => t.lexeme))}`);
+    }
+
+    return new GlobalExpression(parseTree[0] as Token, type, expr[0] as Token, expr[1] as Token, name);
   }
 
 
@@ -871,6 +910,11 @@ function isStartExpression(parseTree: ParseTree): boolean {
 function isMemoryExpression(parseTree: ParseTree): boolean {
   const tokenHeader = parseTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === TokenType.Memory;
+}
+
+function isGlobalExpression(parseTree: ParseTree): boolean {
+  const tokenHeader = parseTree[0];
+  return tokenHeader instanceof Token && tokenHeader.type === TokenType.Global;
 }
 
 /**
