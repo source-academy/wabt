@@ -15,6 +15,8 @@ import {
   SelectExpression,
   type MemoryExpression,
   type GlobalExpression,
+  type ImportExpression,
+  type ImportGlobalExpression,
 } from './ir_types';
 import { ValueType } from '../common/type';
 import { type Token, TokenType } from '../common/token';
@@ -90,7 +92,17 @@ export class BinaryWriter {
   }
 
   private encodeImportSection(): Uint8Array {
-    return new Uint8Array([]);
+    if (this.module.imports.length === 0) {
+      return new Uint8Array([]);
+    }
+    const importExpressionEncoding = this.module.imports.flatMap((importExpression) => Array.from(this.encodeImportExpression(importExpression)));
+
+    return new Uint8Array([
+      SectionCode.Import,
+      importExpressionEncoding.length + 1,
+      this.module.imports.length,
+      ...importExpressionEncoding,
+    ]);
   }
 
   private encodeFunctionSection(): Uint8Array {
@@ -250,7 +262,7 @@ export class BinaryWriter {
     const globalType = ir.globalType;
     const globalValue = ir.globalValue;
 
-    const mutability = 0;
+    const mutability = ir.mutability;
 
     let literal: Uint8Array;
     switch (type) {
@@ -290,6 +302,41 @@ export class BinaryWriter {
       ...literal,
       0x0b, // End token
     ]);
+  }
+
+  private encodeImportGlobalExpression(ir: ImportGlobalExpression): Uint8Array {
+    const mutability = 0;
+    const globalType = ir.typeToken;
+
+    return new Uint8Array([
+      ...this.encodeToken(globalType),
+      mutability,
+    ]);
+  }
+
+
+  private encodeImportExpression(importExpression: ImportExpression): Uint8Array {
+    const importModuleEncoding = this.encodeToken(importExpression.importModule);
+    const importNameEncoding = this.encodeToken(importExpression.importName);
+    let importTypeEncoding: number;
+    let importDescEncoding: Uint8Array;
+    switch (importExpression.importType) {
+      case TokenType.Func:
+        importTypeEncoding = 0;
+        importDescEncoding = new Uint8Array([this.module.resolveGlobalTypeIndex(importExpression.functionSignature!.signatureType)]);
+        break;
+      case TokenType.Memory:
+        importTypeEncoding = 2;
+        importDescEncoding = this.encodeMemoryExpression(importExpression.memoryExpression!);
+        break;
+      case TokenType.Global:
+        importTypeEncoding = 3;
+        importDescEncoding = this.encodeImportGlobalExpression(importExpression.globalExpression!);
+        break;
+      default:
+        throw new Error(`Invalid import type ${importExpression.importType}`);
+    }
+    return new Uint8Array([...importModuleEncoding, ...importNameEncoding, importTypeEncoding, ...importDescEncoding]);
   }
   // Functions
 
@@ -399,10 +446,14 @@ export class BinaryWriter {
     switch (token.prevToken?.type) {
       case TokenType.LocalSet:
       case TokenType.LocalGet:
+      case TokenType.LocalTee:
         return this.encodeFunctionLocalVarToken(token, fnExpr);
       case TokenType.Br:
       case TokenType.BrIf:
         return this.encodeFunctionBrVarToken(token);
+      case TokenType.GlobalSet:
+      case TokenType.GlobalGet:
+        return this.encodeFunctionGlobalVarToken(token, fnExpr);
 
       default:
         throw new Error(
@@ -453,6 +504,26 @@ export class BinaryWriter {
       ...fnExpr.getLocalNames(),
     ].entries()) {
       if (name === nameToResolve) {
+        return i;
+      }
+    }
+    throw new Error(
+      `Parameter name ${nameToResolve} not found in function. Parameter names available: ${[
+        fnExpr.getParamNames(),
+      ]}, Local Names available: ${fnExpr.getLocalNames()}`,
+    );
+  }
+  /**
+   * Encode a 'global.get $var' or 'global.set $var' token by evaluating the index for $var.
+   * @returns a number corresponding to the local variable index.
+   */
+  private encodeFunctionGlobalVarToken(
+    token: IRToken,
+    fnExpr: FunctionExpression,
+  ): number {
+    const nameToResolve = token.lexeme;
+    for (const [i, global] of this.module.globals.entries()) {
+      if (global.getID() === nameToResolve) {
         return i;
       }
     }
@@ -641,6 +712,10 @@ export class BinaryWriter {
       return this.encodeOpcodeToken(token);
     }
 
+    if (token.isTextToken()) {
+      return this.encodeTextToken(token);
+    }
+
     if (token.valueType !== null) {
       // This is a last-ditch attempt to translate a given token. May not be correct.
       return new Uint8Array([ValueType.getValue(token.valueType!)]);
@@ -707,6 +782,16 @@ export class BinaryWriter {
 
   private encodeOpcodeToken(token: IRToken): Uint8Array {
     return new Uint8Array([Opcode.getCode(token.opcodeType!)]);
+  }
+
+  private encodeTextToken(token: IRToken): Uint8Array {
+    const text = token.extractName();
+    const length = text.length;
+    const encoding = [];
+    for (let i = 0; i < length; i++) {
+      encoding.push(text.charCodeAt(i));
+    }
+    return new Uint8Array([length, ...encoding]);
   }
 
   private encodeMemoryOperationToken(token: IRToken): Uint8Array {

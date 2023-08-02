@@ -102,9 +102,14 @@ export class ModuleExpression extends IntermediateRepresentation {
   memory: MemoryExpression | null = null;
 
   /**
-   * For memory section
+   * For global section
    */
   globals: GlobalExpression[] = [];
+
+  /**
+   * For import section
+   */
+  imports: ImportExpression[] = [];
 
   /**
    * Global variables that can be exported
@@ -152,6 +157,21 @@ export class ModuleExpression extends IntermediateRepresentation {
   addGlobalExpression(globalExp: GlobalExpression) {
     this.globals.push(globalExp);
     this.exportableGlobals.push(globalExp);
+  }
+
+  addImportExpression(importExp: ImportExpression) {
+    this.imports.push(importExp);
+    switch (importExp.importType) {
+      case TokenType.Func:
+        this.addGlobalType(importExp.functionSignature.signatureType);
+        break;
+      case TokenType.Memory:
+        break;
+      case TokenType.Global:
+        break;
+      default:
+        throw new Error(`Import type ${importExp.importType} not supported yet!`);
+    }
   }
 
   /**
@@ -367,6 +387,59 @@ export class ExportExpression extends IntermediateRepresentation {
   }
 }
 
+type ImportType = TokenType.Func | TokenType.Table | TokenType.Memory | TokenType.Global;
+
+export class ImportExpression extends IntermediateRepresentation {
+  private _parent: IntermediateRepresentation | null = null;
+  importModule: IRToken;
+  importName: IRToken;
+  importType: ImportType;
+  functionSignature: FunctionSignature | null = null;
+  memoryExpression: MemoryExpression | null = null;
+  globalExpression: ImportGlobalExpression | null = null;
+
+  private constructor(importModule: Token, importName: Token, importType: ImportType) {
+    super();
+    this.importModule = new IRToken(importModule, this);
+    this.importName = new IRToken(importName, this);
+    this.importType = importType;
+  }
+
+  static functionImport(importModule: Token, importName: Token, functionSignature: FunctionSignature) {
+    const importExp = new ImportExpression(importModule, importName, TokenType.Func);
+    importExp.functionSignature = functionSignature;
+    return importExp;
+  }
+
+  // static tableImport(importModule: Token, importName: Token, tableExpression: FunctionSignature) {
+  //   const importExp = new ImportExpression(importModule, importName, TokenType.Func);
+  //   importExp.functionSignature = functionSignature;
+  //   return importExp;
+  // }
+
+  static memoryImport(importModule: Token, importName: Token, memoryExpression: MemoryExpression) {
+    const importExp = new ImportExpression(importModule, importName, TokenType.Memory);
+    importExp.memoryExpression = memoryExpression;
+    return importExp;
+  }
+
+  static globalImport(importModule: Token, importName: Token, globalExpression: ImportGlobalExpression) {
+    const importExp = new ImportExpression(importModule, importName, TokenType.Global);
+    importExp.globalExpression = globalExpression;
+    return importExp;
+  }
+
+  get parent(): IntermediateRepresentation | null {
+    return this._parent;
+  }
+  set parent(parentExpression: IntermediateRepresentation) {
+    this._parent = parent;
+  }
+  toString(): string {
+    return 'import';
+  }
+}
+
 export class StartExpression extends IntermediateRepresentation {
   private _identifier: IRToken;
   private _parent: IntermediateRepresentation | null = null;
@@ -428,6 +501,34 @@ export class MemoryExpression extends IntermediateRepresentation implements HasI
     return `Memory: ${this._memoryLength}`;
   }
 }
+
+export class ImportGlobalExpression
+  extends IntermediateRepresentation
+  implements HasIdentifier {
+  private _parent: IntermediateRepresentation | null = null;
+
+  headerToken: IRToken;
+  typeToken: IRToken;
+  name: string | null;
+  constructor(headerToken: Token, typeToken: Token, name: string | null = null) {
+    super();
+    this.headerToken = new IRToken(headerToken, this);
+    this.typeToken = new IRToken(typeToken, this, headerToken);
+    this.name = name;
+  }
+  getID(): string | null {
+    return this.name;
+  }
+  get parent(): IntermediateRepresentation | null {
+    return this._parent;
+  }
+  set parent(parentExpression: IntermediateRepresentation) {
+    this._parent = parentExpression;
+  }
+  toString(): string {
+    return 'import global expression';
+  }
+}
 export class GlobalExpression
   extends IntermediateRepresentation
   implements HasIdentifier {
@@ -437,12 +538,14 @@ export class GlobalExpression
   private name: string | null;
   globalType: IRToken;
   globalValue: IRToken;
+  mutability: boolean;
 
-  constructor(headerToken: Token, type: ValueType, globalType: Token, globalValue: Token, name: string | null) {
+  constructor(headerToken: Token, type: ValueType, mutability: boolean, globalType: Token, globalValue: Token, name: string | null) {
     super();
     this.headerToken = new IRToken(headerToken, this);
     this.type = type;
     this.globalType = new IRToken(globalType, this);
+    this.mutability = mutability;
     this.globalValue = new IRToken(globalValue, this);
     this.name = name;
   }

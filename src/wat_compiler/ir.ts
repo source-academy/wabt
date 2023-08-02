@@ -13,7 +13,7 @@ import {
   SelectExpression,
   BlockBlockExpression,
   BlockIfExpression,
-  StartExpression, MemoryExpression, GlobalExpression,
+  StartExpression, MemoryExpression, GlobalExpression, ImportExpression, ImportGlobalExpression,
 } from './ir_types';
 import { Token, TokenType } from '../common/token';
 import { Tree, type ParseTree } from './tree_types';
@@ -82,6 +82,12 @@ export class IRWriter {
       if (isGlobalExpression(parseTreeNode)) {
         const globalExp = this.parseGlobalExpression(parseTreeNode);
         this.module.addGlobalExpression(globalExp);
+        continue;
+      }
+
+      if (isImportExpression(parseTreeNode)) {
+        const importExp = this.parseImportExpression(parseTreeNode);
+        this.module.addImportExpression(importExp);
         continue;
       }
 
@@ -179,9 +185,9 @@ export class IRWriter {
   private parseGlobalExpression(parseTree:ParseTree): GlobalExpression {
     let name: string | null = null;
     let type: ValueType | null = null;
+    let type_mutability: boolean = false;
     let expr: Tree<Token> | null = null;
-    for (let i = 1; i < parseTree.length; i++) {
-      const token = parseTree[i];
+    for (const [i, token] of parseTree.entries()) {
       if (token instanceof Token && token.type === TokenType.Var) {
         name = token.lexeme;
         continue;
@@ -189,6 +195,12 @@ export class IRWriter {
 
       if (token instanceof Token && token.type === TokenType.ValueType) {
         type = token.valueType;
+        continue;
+      }
+
+      if (token[0] instanceof Token && token[0].type === TokenType.Mut && token[1] instanceof Token && token[1].type === TokenType.ValueType) {
+        type = token[1].valueType;
+        type_mutability = true;
         continue;
       }
 
@@ -206,12 +218,84 @@ export class IRWriter {
       throw new Error(`Expected expression in Global Expression: ${Tree.treeMap(parseTree, ((t) => t.lexeme))}`);
     }
 
-    return new GlobalExpression(parseTree[0] as Token, type, expr[0] as Token, expr[1] as Token, name);
+    return new GlobalExpression(parseTree[0] as Token, type, type_mutability, expr[0] as Token, expr[1] as Token, name);
   }
+
+  private parseImportExpression(parseTree: ParseTree): ImportExpression {
+    if (parseTree.length !== 4) {
+      throw new Error(`Expected 4 tokens in import expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+    const importModule = parseTree[1];
+    const importName = parseTree[2];
+    if (!(importModule instanceof Token) || importModule.type !== TokenType.Text) {
+      throw new Error(`Expected module name to be a string in import expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+    if (!(importName instanceof Token) || importName.type !== TokenType.Text) {
+      throw new Error(`Expected import name to be a string in import expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+    const importdesc = parseTree[3];
+    if (!(importdesc instanceof Array) || !(importdesc[0] instanceof Token)) {
+      throw new Error(`Expected import description to be a sequence of tokens in import expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+    switch (importdesc[0].type) {
+      case TokenType.Func:
+        return ImportExpression.functionImport(importModule, importName, this.parseFunctionExpressionSignature(importdesc)[0]);
+      case TokenType.Table:
+        // console.log(this.parseTableExpression(importdesc));
+        throw new Error('Table expressions are not supported yet.');
+        break;
+      case TokenType.Memory:
+        return ImportExpression.memoryImport(importModule, importName, this.parseMemoryExpression(importdesc));
+        // console.log(this.parseMemoryExpression(importdesc));
+      case TokenType.Global:
+        return ImportExpression.globalImport(importModule, importName, this.parseImportGlobalExpression(importdesc));
+        break;
+      default:
+        throw new Error(`Unrecognised import description: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+    throw new Error(`Unrecognised Expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+  }
+
+  private parseImportGlobalExpression(parseTree: ParseTree): ImportGlobalExpression {
+    const headerToken = parseTree[0];
+    const typeToken = parseTree[1];
+    if (parseTree.length !== 2) {
+      throw new Error(`Expected 2 tokens in import global expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+    if (!(headerToken instanceof Token)) {
+      throw new Error(`Expected header token in import global expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+    if (!(typeToken instanceof Token)) {
+      throw new Error(`Expected type token in import global expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+    return new ImportGlobalExpression(headerToken, typeToken);
+  }
+
 
 
   private parseFunctionExpression(parseTree: ParseTree): FunctionExpression {
     assert(isFunctionExpression(parseTree));
+    const [functionSignature, cursor] = this.parseFunctionExpressionSignature(parseTree);
+
+    // Parse function params and declarations first
+    let remainingTree: ParseTree = parseTree.slice(cursor);
+    let isStart = false;
+
+    // If the function body is something like [add 1 0], slicing the tree yields:
+    // [[add 1 0]] --> this is not a valid s-expression that can be parsed.
+    // Token check is in place to avoid opening up [token] => token, the latter of which also cannot be parsed
+    if (remainingTree.length === 1 && !(remainingTree[0] instanceof Token)) {
+      remainingTree = remainingTree[0];
+      isStart = true;
+    }
+
+
+    this.module.addGlobalType(functionSignature.signatureType);
+    const ir = this.parseFunctionBodyExpression(remainingTree, isStart);
+    return new FunctionExpression(functionSignature, ir);
+  }
+
+  private parseFunctionExpressionSignature(parseTree: ParseTree): [FunctionSignature, number] {
     let functionName: string | null = null;
     let inlineExportName: string | null = null;
     const paramTypes: ValueType[] = [];
@@ -287,17 +371,6 @@ export class IRWriter {
       localNames.push(...names);
     }
 
-    // Parse function params and declarations first
-    let remainingTree: ParseTree = parseTree.slice(cursor);
-    let isStart = false;
-
-    // If the function body is something like [add 1 0], slicing the tree yields:
-    // [[add 1 0]] --> this is not a valid s-expression that can be parsed.
-    // Token check is in place to avoid opening up [token] => token, the latter of which also cannot be parsed
-    if (remainingTree.length === 1 && !(remainingTree[0] instanceof Token)) {
-      remainingTree = remainingTree[0];
-      isStart = true;
-    }
 
     const functionSignature = new FunctionSignature(
       functionName,
@@ -309,9 +382,7 @@ export class IRWriter {
       localNames,
     );
 
-    this.module.addGlobalType(functionSignature.signatureType);
-    const ir = this.parseFunctionBodyExpression(remainingTree, isStart);
-    return new FunctionExpression(functionSignature, ir);
+    return [functionSignature, cursor];
   }
 
   /*
@@ -915,6 +986,11 @@ function isMemoryExpression(parseTree: ParseTree): boolean {
 function isGlobalExpression(parseTree: ParseTree): boolean {
   const tokenHeader = parseTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === TokenType.Global;
+}
+
+function isImportExpression(parseTree: ParseTree): boolean {
+  const tokenHeader = parseTree[0];
+  return tokenHeader instanceof Token && tokenHeader.type === TokenType.Import;
 }
 
 /**

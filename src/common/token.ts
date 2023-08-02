@@ -56,6 +56,9 @@ export class Token {
   isOpcodeToken(): boolean {
     return isTokenTypeOpcode(this.type);
   }
+  isTextToken(): boolean {
+    return this.type === TokenType.Text;
+  }
   isOpcodeType(opcodeType: OpcodeType): boolean {
     return isTokenTypeOpcode(this.type) && this.opcodeType === opcodeType;
   }

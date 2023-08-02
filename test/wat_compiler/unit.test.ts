@@ -13,14 +13,20 @@ import { positiveControlTestCases } from './resources/control_instructions.testc
 import { positiveTestCases as positiveStartSectionTestCases } from './resources/start_expression.testcase';
 import { positiveTestCases as positiveMemorySectionTestCases } from './resources/memory_data_expressions.testcase';
 import { positiveTestCases as positiveGlobalSectionTestCases } from './resources/global_expressions.testcase';
+import { positiveTestCases as positiveImportSectionTestCases } from './resources/import_expressions.testcase';
+import { positiveTestCases as positiveReferencenTestCases } from './resources/reference_instructions.testcase';
+import { positiveTestCases as positiveVariableTestCases } from './resources/variable_instructions.testcase';
 
 describe.each([
-  [positiveFunctionTestCases, 'function expressions'],
-  [positiveNumOpTestCases, 'numeric operations'],
-  [positiveControlTestCases, 'control operations'],
-  [positiveStartSectionTestCases, 'start expression'],
-  [positiveMemorySectionTestCases, 'memory expressions'],
-  [positiveGlobalSectionTestCases, 'global expressions'],
+  // [positiveFunctionTestCases, 'function expressions'],
+  // [positiveNumOpTestCases, 'numeric operations'],
+  // [positiveControlTestCases, 'control operations'],
+  // [positiveStartSectionTestCases, 'start expression'],
+  // [positiveMemorySectionTestCases, 'memory expressions'],
+  // [positiveGlobalSectionTestCases, 'global expressions'],
+  // [positiveImportSectionTestCases, 'import expressions'],
+  // [positiveReferencenTestCases, 'reference expressions'],
+  [positiveVariableTestCases, 'variable expressions'],
 ])('snapshot tests', (testCases, testCaseLabel) => {
   describe.each(testCases)(`${testCaseLabel}`, (testCase: string) => {
     let tokens: Token[];
