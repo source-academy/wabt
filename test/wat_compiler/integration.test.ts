@@ -10,6 +10,7 @@ import { positiveTestCases as positiveGlobalSectionTestCases } from './resources
 import { positiveTestCases as positiveImportSectionTestCases } from './resources/import_expressions.testcase';
 import { positiveTestCases as positiveReferencenTestCases } from './resources/reference_instructions.testcase';
 import { positiveTestCases as positiveVariableTestCases } from './resources/variable_instructions.testcase';
+import { positiveTestCases as positiveTableElemTestCases } from './resources/table_element_expressions.testcase';
 import { expect } from '@jest/globals';
 import wabt from 'wabt';
 
@@ -23,6 +24,7 @@ describe.each([
   [positiveImportSectionTestCases, 'import expressions'],
   [positiveReferencenTestCases, 'reference expressions'],
   [positiveVariableTestCases, 'variable expressions'],
+  [positiveTableElemTestCases, 'table element expressions'],
 ])('integration: encode', (testCase, testCaseLabel) => {
   test.each(testCase)(testCaseLabel, async (test) => {
     const actual = compile(parse(test));

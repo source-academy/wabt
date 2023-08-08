@@ -16,6 +16,7 @@ import { positiveTestCases as positiveGlobalSectionTestCases } from './resources
 import { positiveTestCases as positiveImportSectionTestCases } from './resources/import_expressions.testcase';
 import { positiveTestCases as positiveReferencenTestCases } from './resources/reference_instructions.testcase';
 import { positiveTestCases as positiveVariableTestCases } from './resources/variable_instructions.testcase';
+import { positiveTestCases as positiveTableElemTestCases } from './resources/table_element_expressions.testcase';
 
 describe.each([
   // [positiveFunctionTestCases, 'function expressions'],
@@ -27,6 +28,7 @@ describe.each([
   // [positiveImportSectionTestCases, 'import expressions'],
   // [positiveReferencenTestCases, 'reference expressions'],
   [positiveVariableTestCases, 'variable expressions'],
+  [positiveTableElemTestCases, 'table element expressions'],
 ])('snapshot tests', (testCases, testCaseLabel) => {
   describe.each(testCases)(`${testCaseLabel}`, (testCase: string) => {
     let tokens: Token[];
