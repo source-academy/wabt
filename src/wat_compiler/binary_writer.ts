@@ -17,6 +17,8 @@ import {
   type GlobalExpression,
   type ImportExpression,
   type ImportGlobalExpression,
+  type ElementExpression,
+  type ElementItemExpression,
 } from './ir_types';
 import { ValueType } from '../common/type';
 import { type Token, TokenType } from '../common/token';
@@ -211,7 +213,58 @@ export class BinaryWriter {
     // const startFunctionIndex = this.module.(this.module.start.identifier);
   }
   private encodeElementSection(): Uint8Array {
-    return new Uint8Array([]);
+    if (this.module.elementSection.length === 0) {
+      return new Uint8Array([]);
+    }
+
+    const elemSize: number = this.module.elementSection.length;
+    const elementEncoding = this.module.elementSection.flatMap((elem) => this.encodeElementExpression(elem));
+    const sectionSize: number = elementEncoding.length + 1;
+
+    return new Uint8Array([
+      SectionCode.Element,
+      sectionSize,
+      elemSize,
+      ...elementEncoding,
+    ]);
+  }
+
+  private encodeElementExpression(elementExp: ElementExpression): number[] {
+    const elementFlag = elementExp.getFlag();
+    const elementType = elementExp.elementType;
+    const elementItems = elementExp.items;
+    const elementItemEncoding = elementItems.flatMap((item) => this.encodeElementItemExpression(item));
+    let elementTypeEncoding;
+    switch (elementType?.valueType) {
+      case undefined:
+      case ValueType.FuncRef:
+        elementTypeEncoding = 0;
+        break;
+      case ValueType.ExternRef:
+        elementTypeEncoding = 111;
+        break;
+      default:
+        throw new Error();
+    }
+    return ([
+      elementFlag,
+      elementTypeEncoding,
+      elementItems.length,
+      ...elementItemEncoding,
+    ]);
+  }
+
+  private encodeElementItemExpression(itemExp: ElementItemExpression): number[] {
+    const itemType = itemExp.itemType;
+    let itemIndex = itemExp.itemIndex;
+
+    if (itemIndex === undefined && itemType === TokenType.RefFunc) {
+      itemIndex = this.module.resolveExportableExpressionIndexByName(itemExp.itemVarName!, ExportType.Func);
+    } else if (itemIndex === undefined) {
+      throw new Error(`Element item type is undefined. ${itemType}`);
+    }
+
+    return [itemIndex!];
   }
 
   private encodeCodeSection(): Uint8Array {

@@ -120,6 +120,11 @@ export class ModuleExpression extends IntermediateRepresentation {
   exportableTables: ExportableExpression[] = [];
 
   /**
+   * Element section
+   */
+  elementSection: ElementExpression[] = [];
+
+  /**
    * Declarations for export section
    */
   exportExpressions: ExportExpression[] = []; // TODO add support for multiple export expressions (evaluate whether this is really necesary)
@@ -172,6 +177,10 @@ export class ModuleExpression extends IntermediateRepresentation {
       default:
         throw new Error(`Import type ${importExp.importType} not supported yet!`);
     }
+  }
+
+  addElementExpression(elementExp: ElementExpression) {
+    this.elementSection.push(elementExp);
   }
 
   /**
@@ -561,6 +570,82 @@ export class GlobalExpression
   }
   getID(): string | null {
     return this.name;
+  }
+}
+
+export type ElementMode = 'passive' | 'active' | 'declarative';
+export class ElementExpression extends IntermediateRepresentation {
+  private _parent: IntermediateRepresentation | null = null;
+  headerToken: IRToken;
+  elementType: IRToken | null;
+  private mode: ElementMode;
+  name: string | null;
+  items: ElementItemExpression[];
+
+  constructor(headerToken: Token, elementType: Token | null, mode: ElementMode, name: string | null = null, items: ElementItemExpression[] = []) {
+    super();
+    this.headerToken = new IRToken(headerToken, this);
+    this.elementType = elementType === null ? null : new IRToken(elementType, this);
+    this.mode = mode;
+    this.name = name;
+    this.items = items;
+    this.items.forEach((item) => {
+      item.parent = this;
+    });
+  }
+
+  getFlag(): number {
+    if (this.elementType === null) {
+      return 1;
+    }
+    if (this.mode === 'passive') {
+      switch (this.elementType.valueType) {
+        case ValueType.FuncRef:
+          return 1;
+        case ValueType.ExternRef:
+          return 5;
+        default:
+          throw new Error();
+      }
+    }
+    throw new Error();
+  }
+
+  get parent(): IntermediateRepresentation | null {
+    return this._parent;
+  }
+  set parent(parentExpression: IntermediateRepresentation) {
+    this._parent = parentExpression;
+  }
+  toString(): string {
+    return `element expression: ${this.headerToken.lexeme}`;
+  }
+}
+
+export class ElementItemExpression extends IntermediateRepresentation {
+  private _parent: IntermediateRepresentation | null = null;
+  itemType!: TokenType;
+  itemVarName?: string;
+  itemIndex?: number;
+
+  constructor(itemType: TokenType, itemToken: Token) {
+    super();
+    this.itemType = itemType;
+    if (itemToken.type === TokenType.Var) {
+      this.itemVarName = itemToken.lexeme;
+    } else {
+      this.itemIndex = parseInt(itemToken.lexeme);
+    }
+  }
+
+  get parent(): IntermediateRepresentation | null {
+    return this._parent;
+  }
+  set parent(parentExpression: IntermediateRepresentation) {
+    this._parent = parentExpression;
+  }
+  toString(): string {
+    throw new Error('Method not implemented.');
   }
 }
 /*

@@ -13,7 +13,7 @@ import {
   SelectExpression,
   BlockBlockExpression,
   BlockIfExpression,
-  StartExpression, MemoryExpression, GlobalExpression, ImportExpression, ImportGlobalExpression,
+  StartExpression, MemoryExpression, GlobalExpression, ImportExpression, ImportGlobalExpression, ElementExpression, type ElementMode, ElementItemExpression,
 } from './ir_types';
 import { Token, TokenType } from '../common/token';
 import { Tree, type ParseTree } from './tree_types';
@@ -88,6 +88,12 @@ export class IRWriter {
       if (isImportExpression(parseTreeNode)) {
         const importExp = this.parseImportExpression(parseTreeNode);
         this.module.addImportExpression(importExp);
+        continue;
+      }
+
+      if (isElementExpression(parseTreeNode)) {
+        const elemExp = this.parseElementExpression(parseTreeNode);
+        this.module.addElementExpression(elemExp);
         continue;
       }
 
@@ -271,7 +277,85 @@ export class IRWriter {
     return new ImportGlobalExpression(headerToken, typeToken);
   }
 
+  private parseElementExpression(parseTree: ParseTree): ElementExpression {
+    assert(isElementExpression(parseTree));
 
+    if (parseTree.length === 1) {
+      return new ElementExpression(parseTree[0] as Token, null, 'passive');
+    }
+
+    let cursor = 1;
+    let currentToken = parseTree[cursor];
+
+    if (currentToken instanceof Token && currentToken.type === TokenType.Var) {
+      cursor++;
+      currentToken = parseTree[cursor];
+    }
+
+    if (currentToken instanceof Array && currentToken[0] instanceof Token && currentToken[0].type === TokenType.Table) {
+      return this.parseActiveElementExpression(parseTree);
+    }
+
+    if (currentToken instanceof Token && currentToken.type === TokenType.Declare) {
+      return this.parseDeclarativeElementExpression(parseTree);
+    }
+
+    return this.parsePassiveElementExpression(parseTree);
+  }
+
+  private parsePassiveElementExpression(parseTree: ParseTree): ElementExpression {
+    let cursor = 1;
+    let currentToken = parseTree[cursor];
+    let name : string | null = null;
+    let elementType: Token;
+
+    if (currentToken instanceof Token && currentToken.type === TokenType.Var) {
+      name = currentToken.lexeme;
+      cursor++;
+      currentToken = parseTree[cursor];
+    }
+
+    if (!(currentToken instanceof Token)) {
+      throw new Error(`Expected token in passive element expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+    elementType = currentToken;
+    cursor++;
+    currentToken = parseTree[cursor];
+
+    const items = parseTree.slice(cursor)
+      .map((x) => this.parseElementItemExpression(x));
+
+    return new ElementExpression(
+      parseTree[0] as Token,
+      elementType,
+      'passive',
+      name,
+      items,
+    );
+  }
+
+  private parseActiveElementExpression(parseTree: ParseTree): ElementExpression {
+
+  }
+
+  private parseDeclarativeElementExpression(parseTree: ParseTree): ElementExpression {
+
+  }
+
+  private parseElementItemExpression(itemExpression: Token[]): ElementItemExpression {
+    assert(isElementItemExpression(itemExpression));
+    if (itemExpression.length === 2) {
+      const itemType = itemExpression[0];
+      const itemToken = itemExpression[1];
+      return new ElementItemExpression(itemType.type, itemToken);
+    }
+    if (itemExpression.length === 3) {
+      const itemType = itemExpression[1];
+      const itemToken = itemExpression[2];
+      return new ElementItemExpression(itemType.type, itemToken);
+    }
+    throw new Error(`Unrecognised element item expression: ${Tree.treeMap(itemExpression, (t) => t.lexeme)}`);
+  }
 
   private parseFunctionExpression(parseTree: ParseTree): FunctionExpression {
     assert(isFunctionExpression(parseTree));
@@ -991,6 +1075,27 @@ function isGlobalExpression(parseTree: ParseTree): boolean {
 function isImportExpression(parseTree: ParseTree): boolean {
   const tokenHeader = parseTree[0];
   return tokenHeader instanceof Token && tokenHeader.type === TokenType.Import;
+}
+
+function isElementExpression(parseTree: ParseTree): boolean {
+  const tokenHeader = parseTree[0];
+  return tokenHeader instanceof Token && tokenHeader.type === TokenType.Elem;
+}
+
+function isElementItemExpression(parseTree: ParseTree): boolean {
+  for (const token of parseTree) {
+    if (!(token instanceof Token)) {
+      return false;
+    }
+  }
+  const first_token = parseTree[0] as Token;
+  if (parseTree.length === 3) {
+    return first_token.type === TokenType.Item;
+  }
+  if (parseTree.length === 2) {
+    return first_token.type === TokenType.RefFunc || first_token.type === TokenType.RefExtern;
+  }
+  return false;
 }
 
 /**

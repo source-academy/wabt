@@ -19,14 +19,14 @@ import { positiveTestCases as positiveVariableTestCases } from './resources/vari
 import { positiveTestCases as positiveTableElemTestCases } from './resources/table_element_expressions.testcase';
 
 describe.each([
-  // [positiveFunctionTestCases, 'function expressions'],
-  // [positiveNumOpTestCases, 'numeric operations'],
-  // [positiveControlTestCases, 'control operations'],
-  // [positiveStartSectionTestCases, 'start expression'],
-  // [positiveMemorySectionTestCases, 'memory expressions'],
-  // [positiveGlobalSectionTestCases, 'global expressions'],
-  // [positiveImportSectionTestCases, 'import expressions'],
-  // [positiveReferencenTestCases, 'reference expressions'],
+  [positiveFunctionTestCases, 'function expressions'],
+  [positiveNumOpTestCases, 'numeric operations'],
+  [positiveControlTestCases, 'control operations'],
+  [positiveStartSectionTestCases, 'start expression'],
+  [positiveMemorySectionTestCases, 'memory expressions'],
+  [positiveGlobalSectionTestCases, 'global expressions'],
+  [positiveImportSectionTestCases, 'import expressions'],
+  [positiveReferencenTestCases, 'reference expressions'],
   [positiveVariableTestCases, 'variable expressions'],
   [positiveTableElemTestCases, 'table element expressions'],
 ])('snapshot tests', (testCases, testCaseLabel) => {
