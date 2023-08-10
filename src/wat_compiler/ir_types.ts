@@ -129,6 +129,41 @@ export class ModuleExpression extends IntermediateRepresentation {
    */
   exportExpressions: ExportExpression[] = []; // TODO add support for multiple export expressions (evaluate whether this is really necesary)
 
+  addIntermediateRepresentation(ir: IntermediateRepresentation) {
+    if (ir instanceof FunctionExpression) {
+      this.addFunctionExpression(ir);
+      return;
+    }
+    if (ir instanceof ExportExpression) {
+      this.addExportExpression(ir);
+      return;
+    }
+    if (ir instanceof StartExpression) {
+      this.addStartExpression(ir);
+      return;
+    }
+    if (ir instanceof MemoryExpression) {
+      this.addMemoryExpression(ir);
+      return;
+    }
+    if (ir instanceof GlobalExpression) {
+      this.addGlobalExpression(ir);
+      return;
+    }
+    if (ir instanceof ImportExpression) {
+      this.addImportExpression(ir);
+      return;
+    }
+    if (ir instanceof ElementExpression) {
+      this.addElementExpression(ir);
+      return;
+    }
+    if (ir instanceof TableExpression) {
+      this.addTableExpression(ir);
+      return;
+    }
+    throw new Error(`Unsupported intermediate representation ${ir.constructor.name}`);
+  }
   addFunctionExpression(functionExpression: FunctionExpression) {
     this.functions.push(functionExpression);
     this.addGlobalType(functionExpression.getSignatureType());

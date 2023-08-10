@@ -54,7 +54,7 @@ export class IRWriter {
       }
 
       if (isFunctionExpression(parseTreeNode)) {
-        this.module.addFunctionExpression(
+        this.module.addIntermediateRepresentation(
           this.parseFunctionExpression(parseTreeNode),
         );
         continue;
@@ -63,48 +63,44 @@ export class IRWriter {
       if (isExportExpression(parseTreeNode)) {
         this.parseExportExpression(parseTreeNode)
           .forEach((exp) => {
-            this.module.addExportExpression(exp);
+            this.module.addIntermediateRepresentation(exp);
           });
         continue;
       }
 
       if (isStartExpression(parseTreeNode)) {
         const startExp = this.parseStartExpression(parseTreeNode);
-        this.module.addStartExpression(startExp);
+        this.module.addIntermediateRepresentation(startExp);
         continue;
       }
 
       if (isMemoryExpression(parseTreeNode)) {
         const moduleExp = this.parseMemoryExpression(parseTreeNode);
-        this.module.addMemoryExpression(moduleExp);
+        this.module.addIntermediateRepresentation(moduleExp);
         continue;
       }
 
       if (isGlobalExpression(parseTreeNode)) {
         const globalExp = this.parseGlobalExpression(parseTreeNode);
-        this.module.addGlobalExpression(globalExp);
+        this.module.addIntermediateRepresentation(globalExp);
         continue;
       }
 
       if (isImportExpression(parseTreeNode)) {
         const importExp = this.parseImportExpression(parseTreeNode);
-        this.module.addImportExpression(importExp);
+        this.module.addIntermediateRepresentation(importExp);
         continue;
       }
 
       if (isElementExpression(parseTreeNode)) {
         const elemExp = this.parseElementExpression(parseTreeNode);
-        this.module.addElementExpression(elemExp);
+        this.module.addIntermediateRepresentation(elemExp);
         continue;
       }
 
       if (isTableExpression(parseTreeNode)) {
         const tableExp = this.parseTableExpression(parseTreeNode);
-        if (tableExp instanceof ImportExpression) {
-          this.module.addImportExpression(tableExp);
-          continue;
-        }
-        this.module.addTableExpression(tableExp);
+        this.module.addIntermediateRepresentation(tableExp);
         continue;
       }
 

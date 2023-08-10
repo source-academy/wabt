@@ -788,6 +788,10 @@ const elem_drop_index = `
 )
 `;
 
+// export const positiveTestCases = [
+//   table_prod_one_abbr_one,
+//   table_prod_one_abbr_two,
+// ];
 export const positiveTestCases = [
   empty_elem,
   empty_elem_funcref,
