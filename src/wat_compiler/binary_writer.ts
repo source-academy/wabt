@@ -19,6 +19,7 @@ import {
   type ImportGlobalExpression,
   type ElementExpression,
   type ElementItemExpression,
+  type TableExpression,
 } from './ir_types';
 import { ValueType } from '../common/type';
 import { type Token, TokenType } from '../common/token';
@@ -126,7 +127,40 @@ export class BinaryWriter {
   }
 
   private encodeTableSection(): Uint8Array {
-    return new Uint8Array([]);
+    if (this.module.exportableTables.length === 0) {
+      return new Uint8Array([]);
+    }
+
+    const tableNum = this.module.exportableTables.length;
+    const tableEncoding = this.module.exportableTables.flatMap((table) => Array.from(this.encodeTableExpression(table)));
+
+    return [
+      SectionCode.Table,
+      tableEncoding.length + 1,
+      tableNum,
+      ...tableEncoding,
+    ];
+  }
+
+  private encodeTableExpression(tableExp: TableExpression): number[] {
+    const { minFlag, maxFlag, tableType } = tableExp;
+
+    const hasMaxFlag: number = maxFlag === null ? 0 : 1;
+    const tableTypeEncoding = tableType === ValueType.FuncRef ? 0x70 : 0x6F; // Either Funcref or Externref
+
+    if (maxFlag === null) {
+      return [
+        tableTypeEncoding,
+        hasMaxFlag,
+        minFlag,
+      ];
+    }
+    return [
+      tableTypeEncoding,
+      hasMaxFlag,
+      minFlag,
+      maxFlag,
+    ];
   }
 
   private encodeMemorySection(): Uint8Array {
@@ -372,7 +406,7 @@ export class BinaryWriter {
     const importModuleEncoding = this.encodeToken(importExpression.importModule);
     const importNameEncoding = this.encodeToken(importExpression.importName);
     let importTypeEncoding: number;
-    let importDescEncoding: Uint8Array;
+    let importDescEncoding: Uint8Array | number[];
     switch (importExpression.importType) {
       case TokenType.Func:
         importTypeEncoding = 0;
@@ -385,6 +419,10 @@ export class BinaryWriter {
       case TokenType.Global:
         importTypeEncoding = 3;
         importDescEncoding = this.encodeImportGlobalExpression(importExpression.globalExpression!);
+        break;
+      case TokenType.Table:
+        importTypeEncoding = 1;
+        importDescEncoding = this.encodeTableExpression(importExpression.tableExpression!);
         break;
       default:
         throw new Error(`Invalid import type ${importExpression.importType}`);

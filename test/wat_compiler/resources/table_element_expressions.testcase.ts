@@ -19,7 +19,7 @@ Abbreviations:
 Table:
     table ::= ('table' id? tabletype)
     tabletype ::= limits reftype
-    limits ::= n:u32 (32-bit unsigned integer)
+    limits ::= n:u32 (32-bit unsigned integer) or n: u32 m: u32
     reftype := 'funcref' | 'externref'
 
 
@@ -312,12 +312,22 @@ const elem_prod_two_abbr_one_two_1 = `
 )
 `;
 
-const table_prod_one_funcref = `
+const table_prod_one_funcref_0 = `
 (module
 	(table 1 funcref)
 )
 `;
-const table_prod_one_externref = `
+const table_prod_one_funcref_1 = `
+(module
+	(table 1 funcref)
+)
+`;
+const table_prod_one_externref_0 = `
+(module
+	(table 1 externref)
+)
+`;
+const table_prod_one_externref_1 = `
 (module
 	(table 1 externref)
 )
@@ -801,14 +811,16 @@ export const positiveTestCases = [
   // elem_prod_two_abbr_two_1,
   // elem_prod_two_abbr_one_two_0,
   // elem_prod_two_abbr_one_two_1,
-  // table_prod_one_funcref,
-  // table_prod_one_externref,
+  table_prod_one_funcref_0,
+  table_prod_one_externref_0,
+  table_prod_one_funcref_1,
+  table_prod_one_externref_1,
   // table_prod_one_abbr_one,
   // table_prod_one_abbr_two,
-  // table_prod_one_inline_import,
-  // table_prod_one_inline_export_0,
-  // table_prod_one_inline_export_1,
-  // table_prod_one_inline_export_2,
+  table_prod_one_inline_import,
+  table_prod_one_inline_export_0,
+  table_prod_one_inline_export_1,
+  table_prod_one_inline_export_2,
   // table_prod_one_inline_export_3,
   // table_prod_one_inline_export_4,
   // table_get_index,

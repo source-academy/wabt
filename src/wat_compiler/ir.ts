@@ -13,16 +13,17 @@ import {
   SelectExpression,
   BlockBlockExpression,
   BlockIfExpression,
-  StartExpression, MemoryExpression, GlobalExpression, ImportExpression, ImportGlobalExpression, ElementExpression, type ElementMode, ElementItemExpression,
+  StartExpression, MemoryExpression, GlobalExpression, ImportExpression, ImportGlobalExpression, ElementExpression, type ElementMode, ElementItemExpression, TableExpression,
 } from './ir_types';
 import { Token, TokenType } from '../common/token';
 import { Tree, type ParseTree } from './tree_types';
 
 import { Opcode } from '../common/opcode';
-import { type ValueType } from '../common/type';
+import { ValueType } from '../common/type';
 import { assert } from '../common/assert';
 import { IllegalMemorySection, IllegalStartSection, ParseTreeException } from './exceptions';
-import { toInteger } from 'lodash';
+import { max, toInteger } from 'lodash';
+import { ExportType } from '../common/export_types';
 
 export function getIR(parseTree: ParseTree) {
   const ir = new IRWriter(parseTree)
@@ -94,6 +95,16 @@ export class IRWriter {
       if (isElementExpression(parseTreeNode)) {
         const elemExp = this.parseElementExpression(parseTreeNode);
         this.module.addElementExpression(elemExp);
+        continue;
+      }
+
+      if (isTableExpression(parseTreeNode)) {
+        const tableExp = this.parseTableExpression(parseTreeNode);
+        if (tableExp instanceof ImportExpression) {
+          this.module.addImportExpression(tableExp);
+          continue;
+        }
+        this.module.addTableExpression(tableExp);
         continue;
       }
 
@@ -248,7 +259,7 @@ export class IRWriter {
         return ImportExpression.functionImport(importModule, importName, this.parseFunctionExpressionSignature(importdesc)[0]);
       case TokenType.Table:
         // console.log(this.parseTableExpression(importdesc));
-        throw new Error('Table expressions are not supported yet.');
+        throw new Error('Table expressions are not supported yet.'); // FIXME
         break;
       case TokenType.Memory:
         return ImportExpression.memoryImport(importModule, importName, this.parseMemoryExpression(importdesc));
@@ -355,6 +366,102 @@ export class IRWriter {
       return new ElementItemExpression(itemType.type, itemToken);
     }
     throw new Error(`Unrecognised element item expression: ${Tree.treeMap(itemExpression, (t) => t.lexeme)}`);
+  }
+
+  private parseTableExpression(parseTree: ParseTree): TableExpression | ImportExpression {
+    assert(isTableExpression(parseTree));
+    const headerToken = parseTree[0] as Token;
+    let tableName: string | null = null;
+    let minFlag: number | null = null;
+    let maxFlag: number | null = null;
+    let tableType: ValueType | null = null;
+    let linkedImportExpression = null;
+    let linkedExportExpression = null;
+
+    let cursor = 1;
+    let currentToken = parseTree[cursor];
+    if (currentToken instanceof Token && currentToken.type === TokenType.Var) {
+      tableName = currentToken.lexeme;
+      currentToken = parseTree[++cursor];
+    }
+
+    if (currentToken instanceof Array) {
+      const firstToken = currentToken[0];
+      if (firstToken instanceof Token && firstToken.type === TokenType.Import) {
+        linkedImportExpression = this.parseInlineTableImportExpression(currentToken);
+      } else if (firstToken instanceof Token && firstToken.type === TokenType.Export) {
+        linkedExportExpression = this.parseInlineTableExportExpression(currentToken);
+        linkedExportExpression.exportType = ExportType.Table;
+      }
+      currentToken = parseTree[++cursor];
+    }
+
+    if (!(currentToken instanceof Token) || currentToken.type !== TokenType.Nat) {
+      throw new Error(`Expected min flag in table expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+    minFlag = parseInt(currentToken.lexeme);
+    currentToken = parseTree[++cursor];
+
+    if (currentToken instanceof Token && currentToken.type === TokenType.Nat) {
+      maxFlag = parseInt(currentToken.lexeme);
+      currentToken = parseTree[++cursor];
+    }
+
+    if (currentToken instanceof Token && (currentToken.valueType === ValueType.FuncRef || currentToken.valueType === ValueType.ExternRef)) {
+      tableType = currentToken.valueType;
+      currentToken = parseTree[++cursor];
+    }
+
+    if (minFlag === null) {
+      throw new Error(`Expected min flag in table expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+    if (tableType === null) {
+      throw new Error(`Expected table type in table expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+
+    const result = new TableExpression(headerToken, tableName, minFlag, maxFlag, tableType);
+
+    if (linkedExportExpression !== null) {
+      this.module.addExportExpression(linkedExportExpression);
+    }
+    if (linkedImportExpression !== null) {
+      return linkedImportExpression(result);
+    }
+
+    return result;
+  }
+
+  private parseInlineTableImportExpression(parseTree: ParseTree): (tableExpression: TableExpression) => ImportExpression {
+    if (parseTree.length !== 3) {
+      throw new Error(`Expected 3 tokens in inline table import expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+    for (const token of parseTree) {
+      if (!(token instanceof Token)) {
+        throw new Error(`Invalid inline table import expression (No nested expression): ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+      }
+    }
+    parseTree = parseTree as Token[];
+
+    const importModuleName = parseTree[1] as Token;
+    const importEntityName = parseTree[2] as Token;
+
+    return (tableExpression: TableExpression) => ImportExpression.tableImport(importModuleName, importEntityName, tableExpression);
+  }
+
+  private parseInlineTableExportExpression(parseTree: ParseTree): ExportExpression {
+    if (parseTree.length !== 2) {
+      throw new Error(`Expected 2 tokens in inline table export expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+    for (const token of parseTree) {
+      if (!(token instanceof Token)) {
+        throw new Error(`Invalid inline table export expression (No nested expression): ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+      }
+    }
+    parseTree = parseTree as Token[];
+
+    const exportName = (parseTree[1] as Token).extractName();
+
+    return new ExportExpression(exportName, ExportType.Table, this.module.exportableTables.length);
   }
 
   private parseFunctionExpression(parseTree: ParseTree): FunctionExpression {
@@ -1096,6 +1203,11 @@ function isElementItemExpression(parseTree: ParseTree): boolean {
     return first_token.type === TokenType.RefFunc || first_token.type === TokenType.RefExtern;
   }
   return false;
+}
+
+function isTableExpression(parseTree: ParseTree): boolean {
+  const tokenHeader = parseTree[0];
+  return tokenHeader instanceof Token && tokenHeader.type === TokenType.Table;
 }
 
 /**

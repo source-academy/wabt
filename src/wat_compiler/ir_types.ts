@@ -117,7 +117,7 @@ export class ModuleExpression extends IntermediateRepresentation {
   exportableFuncs: ExportableExpression[] = [];
   exportableGlobals: ExportableExpression[] = []; // TODO what are exportable globals?
   exportableMems: ExportableExpression[] = [];
-  exportableTables: ExportableExpression[] = [];
+  exportableTables: TableExpression[] = [];
 
   /**
    * Element section
@@ -174,6 +174,8 @@ export class ModuleExpression extends IntermediateRepresentation {
         break;
       case TokenType.Global:
         break;
+      case TokenType.Table:
+        break;
       default:
         throw new Error(`Import type ${importExp.importType} not supported yet!`);
     }
@@ -181,6 +183,10 @@ export class ModuleExpression extends IntermediateRepresentation {
 
   addElementExpression(elementExp: ElementExpression) {
     this.elementSection.push(elementExp);
+  }
+
+  addTableExpression(tableExp: TableExpression) {
+    this.exportableTables.push(tableExp);
   }
 
   /**
@@ -406,6 +412,7 @@ export class ImportExpression extends IntermediateRepresentation {
   functionSignature: FunctionSignature | null = null;
   memoryExpression: MemoryExpression | null = null;
   globalExpression: ImportGlobalExpression | null = null;
+  tableExpression: TableExpression | null = null;
 
   private constructor(importModule: Token, importName: Token, importType: ImportType) {
     super();
@@ -420,11 +427,11 @@ export class ImportExpression extends IntermediateRepresentation {
     return importExp;
   }
 
-  // static tableImport(importModule: Token, importName: Token, tableExpression: FunctionSignature) {
-  //   const importExp = new ImportExpression(importModule, importName, TokenType.Func);
-  //   importExp.functionSignature = functionSignature;
-  //   return importExp;
-  // }
+  static tableImport(importModule: Token, importName: Token, tableExpression: TableExpression) {
+    const importExp = new ImportExpression(importModule, importName, TokenType.Table);
+    importExp.tableExpression = tableExpression;
+    return importExp;
+  }
 
   static memoryImport(importModule: Token, importName: Token, memoryExpression: MemoryExpression) {
     const importExp = new ImportExpression(importModule, importName, TokenType.Memory);
@@ -646,6 +653,36 @@ export class ElementItemExpression extends IntermediateRepresentation {
   }
   toString(): string {
     throw new Error('Method not implemented.');
+  }
+}
+
+export class TableExpression extends IntermediateRepresentation { // FIXME: extends ExportableExpression
+  private _parent: IntermediateRepresentation | null = null;
+  headerToken: IRToken;
+  minFlag: number;
+  maxFlag: number | null;
+  tableType: ValueType.FuncRef | ValueType.ExternRef;
+  tableName: string | null;
+
+  constructor(headerToken: Token, tableName: string | null, minFlag: number, maxFlag: number | null, tableType: ValueType.FuncRef | ValueType.ExternRef) {
+    super();
+    this.headerToken = new IRToken(headerToken, this);
+    this.tableName = tableName;
+    this.minFlag = minFlag;
+    this.maxFlag = maxFlag;
+    this.tableType = tableType;
+  }
+  getID(): string | null {
+    throw new Error('Method not implemented.');
+  }
+  get parent(): IntermediateRepresentation | null {
+    return this._parent;
+  }
+  set parent(parentExpression: IntermediateRepresentation) {
+    this._parent = parentExpression;
+  }
+  toString(): string {
+    return `table expression: ${this.headerToken.lexeme}`;
   }
 }
 /*
