@@ -18,12 +18,13 @@ import {
 import { Token, TokenType } from '../common/token';
 import { Tree, type ParseTree } from './tree_types';
 
-import { Opcode } from '../common/opcode';
+import { Opcode, OpcodeType } from '../common/opcode';
 import { ValueType } from '../common/type';
 import { assert } from '../common/assert';
 import { IllegalMemorySection, IllegalStartSection, ParseTreeException } from './exceptions';
-import { max, toInteger } from 'lodash';
+import { first, max, toInteger } from 'lodash';
 import { ExportType } from '../common/export_types';
+import { parse } from '.';
 
 export function getIR(parseTree: ParseTree) {
   const ir = new IRWriter(parseTree)
@@ -299,13 +300,14 @@ export class IRWriter {
       currentToken = parseTree[cursor];
     }
 
-    if (currentToken instanceof Array && currentToken[0] instanceof Token && currentToken[0].type === TokenType.Table) {
+    if (currentToken instanceof Array && currentToken[0] instanceof Token && (currentToken[0].type === TokenType.Table || currentToken[0].type === TokenType.Offset)) {
       return this.parseActiveElementExpression(parseTree);
     }
 
     if (currentToken instanceof Token && currentToken.type === TokenType.Declare) {
       return this.parseDeclarativeElementExpression(parseTree);
     }
+
 
     return this.parsePassiveElementExpression(parseTree);
   }
@@ -332,17 +334,59 @@ export class IRWriter {
     const items = parseTree.slice(cursor)
       .map((x) => this.parseElementItemExpression(x));
 
-    return new ElementExpression(
+    return ElementExpression.Passive(
       parseTree[0] as Token,
       elementType,
-      'passive',
       name,
       items,
     );
   }
 
   private parseActiveElementExpression(parseTree: ParseTree): ElementExpression {
+    let cursor = 0;
+    let currentToken = parseTree[cursor];
 
+    const headerToken = currentToken as Token;
+    currentToken = parseTree[++cursor];
+
+    let name : string | null = null;
+    let elementType: Token;
+    let linkedTableExpression = null;
+    let offsetExpression;
+
+    if (currentToken instanceof Token && currentToken.type === TokenType.Var) {
+      name = currentToken.lexeme;
+      currentToken = parseTree[++cursor];
+    }
+
+    if (currentToken instanceof Array && currentToken[0] instanceof Token && currentToken[0].type === TokenType.Table) {
+      if (currentToken.length !== 2) {
+        throw new Error(`Expected 2 tokens in linked table expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+      }
+      linkedTableExpression = currentToken;
+      currentToken = parseTree[++cursor];
+    }
+
+    if (!(currentToken[0] instanceof Token) && currentToken[0].type !== TokenType.Offset) {
+      throw new Error(`Expected offset expression in active element expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+    offsetExpression = this.parseFunctionBodyExpression(currentToken.slice(1), true); // TODO: compile-time verification of offset expression
+    currentToken = parseTree[++cursor];
+
+    elementType = currentToken;
+    currentToken = parseTree[++cursor];
+
+    const items = parseTree.slice(cursor)
+      .map((x) => this.parseElementItemExpression(x));
+
+    return ElementExpression.Active(
+      headerToken,
+      elementType,
+      name,
+      linkedTableExpression,
+      offsetExpression,
+      items,
+    );
   }
 
   private parseDeclarativeElementExpression(parseTree: ParseTree): ElementExpression {
@@ -351,9 +395,14 @@ export class IRWriter {
 
   private parseElementItemExpression(itemExpression: Token[]): ElementItemExpression {
     assert(isElementItemExpression(itemExpression));
-    if (itemExpression.length === 2) {
+    if (itemExpression.length === 2 && (itemExpression[0] as Token).type !== TokenType.Item) {
       const itemType = itemExpression[0];
       const itemToken = itemExpression[1];
+      return new ElementItemExpression(itemType.type, itemToken);
+    }
+    if (itemExpression.length === 2 && (itemExpression[0] as Token).type === TokenType.Item) {
+      const itemType = itemExpression[1][0] as Token;
+      const itemToken = itemExpression[1][1] as Token;
       return new ElementItemExpression(itemType.type, itemToken);
     }
     if (itemExpression.length === 3) {
@@ -1186,18 +1235,28 @@ function isElementExpression(parseTree: ParseTree): boolean {
 }
 
 function isElementItemExpression(parseTree: ParseTree): boolean {
-  for (const token of parseTree) {
-    if (!(token instanceof Token)) {
-      return false;
-    }
+  const firstToken = parseTree[0];
+  if (!(firstToken instanceof Token)) {
+    return false;
   }
-  const first_token = parseTree[0] as Token;
+
   if (parseTree.length === 3) {
-    return first_token.type === TokenType.Item;
+    return firstToken.type === TokenType.Item
+    && parseTree[1] instanceof Token
+    && parseTree[2] instanceof Token;
   }
-  if (parseTree.length === 2) {
-    return first_token.type === TokenType.RefFunc || first_token.type === TokenType.RefExtern;
+
+  if (parseTree.length === 2 && firstToken.type === TokenType.Item) {
+    return parseTree[1] instanceof Array
+    && parseTree[1].length === 2
+    && parseTree[1][0] instanceof Token
+    && (parseTree[1][0].type === TokenType.RefFunc || parseTree[1][0].type === TokenType.RefExtern);
   }
+
+  if (parseTree.length === 2 && (firstToken.type === TokenType.RefFunc || firstToken.type === TokenType.RefExtern)) {
+    return parseTree[1] instanceof Token;
+  }
+
   return false;
 }
 

@@ -264,6 +264,45 @@ export class BinaryWriter {
   }
 
   private encodeElementExpression(elementExp: ElementExpression): number[] {
+    switch (elementExp.mode) {
+      case 'active':
+        return this.encodeActiveElementExpression(elementExp);
+      case 'passive':
+        return this.encodePassiveElementExpression(elementExp);
+      case 'declarative':
+        throw new Error();
+    }
+  }
+
+  private encodeActiveElementExpression(elementExp: ElementExpression): number[] {
+    const elementFlag = elementExp.getFlag();
+    const elementType = elementExp.elementType;
+    const elementItems = elementExp.items;
+    const elementTableOffset = elementExp.linkedTableOffset;
+    const elementItemEncoding = elementItems.flatMap((item) => this.encodeElementItemExpression(item));
+    let elementTypeEncoding;
+    switch (elementType?.valueType) {
+      case undefined:
+      case ValueType.FuncRef:
+        elementTypeEncoding = 0;
+        break;
+      case ValueType.ExternRef:
+        elementTypeEncoding = 111;
+        break;
+      default:
+        throw new Error();
+    }
+    return ([
+      elementFlag,
+      ...this.encodeFunctionBodyExpression(elementTableOffset, null), //  FIXME: This is a hack, null is not a valid value for this'
+      0x0b, // end
+      // elementTypeEncoding, // no encoding
+      elementItems.length,
+      ...elementItemEncoding,
+    ]);
+  }
+
+  private encodePassiveElementExpression(elementExp: ElementExpression): number[] {
     const elementFlag = elementExp.getFlag();
     const elementType = elementExp.elementType;
     const elementItems = elementExp.items;

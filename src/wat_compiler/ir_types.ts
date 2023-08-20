@@ -620,11 +620,13 @@ export class ElementExpression extends IntermediateRepresentation {
   private _parent: IntermediateRepresentation | null = null;
   headerToken: IRToken;
   elementType: IRToken | null;
-  private mode: ElementMode;
+  mode: ElementMode;
   name: string | null;
   items: ElementItemExpression[];
+  linkedTableIfActive: IRToken | null = null;
+  linkedTableOffset: TokenExpression | null = null;
 
-  constructor(headerToken: Token, elementType: Token | null, mode: ElementMode, name: string | null = null, items: ElementItemExpression[] = []) {
+  private constructor(headerToken: Token, elementType: Token | null, mode: ElementMode, name: string | null = null, items: ElementItemExpression[] = []) {
     super();
     this.headerToken = new IRToken(headerToken, this);
     this.elementType = elementType === null ? null : new IRToken(elementType, this);
@@ -634,6 +636,17 @@ export class ElementExpression extends IntermediateRepresentation {
     this.items.forEach((item) => {
       item.parent = this;
     });
+  }
+
+  static Passive(headerToken: Token, elementType: Token | null, name: string | null = null, items: ElementItemExpression[] = []) {
+    return new ElementExpression(headerToken, elementType, 'passive', name, items);
+  }
+
+  static Active(headerToken: Token, elementType: Token | null, name: string | null, linkedTableExpression: Token | null, offsetExpression: TokenExpression, items: ElementItemExpression[] = []) {
+    const exp = new ElementExpression(headerToken, elementType, 'active', name, items);
+    exp.linkedTableIfActive = linkedTableExpression === null ? null : new IRToken(linkedTableExpression, exp);
+    exp.linkedTableOffset = offsetExpression;
+    return exp;
   }
 
   getFlag(): number {
@@ -649,6 +662,11 @@ export class ElementExpression extends IntermediateRepresentation {
         default:
           throw new Error();
       }
+    }
+    if (this.mode === 'active') {
+      return 0;
+      // 2
+      // 4
     }
     throw new Error();
   }

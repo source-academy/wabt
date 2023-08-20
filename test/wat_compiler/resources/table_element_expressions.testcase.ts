@@ -96,10 +96,24 @@ const elem_prod_one_1 = `
 )
 `;
 
+// const elem_prod_two_0 = `
+// (module
+//   (elem
+//     (table 0)
+//   	funcref
+//     (item (ref.func 0))
+//     (item (ref.func $two))
+//   )
+//   (table 0 funcref)
+//   (func $one)
+//   (func $two)
+// )
+// `;
 const elem_prod_two_0 = `
 (module
   (elem
     (table 0)
+    (offset (i32.const 0))
   	funcref
     (item (ref.func 0))
     (item (ref.func $two))
@@ -113,7 +127,7 @@ const elem_prod_two_1 = `
 (module
   (elem
     (table 0)
-    (offset (i32.const 0))
+    (offset i32.const 0)
   	funcref
     (item (ref.func 0))
     (item (ref.func $two))
@@ -789,8 +803,9 @@ const elem_drop_index = `
 `;
 
 // export const positiveTestCases = [
-//   table_prod_one_abbr_one,
-//   table_prod_one_abbr_two,
+//   elem_prod_two_0,
+//   elem_prod_two_1,
+//   elem_prod_two_2,
 // ];
 export const positiveTestCases = [
   empty_elem,
@@ -799,9 +814,9 @@ export const positiveTestCases = [
   empty_elem_externref,
   elem_prod_one_0,
   elem_prod_one_1,
-  // elem_prod_two_0,
-  // elem_prod_two_1,
-  // elem_prod_two_2,
+  elem_prod_two_0,
+  elem_prod_two_1,
+  elem_prod_two_2,
   // elem_prod_three_0,
   // elem_prod_three_1,
   elem_prod_one_abbr_one_0,
