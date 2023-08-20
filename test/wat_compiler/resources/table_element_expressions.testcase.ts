@@ -109,6 +109,15 @@ const elem_prod_one_1 = `
 //   (func $two)
 // )
 // `;
+const elem_prod_two_empty = `
+(module
+  (elem
+    (table 0)
+    (offset (i32.const 0))
+  )
+  (table 0 funcref)
+)
+`;
 const elem_prod_two_0 = `
 (module
   (elem
@@ -151,6 +160,11 @@ const elem_prod_two_2 = `
 )
 `;
 
+const elem_prod_three_empty = `
+(module
+  (elem declare)
+)
+`;
 const elem_prod_three_0 = `
 (module
   (elem declare funcref
@@ -803,10 +817,11 @@ const elem_drop_index = `
 `;
 
 // export const positiveTestCases = [
-//   elem_prod_two_0,
-//   elem_prod_two_1,
-//   elem_prod_two_2,
+//   empty_elem,
+//   elem_prod_two_empty,
+//   elem_prod_three_empty,
 // ];
+
 export const positiveTestCases = [
   empty_elem,
   empty_elem_funcref,
@@ -814,11 +829,13 @@ export const positiveTestCases = [
   empty_elem_externref,
   elem_prod_one_0,
   elem_prod_one_1,
+  elem_prod_two_empty,
   elem_prod_two_0,
   elem_prod_two_1,
   elem_prod_two_2,
-  // elem_prod_three_0,
-  // elem_prod_three_1,
+  elem_prod_three_empty,
+  elem_prod_three_0,
+  elem_prod_three_1,
   elem_prod_one_abbr_one_0,
   elem_prod_one_abbr_one_1,
   // elem_prod_two_abbr_one_0,

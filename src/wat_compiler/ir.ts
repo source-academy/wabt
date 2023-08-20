@@ -308,7 +308,6 @@ export class IRWriter {
       return this.parseDeclarativeElementExpression(parseTree);
     }
 
-
     return this.parsePassiveElementExpression(parseTree);
   }
 
@@ -327,7 +326,7 @@ export class IRWriter {
     if (!(currentToken instanceof Token)) {
       throw new Error(`Expected token in passive element expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
     }
-    elementType = currentToken;
+    elementType = currentToken ?? null;
     cursor++;
     currentToken = parseTree[cursor];
 
@@ -350,7 +349,7 @@ export class IRWriter {
     currentToken = parseTree[++cursor];
 
     let name : string | null = null;
-    let elementType: Token;
+    let elementType: Token | null = null;
     let linkedTableExpression = null;
     let offsetExpression;
 
@@ -373,7 +372,7 @@ export class IRWriter {
     offsetExpression = this.parseFunctionBodyExpression(currentToken.slice(1), true); // TODO: compile-time verification of offset expression
     currentToken = parseTree[++cursor];
 
-    elementType = currentToken;
+    elementType = currentToken ?? null;
     currentToken = parseTree[++cursor];
 
     const items = parseTree.slice(cursor)
@@ -390,7 +389,19 @@ export class IRWriter {
   }
 
   private parseDeclarativeElementExpression(parseTree: ParseTree): ElementExpression {
+    let cursor = 0;
 
+    const headerToken = parseTree[cursor++] as Token; //FIXME : static checks for this
+    let name: string | null = null;
+    if (parseTree[cursor] instanceof Token && (parseTree[cursor] as Token).type === TokenType.Var) {
+      name = (parseTree[cursor++] as Token).lexeme; //FIXME : static checks for this
+    }
+    const declarationToken = parseTree[cursor++] as Token; //FIXME : static checks for this
+    const elementType = (parseTree[cursor++] as Token) ?? null; //FIXME : static checks for this
+    const items = parseTree.slice(cursor)
+      .map((x) => this.parseElementItemExpression(x));
+
+    return ElementExpression.Declarative(headerToken, name, declarationToken, elementType, items);
   }
 
   private parseElementItemExpression(itemExpression: Token[]): ElementItemExpression {

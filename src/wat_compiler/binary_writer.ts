@@ -270,28 +270,30 @@ export class BinaryWriter {
       case 'passive':
         return this.encodePassiveElementExpression(elementExp);
       case 'declarative':
-        throw new Error();
+        return this.encodeDeclarativeElementExpression(elementExp);
+    }
+  }
+
+  private encodeElementType(elementType: Token | IRToken | null | undefined): number {
+    switch (elementType?.valueType) {
+      case ValueType.FuncRef:
+      case null:
+      case undefined:
+        return 0;
+      case ValueType.ExternRef:
+        return 111;
+      default:
+        throw new Error(`Invalid element type: ${elementType?.valueType}`);
     }
   }
 
   private encodeActiveElementExpression(elementExp: ElementExpression): number[] {
     const elementFlag = elementExp.getFlag();
-    const elementType = elementExp.elementType;
     const elementItems = elementExp.items;
     const elementTableOffset = elementExp.linkedTableOffset;
     const elementItemEncoding = elementItems.flatMap((item) => this.encodeElementItemExpression(item));
-    let elementTypeEncoding;
-    switch (elementType?.valueType) {
-      case undefined:
-      case ValueType.FuncRef:
-        elementTypeEncoding = 0;
-        break;
-      case ValueType.ExternRef:
-        elementTypeEncoding = 111;
-        break;
-      default:
-        throw new Error();
-    }
+    // const elementType = elementExp.elementType; // no encoding
+    // const elementTypeEncoding = this.encodeElementType(elementType); // no encoding
     return ([
       elementFlag,
       ...this.encodeFunctionBodyExpression(elementTableOffset, null), //  FIXME: This is a hack, null is not a valid value for this'
@@ -303,22 +305,23 @@ export class BinaryWriter {
   }
 
   private encodePassiveElementExpression(elementExp: ElementExpression): number[] {
+    const elementItems = elementExp.items;
+    const elementItemEncoding = elementItems.flatMap((item) => this.encodeElementItemExpression(item));
+    const elementTypeEncoding = this.encodeElementType(elementExp.elementType);
+    return ([
+      elementExp.getFlag(),
+      elementTypeEncoding,
+      elementItems.length,
+      ...elementItemEncoding,
+    ]);
+  }
+
+  private encodeDeclarativeElementExpression(elementExp: ElementExpression): number[] {
     const elementFlag = elementExp.getFlag();
     const elementType = elementExp.elementType;
     const elementItems = elementExp.items;
     const elementItemEncoding = elementItems.flatMap((item) => this.encodeElementItemExpression(item));
-    let elementTypeEncoding;
-    switch (elementType?.valueType) {
-      case undefined:
-      case ValueType.FuncRef:
-        elementTypeEncoding = 0;
-        break;
-      case ValueType.ExternRef:
-        elementTypeEncoding = 111;
-        break;
-      default:
-        throw new Error();
-    }
+    const elementTypeEncoding = this.encodeElementType(elementType);
     return ([
       elementFlag,
       elementTypeEncoding,

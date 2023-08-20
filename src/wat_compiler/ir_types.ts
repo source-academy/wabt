@@ -649,13 +649,23 @@ export class ElementExpression extends IntermediateRepresentation {
     return exp;
   }
 
+  static Declarative(headerToken: Token, name: string | null, declareToken: Token, elementType: Token | null, items: ElementItemExpression[] = []) {
+    return new ElementExpression(headerToken, elementType, 'declarative', name, items);
+  }
+
+  isEmpty(): boolean {
+    return this.elementType === null
+    && this.items.length === 0
+    && this.mode === 'passive'
+    && this.linkedTableIfActive === null
+    && this.linkedTableOffset === null;
+  }
+
   getFlag(): number {
-    if (this.elementType === null) {
-      return 1;
-    }
     if (this.mode === 'passive') {
-      switch (this.elementType.valueType) {
+      switch (this.elementType?.valueType) {
         case ValueType.FuncRef:
+        case undefined:
           return 1;
         case ValueType.ExternRef:
           return 5;
@@ -664,9 +674,21 @@ export class ElementExpression extends IntermediateRepresentation {
       }
     }
     if (this.mode === 'active') {
-      return 0;
+      return 0; // FIXME: The other values do not seem to be used?
       // 2
       // 4
+    }
+
+    if (this.mode === 'declarative') {
+      switch (this.elementType?.valueType) {
+        case ValueType.FuncRef:
+        case undefined:
+          return 3;
+        case ValueType.ExternRef:
+          return 7;
+        default:
+          throw new Error();
+      }
     }
     throw new Error();
   }
