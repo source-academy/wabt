@@ -300,7 +300,7 @@ export class IRWriter {
       currentToken = parseTree[cursor];
     }
 
-    if (currentToken instanceof Array && currentToken[0] instanceof Token && (currentToken[0].type === TokenType.Table || currentToken[0].type === TokenType.Offset)) {
+    if (currentToken instanceof Array && ((currentToken[0] instanceof Token && currentToken[0].type === TokenType.Table) || isElementOffsetExpression(currentToken))) {
       return this.parseActiveElementExpression(parseTree);
     }
 
@@ -369,7 +369,7 @@ export class IRWriter {
     if (!(currentToken[0] instanceof Token) && currentToken[0].type !== TokenType.Offset) {
       throw new Error(`Expected offset expression in active element expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
     }
-    offsetExpression = this.parseFunctionBodyExpression(currentToken.slice(1), true); // TODO: compile-time verification of offset expression
+    offsetExpression = this.parseElementOffsetExpression(currentToken); // TODO: compile-time verification of offset expression
     currentToken = parseTree[++cursor];
 
     elementType = currentToken ?? null;
@@ -402,6 +402,17 @@ export class IRWriter {
       .map((x) => this.parseElementItemExpression(x));
 
     return ElementExpression.Declarative(headerToken, name, declarationToken, elementType, items);
+  }
+
+  private parseElementOffsetExpression(parseTree: ParseTree): TokenExpression {
+    assert(isElementOffsetExpression(parseTree));
+    const header = parseTree[0];
+    if (header instanceof Token && header.type === TokenType.Offset) {
+      return this.parseElementOffsetExpression(parseTree.slice(1));
+    }
+
+    parseTree = parseTree.flat();
+    return this.parseFunctionBodyExpression(parseTree, true);
   }
 
   private parseElementItemExpression(itemExpression: Token[]): ElementItemExpression {
@@ -1269,6 +1280,21 @@ function isElementItemExpression(parseTree: ParseTree): boolean {
   }
 
   return false;
+}
+
+function isElementOffsetExpression(parseTree: ParseTree): boolean {
+  const tokenHeader = parseTree[0];
+  if (tokenHeader instanceof Token && tokenHeader.type === TokenType.Offset) {
+    return isElementOffsetExpression(parseTree.slice(1));
+  }
+
+  parseTree = parseTree.flat();
+
+  return parseTree.length === 2
+  && parseTree[0] instanceof Token
+  && parseTree[1] instanceof Token
+  && parseTree[0].opcodeType === OpcodeType.I32Const
+  && parseTree[1].type === TokenType.Nat;
 }
 
 function isTableExpression(parseTree: ParseTree): boolean {

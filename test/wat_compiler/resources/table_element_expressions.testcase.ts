@@ -219,20 +219,8 @@ const elem_prod_one_abbr_one_1 = `
 )
 `;
 
+
 const elem_prod_two_abbr_one_0 = `
-(module
-  (elem
-    (table 0)
-  	funcref
-    (ref.func 0)
-    (ref.func $two)
-  )
-  (table 0 funcref)
-  (func $one)
-  (func $two)
-)
-`;
-const elem_prod_two_abbr_one_1 = `
 (module
   (elem
     (table 0)
@@ -246,7 +234,7 @@ const elem_prod_two_abbr_one_1 = `
   (func $two)
 )
 `;
-const elem_prod_two_abbr_one_2 = `
+const elem_prod_two_abbr_one_1 = `
 (module
   (elem
     (offset (i32.const 0))
@@ -817,9 +805,10 @@ const elem_drop_index = `
 `;
 
 // export const positiveTestCases = [
-//   empty_elem,
-//   elem_prod_two_empty,
-//   elem_prod_three_empty,
+//   elem_prod_two_abbr_two_0,
+//   elem_prod_two_abbr_two_1,
+//   elem_prod_two_abbr_one_two_0,
+//   elem_prod_two_abbr_one_two_1,
 // ];
 
 export const positiveTestCases = [
@@ -838,15 +827,14 @@ export const positiveTestCases = [
   elem_prod_three_1,
   elem_prod_one_abbr_one_0,
   elem_prod_one_abbr_one_1,
-  // elem_prod_two_abbr_one_0,
-  // elem_prod_two_abbr_one_1,
-  // elem_prod_two_abbr_one_2,
-  // elem_prod_three_0_abbr,
-  // elem_prod_three_1_abbr,
-  // elem_prod_two_abbr_two_0,
-  // elem_prod_two_abbr_two_1,
-  // elem_prod_two_abbr_one_two_0,
-  // elem_prod_two_abbr_one_two_1,
+  elem_prod_two_abbr_one_0,
+  elem_prod_two_abbr_one_1,
+  elem_prod_three_0_abbr,
+  elem_prod_three_1_abbr,
+  elem_prod_two_abbr_two_0,
+  elem_prod_two_abbr_two_1,
+  elem_prod_two_abbr_one_two_0,
+  elem_prod_two_abbr_one_two_1,
   table_prod_one_funcref_0,
   table_prod_one_externref_0,
   table_prod_one_funcref_1,
