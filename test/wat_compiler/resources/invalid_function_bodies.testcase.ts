@@ -1,5 +1,4 @@
 import { getSampleToken as t } from './resolved_tokens';
-import { type FunctionBodyTestCaseData } from './valid_function_bodies';
 
 // Fails at the IR stage. Need brackets around the f64.const arguments.
 export const simple_addition_sexpr_without_argument_bracket_fails = {

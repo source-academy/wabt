@@ -3,7 +3,6 @@ import { Opcode, type OpcodeType } from './opcode';
 import { TokenType } from './token';
 import { type ValueType } from './type';
 
-
 export class Token {
   type: TokenType;
   lexeme: string;
@@ -35,7 +34,15 @@ export class Token {
     col: number,
     indexInSource: number,
   ) {
-    return new Token(TokenType.Eof, lexeme, line, col, indexInSource, null, null);
+    return new Token(
+      TokenType.Eof,
+      lexeme,
+      line,
+      col,
+      indexInSource,
+      null,
+      null,
+    );
   }
 
   isBareToken(): boolean {
@@ -54,6 +61,10 @@ export class Token {
     return isTokenTypeOpcode(this.type);
   }
 
+  isTextToken(): boolean {
+    return this.type === TokenType.Text;
+  }
+
   isOpcodeType(opcodeType: OpcodeType): boolean {
     return isTokenTypeOpcode(this.type) && this.opcodeType === opcodeType;
   }
@@ -66,6 +77,20 @@ export class Token {
     return isTokenTypeRefKind(this.type);
   }
 
+  isBlock(): boolean {
+    return isTokenTypeBlock(this.type);
+  }
+
+  isMemoryOpcodeToken(): boolean {
+    return this.isOpcodeToken()
+    && (
+      this.type === TokenType.Store
+      || this.type === TokenType.Load
+      || this.type === TokenType.MemoryGrow
+      || this.type === TokenType.MemorySize
+    );
+  }
+
   getOpcodeParamLength(): number {
     assert(this.opcodeType !== null);
     return Opcode.getParamLength(this.opcodeType!);
@@ -74,6 +99,16 @@ export class Token {
   getOpcodeEncoding(): number {
     assert(this.opcodeType !== null);
     return Opcode.getCode(this.opcodeType!);
+  }
+
+  /**
+   * Extract the text from a text token.
+   * @returns the extracted text
+   * @throws error if text token is not a TokenType.Text type.
+   */
+  extractName(): string {
+    assert(this.type === TokenType.Text);
+    return this.lexeme.slice(1, this.lexeme.length - 1);
   }
 }
 
@@ -242,6 +277,15 @@ export function isTokenTypeRefKind(token_type: TokenType | null): boolean {
     token_type === TokenType.Func
     || token_type === TokenType.Extern
     || token_type === TokenType.Exn
+  );
+}
+
+export function isTokenTypeBlock(token_type: TokenType | null): boolean {
+  if (token_type === null) return false;
+  return (
+    token_type === TokenType.Block
+    || token_type === TokenType.If
+    || token_type === TokenType.Loop
   );
 }
 

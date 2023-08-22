@@ -1,4 +1,4 @@
-import { Token } from '../src/common/token';
+import { Token } from '../../../src/common/token';
 
 /**
  * Equality comparison for two tokesn that ignore token's column/line/index in source.

@@ -4,3 +4,10 @@
 /scripts/
 /node_modules/
 /.vscode/
+/coverage/
+jest.config.js
+.eslintrc.base.cjs
+.eslintrc.cjs
+.gitmodules
+bundle.tsconfig.json
+tsconfig.json

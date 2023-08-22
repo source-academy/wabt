@@ -1,4 +1,4 @@
-import { encodeModule } from './binary_writer';
+import { BinaryWriter } from './binary_writer';
 import { getIR } from './ir';
 import { type ModuleExpression } from './ir_types';
 import { tokenize } from './lexer';
@@ -11,4 +11,8 @@ import { type ParseTree } from './tree_types';
  * @returns a tree of string tokens.
  */
 export const parse = (program: string) => getParseTree(tokenize(program));
-export const compile = (parseTree: ParseTree) => encodeModule(getIR(parseTree) as ModuleExpression);
+export const compile = (parseTree: ParseTree) => {
+  const ir = getIR(parseTree) as ModuleExpression;
+  const binaryWriter = new BinaryWriter(ir);
+  return binaryWriter.encode();
+};

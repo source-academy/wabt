@@ -6,7 +6,13 @@ import { readdirSync, statSync } from 'fs';
 import { join, sep } from 'path';
 import { promisify } from 'util';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { outputFile, readFile, readFileSync, remove, writeFile } from 'fs-extra';
+import {
+  outputFile,
+  readFile,
+  readFileSync,
+  remove,
+  writeFile,
+} from 'fs-extra';
 import { INCLUDE_PATH, SOURCE_FILE_PATH } from './directories';
 const exec = promisify(require('child_process').exec);
 

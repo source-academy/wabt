@@ -1,118 +1,42 @@
+/* eslint-disable @typescript-eslint/dot-notation */
+// This is because we use class['property'] to access private methods to do testing.
 import { compile, parse } from '../../src/wat_compiler';
-import {
-  TEST_EXPORTS,
-  encodeModule,
-} from '../../src/wat_compiler/binary_writer';
-import { getIR } from '../../src/wat_compiler/ir';
-import { areUint8ArraysEqual } from '../array_buffer_comparison';
-import { invalidTestCases as invalidFuncExpTestCases } from './resources/function_expressions';
-import {
-  type ModuleTestCase,
-  moduleTestCases,
-} from './resources/module_program_fragments';
-import { isTokenEqual } from '../token_comparisons';
+import { positiveControlTestCases } from './resources/control_instructions.testcase';
+import { positiveFunctionTestCases } from './resources/functions.testcase';
+import { positiveTestCases as positiveNumOpTestCases } from './resources/numeric_operators.testcase';
+import { positiveTestCases as positiveStartSectionTestCases } from './resources/start_expression.testcase';
+import { positiveTestCases as positiveMemorySectionTestCases } from './resources/memory_data_expressions.testcase';
+import { positiveTestCases as positiveGlobalSectionTestCases } from './resources/global_expressions.testcase';
+import { positiveTestCases as positiveImportSectionTestCases } from './resources/import_expressions.testcase';
+import { positiveTestCases as positiveReferencenTestCases } from './resources/reference_instructions.testcase';
+import { positiveTestCases as positiveVariableTestCases } from './resources/variable_instructions.testcase';
+import { positiveTestCases as positiveTableElemTestCases } from './resources/table_element_expressions.testcase';
 import { expect } from '@jest/globals';
-const {
-  encodeModuleTypeSection,
-  encodeModuleImportSection,
-  encodeModuleFunctionSection,
-  encodeModuleTableSection,
-  encodeModuleMemorySection,
-  encodeModuleGlobalSection,
-  encodeModuleExportSection,
-  encodeModuleStartSection,
-  encodeModuleElementSection,
-  encodeModuleCodeSection,
-  encodeModuleDataSection,
-} = TEST_EXPORTS;
+import wabt from 'wabt';
 
-expect.addEqualityTesters([isTokenEqual]);
-// expect.addEqualityTesters([areUint8ArraysEqual]);
+describe.each([
+  [positiveFunctionTestCases, 'function test cases'],
+  [positiveNumOpTestCases, 'numeric operators'],
+  [positiveControlTestCases, 'control operations'],
+  [positiveStartSectionTestCases, 'start expression'],
+  [positiveMemorySectionTestCases, 'memory expressions'],
+  [positiveGlobalSectionTestCases, 'global expressions'],
+  [positiveImportSectionTestCases, 'import expressions'],
+  [positiveReferencenTestCases, 'reference expressions'],
+  [positiveVariableTestCases, 'variable expressions'],
+  [positiveTableElemTestCases, 'table element expressions'],
+])('integration: encode', (testCase, testCaseLabel) => {
+  test.each(testCase)(testCaseLabel, async (test) => {
+    const actual = compile(parse(test));
+    const expected = await wabt()
+      .then(
+        (wabtModule) => wabtModule.parseWat('', test)
+          .toBinary({}).buffer,
+      );
 
-describe.each(moduleTestCases)('encode modules', (testCase: ModuleTestCase) => {
-  test('Check IR', () => {
-    const ir = getIR(parse(testCase.str));
-    expect(ir)
-      .toEqual(testCase.ir);
-  });
-
-  test('Test encode Module Type Section', () => {
-    const encoding = encodeModuleTypeSection(testCase.ir);
-    expect(encoding)
-      .toEqual(testCase.type_section_encoding);
-  });
-
-  test('Test encode Module Import Section', () => {
-    const encoding = encodeModuleImportSection(testCase.ir);
-    expect(encoding)
-      .toEqual(testCase.import_section_encoding);
-  });
-
-  test('Test encode Module Function Section', () => {
-    const encoding = encodeModuleFunctionSection(testCase.ir);
-    expect(encoding)
-      .toEqual(testCase.function_section_encoding);
-  });
-
-  test('Test encode Module Table Section', () => {
-    const encoding = encodeModuleTableSection(testCase.ir);
-    expect(encoding)
-      .toEqual(testCase.table_section_encoding);
-  });
-
-  test('Test encode Module Memory Section', () => {
-    const encoding = encodeModuleMemorySection(testCase.ir);
-    expect(encoding)
-      .toEqual(testCase.memory_section_encoding);
-  });
-
-  test('Test encode Module Global Section', () => {
-    const encoding = encodeModuleGlobalSection(testCase.ir);
-    expect(encoding)
-      .toEqual(testCase.global_section_encoding);
-  });
-
-  test('Test encode Module Export Section', () => {
-    const encoding = encodeModuleExportSection(testCase.ir);
-    expect(encoding)
-      .toEqual(testCase.export_section_encoding);
-  });
-
-  test('Test encode Module Start Section', () => {
-    const encoding = encodeModuleStartSection(testCase.ir);
-    expect(encoding)
-      .toEqual(testCase.start_section_encoding);
-  });
-
-  test('Test encode Module Element Section', () => {
-    const encoding = encodeModuleElementSection(testCase.ir);
-    expect(encoding)
-      .toEqual(testCase.element_section_encoding);
-  });
-
-  test('Test encode Module Code Section', () => {
-    const encoding = encodeModuleCodeSection(testCase.ir);
-    expect(encoding)
-      .toEqual(testCase.code_section_encoding);
-  });
-
-  test('Test encode Module Data Section', () => {
-    const encoding = encodeModuleDataSection(testCase.ir);
-    expect(encoding)
-      .toEqual(testCase.data_section_encoding);
-  });
-
-  test('Test overall minimal encoding', () => {
-    const encoding = encodeModule(testCase.ir);
-    expect(encoding)
-      .toEqual(testCase.minimal_module_encoding);
+    // console.log({ actual });
+    // console.log({ expected });
+    expect(actual)
+      .toEqual(expected);
   });
 });
-
-test.each(invalidFuncExpTestCases)(
-  'encode invalid function expression throws',
-  (testCase) => {
-    expect(() => compile(parse(testCase.str)))
-      .toThrow();
-  },
-);

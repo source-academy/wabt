@@ -1,56 +1,75 @@
 /**
  * Just a file to write demos and run examples on ts-node
  */
-import { compile, parse } from './index';
+import { compile } from './index';
+import { BinaryWriter } from './wat_compiler/binary_writer';
+import { getIR } from './wat_compiler/ir';
+import {
+  type BlockExpression,
+  type ModuleExpression,
+} from './wat_compiler/ir_types';
+import { tokenize } from './wat_compiler/lexer';
+import { getParseTree } from './wat_compiler/parser';
+import { ParseTree } from './wat_compiler/tree_types';
 const program = `
 (module
-    (func $first_function (param) (result))
-    (func $second_function (param) (result))
-    (export "second" (func $second_function))
-    (export "first" (func $first_function))
-  )
+    (func
+        (block $my_block
+            nop
+        )
+    )    
+)
 `;
+
+const programFragment = `
+(block $my_block
+    nop
+)
+`;
+
+const tokens = tokenize(program);
+// console.log(tokens);
+const parseTree = getParseTree(tokens);
+// console.log(JSON.stringify(parseTree, undefined, 2));
+const ir = getIR(parseTree) as ModuleExpression;
+// console.log(ir);
+// console.log(JSON.stringify(ir, undefined, 2));
+console.log(ir.functions[0].body.body);
+console.log((ir.functions[0].body.body as BlockExpression).unfold());
+const encoding = new BinaryWriter(ir)
+  .encode();
+console.log(encoding);
 // const program = `
 // (module
-//     (func (param f64) (param f64) (result f64)
-//         local.get 0
-//         local.get 1
-//         f64.add)
-//     (func (param f64) (param f64) (result f64)
-//         local.get 0
-//         local.get 1
-//         f64.sub)
-//     (func (param f64) (param f64) (result f64)
-//         local.get 0
-//         local.get 1
-//         f64.mul)
-//     (func (param f64) (param f64) (result f64)
-//         local.get 0
-//         local.get 1
-//         f64.div)
-//     (export "add" (func 0))
-//     (export "sub" (func 1))
-//     (export "mul" (func 2))
-//     (export "div" (func 3))
-// )`;
+//   (func (export "add") (param f64) (param f64) (result f64)
+//       local.get 0
+//       local.get 1
+//       f64.add)
+//   (func (export "sub") (param f64) (param f64) (result f64)
+//       local.get 0
+//       local.get 1
+//       f64.sub)
+//   (func (export "mul") (param f64) (param f64) (result f64)
+//       local.get 0
+//       local.get 1
+//       f64.mul)
+//   (func (export "div") (param f64) (param f64) (result f64)
+//       local.get 0
+//       local.get 1
+//       f64.div)
+// )
+// `;
 
-const parseTree = compile(program);
-// const encoding = encode(parseTree);
 // const encoding = compile(program);
 // const instance = new WebAssembly.Instance(new WebAssembly.Module(encoding));
-// console.log(instance.exports);
+
 // const { add, sub, mul, div } = instance.exports;
 
-// console.log(add);
-// console.log(sub);
-// console.log(mul);
-// console.log(div);
-
 // // @ts-ignore
-// console.log(add(2, 1));
+// console.log(add(1, 12));
 // // @ts-ignore
-// console.log(sub(10, 5));
+// console.log(sub(1, 12));
 // // @ts-ignore
-// console.log(div(40, 6));
+// console.log(mul(1, 12));
 // // @ts-ignore
-// console.log(mul(50, 19));
+// console.log(div(1, 12));

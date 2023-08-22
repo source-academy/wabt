@@ -28,6 +28,10 @@ git clone https://github.com/source-academy/wabt.git
 cd wabt
 ```
 
+## Testing
+This project follows Test-Driven Development, where tests are written first before their corresponding features. Given the myriad of bugs in implementing any compiler, it is heavily recommended to follow this when contributing. Refer to [here](./test/README.md) for the test documentation.
+
+
 ## Building the Project
 On top of the dependencies in `package.json`, you will need the [C Preprocessor](https://gcc.gnu.org/onlinedocs/cpp/) to build this project. I'm not sure if you can just download the preprocessor by itself, so I reccommend you to just download the GNU GCC while you're at it. Go [here](https://gcc.gnu.org/install/) or [here (Windows)](https://winlibs.com)
 
