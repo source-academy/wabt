@@ -619,17 +619,17 @@ export type ElementMode = 'passive' | 'active' | 'declarative';
 export class ElementExpression extends IntermediateRepresentation {
   private _parent: IntermediateRepresentation | null = null;
   headerToken: IRToken;
-  elementType: IRToken | null;
+  elementType: ValueType | null;
   mode: ElementMode;
   name: string | null;
   items: ElementItemExpression[];
   linkedTableIfActive: IRToken | null = null;
   linkedTableOffset: TokenExpression | null = null;
 
-  private constructor(headerToken: Token, elementType: Token | null, mode: ElementMode, name: string | null = null, items: ElementItemExpression[] = []) {
+  private constructor(headerToken: Token, elementType: ValueType | null, mode: ElementMode, name: string | null = null, items: ElementItemExpression[] = []) {
     super();
     this.headerToken = new IRToken(headerToken, this);
-    this.elementType = elementType === null ? null : new IRToken(elementType, this);
+    this.elementType = elementType;
     this.mode = mode;
     this.name = name;
     this.items = items;
@@ -638,18 +638,18 @@ export class ElementExpression extends IntermediateRepresentation {
     });
   }
 
-  static Passive(headerToken: Token, elementType: Token | null, name: string | null = null, items: ElementItemExpression[] = []) {
+  static Passive(headerToken: Token, elementType: ValueType | null, name: string | null = null, items: ElementItemExpression[] = []) {
     return new ElementExpression(headerToken, elementType, 'passive', name, items);
   }
 
-  static Active(headerToken: Token, elementType: Token | null, name: string | null, linkedTableExpression: Token | null, offsetExpression: TokenExpression, items: ElementItemExpression[] = []) {
+  static Active(headerToken: Token, elementType: ValueType | null, name: string | null, linkedTableExpression: Token | null, offsetExpression: TokenExpression, items: ElementItemExpression[] = []) {
     const exp = new ElementExpression(headerToken, elementType, 'active', name, items);
     exp.linkedTableIfActive = linkedTableExpression === null ? null : new IRToken(linkedTableExpression, exp);
     exp.linkedTableOffset = offsetExpression;
     return exp;
   }
 
-  static Declarative(headerToken: Token, name: string | null, declareToken: Token, elementType: Token | null, items: ElementItemExpression[] = []) {
+  static Declarative(headerToken: Token, name: string | null, declareToken: Token, elementType: ValueType | null, items: ElementItemExpression[] = []) {
     return new ElementExpression(headerToken, elementType, 'declarative', name, items);
   }
 
@@ -663,9 +663,9 @@ export class ElementExpression extends IntermediateRepresentation {
 
   getFlag(): number {
     if (this.mode === 'passive') {
-      switch (this.elementType?.valueType) {
+      switch (this.elementType) {
         case ValueType.FuncRef:
-        case undefined:
+        case null:
           return 1;
         case ValueType.ExternRef:
           return 5;
@@ -680,9 +680,9 @@ export class ElementExpression extends IntermediateRepresentation {
     }
 
     if (this.mode === 'declarative') {
-      switch (this.elementType?.valueType) {
+      switch (this.elementType) {
         case ValueType.FuncRef:
-        case undefined:
+        case null:
           return 3;
         case ValueType.ExternRef:
           return 7;
@@ -706,7 +706,7 @@ export class ElementExpression extends IntermediateRepresentation {
 
 export class ElementItemExpression extends IntermediateRepresentation {
   private _parent: IntermediateRepresentation | null = null;
-  itemType!: TokenType;
+  itemType: TokenType;
   itemVarName?: string;
   itemIndex?: number;
 

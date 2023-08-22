@@ -66612,17 +66612,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 23,
-        "lexeme": "funcref",
-        "line": 2,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -66660,17 +66650,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 29,
-        "lexeme": "funcref",
-        "line": 2,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -66708,17 +66688,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 25,
-        "lexeme": "externref",
-        "line": 2,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 8,
-      },
+      "elementType": 8,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -66756,17 +66726,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 24,
-        "lexeme": "funcref",
-        "line": 2,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -66932,17 +66892,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 30,
-        "lexeme": "funcref",
-        "line": 2,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -67209,17 +67159,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 68,
-        "lexeme": "funcref",
-        "line": 5,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -67408,17 +67348,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 66,
-        "lexeme": "funcref",
-        "line": 5,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -67607,17 +67537,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 54,
-        "lexeme": "funcref",
-        "line": 4,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -67834,17 +67754,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 32,
-        "lexeme": "funcref",
-        "line": 2,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -68010,17 +67920,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 38,
-        "lexeme": "funcref",
-        "line": 2,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -68186,17 +68086,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 24,
-        "lexeme": "funcref",
-        "line": 2,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -68362,17 +68252,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 30,
-        "lexeme": "funcref",
-        "line": 2,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -68538,17 +68418,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 68,
-        "lexeme": "funcref",
-        "line": 5,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -68737,17 +68607,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 54,
-        "lexeme": "funcref",
-        "line": 4,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -68926,17 +68786,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 32,
-        "lexeme": "funcref",
-        "line": 2,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -69102,17 +68952,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 38,
-        "lexeme": "funcref",
-        "line": 2,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -69278,17 +69118,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 59,
-        "lexeme": "funcref",
-        "line": 5,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -69477,17 +69307,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 45,
-        "lexeme": "funcref",
-        "line": 4,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -69666,17 +69486,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 59,
-        "lexeme": "funcref",
-        "line": 5,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -69865,17 +69675,7 @@ ModuleExpression {
   "elementSection": [
     ElementExpression {
       "_parent": null,
-      "elementType": IRToken {
-        "_parent": [Circular],
-        "_prevToken": null,
-        "col": 0,
-        "indexInSource": 45,
-        "lexeme": "funcref",
-        "line": 4,
-        "opcodeType": null,
-        "type": "VALUETYPE",
-        "valueType": 7,
-      },
+      "elementType": 7,
       "headerToken": IRToken {
         "_parent": [Circular],
         "_prevToken": null,
@@ -70195,6 +69995,377 @@ ModuleExpression {
 
 exports[`snapshot tests table element expressions test intermediate representation 28`] = `
 ModuleExpression {
+  "elementSection": [
+    ElementExpression {
+      "_parent": null,
+      "elementType": 7,
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 33,
+        "lexeme": "elem",
+        "line": 3,
+        "opcodeType": null,
+        "type": "elem",
+        "valueType": null,
+      },
+      "items": [],
+      "linkedTableIfActive": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": -1,
+        "indexInSource": -1,
+        "lexeme": "0",
+        "line": -1,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+      "linkedTableOffset": UnfoldedTokenExpression {
+        "_parent": undefined,
+        "expr": [
+          IRToken {
+            "_parent": [Circular],
+            "_prevToken": null,
+            "col": -1,
+            "indexInSource": -1,
+            "lexeme": "i32.const",
+            "line": -1,
+            "opcodeType": 55,
+            "type": "CONST",
+            "valueType": null,
+          },
+          IRToken {
+            "_parent": [Circular],
+            "_prevToken": Token {
+              "col": -1,
+              "indexInSource": -1,
+              "lexeme": "i32.const",
+              "line": -1,
+              "opcodeType": 55,
+              "type": "CONST",
+              "valueType": null,
+            },
+            "col": -1,
+            "indexInSource": -1,
+            "lexeme": "0",
+            "line": -1,
+            "opcodeType": null,
+            "type": "NAT",
+            "valueType": null,
+          },
+        ],
+      },
+      "mode": "active",
+      "name": null,
+    },
+  ],
+  "exportExpressions": [],
+  "exportableFuncs": [
+    FunctionExpression {
+      "_parent": undefined,
+      "body": EmptyTokenExpression {
+        "_parent": [Circular],
+      },
+      "signature": FunctionSignature {
+        "functionName": "$one",
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "_paramTypes": [],
+          "_returnTypes": [],
+        },
+      },
+    },
+    FunctionExpression {
+      "_parent": undefined,
+      "body": EmptyTokenExpression {
+        "_parent": [Circular],
+      },
+      "signature": FunctionSignature {
+        "functionName": "$two",
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "_paramTypes": [],
+          "_returnTypes": [],
+        },
+      },
+    },
+  ],
+  "exportableGlobals": [],
+  "exportableMems": [],
+  "exportableTables": [
+    TableExpression {
+      "_parent": null,
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 16,
+        "lexeme": "table",
+        "line": 2,
+        "opcodeType": null,
+        "type": "table",
+        "valueType": null,
+      },
+      "maxFlag": 0,
+      "minFlag": 0,
+      "tableName": null,
+      "tableType": 7,
+    },
+  ],
+  "functions": [
+    FunctionExpression {
+      "_parent": undefined,
+      "body": EmptyTokenExpression {
+        "_parent": [Circular],
+      },
+      "signature": FunctionSignature {
+        "functionName": "$one",
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "_paramTypes": [],
+          "_returnTypes": [],
+        },
+      },
+    },
+    FunctionExpression {
+      "_parent": undefined,
+      "body": EmptyTokenExpression {
+        "_parent": [Circular],
+      },
+      "signature": FunctionSignature {
+        "functionName": "$two",
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "_paramTypes": [],
+          "_returnTypes": [],
+        },
+      },
+    },
+  ],
+  "globalTypes": [
+    SignatureType {
+      "_paramTypes": [],
+      "_returnTypes": [],
+    },
+  ],
+  "globals": [],
+  "imports": [],
+  "memory": null,
+  "start": null,
+}
+`;
+
+exports[`snapshot tests table element expressions test intermediate representation 29`] = `
+ModuleExpression {
+  "elementSection": [
+    ElementExpression {
+      "_parent": null,
+      "elementType": 7,
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 33,
+        "lexeme": "elem",
+        "line": 3,
+        "opcodeType": null,
+        "type": "elem",
+        "valueType": null,
+      },
+      "items": [
+        ElementItemExpression {
+          "_parent": [Circular],
+          "itemIndex": undefined,
+          "itemType": "ref.func",
+          "itemVarName": "$one",
+        },
+        ElementItemExpression {
+          "_parent": [Circular],
+          "itemIndex": undefined,
+          "itemType": "ref.func",
+          "itemVarName": "$two",
+        },
+        ElementItemExpression {
+          "_parent": [Circular],
+          "itemIndex": 0,
+          "itemType": "ref.func",
+          "itemVarName": undefined,
+        },
+      ],
+      "linkedTableIfActive": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": -1,
+        "indexInSource": -1,
+        "lexeme": "0",
+        "line": -1,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+      "linkedTableOffset": UnfoldedTokenExpression {
+        "_parent": undefined,
+        "expr": [
+          IRToken {
+            "_parent": [Circular],
+            "_prevToken": null,
+            "col": -1,
+            "indexInSource": -1,
+            "lexeme": "i32.const",
+            "line": -1,
+            "opcodeType": 55,
+            "type": "CONST",
+            "valueType": null,
+          },
+          IRToken {
+            "_parent": [Circular],
+            "_prevToken": Token {
+              "col": -1,
+              "indexInSource": -1,
+              "lexeme": "i32.const",
+              "line": -1,
+              "opcodeType": 55,
+              "type": "CONST",
+              "valueType": null,
+            },
+            "col": -1,
+            "indexInSource": -1,
+            "lexeme": "0",
+            "line": -1,
+            "opcodeType": null,
+            "type": "NAT",
+            "valueType": null,
+          },
+        ],
+      },
+      "mode": "active",
+      "name": null,
+    },
+  ],
+  "exportExpressions": [],
+  "exportableFuncs": [
+    FunctionExpression {
+      "_parent": undefined,
+      "body": EmptyTokenExpression {
+        "_parent": [Circular],
+      },
+      "signature": FunctionSignature {
+        "functionName": "$one",
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "_paramTypes": [],
+          "_returnTypes": [],
+        },
+      },
+    },
+    FunctionExpression {
+      "_parent": undefined,
+      "body": EmptyTokenExpression {
+        "_parent": [Circular],
+      },
+      "signature": FunctionSignature {
+        "functionName": "$two",
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "_paramTypes": [],
+          "_returnTypes": [],
+        },
+      },
+    },
+  ],
+  "exportableGlobals": [],
+  "exportableMems": [],
+  "exportableTables": [
+    TableExpression {
+      "_parent": null,
+      "headerToken": IRToken {
+        "_parent": [Circular],
+        "_prevToken": null,
+        "col": 0,
+        "indexInSource": 16,
+        "lexeme": "table",
+        "line": 2,
+        "opcodeType": null,
+        "type": "table",
+        "valueType": null,
+      },
+      "maxFlag": 3,
+      "minFlag": 3,
+      "tableName": null,
+      "tableType": 7,
+    },
+  ],
+  "functions": [
+    FunctionExpression {
+      "_parent": undefined,
+      "body": EmptyTokenExpression {
+        "_parent": [Circular],
+      },
+      "signature": FunctionSignature {
+        "functionName": "$one",
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "_paramTypes": [],
+          "_returnTypes": [],
+        },
+      },
+    },
+    FunctionExpression {
+      "_parent": undefined,
+      "body": EmptyTokenExpression {
+        "_parent": [Circular],
+      },
+      "signature": FunctionSignature {
+        "functionName": "$two",
+        "inlineExportName": null,
+        "localNames": [],
+        "localTypes": [],
+        "paramNames": [],
+        "signatureType": SignatureType {
+          "_paramTypes": [],
+          "_returnTypes": [],
+        },
+      },
+    },
+  ],
+  "globalTypes": [
+    SignatureType {
+      "_paramTypes": [],
+      "_returnTypes": [],
+    },
+  ],
+  "globals": [],
+  "imports": [],
+  "memory": null,
+  "start": null,
+}
+`;
+
+exports[`snapshot tests table element expressions test intermediate representation 30`] = `
+ModuleExpression {
   "elementSection": [],
   "exportExpressions": [],
   "exportableFuncs": [],
@@ -70258,7 +70429,7 @@ ModuleExpression {
 }
 `;
 
-exports[`snapshot tests table element expressions test intermediate representation 29`] = `
+exports[`snapshot tests table element expressions test intermediate representation 31`] = `
 ModuleExpression {
   "elementSection": [],
   "exportExpressions": [
@@ -70302,7 +70473,7 @@ ModuleExpression {
 }
 `;
 
-exports[`snapshot tests table element expressions test intermediate representation 30`] = `
+exports[`snapshot tests table element expressions test intermediate representation 32`] = `
 ModuleExpression {
   "elementSection": [],
   "exportExpressions": [
@@ -70346,7 +70517,7 @@ ModuleExpression {
 }
 `;
 
-exports[`snapshot tests table element expressions test intermediate representation 31`] = `
+exports[`snapshot tests table element expressions test intermediate representation 33`] = `
 ModuleExpression {
   "elementSection": [],
   "exportExpressions": [
@@ -76424,6 +76595,358 @@ exports[`snapshot tests table element expressions test lexer 28`] = `
   },
   Token {
     "col": 0,
+    "indexInSource": 11,
+    "lexeme": "(",
+    "line": 2,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 16,
+    "lexeme": "table",
+    "line": 2,
+    "opcodeType": null,
+    "type": "table",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 24,
+    "lexeme": "funcref",
+    "line": 2,
+    "opcodeType": null,
+    "type": "VALUETYPE",
+    "valueType": 7,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 29,
+    "lexeme": "(",
+    "line": 3,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 33,
+    "lexeme": "elem",
+    "line": 3,
+    "opcodeType": null,
+    "type": "elem",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 35,
+    "lexeme": "(",
+    "line": 3,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 39,
+    "lexeme": "item",
+    "line": 3,
+    "opcodeType": null,
+    "type": "item",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 40,
+    "lexeme": ")",
+    "line": 3,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 41,
+    "lexeme": ")",
+    "line": 3,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 45,
+    "lexeme": ")",
+    "line": 4,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 50,
+    "lexeme": "(",
+    "line": 5,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 54,
+    "lexeme": "func",
+    "line": 5,
+    "opcodeType": null,
+    "type": "func",
+    "valueType": 7,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 59,
+    "lexeme": "$one",
+    "line": 5,
+    "opcodeType": null,
+    "type": "VAR",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 60,
+    "lexeme": ")",
+    "line": 5,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 64,
+    "lexeme": "(",
+    "line": 6,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 68,
+    "lexeme": "func",
+    "line": 6,
+    "opcodeType": null,
+    "type": "func",
+    "valueType": 7,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 73,
+    "lexeme": "$two",
+    "line": 6,
+    "opcodeType": null,
+    "type": "VAR",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 74,
+    "lexeme": ")",
+    "line": 6,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+]
+`;
+
+exports[`snapshot tests table element expressions test lexer 29`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 11,
+    "lexeme": "(",
+    "line": 2,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 16,
+    "lexeme": "table",
+    "line": 2,
+    "opcodeType": null,
+    "type": "table",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 24,
+    "lexeme": "funcref",
+    "line": 2,
+    "opcodeType": null,
+    "type": "VALUETYPE",
+    "valueType": 7,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 29,
+    "lexeme": "(",
+    "line": 3,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 33,
+    "lexeme": "elem",
+    "line": 3,
+    "opcodeType": null,
+    "type": "elem",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 44,
+    "lexeme": "$one",
+    "line": 4,
+    "opcodeType": null,
+    "type": "VAR",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 55,
+    "lexeme": "$two",
+    "line": 5,
+    "opcodeType": null,
+    "type": "VAR",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 63,
+    "lexeme": "0",
+    "line": 6,
+    "opcodeType": null,
+    "type": "NAT",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 69,
+    "lexeme": ")",
+    "line": 7,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 73,
+    "lexeme": ")",
+    "line": 8,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 78,
+    "lexeme": "(",
+    "line": 9,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 82,
+    "lexeme": "func",
+    "line": 9,
+    "opcodeType": null,
+    "type": "func",
+    "valueType": 7,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 87,
+    "lexeme": "$one",
+    "line": 9,
+    "opcodeType": null,
+    "type": "VAR",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 88,
+    "lexeme": ")",
+    "line": 9,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 92,
+    "lexeme": "(",
+    "line": 10,
+    "opcodeType": null,
+    "type": "(",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 96,
+    "lexeme": "func",
+    "line": 10,
+    "opcodeType": null,
+    "type": "func",
+    "valueType": 7,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 101,
+    "lexeme": "$two",
+    "line": 10,
+    "opcodeType": null,
+    "type": "VAR",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
+    "indexInSource": 102,
+    "lexeme": ")",
+    "line": 10,
+    "opcodeType": null,
+    "type": ")",
+    "valueType": null,
+  },
+]
+`;
+
+exports[`snapshot tests table element expressions test lexer 30`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  Token {
+    "col": 0,
     "indexInSource": 12,
     "lexeme": "(",
     "line": 2,
@@ -76524,7 +77047,7 @@ exports[`snapshot tests table element expressions test lexer 28`] = `
 ]
 `;
 
-exports[`snapshot tests table element expressions test lexer 29`] = `
+exports[`snapshot tests table element expressions test lexer 31`] = `
 [
   Token {
     "col": 0,
@@ -76628,7 +77151,7 @@ exports[`snapshot tests table element expressions test lexer 29`] = `
 ]
 `;
 
-exports[`snapshot tests table element expressions test lexer 30`] = `
+exports[`snapshot tests table element expressions test lexer 32`] = `
 [
   Token {
     "col": 0,
@@ -76723,7 +77246,7 @@ exports[`snapshot tests table element expressions test lexer 30`] = `
 ]
 `;
 
-exports[`snapshot tests table element expressions test lexer 31`] = `
+exports[`snapshot tests table element expressions test lexer 33`] = `
 [
   Token {
     "col": 0,
@@ -80421,6 +80944,214 @@ exports[`snapshot tests table element expressions test parse tree 28`] = `
   [
     Token {
       "col": 0,
+      "indexInSource": 16,
+      "lexeme": "table",
+      "line": 2,
+      "opcodeType": null,
+      "type": "table",
+      "valueType": null,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 24,
+      "lexeme": "funcref",
+      "line": 2,
+      "opcodeType": null,
+      "type": "VALUETYPE",
+      "valueType": 7,
+    },
+    [
+      Token {
+        "col": 0,
+        "indexInSource": 33,
+        "lexeme": "elem",
+        "line": 3,
+        "opcodeType": null,
+        "type": "elem",
+        "valueType": null,
+      },
+      [
+        Token {
+          "col": 0,
+          "indexInSource": 39,
+          "lexeme": "item",
+          "line": 3,
+          "opcodeType": null,
+          "type": "item",
+          "valueType": null,
+        },
+      ],
+    ],
+  ],
+  [
+    Token {
+      "col": 0,
+      "indexInSource": 54,
+      "lexeme": "func",
+      "line": 5,
+      "opcodeType": null,
+      "type": "func",
+      "valueType": 7,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 59,
+      "lexeme": "$one",
+      "line": 5,
+      "opcodeType": null,
+      "type": "VAR",
+      "valueType": null,
+    },
+  ],
+  [
+    Token {
+      "col": 0,
+      "indexInSource": 68,
+      "lexeme": "func",
+      "line": 6,
+      "opcodeType": null,
+      "type": "func",
+      "valueType": 7,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 73,
+      "lexeme": "$two",
+      "line": 6,
+      "opcodeType": null,
+      "type": "VAR",
+      "valueType": null,
+    },
+  ],
+]
+`;
+
+exports[`snapshot tests table element expressions test parse tree 29`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  [
+    Token {
+      "col": 0,
+      "indexInSource": 16,
+      "lexeme": "table",
+      "line": 2,
+      "opcodeType": null,
+      "type": "table",
+      "valueType": null,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 24,
+      "lexeme": "funcref",
+      "line": 2,
+      "opcodeType": null,
+      "type": "VALUETYPE",
+      "valueType": 7,
+    },
+    [
+      Token {
+        "col": 0,
+        "indexInSource": 33,
+        "lexeme": "elem",
+        "line": 3,
+        "opcodeType": null,
+        "type": "elem",
+        "valueType": null,
+      },
+      Token {
+        "col": 0,
+        "indexInSource": 44,
+        "lexeme": "$one",
+        "line": 4,
+        "opcodeType": null,
+        "type": "VAR",
+        "valueType": null,
+      },
+      Token {
+        "col": 0,
+        "indexInSource": 55,
+        "lexeme": "$two",
+        "line": 5,
+        "opcodeType": null,
+        "type": "VAR",
+        "valueType": null,
+      },
+      Token {
+        "col": 0,
+        "indexInSource": 63,
+        "lexeme": "0",
+        "line": 6,
+        "opcodeType": null,
+        "type": "NAT",
+        "valueType": null,
+      },
+    ],
+  ],
+  [
+    Token {
+      "col": 0,
+      "indexInSource": 82,
+      "lexeme": "func",
+      "line": 9,
+      "opcodeType": null,
+      "type": "func",
+      "valueType": 7,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 87,
+      "lexeme": "$one",
+      "line": 9,
+      "opcodeType": null,
+      "type": "VAR",
+      "valueType": null,
+    },
+  ],
+  [
+    Token {
+      "col": 0,
+      "indexInSource": 96,
+      "lexeme": "func",
+      "line": 10,
+      "opcodeType": null,
+      "type": "func",
+      "valueType": 7,
+    },
+    Token {
+      "col": 0,
+      "indexInSource": 101,
+      "lexeme": "$two",
+      "line": 10,
+      "opcodeType": null,
+      "type": "VAR",
+      "valueType": null,
+    },
+  ],
+]
+`;
+
+exports[`snapshot tests table element expressions test parse tree 30`] = `
+[
+  Token {
+    "col": 0,
+    "indexInSource": 8,
+    "lexeme": "module",
+    "line": 1,
+    "opcodeType": null,
+    "type": "module",
+    "valueType": null,
+  },
+  [
+    Token {
+      "col": 0,
       "indexInSource": 17,
       "lexeme": "table",
       "line": 2,
@@ -80488,7 +81219,7 @@ exports[`snapshot tests table element expressions test parse tree 28`] = `
 ]
 `;
 
-exports[`snapshot tests table element expressions test parse tree 29`] = `
+exports[`snapshot tests table element expressions test parse tree 31`] = `
 [
   Token {
     "col": 0,
@@ -80560,7 +81291,7 @@ exports[`snapshot tests table element expressions test parse tree 29`] = `
 ]
 `;
 
-exports[`snapshot tests table element expressions test parse tree 30`] = `
+exports[`snapshot tests table element expressions test parse tree 32`] = `
 [
   Token {
     "col": 0,
@@ -80623,7 +81354,7 @@ exports[`snapshot tests table element expressions test parse tree 30`] = `
 ]
 `;
 
-exports[`snapshot tests table element expressions test parse tree 31`] = `
+exports[`snapshot tests table element expressions test parse tree 33`] = `
 [
   Token {
     "col": 0,

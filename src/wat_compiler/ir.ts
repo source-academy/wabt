@@ -100,8 +100,8 @@ export class IRWriter {
       }
 
       if (isTableExpression(parseTreeNode)) {
-        const tableExp = this.parseTableExpression(parseTreeNode);
-        this.module.addIntermediateRepresentation(tableExp);
+        this.parseTableExpression(parseTreeNode)
+          .forEach((exp) => this.module.addIntermediateRepresentation(exp));
         continue;
       }
 
@@ -335,7 +335,7 @@ export class IRWriter {
 
     return ElementExpression.Passive(
       parseTree[0] as Token,
-      elementType,
+      elementType.valueType,
       name,
       items,
     );
@@ -380,7 +380,7 @@ export class IRWriter {
 
     return ElementExpression.Active(
       headerToken,
-      elementType,
+      elementType?.valueType ?? null,
       name,
       linkedTableExpression,
       offsetExpression,
@@ -397,7 +397,7 @@ export class IRWriter {
       name = (parseTree[cursor++] as Token).lexeme; //FIXME : static checks for this
     }
     const declarationToken = parseTree[cursor++] as Token; //FIXME : static checks for this
-    const elementType = (parseTree[cursor++] as Token) ?? null; //FIXME : static checks for this
+    const elementType = (parseTree[cursor++] as Token)?.valueType ?? null; //FIXME : static checks for this
     const items = parseTree.slice(cursor)
       .map((x) => this.parseElementItemExpression(x));
 
@@ -435,8 +435,14 @@ export class IRWriter {
     throw new Error(`Unrecognised element item expression: ${Tree.treeMap(itemExpression, (t) => t.lexeme)}`);
   }
 
-  private parseTableExpression(parseTree: ParseTree): TableExpression | ImportExpression {
+  // FIXME: Long Function
+  // eslint-disable-next-line complexity
+  private parseTableExpression(parseTree: ParseTree): (TableExpression | ImportExpression | ElementExpression)[] {
     assert(isTableExpression(parseTree));
+    if (tableExpressionHasInlineElementExpression(parseTree)) {
+      return this.parseTableWithInlineElementExpression(parseTree);
+    }
+
     const headerToken = parseTree[0] as Token;
     let tableName: string | null = null;
     let minFlag: number | null = null;
@@ -492,10 +498,74 @@ export class IRWriter {
       this.module.addExportExpression(linkedExportExpression);
     }
     if (linkedImportExpression !== null) {
-      return linkedImportExpression(result);
+      return [linkedImportExpression(result)];
     }
 
-    return result;
+    return [result];
+  }
+
+  private parseTableWithInlineElementExpression(parseTree: ParseTree): [TableExpression, ElementExpression] {
+    let cursor = 0;
+    let currentToken = parseTree[cursor];
+
+    let headerToken: Token | null = null;
+    let name: string | null = null;
+    let reftype: ValueType | null = null;
+
+    if (!(currentToken instanceof Token) || currentToken.type !== TokenType.Table) {
+      throw new Error(`Invalid table expression: Expected to start with table token: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+    headerToken = currentToken;
+    currentToken = parseTree[++cursor];
+
+    if (currentToken instanceof Token && currentToken.type === TokenType.Var) {
+      name = currentToken.lexeme;
+      currentToken = parseTree[++cursor];
+    }
+
+    if ((currentToken instanceof Array) || (currentToken.valueType !== ValueType.FuncRef && currentToken.valueType !== ValueType.ExternRef)) {
+      throw new Error(`Invalid table expression: Expected table type (funcref or externref): ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+    reftype = currentToken.valueType;
+
+    currentToken = parseTree[++cursor];
+
+    const elemTokenTree = currentToken;
+    if (elemTokenTree instanceof Token || !(elemTokenTree[0] instanceof Token) || elemTokenTree[0].type !== TokenType.Elem) {
+      throw new Error(`Invalid table expression: Expected elem token: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    }
+
+    const elemExpression = this.parseInlineTableElemExpression(elemTokenTree);
+
+    const tableExpression = new TableExpression(headerToken, name, elemExpression.items.length, elemExpression.items.length, reftype);
+
+    return [tableExpression, elemExpression];
+  }
+
+  private parseInlineTableElemExpression(elemParseTree: ParseTree): ElementExpression {
+    // @ts-ignore This is a valid operation.
+    const flatTree: Token[] = elemParseTree.flat();
+    let cursor = 0;
+    let currentToken = flatTree[cursor];
+
+    const headerToken = currentToken;
+    currentToken = flatTree[++cursor];
+
+    // FIXME: not the best way to do this, but it's okay I guess
+    const itemType = TokenType.RefFunc;
+    const elementType = ValueType.FuncRef;
+    const name = null;
+    const linkedTableExpression = new Token(TokenType.Nat, `${this.module.exportableTables.length}`, -1, -1, -1, null, null);
+    let offsetExpression = new UnfoldedTokenExpression(
+      [new Token(TokenType.Const, 'i32.const', -1, -1, -1, OpcodeType.I32Const, null),
+        new Token(TokenType.Nat, '0', -1, -1, -1, null, null)],
+    );
+    const items = flatTree.slice(cursor)
+      .filter((x) => x.type !== TokenType.Item)
+      .map((x) => new ElementItemExpression(itemType, x));
+
+
+    return ElementExpression.Active(headerToken, elementType, name, linkedTableExpression, offsetExpression, items);
   }
 
   private parseInlineTableImportExpression(parseTree: ParseTree): (tableExpression: TableExpression) => ImportExpression {
@@ -1302,6 +1372,14 @@ function isTableExpression(parseTree: ParseTree): boolean {
   return tokenHeader instanceof Token && tokenHeader.type === TokenType.Table;
 }
 
+function tableExpressionHasInlineElementExpression(parseTree: ParseTree) {
+  for (const node of parseTree) {
+    if (node instanceof Array && node[0] instanceof Token && node[0].type === TokenType.Elem) {
+      return true;
+    }
+  }
+  return false;
+}
 /**
  * Check if given parse tree is a block expression --> (block ?? )
  */

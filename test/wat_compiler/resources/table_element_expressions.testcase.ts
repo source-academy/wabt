@@ -360,6 +360,20 @@ const table_prod_one_abbr_one = `
 )
 `;
 
+/*
+This is a bug in the official parser, it should be able to parse this.
+correct is (elem (item $one) (item 1))
+(module
+	(table funcref
+  	(elem (item) $one 1)
+  )
+
+  (func $one)
+  (func $two)
+)
+
+*/
+
 const table_prod_one_abbr_two = `
 (module
 	(table funcref
@@ -805,10 +819,8 @@ const elem_drop_index = `
 `;
 
 // export const positiveTestCases = [
-//   elem_prod_two_abbr_two_0,
-//   elem_prod_two_abbr_two_1,
-//   elem_prod_two_abbr_one_two_0,
-//   elem_prod_two_abbr_one_two_1,
+//   table_prod_one_abbr_one,
+//   table_prod_one_abbr_two,
 // ];
 
 export const positiveTestCases = [
@@ -839,8 +851,8 @@ export const positiveTestCases = [
   table_prod_one_externref_0,
   table_prod_one_funcref_1,
   table_prod_one_externref_1,
-  // table_prod_one_abbr_one,
-  // table_prod_one_abbr_two,
+  table_prod_one_abbr_one,
+  table_prod_one_abbr_two,
   table_prod_one_inline_import,
   table_prod_one_inline_export_0,
   table_prod_one_inline_export_1,

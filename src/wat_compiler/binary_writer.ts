@@ -274,16 +274,15 @@ export class BinaryWriter {
     }
   }
 
-  private encodeElementType(elementType: Token | IRToken | null | undefined): number {
-    switch (elementType?.valueType) {
+  private encodeElementType(elementType: ValueType | null): number {
+    switch (elementType) {
       case ValueType.FuncRef:
       case null:
-      case undefined:
         return 0;
       case ValueType.ExternRef:
         return 111;
       default:
-        throw new Error(`Invalid element type: ${elementType?.valueType}`);
+        throw new Error(`Invalid element type: ${elementType}`);
     }
   }
 
