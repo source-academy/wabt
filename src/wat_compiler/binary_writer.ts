@@ -2,8 +2,7 @@
 import {
   type SignatureType,
   type ModuleExpression,
-  type ExportExpression,
-  type FunctionExpression,
+  type ExportExpression, type FunctionExpression,
   UnfoldedBlockExpression,
   OperationTree,
   EmptyTokenExpression,
@@ -22,7 +21,7 @@ import {
   type TableExpression,
 } from './ir_types';
 import { ValueType } from '../common/type';
-import { type Token, TokenType } from '../common/token';
+import { Token, TokenType } from '../common/token';
 import { Opcode, OpcodeType } from '../common/opcode';
 
 import { ExportType } from '../common/export_types';
@@ -291,13 +290,34 @@ export class BinaryWriter {
     const elementItems = elementExp.items;
     const elementTableOffset = elementExp.linkedTableOffset;
     const elementItemEncoding = elementItems.flatMap((item) => this.encodeElementItemExpression(item));
-    // const elementType = elementExp.elementType; // no encoding
-    // const elementTypeEncoding = this.encodeElementType(elementType); // no encoding
+
+    const linkedTable = elementExp.linkedTableIfActive;
+    let linkedTableIndex;
+    if (linkedTable?.type === TokenType.Var) {
+      linkedTableIndex = this.module.resolveExportableExpressionIndexByName(linkedTable.lexeme, ExportType.Table);
+    } else {
+      linkedTableIndex = toInteger(linkedTable!.lexeme);
+    }
+
+    const elementType = elementExp.elementType;
+    const elementTypeEncoding = this.encodeElementType(elementType);
+
+    if (elementFlag === 0 || elementFlag === 4) {
+      return ([
+        elementFlag,
+        ...this.encodeFunctionBodyExpression(elementTableOffset, null), //  FIXME: This is a hack, null is not a valid value for this'
+        0x0b, // end
+        // elementTypeEncoding, // no encoding
+        elementItems.length,
+        ...elementItemEncoding,
+      ]);
+    }
     return ([
       elementFlag,
+      toInteger(linkedTable!.lexeme),
       ...this.encodeFunctionBodyExpression(elementTableOffset, null), //  FIXME: This is a hack, null is not a valid value for this'
       0x0b, // end
-      // elementTypeEncoding, // no encoding
+      elementTypeEncoding, // no encoding
       elementItems.length,
       ...elementItemEncoding,
     ]);
@@ -412,12 +432,12 @@ export class BinaryWriter {
         } else if (globalValue.type === TokenType.Nat) {
           literal = new Uint8Array([toInteger(globalValue.lexeme)]);
         } else {
-          literal = this.encodeToken(globalValue);
+          literal = this.encodeToken(globalValue, null);
         }
         break;
       case ValueType.ExternRef:
         // throw new Error(`Invalid global type ${globalValue}`);
-        literal = this.encodeToken(globalValue);
+        literal = this.encodeToken(globalValue, null);
         break;
       default:
         throw new Error(`Invalid global type ${globalValue}`);
@@ -426,7 +446,7 @@ export class BinaryWriter {
     return new Uint8Array([
       ValueType.getValue(type),
       mutability,
-      ...this.encodeToken(globalType),
+      ...this.encodeToken(globalType, null),
       ...literal,
       0x0b, // End token
     ]);
@@ -437,15 +457,15 @@ export class BinaryWriter {
     const globalType = ir.typeToken;
 
     return new Uint8Array([
-      ...this.encodeToken(globalType),
+      ...this.encodeToken(globalType, null),
       mutability,
     ]);
   }
 
 
   private encodeImportExpression(importExpression: ImportExpression): Uint8Array {
-    const importModuleEncoding = this.encodeToken(importExpression.importModule);
-    const importNameEncoding = this.encodeToken(importExpression.importName);
+    const importModuleEncoding = this.encodeToken(importExpression.importModule, null);
+    const importNameEncoding = this.encodeToken(importExpression.importName, null);
     let importTypeEncoding: number;
     let importDescEncoding: Uint8Array | number[];
     switch (importExpression.importType) {
@@ -551,13 +571,14 @@ export class BinaryWriter {
     const result: number[] = [];
     for (let i = 0; i < unfoldedTokenExpr.expr.length; i++) {
       let currentExpr = unfoldedTokenExpr.expr[i];
+      let prevExpr = (unfoldedTokenExpr.expr[i - 1] as IRToken) ?? null; // As returns undefined if type cast fails
 
       if (currentExpr instanceof IRToken) {
         // Variable resolution
         if (currentExpr.type === TokenType.Var) {
-          result.push(this.encodeVarToken(currentExpr, fnExpr));
+          result.push(this.encodeVarToken(currentExpr, fnExpr, prevExpr));
         } else {
-          result.push(...this.encodeToken(currentExpr));
+          result.push(...this.encodeToken(currentExpr, prevExpr));
         }
         continue;
       } else {
@@ -574,7 +595,7 @@ export class BinaryWriter {
    * @param fnExpr function expression that wraps this token
    * @returns a number which represents the binary encoding of said token.
    */
-  private encodeVarToken(token: IRToken, fnExpr: FunctionExpression): number {
+  private encodeVarToken(token: IRToken, fnExpr: FunctionExpression, prevToken: IRToken): number {
     switch (token.prevToken?.type) {
       case TokenType.LocalSet:
       case TokenType.LocalGet:
@@ -586,12 +607,30 @@ export class BinaryWriter {
       case TokenType.GlobalSet:
       case TokenType.GlobalGet:
         return this.encodeFunctionGlobalVarToken(token, fnExpr);
-
-      default:
-        throw new Error(
-          `Unable to resolve var token ${token.prevToken?.lexeme} ${token.lexeme}`,
-        );
+      case TokenType.TableGet:
+      case TokenType.TableSet:
+      case TokenType.TableSize:
+      case TokenType.TableCopy:
+      case TokenType.TableGrow:
+      case TokenType.TableFill:
+      case TokenType.TableInit:
+        return this.encodeTableVarToken(token);
+      case TokenType.RefFunc:
+        return this.encodeFuncRefToken(token);
+      case TokenType.ElemDrop:
+        return this.encodeElementVarToken(token);
     }
+    switch (prevToken?.prevToken?.type) {
+      case TokenType.TableCopy:
+        return this.encodeTableVarToken(token);
+      case TokenType.TableInit:
+        return this.encodeElementVarToken(token);
+    }
+
+    console.log(prevToken);
+    throw new Error(
+      `Unable to resolve var token ${token.prevToken?.lexeme} ${token.lexeme}`,
+    );
   }
 
   /**
@@ -665,6 +704,68 @@ export class BinaryWriter {
       ]}, Local Names available: ${fnExpr.getLocalNames()}`,
     );
   }
+  /**
+   * Encode a 'table.get $var' or 'table.set $var' token by evaluating the index for $var.
+   * @returns a number corresponding to the local variable index.
+   */
+  private encodeTableVarToken(
+    token: IRToken,
+  ): number {
+    const nameToResolve = token.lexeme;
+    for (const [i, table] of this.module.exportableTables.entries()) {
+      if (table.getID() === nameToResolve) {
+        return i;
+      }
+    }
+    throw new Error(
+      `Table name ${nameToResolve} not found in modules. Table names available: ${
+        this.module.exportableTables
+          .map((table) => table.tableName)
+          .filter((x) => x !== null)
+      }`,
+    );
+  }
+  /**
+   * Encode a 'ref.func $var' token by evaluating the index for $var.
+   * @returns a number corresponding to the local variable index.
+   */
+  private encodeFuncRefToken(
+    token: IRToken,
+  ): number {
+    const nameToResolve = token.lexeme;
+    for (const [i, fn] of this.module.functions.entries()) {
+      if (fn.getID() === nameToResolve) {
+        return i;
+      }
+    }
+    throw new Error(
+      `Function name ${nameToResolve} not found in modules. Function names available: ${
+        this.module.functions
+          .map((fn) => fn.getID())
+          .filter((name) => name !== null)
+      }`,
+    );
+  }
+
+  private encodeElementVarToken(
+    token: IRToken,
+  ): number {
+    const nameToResolve = token.lexeme;
+    for (const [i, fn] of this.module.elementSection.entries()) {
+      if (fn.getID() === nameToResolve) {
+        return i;
+      }
+    }
+    throw new Error(
+      `Function name ${nameToResolve} not found in modules. Function names available: ${
+        this.module.functions
+          .map((fn) => fn.getID())
+          .filter((name) => name !== null)
+      }`,
+    );
+  }
+
+
 
   /**
    * Encode local type count of function body
@@ -702,14 +803,14 @@ export class BinaryWriter {
     return Uint8Array.from([total_types, ...encoding]);
   }
 
-  private encodeToken(token: IRToken): Uint8Array {
+  private encodeToken(token: IRToken, prevToken: IRToken | null): Uint8Array {
     if (!this.isLiteralToken(token)) {
       return this.encodeNonLiteralToken(token);
     }
     if (token.prevToken === null) {
       throw new Error(`Unable to encode ${token}`);
     }
-    return this.encodeLiteralToken(token.prevToken, token);
+    return this.encodeLiteralToken(token, prevToken);
   }
 
   private encodeUnfoldedBlockExpression(
@@ -856,13 +957,20 @@ export class BinaryWriter {
     throw new Error(`Unexpected token: ${token.toString()}`);
   }
 
+
   /**
    * Encode a literal token.
    * We need to know the previous token to determine the type of the current token.
    * @param prevToken previous token
    * @param token token
    */
-  private encodeLiteralToken(prevToken: Token, token: IRToken): Uint8Array {
+  // FIXME: long function
+  // eslint-disable-next-line complexity
+  private encodeLiteralToken(token: IRToken, prevToken: IRToken | null): Uint8Array {
+    if (prevToken === null) {
+      throw new Error(`A literal token must have a previous token: ${token.toString()}`);
+    }
+
     if (prevToken.isOpcodeType(OpcodeType.F64Const)) {
       return NumberEncoder.encodeF64Const(
         /^\d+$/u.test(token.lexeme)
@@ -891,6 +999,18 @@ export class BinaryWriter {
     if (
       prevToken.type === TokenType.LocalGet
       || prevToken.type === TokenType.LocalSet
+      || prevToken.type === TokenType.TableGet
+      || prevToken.type === TokenType.TableSet
+      || prevToken.type === TokenType.TableSize
+      || prevToken.type === TokenType.TableCopy
+      || prevToken.type === TokenType.TableGrow
+      || prevToken.type === TokenType.TableFill
+      || prevToken.type === TokenType.TableInit
+      || prevToken.type === TokenType.RefFunc
+      || prevToken.type === TokenType.ElemDrop
+      || prevToken.prevToken?.type === TokenType.ElemDrop
+      || prevToken.prevToken?.type === TokenType.TableCopy
+      || prevToken.prevToken?.type === TokenType.TableInit
     ) {
       assert(token.type === TokenType.Nat); // TODO proper error
       return new Uint8Array([Number.parseInt(token.lexeme)]);
@@ -902,18 +1022,29 @@ export class BinaryWriter {
       return new Uint8Array([Number.parseInt(token.lexeme)]);
     }
 
+    console.log(prevToken);
     // TODO custom error
     throw new Error(
-      `Unsuppored literal token type: [${JSON.stringify(
-        prevToken,
-        undefined,
-        2,
-      )}, ${JSON.stringify(token, undefined, 2)}]`,
+      `Unsuppored literal token type: [${prevToken.lexeme}, ${token.lexeme}]`,
     );
   }
 
   private encodeOpcodeToken(token: IRToken): Uint8Array {
-    return new Uint8Array([Opcode.getCode(token.opcodeType!)]);
+    const encoding = [Opcode.getCode(token.opcodeType!)];
+
+    // Add prefixes
+    switch (token.opcodeType) {
+      case OpcodeType.TableInit:
+      case OpcodeType.ElemDrop:
+      case OpcodeType.TableCopy:
+      case OpcodeType.TableGrow:
+      case OpcodeType.TableSize:
+      case OpcodeType.TableFill:
+        encoding.unshift(0xFC);
+        break;
+    }
+
+    return new Uint8Array(encoding);
   }
 
   private encodeTextToken(token: IRToken): Uint8Array {

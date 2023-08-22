@@ -315,27 +315,25 @@ export class IRWriter {
     let cursor = 1;
     let currentToken = parseTree[cursor];
     let name : string | null = null;
-    let elementType: Token;
+    let elementType: ValueType = ValueType.FuncRef;
 
     if (currentToken instanceof Token && currentToken.type === TokenType.Var) {
       name = currentToken.lexeme;
-      cursor++;
-      currentToken = parseTree[cursor];
+      currentToken = parseTree[++cursor];
     }
 
-    if (!(currentToken instanceof Token)) {
+    if (cursor < parseTree.length && !(currentToken instanceof Token)) {
       throw new Error(`Expected token in passive element expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
     }
-    elementType = currentToken ?? null;
-    cursor++;
-    currentToken = parseTree[cursor];
+    elementType = currentToken?.valueType ?? elementType;
+    currentToken = parseTree[++cursor];
 
     const items = parseTree.slice(cursor)
       .map((x) => this.parseElementItemExpression(x));
 
     return ElementExpression.Passive(
       parseTree[0] as Token,
-      elementType.valueType,
+      elementType,
       name,
       items,
     );
@@ -350,19 +348,19 @@ export class IRWriter {
 
     let name : string | null = null;
     let elementType: Token | null = null;
-    let linkedTableExpression = null;
-    let offsetExpression;
+    let linkedTableExpression: Token | number = 0;
+    let offsetExpression = 0;
 
     if (currentToken instanceof Token && currentToken.type === TokenType.Var) {
       name = currentToken.lexeme;
       currentToken = parseTree[++cursor];
     }
 
-    if (currentToken instanceof Array && currentToken[0] instanceof Token && currentToken[0].type === TokenType.Table) {
+    if (currentToken instanceof Array && currentToken[0] instanceof Token && currentToken[1] instanceof Token && currentToken[0].type === TokenType.Table) {
       if (currentToken.length !== 2) {
         throw new Error(`Expected 2 tokens in linked table expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
       }
-      linkedTableExpression = currentToken;
+      linkedTableExpression = currentToken[1];
       currentToken = parseTree[++cursor];
     }
 
@@ -563,7 +561,6 @@ export class IRWriter {
     const items = flatTree.slice(cursor)
       .filter((x) => x.type !== TokenType.Item)
       .map((x) => new ElementItemExpression(itemType, x));
-
 
     return ElementExpression.Active(headerToken, elementType, name, linkedTableExpression, offsetExpression, items);
   }

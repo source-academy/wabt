@@ -616,14 +616,14 @@ export class GlobalExpression
 }
 
 export type ElementMode = 'passive' | 'active' | 'declarative';
-export class ElementExpression extends IntermediateRepresentation {
+export class ElementExpression extends IntermediateRepresentation implements HasIdentifier {
   private _parent: IntermediateRepresentation | null = null;
   headerToken: IRToken;
   elementType: ValueType | null;
   mode: ElementMode;
   name: string | null;
   items: ElementItemExpression[];
-  linkedTableIfActive: IRToken | null = null;
+  linkedTableIfActive: IRToken | number | null = null;
   linkedTableOffset: TokenExpression | null = null;
 
   private constructor(headerToken: Token, elementType: ValueType | null, mode: ElementMode, name: string | null = null, items: ElementItemExpression[] = []) {
@@ -642,9 +642,9 @@ export class ElementExpression extends IntermediateRepresentation {
     return new ElementExpression(headerToken, elementType, 'passive', name, items);
   }
 
-  static Active(headerToken: Token, elementType: ValueType | null, name: string | null, linkedTableExpression: Token | null, offsetExpression: TokenExpression, items: ElementItemExpression[] = []) {
+  static Active(headerToken: Token, elementType: ValueType | null, name: string | null, linkedTableExpression: Token | number, offsetExpression: TokenExpression, items: ElementItemExpression[] = []) {
     const exp = new ElementExpression(headerToken, elementType, 'active', name, items);
-    exp.linkedTableIfActive = linkedTableExpression === null ? null : new IRToken(linkedTableExpression, exp);
+    exp.linkedTableIfActive = linkedTableExpression instanceof Token ? new IRToken(linkedTableExpression, exp) : linkedTableExpression;
     exp.linkedTableOffset = offsetExpression;
     return exp;
   }
@@ -674,9 +674,19 @@ export class ElementExpression extends IntermediateRepresentation {
       }
     }
     if (this.mode === 'active') {
-      return 0; // FIXME: The other values do not seem to be used?
-      // 2
-      // 4
+      switch (this.elementType) {
+        case ValueType.FuncRef:
+        case null:
+          if (this.linkedTableIfActive === 0 || (this.linkedTableIfActive?.type === TokenType.Nat && this.linkedTableIfActive?.lexeme === '0')) {
+            return 0;
+          }
+          return 2;
+
+        case ValueType.ExternRef:
+          return 4;
+        default:
+          throw new Error();
+      }
     }
 
     if (this.mode === 'declarative') {
@@ -693,6 +703,9 @@ export class ElementExpression extends IntermediateRepresentation {
     throw new Error();
   }
 
+  getID(): string | null {
+    return this.name;
+  }
   get parent(): IntermediateRepresentation | null {
     return this._parent;
   }
@@ -748,7 +761,7 @@ export class TableExpression extends IntermediateRepresentation { // FIXME: exte
     this.tableType = tableType;
   }
   getID(): string | null {
-    throw new Error('Method not implemented.');
+    return this.tableName;
   }
   get parent(): IntermediateRepresentation | null {
     return this._parent;
