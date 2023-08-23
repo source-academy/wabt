@@ -8,7 +8,7 @@ Everything in WebAssembly is a module.
 
 The smallest WebAssembly program is:
 
-```wabt
+```webassembly
 (module)
 ```
 
@@ -26,7 +26,7 @@ For all variable instructions, see [here](https://developer.mozilla.org/en-US/do
 
 ### Simple Function
 Here is a function that adds two numbers:
-```wabt
+```webassembly
 (module
   (func $add (export "add") (param i32 i32) (result i32)
     local.get 0
@@ -37,7 +37,7 @@ Here is a function that adds two numbers:
 
 Note that WASM is a stack machine, so we use the `local.get` instruction to get the first and second parameters off the stack. Then we use the `i32.add` instruction to add them together. Alternatively, to write this function in the form of S-expressions, you can write:
 
-```wabt
+```webassembly
 (module
   (func $add (export "add") (param i32 i32) (result i32)
     (i32.add (local.get 0) (local.get 1)))
@@ -48,7 +48,7 @@ Note that WASM is a stack machine, so we use the `local.get` instruction to get 
 ### Functions with Local Variables
 Local variables can be declared at the top of the function. Here is an example of a function with local variables.
 
-```wabt
+```webassembly
 (module
 
     ;; This function (named $func) has two parameters (both f64) and two local variables (both f64).
@@ -78,7 +78,7 @@ Local variables can be declared at the top of the function. Here is an example o
 ### Factorial Function
 
 Here is an example factorial function:
-```wabt
+```webassembly
 (module
   (func $fac (export "fac") (param f64) (result f64)
     local.get 0
