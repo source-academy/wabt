@@ -10,6 +10,8 @@ yarn add source-academy-wabt
 
 Currently, this project has a partial port of a WebAssembly Text compiler (wat2wasm).
 
+To write WebAssembly Text, see [EXAMPLES.md](./EXAMPLES.md).
+
 ## Info for Developers
 The following set of instructions will tell you how to set up a local copy of this repository on your local machine for building and development.
 
