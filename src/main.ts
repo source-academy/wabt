@@ -27,18 +27,18 @@ const programFragment = `
 )
 `;
 
-const tokens = tokenize(program);
+// const tokens = tokenize(program);
 // console.log(tokens);
-const parseTree = getParseTree(tokens);
+// const parseTree = getParseTree(tokens);
 // console.log(JSON.stringify(parseTree, undefined, 2));
-const ir = getIR(parseTree) as ModuleExpression;
+// const ir = getIR(parseTree) as ModuleExpression;
 // console.log(ir);
 // console.log(JSON.stringify(ir, undefined, 2));
-console.log(ir.functions[0].body.body);
-console.log((ir.functions[0].body.body as BlockExpression).unfold());
-const encoding = new BinaryWriter(ir)
-  .encode();
-console.log(encoding);
+// console.log(ir.functions[0].body.body);
+// console.log((ir.functions[0].body.body as BlockExpression).unfold());
+// const encoding = new BinaryWriter(ir)
+//   .encode();
+// console.log(encoding);
 // const program = `
 // (module
 //   (func (export "add") (param f64) (param f64) (result f64)

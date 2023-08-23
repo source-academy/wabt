@@ -212,7 +212,7 @@ export class IRWriter {
         continue;
       }
 
-      if (token[0] instanceof Token && token[0].type === TokenType.Mut && token[1] instanceof Token && token[1].type === TokenType.ValueType) {
+      if (token instanceof Array && token[0] instanceof Token && token[0].type === TokenType.Mut && token[1] instanceof Token && token[1].type === TokenType.ValueType) {
         type = token[1].valueType;
         type_mutability = true;
         continue;
@@ -289,7 +289,7 @@ export class IRWriter {
     assert(isElementExpression(parseTree));
 
     if (parseTree.length === 1) {
-      return new ElementExpression(parseTree[0] as Token, null, 'passive');
+      return ElementExpression.Passive(parseTree[0] as Token, null, null, []);
     }
 
     let cursor = 1;
@@ -325,10 +325,13 @@ export class IRWriter {
     if (cursor < parseTree.length && !(currentToken instanceof Token)) {
       throw new Error(`Expected token in passive element expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
     }
-    elementType = currentToken?.valueType ?? elementType;
+    if (currentToken instanceof Token && currentToken.valueType !== null) {
+      elementType = currentToken.valueType;
+    }
     currentToken = parseTree[++cursor];
 
     const items = parseTree.slice(cursor)
+    // @ts-ignore
       .map((x) => this.parseElementItemExpression(x));
 
     return ElementExpression.Passive(
@@ -347,9 +350,9 @@ export class IRWriter {
     currentToken = parseTree[++cursor];
 
     let name : string | null = null;
-    let elementType: Token | null = null;
+    let elementType = null;
     let linkedTableExpression: Token | number = 0;
-    let offsetExpression = 0;
+    let offsetExpression;
 
     if (currentToken instanceof Token && currentToken.type === TokenType.Var) {
       name = currentToken.lexeme;
@@ -364,21 +367,26 @@ export class IRWriter {
       currentToken = parseTree[++cursor];
     }
 
-    if (!(currentToken[0] instanceof Token) && currentToken[0].type !== TokenType.Offset) {
-      throw new Error(`Expected offset expression in active element expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
-    }
+    // if (currentToken instanceof Array && !(currentToken[0] instanceof Token) && currentToken[0].type !== TokenType.Offset) {
+    //   throw new Error(`Expected offset expression in active element expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
+    // }
+    // FIXME
+    // @ts-ignore
     offsetExpression = this.parseElementOffsetExpression(currentToken); // TODO: compile-time verification of offset expression
     currentToken = parseTree[++cursor];
 
-    elementType = currentToken ?? null;
+    if (currentToken instanceof Token) {
+      elementType = currentToken.valueType;
+    }
     currentToken = parseTree[++cursor];
 
     const items = parseTree.slice(cursor)
+      // @ts-ignore
       .map((x) => this.parseElementItemExpression(x));
 
     return ElementExpression.Active(
       headerToken,
-      elementType?.valueType ?? null,
+      elementType,
       name,
       linkedTableExpression,
       offsetExpression,
@@ -397,6 +405,7 @@ export class IRWriter {
     const declarationToken = parseTree[cursor++] as Token; //FIXME : static checks for this
     const elementType = (parseTree[cursor++] as Token)?.valueType ?? null; //FIXME : static checks for this
     const items = parseTree.slice(cursor)
+      // @ts-ignore
       .map((x) => this.parseElementItemExpression(x));
 
     return ElementExpression.Declarative(headerToken, name, declarationToken, elementType, items);
@@ -413,19 +422,19 @@ export class IRWriter {
     return this.parseFunctionBodyExpression(parseTree, true);
   }
 
-  private parseElementItemExpression(itemExpression: Token[]): ElementItemExpression {
+  private parseElementItemExpression(itemExpression: ParseTree): ElementItemExpression {
     assert(isElementItemExpression(itemExpression));
-    if (itemExpression.length === 2 && (itemExpression[0] as Token).type !== TokenType.Item) {
+    if (itemExpression.length === 2 && itemExpression[0] instanceof Token && itemExpression[1] instanceof Token && itemExpression[0].type !== TokenType.Item) {
       const itemType = itemExpression[0];
       const itemToken = itemExpression[1];
       return new ElementItemExpression(itemType.type, itemToken);
     }
-    if (itemExpression.length === 2 && (itemExpression[0] as Token).type === TokenType.Item) {
+    if (itemExpression.length === 2 && itemExpression[0] instanceof Token && itemExpression[1] instanceof Array && itemExpression[0].type === TokenType.Item) {
       const itemType = itemExpression[1][0] as Token;
       const itemToken = itemExpression[1][1] as Token;
       return new ElementItemExpression(itemType.type, itemToken);
     }
-    if (itemExpression.length === 3) {
+    if (itemExpression.length === 3 && itemExpression[1] instanceof Token && itemExpression[2] instanceof Token) {
       const itemType = itemExpression[1];
       const itemToken = itemExpression[2];
       return new ElementItemExpression(itemType.type, itemToken);

@@ -21,7 +21,7 @@ import {
   type TableExpression,
 } from './ir_types';
 import { ValueType } from '../common/type';
-import { Token, TokenType } from '../common/token';
+import { TokenType } from '../common/token';
 import { Opcode, OpcodeType } from '../common/opcode';
 
 import { ExportType } from '../common/export_types';
@@ -133,12 +133,12 @@ export class BinaryWriter {
     const tableNum = this.module.exportableTables.length;
     const tableEncoding = this.module.exportableTables.flatMap((table) => Array.from(this.encodeTableExpression(table)));
 
-    return [
+    return new Uint8Array([
       SectionCode.Table,
       tableEncoding.length + 1,
       tableNum,
       ...tableEncoding,
-    ];
+    ]);
   }
 
   private encodeTableExpression(tableExp: TableExpression): number[] {
@@ -288,15 +288,17 @@ export class BinaryWriter {
   private encodeActiveElementExpression(elementExp: ElementExpression): number[] {
     const elementFlag = elementExp.getFlag();
     const elementItems = elementExp.items;
-    const elementTableOffset = elementExp.linkedTableOffset;
+    const elementTableOffset = elementExp.linkedTableOffset!; // FIXME null cast is not good practice
     const elementItemEncoding = elementItems.flatMap((item) => this.encodeElementItemExpression(item));
 
     const linkedTable = elementExp.linkedTableIfActive;
     let linkedTableIndex;
-    if (linkedTable?.type === TokenType.Var) {
+    if (linkedTable instanceof IRToken && linkedTable.type === TokenType.Var) {
       linkedTableIndex = this.module.resolveExportableExpressionIndexByName(linkedTable.lexeme, ExportType.Table);
+    } else if (linkedTable instanceof IRToken) {
+      linkedTableIndex = toInteger(linkedTable.lexeme);
     } else {
-      linkedTableIndex = toInteger(linkedTable!.lexeme);
+      linkedTableIndex = linkedTable;
     }
 
     const elementType = elementExp.elementType;
@@ -305,6 +307,7 @@ export class BinaryWriter {
     if (elementFlag === 0 || elementFlag === 4) {
       return ([
         elementFlag,
+        // @ts-ignore
         ...this.encodeFunctionBodyExpression(elementTableOffset, null), //  FIXME: This is a hack, null is not a valid value for this'
         0x0b, // end
         // elementTypeEncoding, // no encoding
@@ -314,7 +317,8 @@ export class BinaryWriter {
     }
     return ([
       elementFlag,
-      toInteger(linkedTable!.lexeme),
+      linkedTableIndex ?? 0,
+      // @ts-ignore
       ...this.encodeFunctionBodyExpression(elementTableOffset, null), //  FIXME: This is a hack, null is not a valid value for this'
       0x0b, // end
       elementTypeEncoding, // no encoding
@@ -445,7 +449,7 @@ export class BinaryWriter {
 
     return new Uint8Array([
       ValueType.getValue(type),
-      mutability,
+      toInteger(mutability),
       ...this.encodeToken(globalType, null),
       ...literal,
       0x0b, // End token
