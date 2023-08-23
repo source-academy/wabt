@@ -819,12 +819,12 @@ const elem_drop_index = `
 `;
 
 export const positiveTestCases = [
-  // empty_elem,
-  // empty_elem_funcref,
-  // empty_named_elem_funcref,
-  // empty_elem_externref,
-  // elem_prod_one_0,
-  // elem_prod_one_1,
+  empty_elem,
+  empty_elem_funcref,
+  empty_named_elem_funcref,
+  empty_elem_externref,
+  elem_prod_one_0,
+  elem_prod_one_1,
   elem_prod_two_empty,
   elem_prod_two_0,
   elem_prod_two_1,

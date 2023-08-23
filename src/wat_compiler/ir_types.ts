@@ -203,7 +203,7 @@ export class ModuleExpression extends IntermediateRepresentation {
     this.imports.push(importExp);
     switch (importExp.importType) {
       case TokenType.Func:
-        this.addGlobalType(importExp.functionSignature.signatureType);
+        this.addGlobalType(importExp.functionSignature!.signatureType);
         break;
       case TokenType.Memory:
         break;
@@ -333,7 +333,7 @@ export class ModuleExpression extends IntermediateRepresentation {
   get parent(): IntermediateRepresentation | null {
     return null;
   }
-  set parent(parentExpression: IntermediateRepresentation) {
+  set parent(parentExpression: IntermediateRepresentation | null) {
     throw new Error('Module Expression should not have parent.');
   }
 }
@@ -483,7 +483,7 @@ export class ImportExpression extends IntermediateRepresentation {
   get parent(): IntermediateRepresentation | null {
     return this._parent;
   }
-  set parent(parentExpression: IntermediateRepresentation) {
+  set parent(parentExpression: IntermediateRepresentation | null) {
     this._parent = parent;
   }
   toString(): string {
@@ -503,7 +503,7 @@ export class StartExpression extends IntermediateRepresentation {
   get parent(): IntermediateRepresentation | null {
     return this._parent;
   }
-  set parent(parentExpression: IntermediateRepresentation) {
+  set parent(parentExpression: IntermediateRepresentation | null) {
     this._parent = parentExpression;
   }
   get identifier(): IRToken {
@@ -532,7 +532,7 @@ export class MemoryExpression extends IntermediateRepresentation implements HasI
   get parent(): IntermediateRepresentation | null {
     return this._parent;
   }
-  set parent(parentExpression: IntermediateRepresentation) {
+  set parent(parentExpression: IntermediateRepresentation | null) {
     this._parent = parentExpression;
   }
   get memoryLength(): number {
@@ -573,7 +573,7 @@ export class ImportGlobalExpression
   get parent(): IntermediateRepresentation | null {
     return this._parent;
   }
-  set parent(parentExpression: IntermediateRepresentation) {
+  set parent(parentExpression: IntermediateRepresentation | null) {
     this._parent = parentExpression;
   }
   toString(): string {
@@ -604,7 +604,7 @@ export class GlobalExpression
   get parent(): IntermediateRepresentation | null {
     return this._parent;
   }
-  set parent(parentExpression: IntermediateRepresentation) {
+  set parent(parentExpression: IntermediateRepresentation | null) {
     this._parent = parentExpression;
   }
   toString(): string {
@@ -677,7 +677,7 @@ export class ElementExpression extends IntermediateRepresentation implements Has
       switch (this.elementType) {
         case ValueType.FuncRef:
         case null:
-          if (this.linkedTableIfActive === 0 || (this.linkedTableIfActive?.type === TokenType.Nat && this.linkedTableIfActive?.lexeme === '0')) {
+          if (this.linkedTableIfActive === 0 || (this.linkedTableIfActive instanceof IRToken && this.linkedTableIfActive.type === TokenType.Nat && this.linkedTableIfActive.lexeme === '0')) {
             return 0;
           }
           return 2;
@@ -709,7 +709,7 @@ export class ElementExpression extends IntermediateRepresentation implements Has
   get parent(): IntermediateRepresentation | null {
     return this._parent;
   }
-  set parent(parentExpression: IntermediateRepresentation) {
+  set parent(parentExpression: IntermediateRepresentation | null) {
     this._parent = parentExpression;
   }
   toString(): string {
@@ -736,7 +736,7 @@ export class ElementItemExpression extends IntermediateRepresentation {
   get parent(): IntermediateRepresentation | null {
     return this._parent;
   }
-  set parent(parentExpression: IntermediateRepresentation) {
+  set parent(parentExpression: IntermediateRepresentation | null) {
     this._parent = parentExpression;
   }
   toString(): string {
@@ -766,7 +766,7 @@ export class TableExpression extends IntermediateRepresentation { // FIXME: exte
   get parent(): IntermediateRepresentation | null {
     return this._parent;
   }
-  set parent(parentExpression: IntermediateRepresentation) {
+  set parent(parentExpression: IntermediateRepresentation | null) {
     this._parent = parentExpression;
   }
   toString(): string {
