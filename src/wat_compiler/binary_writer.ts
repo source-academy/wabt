@@ -468,8 +468,8 @@ export class BinaryWriter {
 
 
   private encodeImportExpression(importExpression: ImportExpression): Uint8Array {
-    const importModuleEncoding = this.encodeToken(importExpression.importModule, null);
-    const importNameEncoding = this.encodeToken(importExpression.importName, null);
+    const importModuleEncoding = this._encodeTextToken(importExpression.importModule);
+    const importNameEncoding = this._encodeTextToken(importExpression.importName);
     let importTypeEncoding: number;
     let importDescEncoding: Uint8Array | number[];
     switch (importExpression.importType) {
@@ -949,10 +949,6 @@ export class BinaryWriter {
       return this.encodeOpcodeToken(token);
     }
 
-    if (token.isTextToken()) {
-      return this.encodeTextToken(token);
-    }
-
     if (token.valueType !== null) {
       // This is a last-ditch attempt to translate a given token. May not be correct.
       return new Uint8Array([ValueType.getValue(token.valueType!)]);
@@ -1051,8 +1047,19 @@ export class BinaryWriter {
     return new Uint8Array(encoding);
   }
 
-  private encodeTextToken(token: IRToken): Uint8Array {
+  /**
+   * @deprecated
+   */
+  private _encodeTextToken(token: IRToken): Uint8Array {
     const text = token.extractName();
+    return this.encodeTextLiteral(text);
+  }
+
+  /**
+   * Encode a text literal from a token of type TokenType.Text.
+   * Assumes that text has been extracted with the token.extractName() method (no quotes in string).
+   */
+  private encodeTextLiteral(text: string): Uint8Array {
     const length = text.length;
     const encoding = [];
     for (let i = 0; i < length; i++) {
