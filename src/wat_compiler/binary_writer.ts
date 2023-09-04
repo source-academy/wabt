@@ -1048,14 +1048,6 @@ export class BinaryWriter {
   }
 
   /**
-   * @deprecated
-   */
-  private _encodeTextToken(token: IRToken): Uint8Array {
-    const text = token.extractName();
-    return this.encodeTextLiteral(text);
-  }
-
-  /**
    * Encode a text literal from a token of type TokenType.Text.
    * Assumes that text has been extracted with the token.extractName() method (no quotes in string).
    */
