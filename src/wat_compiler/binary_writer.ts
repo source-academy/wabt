@@ -468,8 +468,8 @@ export class BinaryWriter {
 
 
   private encodeImportExpression(importExpression: ImportExpression): Uint8Array {
-    const importModuleEncoding = this._encodeTextToken(importExpression.importModule);
-    const importNameEncoding = this._encodeTextToken(importExpression.importName);
+    const importModuleEncoding = this.encodeTextLiteral(importExpression.importModule);
+    const importNameEncoding = this.encodeTextLiteral(importExpression.importName);
     let importTypeEncoding: number;
     let importDescEncoding: Uint8Array | number[];
     switch (importExpression.importType) {

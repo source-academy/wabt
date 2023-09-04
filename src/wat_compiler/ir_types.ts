@@ -441,40 +441,40 @@ type ImportType = TokenType.Func | TokenType.Table | TokenType.Memory | TokenTyp
 
 export class ImportExpression extends IntermediateRepresentation {
   private _parent: IntermediateRepresentation | null = null;
-  importModule: IRToken;
-  importName: IRToken;
+  importModule: string;
+  importName: string;
   importType: ImportType;
   functionSignature: FunctionSignature | null = null;
   memoryExpression: MemoryExpression | null = null;
   globalExpression: ImportGlobalExpression | null = null;
   tableExpression: TableExpression | null = null;
 
-  private constructor(importModule: Token, importName: Token, importType: ImportType) {
+  private constructor(importModule: string, importName: string, importType: ImportType) {
     super();
-    this.importModule = new IRToken(importModule, this);
-    this.importName = new IRToken(importName, this);
+    this.importModule = importModule;
+    this.importName = importName;
     this.importType = importType;
   }
 
-  static functionImport(importModule: Token, importName: Token, functionSignature: FunctionSignature) {
+  static functionImport(importModule: string, importName: string, functionSignature: FunctionSignature) {
     const importExp = new ImportExpression(importModule, importName, TokenType.Func);
     importExp.functionSignature = functionSignature;
     return importExp;
   }
 
-  static tableImport(importModule: Token, importName: Token, tableExpression: TableExpression) {
+  static tableImport(importModule: string, importName: string, tableExpression: TableExpression) {
     const importExp = new ImportExpression(importModule, importName, TokenType.Table);
     importExp.tableExpression = tableExpression;
     return importExp;
   }
 
-  static memoryImport(importModule: Token, importName: Token, memoryExpression: MemoryExpression) {
+  static memoryImport(importModule: string, importName: string, memoryExpression: MemoryExpression) {
     const importExp = new ImportExpression(importModule, importName, TokenType.Memory);
     importExp.memoryExpression = memoryExpression;
     return importExp;
   }
 
-  static globalImport(importModule: Token, importName: Token, globalExpression: ImportGlobalExpression) {
+  static globalImport(importModule: string, importName: string, globalExpression: ImportGlobalExpression) {
     const importExp = new ImportExpression(importModule, importName, TokenType.Global);
     importExp.globalExpression = globalExpression;
     return importExp;
