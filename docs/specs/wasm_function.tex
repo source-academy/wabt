@@ -1,0 +1,309 @@
+\subsection{Function Segment}
+
+A function segment declares a function with an optional function identifier, parameters, return values and local variables.
+
+\begin{alignat*}{9}
+    && \textit{function-section}    &&\quad ::= &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{func}}\ \textit{id}^?\ \textit{typeuse}\ \textit{local}^*\ \textit{instr}^*\ \textbf{\texttt{)}}\ \quad && \textrm{function section} \\[1mm]
+    && \textit{local}    &&\quad ::= &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{local}}\ \textit{id}^?\ \textit{valtype}\ \textbf{\texttt{)}}\ &&\\[1mm]
+\end{alignat*}
+
+\subsubsection{Type Uses}
+
+A type use is a reference to a type definition.
+
+\begin{alignat*}{9}
+    && \textit{typeuse}    &&\quad ::= &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{type}}\ \textbf{\texttt{typeidx}}\ \textbf{\texttt{)}}\ \textit{param}^*\ \textit{result}^*\ \quad && \textrm{type definition} \\[1mm]
+    && \textit{param}    &&\quad ::= &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{param}}\ \textit{id}^?\ \textit{valtype}\ \textbf{\texttt{)}}\ \quad && \textrm{parameter declaration} \\[1mm]
+    && \textit{result}    &&\quad ::= &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{result}}\ \textit{valtype}\ \textbf{\texttt{)}}\ param* result* \quad && \textrm{return value declaration} \\[1mm]
+\end{alignat*}
+
+A type use can also be replaced by inline parameter and result declarations. In this case, a type index is automatically inserted.
+
+\begin{alignat*}{9}
+    && \textit{param}^*\ \textit{result}^*  &&\quad ::= &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{type}}\ \textbf{\texttt{typeidx}}\ \textbf{\texttt{)}}\ \textit{param}^*\ \textit{result}^*\ \quad &&  \\[1mm]
+\end{alignat*}
+
+% TODO: valtype
+% TODO: typeidx
+
+\subsubsection{Function Instructions}
+
+Instructions are distinguished between plain and block instructions.
+
+\begin{alignat*}{9}
+    && \textit{instr}\ &&\quad ::= &\quad && \textit{plaininstr}\ \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textit{blockinstr}\ \quad &&  \\[1mm]
+\end{alignat*}
+
+\subsubsection{Control Instructions}
+
+The block type of a block instruction is given similarly to the type definition of a function, or a single result type.
+
+\begin{alignat*}{9}
+    && \textit{blocktype}\ &&\quad ::= &\quad && (\textit{result})^?\ \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textit{typeuse}\ \quad &&  \\[1mm]
+    && \textit{blockinstr}\ &&\quad ::= &\quad && \textbf{\texttt{block}}\ \textit{label}\ \textit{blocktype}\ (\textit{instr})^*\ \textbf{\texttt{end}}\ \textit{id}^?\ \quad &&  \\[1mm]
+    && &&\quad | &\quad && \textbf{\texttt{loop}}\ \textit{label}\ \textit{blocktype}\ (\textit{instr})^*\ \textbf{\texttt{end}}\ \textit{id}^?\ \quad &&  \\[1mm]
+    && &&\quad | &\quad && \textbf{\texttt{if}}\ \textit{label}\ \textit{blocktype}\ (\textit{instr})^*\ \textbf{\texttt{else}}\ \textit{id}^?\ (\textit{instr})^*\ \textbf{\texttt{end}}\ \quad &&  \\[1mm]
+\end{alignat*}
+
+Note that the \textbf{\texttt{else}} keyword of an if instruction can be omitted if the following instruction sequence is empty.
+
+The following are the plain instructions that interact with instruction blocks.
+\begin{alignat*}{9}
+    && \textit{plaininstr}\ &&\quad ::= &\quad && \dots \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{unreachable}}\ \quad && todo \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{nop}}\ \quad && todo \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{br}}\ \quad && todo \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{br\textunderscore if}}\ \quad && todo \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{br\textunderscore table}}\ \quad && todo \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{return}}\ \quad && todo \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{call}}\ \textit{funcidx}\ \quad && todo \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{call\textunderscore indirect}}\ \textit{tableidx} \textit{typeuse}\ \quad && todo \\[1mm]
+\end{alignat*}
+\subsubsection{Reference Instructions}
+
+\begin{alignat*}{9}
+    && \textit{plaininstr}\ &&\quad ::= &\quad && \dots \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{ref.null}}\ \textit{heaptype}\ \quad && todo \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{ref.is\textunderscore null}}\ \quad && todo \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{ref.null}}\ \textit{func-index}\ \quad && todo \\[1mm]
+\end{alignat*}
+
+\subsubsection{Parametric Instructions}
+\begin{alignat*}{9}
+    && \textit{plaininstr}\ &&\quad ::= &\quad && \dots \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{drop}} \quad && todo \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{select}}\ ((\textit{result})^*)^? \quad && todo \\[1mm]
+\end{alignat*}
+
+\subsubsection{Variable Instructions}
+\begin{alignat*}{9}
+    && \textit{plaininstr}\ &&\quad ::= &\quad && \dots \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{local.get}}\ \textit{local-index}\quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{local.set}}\ \textit{local-index}\quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{local.tee}}\ \textit{local-index}\quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{global.get}}\ \textit{global-index}\quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{global.set}}\ \textit{global-index}\quad &&  \\[1mm]
+\end{alignat*}
+
+\subsubsection{Table Instructions}
+\begin{alignat*}{9}
+    && \textit{plaininstr}\ &&\quad ::= &\quad && \dots \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{table.get}}\ \textit{table-index}\ \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{table.set}}\ \textit{table-index}\ \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{table.size}}\ \textit{table-index}\ \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{table.grow}}\ \textit{table-index}\ \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{table.fill}}\ \textit{table-index}\ \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{table.copy}}\ \textit{table-index}\ \textit{table-index}\ \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{table.init}}\ \textit{table-index}\ \textit{elem-index}\ \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{elem.drop}}\ \textit{elem-index}\ \quad &&  \\[1mm]
+\end{alignat*}
+
+All table indices can be omitted from table instructions, and they default to zero.
+
+\subsubsection{Memory Instructions}
+\begin{alignat*}{9}
+    && \textit{memarg}\ &&\quad ::= &\quad && \textit{offset}\ \textit{align} \quad &&  \\[1mm]
+    && \textit{offset}\ &&\quad ::= &\quad && \textbf{\texttt{offset=}} \textit{u32} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textit{\textasciitilde} \quad && \textrm{0 if omitted} \\[1mm]
+    && \textit{align}\ &&\quad ::= &\quad && \textbf{\texttt{align=}} \textit{u32} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textit{\textasciitilde} \quad && \textrm{0 if omitted} \\[1mm]
+    && \textit{plaininstr}\ &&\quad ::= &\quad && \dots \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.load}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.load}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.load}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.load}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.store}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.load8\textunderscore s}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.load8\textunderscore u}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.load16\textunderscore s}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.load16\textunderscore u}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.load8\textunderscore s}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.load8\textunderscore u}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.load16\textunderscore s}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.load16\textunderscore u}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.load32\textunderscore s}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.load32\textunderscore u}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.store}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.store}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.store}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.store8}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.store16}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.store8}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.store16}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.store32}}\ \textit{memarg} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{memory.size}}\ \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{memory.grow}}\ \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{memory.fill}}\ \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{memory.copy}}\ \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{memory.init}}\ \textit{data-index} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{data.drop}}\ \textit{data-index} \quad &&  \\[1mm]
+\end{alignat*}
+
+\subsubsection{Numeric Instructions}
+\begin{alignat*}{9}
+    && \textit{plaininstr}\ &&\quad ::= &\quad && \dots \quad &&  \\[1mm]
+  &&       &&\quad | &\quad && \textbf{\texttt{i32.const}} \quad &&  \\[1mm]
+  &&       &&\quad | &\quad && \textbf{\texttt{i64.const}} \quad &&  \\[1mm]
+  &&       &&\quad | &\quad && \textbf{\texttt{f32.const}} \quad &&  \\[1mm]
+  &&       &&\quad | &\quad && \textbf{\texttt{f64.const}} \quad &&  \\[1mm]
+\end{alignat*}
+
+\begin{alignat*}{9}
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.clz}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.ctz}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.popcnt}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.add}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.submul}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.div\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.div\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.rem\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.rem\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.and}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.or}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.xor}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.shl}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.shr\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.shr\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.rotl}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.rotr}} \quad &&  \\[1mm]
+\end{alignat*}
+
+\begin{alignat*}{9}
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.clz}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.ctz}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.popcnt}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.add}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.submul}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.div\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.div\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.rem\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.rem\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.and}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.or}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.xor}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.shl}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.shr\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.shr\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.rotl}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.rotr}} \quad &&  \\[1mm]
+\end{alignat*}
+
+\begin{alignat*}{9}
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.abs}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.neg}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.ceil}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.floor}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.trunc}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.nearest}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.sqrt}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.add}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.sub}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.mul}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.div}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.min}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.max}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.copysign}} \quad &&  \\[1mm]
+\end{alignat*}
+
+\begin{alignat*}{9}
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.abs}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.neg}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.ceil}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.floor}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.trunc}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.nearest}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.sqrt}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.add}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.sub}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.mul}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.div}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.min}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.max}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.copysign}} \quad &&  \\[1mm]
+\end{alignat*}
+
+\begin{alignat*}{9}
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.eqz}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.eq}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.ne}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.lt\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.lt\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.gt\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.gt\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.le\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.le\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.ge\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.ge\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.eqz}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.eq}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.ne}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.lt\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.lt\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.gt\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.gt\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.le\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.le\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.ge\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.ge\textunderscore u}} \quad &&  \\[1mm]
+\end{alignat*}
+
+\begin{alignat*}{9}
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.eq}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.ne}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.lt}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.gt}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.le}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.ge}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.eq}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.ne}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.lt}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.gt}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.le}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.ge}} \quad &&  \\[1mm]
+\end{alignat*}
+
+\begin{alignat*}{9}
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.wrap\textunderscore i64}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.trunc\textunderscore f32\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.trunc\textunderscore f32\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.trunc\textunderscore f64\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.trunc\textunderscore f64\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.trunc\textunderscore sat\textunderscore f32\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.trunc\textunderscore sat\textunderscore f32\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.trunc\textunderscore sat\textunderscore f64\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.trunc\textunderscore sat\textunderscore f64\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.extend\textunderscore i32\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.extend\textunderscore i32\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.trunc\textunderscore f32\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.trunc\textunderscore f32\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.trunc\textunderscore f64\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.trunc\textunderscore f64\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.trunc\textunderscore sat\textunderscore f32\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.trunc\textunderscore sat\textunderscore f32\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.trunc\textunderscore sat\textunderscore f64\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.trunc\textunderscore sat\textunderscore f64\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.convert\textunderscore i32\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.convert\textunderscore i32\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.convert\textunderscore i64\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.convert\textunderscore i64\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.demote\textunderscore f64}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.convert\textunderscore i32\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.convert\textunderscore i32\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.convert\textunderscore i64\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.convert\textunderscore i64\textunderscore u}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.promote\textunderscore f32}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.reinterpret\textunderscore f32}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.reinterpret\textunderscore f64}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f32.reinterpret\textunderscore i32}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{f64.reinterpret\textunderscore i64}} \quad &&  \\[1mm]
+\end{alignat*}
+
+\begin{alignat*}{9}
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.extend8\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.extend16\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.extend8\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.extend16\textunderscore s}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i64.extend32\textunderscore s}} \quad &&  \\[1mm]
+\end{alignat*}

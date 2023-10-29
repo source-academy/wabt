@@ -1,0 +1,9 @@
+\subsection{Export Segment}
+
+\begin{alignat*}{9}
+    && \textit{export}    &&\quad ::= &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{export}}\ \textit{name}\ \textit{exportdesc}\ \textbf{\texttt{)}}\ \quad && \textrm{export segment} \\[1mm]
+    && \textit{exportdesc}    &&\quad ::= &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{func}}\   \textit{funcidx}\  \textbf{\texttt{)}}\ \quad && \textrm{function export} \\[1mm]
+    &&                        &&\quad  |  &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{table}}\  \textit{tableidx}\  \textbf{\texttt{)}}\ \quad && \textrm{table export} \\[1mm]
+    &&                        &&\quad  |  &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{memory}}\ \textit{memidx}\  \textbf{\texttt{)}}\ \quad && \textrm{memory export} \\[1mm]
+    &&                        &&\quad  |  &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{global}}\ \textit{globalidx}\  \textbf{\texttt{)}}\ \quad && \textrm{global export} \\[1mm]
+\end{alignat*}
