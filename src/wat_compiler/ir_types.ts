@@ -175,7 +175,7 @@ export class ModuleExpression extends IntermediateRepresentation {
         new ExportExpression(
           functionExpression.getInlineExportName()!,
           ExportType.Func,
-          this.functions.length - 1,
+          this.functions.length + this.getImportLength(TokenType.Func) - 1,
         ),
       );
     }
@@ -328,6 +328,10 @@ export class ModuleExpression extends IntermediateRepresentation {
     .map((x) => x.toString())
     .join('\n')}
     }`;
+  }
+
+  getImportLength(importType: ImportType): number {
+    return this.imports.filter((x) => x.importType === importType).length;
   }
 
   get parent(): IntermediateRepresentation | null {

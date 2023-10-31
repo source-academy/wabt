@@ -17,26 +17,3 @@ export const compile = (ir: ModuleExpression) => {
   const binaryWriter = new BinaryWriter(ir);
   return binaryWriter.encode();
 };
-
-/*
-  Functions for dynamic imports
-*/
-export const I32 = ValueType.I32;
-export const I64 = ValueType.I64;
-export const F32 = ValueType.F32;
-export const F64 = ValueType.F64;
-
-// trunk-ignore(eslint/@typescript-eslint/no-unused-vars)
-export const createFunctionImport = (importModule: string, importName: string, functionName: string, paramTypes: ValueType[], returnTypes: ValueType[]) => {
-  for (const type of paramTypes) {
-    if (type !== I32 && type !== I64 && type !== F32 && type !== F64) {
-      throw new Error(`Invalid function param type: Expected I32, I64, F32, or F64. Got: ${type}`);
-    }
-  }
-  for (const type of returnTypes) {
-    if (type !== I32 && type !== I64 && type !== F32 && type !== F64) {
-      throw new Error(`Invalid function return type: Expected I32, I64, F32, or F64. Got: ${type}`);
-    }
-  }
-  return ImportExpression.functionImport(importModule, importName, new FunctionSignature(functionName, null, paramTypes, [null], returnTypes, [], []));
-};

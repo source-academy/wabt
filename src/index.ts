@@ -38,10 +38,5 @@ export {
   parse,
   getIR,
   compile,
-  I32 as I32_TYPE,
-  I64 as I64_TYPE,
-  F32 as F32_TYPE,
-  F64 as F64_TYPE,
-  createFunctionImport,
 } from './wat_compiler';
 // export { getStringParseTree, compileParseTree };
