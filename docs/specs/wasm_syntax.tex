@@ -99,6 +99,6 @@ The type of a function is determined by its parameters and result, where the fun
 \subsubsection{Global Types}
 \textit{Globals} refer to global variables. A global type is a value type and a mutability flag.
 \begin{alignat*}{9}
-    && \textit{globaltype}    &&\quad ::= &\quad && \textit{valtype}  \quad && \\[1mm]
-    &&     &&\quad ::= &\quad && valtype \textbf{\texttt{(}} mu\textbf{\texttt{t}} \textit{valtype} \textbf{\texttt{)}} \quad && \\[1mm]
+    && \textit{globaltype}    &&\quad ::= &\quad && \textit{mut}\ \textit{valtype}  \quad && \\[1mm]
+    && \textit{mut} &&\quad | &\quad && \textit{const}\ |\ \textit{var} \quad && \\[1mm]
 \end{alignat*}

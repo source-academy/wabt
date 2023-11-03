@@ -52,32 +52,61 @@ Note that the \textbf{\texttt{else}} keyword of an if instruction can be omitted
 The following are the plain instructions that interact with instruction blocks.
 \begin{alignat*}{9}
     && \textit{plaininstr}\ &&\quad ::= &\quad && \dots \quad &&  \\[1mm]
-    &&       &&\quad | &\quad && \textbf{\texttt{unreachable}}\ \quad && todo \\[1mm]
-    &&       &&\quad | &\quad && \textbf{\texttt{nop}}\ \quad && todo \\[1mm]
-    &&       &&\quad | &\quad && \textbf{\texttt{br}}\ \quad && todo \\[1mm]
-    &&       &&\quad | &\quad && \textbf{\texttt{br\textunderscore if}}\ \quad && todo \\[1mm]
-    &&       &&\quad | &\quad && \textbf{\texttt{br\textunderscore table}}\ \quad && todo \\[1mm]
-    &&       &&\quad | &\quad && \textbf{\texttt{return}}\ \quad && todo \\[1mm]
-    &&       &&\quad | &\quad && \textbf{\texttt{call}}\ \textit{funcidx}\ \quad && todo \\[1mm]
-    &&       &&\quad | &\quad && \textbf{\texttt{call\textunderscore indirect}}\ \textit{tableidx} \textit{typeuse}\ \quad && todo \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{unreachable}}\ \quad && \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{nop}}\ \quad && \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{br}}\ \quad && \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{br\textunderscore if}}\ \quad && \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{br\textunderscore table}}\ \quad && \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{return}}\ \quad && \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{call}}\ \textit{funcidx}\ \quad && \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{call\textunderscore indirect}}\ \textit{tableidx}\ \textit{typeuse}\ \quad && \\[1mm]
 \end{alignat*}
+
+The \texttt{unreachable} instruction is a special instruction that always traps, which immediately aborts execution. It can be used to indicate unreachable code. \vspace{1em}
+
+The nop instruction does nothing. \vspace{1em}
+
+\texttt{br}, \texttt{br\textunderscore if} and \texttt{br\textunderscore table} are branch instructions.
+\texttt{br} performs and unconditional branch, \texttt{br\textunderscore if} performs a conditional branch, and \texttt{br\textunderscore table}
+performs and indirect branch through and operand indexing to a table. \vspace{1em} Notably, taking a branch unwinds the operand stack up to the branch instruction's target block. \vspace{1em}
+
+The \texttt{return} instruction is an unconditional branch to the caller of the current function.\vspace{1em}
+
+The \texttt{call} instruction calls a function, consuming necessary arguments from the stack and returning the result values of the call back onto the stack. \vspace{1em}
+
+The \texttt{call\textunderscore indirect} instruction invokes a function indirectly via operand indexing to a table.
+
 \subsubsection{Reference Instructions}
 
 \begin{alignat*}{9}
     && \textit{plaininstr}\ &&\quad ::= &\quad && \dots \quad &&  \\[1mm]
-    &&       &&\quad | &\quad && \textbf{\texttt{ref.null}}\ \textit{heaptype}\ \quad && todo \\[1mm]
-    &&       &&\quad | &\quad && \textbf{\texttt{ref.is\textunderscore null}}\ \quad && todo \\[1mm]
-    &&       &&\quad | &\quad && \textbf{\texttt{ref.null}}\ \textit{func-index}\ \quad && todo \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{ref.null}}\ \textit{heaptype}\ \quad && \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{ref.is\textunderscore null}}\ \quad && \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{ref.null}}\ \textit{func-index}\ \quad && \\[1mm]
 \end{alignat*}
+
+The \texttt{ref.null} instruction produces a null value. \vspace {1em}
+
+The \texttt{ref.is\textunderscore null} instruction checks for a null value. \vspace {1em}
+
+The \texttt{ref.func} instruction producs a reference to a given function. \vspace {1em}
 
 \subsubsection{Parametric Instructions}
 \begin{alignat*}{9}
     && \textit{plaininstr}\ &&\quad ::= &\quad && \dots \quad &&  \\[1mm]
-    &&       &&\quad | &\quad && \textbf{\texttt{drop}} \quad && todo \\[1mm]
-    &&       &&\quad | &\quad && \textbf{\texttt{select}}\ ((\textit{result})^*)^? \quad && todo \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{drop}} \quad && \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{select}}\ (\textit{valtype})^? \quad && \\[1mm]
 \end{alignat*}
 
+The \texttt{drop} instruction throws away a single operand on the stack. \vspace{1em}
+
+The \texttt{select} operand selects one of its first two operand based on whether the third operand may be zero or not.
+It may include an optional value type determining the type of the operands. If the value type is excluded, the operands must be of numeric type. \vspace{1em}
+
 \subsubsection{Variable Instructions}
+
+Variable instructions are used to access local and global variables.
+
 \begin{alignat*}{9}
     && \textit{plaininstr}\ &&\quad ::= &\quad && \dots \quad &&  \\[1mm]
     &&       &&\quad | &\quad && \textbf{\texttt{local.get}}\ \textit{local-index}\quad &&  \\[1mm]
@@ -86,6 +115,21 @@ The following are the plain instructions that interact with instruction blocks.
     &&       &&\quad | &\quad && \textbf{\texttt{global.get}}\ \textit{global-index}\quad &&  \\[1mm]
     &&       &&\quad | &\quad && \textbf{\texttt{global.set}}\ \textit{global-index}\quad &&  \\[1mm]
 \end{alignat*}
+
+The \texttt{local.get} instruction fetches the value of a local variable. \vspace{1em}
+
+The \texttt{local.set} instruction writes a value to a local variable. \vspace{1em}
+
+The \texttt{local.tee} instruction writes a value to a local variable and returns the same value. \vspace{1em}
+
+In each function, local variable consists of the function parameters and the local variables declared in the function, and each local variable may be identified by its index. 
+Local variables are indexed from zero, starting with the function parameters, and then spilling over to the local variables. Alternatively, local variables may also be identified by a given identifier. \vspace{1em}
+
+The \texttt{global.get} instruction fetches the value of a global variable. \vspace{1em}
+
+The \texttt{global.set} instruction writes a value to a global variable. \vspace{1em}
+
+Global variables are indexed in order of their declaration, or by a given identifier. \vspace{1em}
 
 \subsubsection{Table Instructions}
 \begin{alignat*}{9}
@@ -101,6 +145,20 @@ The following are the plain instructions that interact with instruction blocks.
 \end{alignat*}
 
 All table indices can be omitted from table instructions, and they default to zero.
+
+
+
+The \texttt{table.get} and \texttt{table.set} instructions access table elements. \vspace{1em}
+
+The \texttt{table.size} instruction returns the current size of a table. \vspace{1em}
+
+The \texttt{table.grow} instruction grows a table by a given number of elements. It returns the previou size of the table, or -1 if space cannot be allocated. Its second operand is an initialisation value for the newly allcoated entries. \vspace{1em}
+
+The \texttt{table.fill} instruction takes in three operands, the first being the starting table index, the second being the ending table index, and the third being the given value. It fills the table with the given value. \vspace{1em}
+
+The \texttt{table.copy} instruction copies a range of elements from one table to another, and the \texttt{table.init} instruction initialises the contents of a table with a passive element segment. They both take in three operands - the destination index, the starting and the ending source index. \vspace{1em}
+
+Teh \texttt{elem.drop} instruction drops a passive element segment, and marks it as unused. \vspace{1em}
 
 \subsubsection{Memory Instructions}
 \begin{alignat*}{9}
@@ -137,9 +195,17 @@ All table indices can be omitted from table instructions, and they default to ze
     &&       &&\quad | &\quad && \textbf{\texttt{memory.grow}}\ \quad &&  \\[1mm]
     &&       &&\quad | &\quad && \textbf{\texttt{memory.fill}}\ \quad &&  \\[1mm]
     &&       &&\quad | &\quad && \textbf{\texttt{memory.copy}}\ \quad &&  \\[1mm]
-    &&       &&\quad | &\quad && \textbf{\texttt{memory.init}}\ \textit{data-index} \quad &&  \\[1mm]
-    &&       &&\quad | &\quad && \textbf{\texttt{data.drop}}\ \textit{data-index} \quad &&  \\[1mm]
 \end{alignat*}
+
+Instructions of the form \texttt{x.loady} loads a value of type \texttt{y} from memory and pushes it onto the operand stack as type \texttt{x}, and instructions of the form \texttt{x.storey} stores a value of type \texttt{x} to memory as type \texttt{y}. \vspace{1em}
+
+The \texttt{memory.size} instruction returns the current size of the memory in units of pages. \vspace{1em}
+
+The \texttt{memory.grow} instruction grows the memory by a given number of pages. It returns the previous size of the memory, or -1 if space cannot be allocated. \vspace{1em}
+
+The \texttt{memory.fill} instruction takes in three operands, the first being the starting memory index, the second being the ending memory index, and the third being the given value. It fills the memory with the given value. \vspace{1em}
+
+The \texttt{memory.copy} instruction copies a range of memory from one memory to another. It takes in three operands - the destination index, the starting and the ending source index. \vspace{1em}
 
 \subsubsection{Numeric Instructions}
 \begin{alignat*}{9}
@@ -155,7 +221,8 @@ All table indices can be omitted from table instructions, and they default to ze
     &&       &&\quad | &\quad && \textbf{\texttt{i32.ctz}} \quad &&  \\[1mm]
     &&       &&\quad | &\quad && \textbf{\texttt{i32.popcnt}} \quad &&  \\[1mm]
     &&       &&\quad | &\quad && \textbf{\texttt{i32.add}} \quad &&  \\[1mm]
-    &&       &&\quad | &\quad && \textbf{\texttt{i32.submul}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.sub}} \quad &&  \\[1mm]
+    &&       &&\quad | &\quad && \textbf{\texttt{i32.mul}} \quad &&  \\[1mm]
     &&       &&\quad | &\quad && \textbf{\texttt{i32.div\textunderscore s}} \quad &&  \\[1mm]
     &&       &&\quad | &\quad && \textbf{\texttt{i32.div\textunderscore u}} \quad &&  \\[1mm]
     &&       &&\quad | &\quad && \textbf{\texttt{i32.rem\textunderscore s}} \quad &&  \\[1mm]
@@ -169,6 +236,7 @@ All table indices can be omitted from table instructions, and they default to ze
     &&       &&\quad | &\quad && \textbf{\texttt{i32.rotl}} \quad &&  \\[1mm]
     &&       &&\quad | &\quad && \textbf{\texttt{i32.rotr}} \quad &&  \\[1mm]
 \end{alignat*}
+
 
 \begin{alignat*}{9}
     &&       &&\quad | &\quad && \textbf{\texttt{i64.clz}} \quad &&  \\[1mm]
@@ -307,3 +375,22 @@ All table indices can be omitted from table instructions, and they default to ze
     &&       &&\quad | &\quad && \textbf{\texttt{i64.extend16\textunderscore s}} \quad &&  \\[1mm]
     &&       &&\quad | &\quad && \textbf{\texttt{i64.extend32\textunderscore s}} \quad &&  \\[1mm]
 \end{alignat*}
+
+
+The \texttt{const} instructions push a constant value onto the operand stack. \vspace{1em}
+
+\texttt{clz}, \texttt{ctz}, and \texttt{popcnt} instructions are all unary operations. \vspace{1em}
+
+The \texttt{clz} instruction counts the number of leading zero bits in the operand.
+The \texttt{ctz} instruction counts the number of trailing zero bits in the operand.
+The \texttt{popcnt} instruction counts the number of one bits in the operand. \vspace{1em}
+
+The \texttt{add}, \texttt{sub}, \texttt{mul}, \texttt{div\textunderscore s}, \texttt{div}, \texttt{rem}, \texttt{and}, \texttt{or}, \texttt{xor}, \texttt{shl}, \texttt{shr}, \texttt{shr}, \texttt{rotl}, and \texttt{rotr} instructions are binary numeric operations. They take in two operands and produce one result of the same type.\vspace{1em}
+
+The \texttt{abs}, \texttt{neg}, \texttt{sqrt}, \texttt{ceil}, \texttt{floor}, \texttt{trunc}, \texttt{nearest} instructions are numeric operations that consume one operand and produce an operand of the same type.
+
+The \texttt{eqz} instruction is a comparison that consumes one operand and produces a boolean integer result (of type i32). \vspace{1em}
+
+The \texttt{eq}, \texttt{ne}, \texttt{lt}, \texttt{gt}, \texttt{le} and \texttt{ge} instructions are comparions that consume two operands and produce a boolean integer result (of type i32). \vspace{1em}
+
+Some integer instructions distinguish whether they work on signed or unsigned integers through the annotation \texttt{\textunderscore s} or \texttt{\textunderscore u}. \vspace{1em}. \vspace{1em}
