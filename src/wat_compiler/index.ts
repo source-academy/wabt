@@ -1,7 +1,6 @@
-import { ValueType } from '../common/type';
 import { BinaryWriter } from './binary_writer';
 import { getIR as _getIR } from './ir';
-import { FunctionSignature, ImportExpression, type ModuleExpression } from './ir_types';
+import { type ModuleExpression } from './ir_types';
 import { tokenize } from './lexer';
 import { getParseTree } from './parser';
 import { type ParseTree } from './tree_types';
