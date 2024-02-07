@@ -51,8 +51,7 @@ Note that the \textbf{\texttt{else}} keyword of an if instruction can be omitted
 
 The following are the plain instructions that interact with instruction blocks.
 \begin{alignat*}{9}
-    && \textit{plaininstr}\ &&\quad ::= &\quad && \dots \quad &&  \\[1mm]
-    &&       &&\quad | &\quad && \textbf{\texttt{unreachable}}\ \quad && \\[1mm]
+    && \textit{plaininstr}\ &&\quad ::= &\quad && \textbf{\texttt{unreachable}}\ \quad &&  \\[1mm]
     &&       &&\quad | &\quad && \textbf{\texttt{nop}}\ \quad && \\[1mm]
     &&       &&\quad | &\quad && \textbf{\texttt{br}}\ \quad && \\[1mm]
     &&       &&\quad | &\quad && \textbf{\texttt{br\textunderscore if}}\ \quad && \\[1mm]
@@ -89,7 +88,7 @@ The \texttt{ref.null} instruction produces a null value. \vspace {1em}
 
 The \texttt{ref.is\textunderscore null} instruction checks for a null value. \vspace {1em}
 
-The \texttt{ref.func} instruction producs a reference to a given function. \vspace {1em}
+The \texttt{ref.func} instruction produces a reference to a given function. \vspace {1em}
 
 \subsubsection{Parametric Instructions}
 \begin{alignat*}{9}
@@ -152,7 +151,7 @@ The \texttt{table.get} and \texttt{table.set} instructions access table elements
 
 The \texttt{table.size} instruction returns the current size of a table. \vspace{1em}
 
-The \texttt{table.grow} instruction grows a table by a given number of elements. It returns the previou size of the table, or -1 if space cannot be allocated. Its second operand is an initialisation value for the newly allcoated entries. \vspace{1em}
+The \texttt{table.grow} instruction grows a table by a given number of elements. It returns the previous size of the table, or -1 if space cannot be allocated. Its second operand is an initialisation value for the newly allocated entries. \vspace{1em}
 
 The \texttt{table.fill} instruction takes in three operands, the first being the starting table index, the second being the ending table index, and the third being the given value. It fills the table with the given value. \vspace{1em}
 
@@ -391,6 +390,6 @@ The \texttt{abs}, \texttt{neg}, \texttt{sqrt}, \texttt{ceil}, \texttt{floor}, \t
 
 The \texttt{eqz} instruction is a comparison that consumes one operand and produces a boolean integer result (of type i32). \vspace{1em}
 
-The \texttt{eq}, \texttt{ne}, \texttt{lt}, \texttt{gt}, \texttt{le} and \texttt{ge} instructions are comparions that consume two operands and produce a boolean integer result (of type i32). \vspace{1em}
+The \texttt{eq}, \texttt{ne}, \texttt{lt}, \texttt{gt}, \texttt{le} and \texttt{ge} instructions are comparisons that consume two operands and produce a boolean integer result (of type i32). \vspace{1em}
 
 Some integer instructions distinguish whether they work on signed or unsigned integers through the annotation \texttt{\textunderscore s} or \texttt{\textunderscore u}. \vspace{1em}. \vspace{1em}
