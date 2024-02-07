@@ -1,0 +1,14 @@
+\subsection{Import Segment}
+
+We can import functions, tables, memories or globals.
+
+\begin{alignat*}{9}
+    && \textit{import-section}    &&\quad ::= &\quad && \textbf{\texttt{(import}}\ \textit{module-name}\ \textit{name}\ \textit{import-desc}\ \textbf{\texttt{)}}  \quad && \textrm{import} \\[1mm]
+    && \textit{module-name}       &&\quad ::= &\quad && \textbf{\texttt{string}} &&\\[1mm]
+    && \textit{name}              &&\quad ::= &\quad && \textbf{\texttt{string}} &&\\[1mm]
+    && \textit{import-desc}       &&\quad ::= &\quad && \textbf{\texttt{(func}}\ \textit{id}^?\ \textit{typeuse}\ \textbf{\texttt{)}}  \quad && \textrm{function import} \\[1mm]
+    &&                            &&\quad  |  &\quad && \textbf{\texttt{(table}}\ \textit{id}^?\ \textit{tabletype}\ \textbf{\texttt{)}}  \quad && \textrm{table import} \\[1mm]
+    &&                            &&\quad  |  &\quad && \textbf{\texttt{(memory}}\ \textit{id}^?\ \textit{memtype}\ \textbf{\texttt{)}}  \quad && \textrm{memory import} \\[1mm]
+    &&                            &&\quad  |  &\quad && \textbf{\texttt{(global}}\ \textit{id}^?\ \textit{globaltype}\ \textbf{\texttt{)}}  \quad && \textrm{global import} \\[1mm]
+\end{alignat*}
+% Add another alignat but with the textit and textbf texttt swapped

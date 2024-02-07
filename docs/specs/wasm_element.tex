@@ -1,0 +1,13 @@
+\subsection{Element Segment}
+
+Element segments are segments used to initialise tables.
+
+\begin{alignat*}{9}
+    && \textit{elem}    &&\quad ::= &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{elem}}\ \textit{id}^?\ \textit{elemlist}\ \textit{)}\ \quad && \textrm{passive element section} \\[1mm]
+    &&                  &&\quad  |  &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{elem}}\ \textit{id}^?\ \textit{tableuse}\  \textbf{\texttt{(}}\ \textbf{\texttt{offset}}\ \textit{expr}\ \textbf{\texttt{)}}\ \textit{elemlist}\ \textbf{\texttt{)}}\  \quad && \textrm{active element section} \\[1mm]
+    &&                  &&\quad  |  &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{elem}}\ \textit{id}^?\ \textbf{\texttt{declare}}\ \textit{elemlist}\ \textbf{\texttt{)}}\  \quad && \textrm{declarative element section} \\[1mm]
+    && \textit{elemlist}       &&\quad ::= &\quad && \textit{reftype}\ \textit{elemexpr}^*\ &&\\[1mm]
+    && \textit{elemexpr}       &&\quad ::= &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{item}}\ \textit{elemexpr}\ \textbf{\texttt{)}}\ &&\\[1mm]
+    && \textit{tableuse}       &&\quad ::= &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{table}}\ \textit{tableidx}\ \textbf{\texttt{)}}\ &&\\[1mm]
+\end{alignat*}
+

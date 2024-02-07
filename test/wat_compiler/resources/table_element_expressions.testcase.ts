@@ -2,7 +2,7 @@
 Productions:
 elem ::=
     ('elem' id? elemlist)
-    ('elem' id? ('table tableidx) ('offset' expr) elemlist)
+    ('elem' id? ('table' tableidx) ('offset' expr) elemlist)
     ('elem' id? 'declare' elemlist)
 
 elemlist ::= reftype elemexpr*

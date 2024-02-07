@@ -251,18 +251,20 @@ export class IRWriter {
     if (!(importdesc instanceof Array) || !(importdesc[0] instanceof Token)) {
       throw new Error(`Expected import description to be a sequence of tokens in import expression: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
     }
+    const importModuleName = importModule.extractName();
+    const importNameName = importName.extractName();
     switch (importdesc[0].type) {
       case TokenType.Func:
-        return ImportExpression.functionImport(importModule, importName, this.parseFunctionExpressionSignature(importdesc)[0]);
+        return ImportExpression.functionImport(importModuleName, importNameName, this.parseFunctionExpressionSignature(importdesc)[0]);
       case TokenType.Table:
         // console.log(this.parseTableExpression(importdesc));
         throw new Error('Table expressions are not supported yet.'); // FIXME
         break;
       case TokenType.Memory:
-        return ImportExpression.memoryImport(importModule, importName, this.parseMemoryExpression(importdesc));
+        return ImportExpression.memoryImport(importModuleName, importNameName, this.parseMemoryExpression(importdesc));
         // console.log(this.parseMemoryExpression(importdesc));
       case TokenType.Global:
-        return ImportExpression.globalImport(importModule, importName, this.parseImportGlobalExpression(importdesc));
+        return ImportExpression.globalImport(importModuleName, importNameName, this.parseImportGlobalExpression(importdesc));
         break;
       default:
         throw new Error(`Unrecognised import description: ${Tree.treeMap(parseTree, (t) => t.lexeme)}`);
@@ -588,7 +590,7 @@ export class IRWriter {
     const importModuleName = parseTree[1] as Token;
     const importEntityName = parseTree[2] as Token;
 
-    return (tableExpression: TableExpression) => ImportExpression.tableImport(importModuleName, importEntityName, tableExpression);
+    return (tableExpression: TableExpression) => ImportExpression.tableImport(importModuleName.extractName(), importEntityName.extractName(), tableExpression);
   }
 
   private parseInlineTableExportExpression(parseTree: ParseTree): ExportExpression {

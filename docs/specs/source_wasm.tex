@@ -1,0 +1,62 @@
+\input source_header.tex
+\begin{document}
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\docheader{2023}{Webassembly Text}{(Source Version)}{Kim Yongbeom}
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \input source_intro.tex
+
+%\input source_1_bnf.tex
+
+\newpage
+
+% \input source_return
+
+\section{Introduction}
+
+\input wasm_intro.tex
+
+\newpage
+
+\section{Syntax}
+
+\input wasm_syntax.tex
+
+\section{Segments}
+
+Each webassembly program is a \textit{module} consisting of a sequence of segments. A module collects definitions for types, functions, tables, memories and globals. In addition, it can declare imports and exports and provide initialisation in the form of data and element segments, or a start function.
+
+\begin{alignat*}{9}
+	&& \textit{module}    &&\quad ::= &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{module}}\  \textit{segment}^*\ \textbf{\texttt{)}}\  && \textrm{module}\\[1mm]
+	&& \textit{segment}    &&\quad ::= &\quad && \textit{type}&& \textrm{type segment} \\[1mm]
+	&& 					   &&\quad 	|  &\quad && \textit{import}&& \textrm{import segment} \\[1mm]
+	&& 					   &&\quad 	|  &\quad && \textit{function}&& \textrm{function segment} \\[1mm]
+	&& 					   &&\quad 	|  &\quad && \textit{table}&& \textrm{table segment} \\[1mm]
+	&& 					   &&\quad 	|  &\quad && \textit{memory}&& \textrm{memory segment} \\[1mm]
+	&& 					   &&\quad 	|  &\quad && \textit{global}&& \textrm{global segment} \\[1mm]
+	&& 					   &&\quad 	|  &\quad && \textit{export}&& \textrm{export segment} \\[1mm]
+	&& 					   &&\quad 	|  &\quad && \textit{start}&& \textrm{start segment} \\[1mm]
+	&& 					   &&\quad 	|  &\quad && \textit{element}&& \textrm{element segment} \\[1mm]
+	&& 					   &&\quad 	|  &\quad && \textit{data}&& \textrm{data segment} \\[1mm]
+\end{alignat*}
+
+\input wasm_type.tex
+
+\input wasm_import.tex
+
+\input wasm_function.tex
+
+\input wasm_table.tex
+
+\input wasm_element.tex
+
+\input wasm_memory.tex
+
+\input wasm_global.tex
+
+\input wasm_export.tex
+
+\input wasm_start.tex
+
+%\input wasm_data.tex
+\end{document}

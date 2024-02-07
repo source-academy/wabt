@@ -1,0 +1,13 @@
+\subsection{Table Segment}
+
+% FIXME: plaigiarised from official specs
+
+A table is an array of values of a given reference type. It allows programs to select such values
+indirectly through a dynamic index operand. Currently, the only available element type is an untyped function reference or a reference to an external host value.
+
+\begin{alignat*}{9}
+    && \textit{table}    &&\quad ::= &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{table}}\ \textit{id}^?\ \textit{tabletype}\ \textbf{\texttt{)}}\ \quad && \textrm{table} \\[1mm]
+    && \textit{tabletype}&&\quad ::= &\quad && \textit{limits}\ \textit{reftype}\ \quad && \textrm{table with} \ \textit{limits} \ \textrm{capacity,} \ \textit{reftype} \ \textrm{type.} \\[1mm]
+    && \textit{limits}  &&\quad ::= &\quad && \textit{u32}\ \quad && \textrm{min} \\[1mm]
+    &&                  &&\quad  |  &\quad && \textit{u32}\ \textit{u32}\ && \textrm{min max} \\[1mm]
+\end{alignat*}

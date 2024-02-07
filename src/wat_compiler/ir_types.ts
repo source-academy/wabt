@@ -175,7 +175,7 @@ export class ModuleExpression extends IntermediateRepresentation {
         new ExportExpression(
           functionExpression.getInlineExportName()!,
           ExportType.Func,
-          this.functions.length - 1,
+          this.functions.length + this.getImportLength(TokenType.Func) - 1,
         ),
       );
     }
@@ -330,6 +330,10 @@ export class ModuleExpression extends IntermediateRepresentation {
     }`;
   }
 
+  getImportLength(importType: ImportType): number {
+    return this.imports.filter((x) => x.importType === importType).length;
+  }
+
   get parent(): IntermediateRepresentation | null {
     return null;
   }
@@ -439,42 +443,49 @@ export class ExportExpression extends IntermediateRepresentation {
 
 type ImportType = TokenType.Func | TokenType.Table | TokenType.Memory | TokenType.Global;
 
-export class ImportExpression extends IntermediateRepresentation {
+export class ImportExpression extends IntermediateRepresentation implements HasIdentifier {
   private _parent: IntermediateRepresentation | null = null;
-  importModule: IRToken;
-  importName: IRToken;
+  importModule: string;
+  importName: string;
   importType: ImportType;
   functionSignature: FunctionSignature | null = null;
   memoryExpression: MemoryExpression | null = null;
   globalExpression: ImportGlobalExpression | null = null;
   tableExpression: TableExpression | null = null;
 
-  private constructor(importModule: Token, importName: Token, importType: ImportType) {
+  private constructor(importModule: string, importName: string, importType: ImportType) {
     super();
-    this.importModule = new IRToken(importModule, this);
-    this.importName = new IRToken(importName, this);
+    this.importModule = importModule;
+    this.importName = importName;
     this.importType = importType;
   }
 
-  static functionImport(importModule: Token, importName: Token, functionSignature: FunctionSignature) {
+  getID(): string | null {
+    if (this.importType === TokenType.Func) {
+      return this.functionSignature!.functionName;
+    }
+    throw new Error('getID not implemented for memory, global or tables');
+  }
+
+  static functionImport(importModule: string, importName: string, functionSignature: FunctionSignature) {
     const importExp = new ImportExpression(importModule, importName, TokenType.Func);
     importExp.functionSignature = functionSignature;
     return importExp;
   }
 
-  static tableImport(importModule: Token, importName: Token, tableExpression: TableExpression) {
+  static tableImport(importModule: string, importName: string, tableExpression: TableExpression) {
     const importExp = new ImportExpression(importModule, importName, TokenType.Table);
     importExp.tableExpression = tableExpression;
     return importExp;
   }
 
-  static memoryImport(importModule: Token, importName: Token, memoryExpression: MemoryExpression) {
+  static memoryImport(importModule: string, importName: string, memoryExpression: MemoryExpression) {
     const importExp = new ImportExpression(importModule, importName, TokenType.Memory);
     importExp.memoryExpression = memoryExpression;
     return importExp;
   }
 
-  static globalImport(importModule: Token, importName: Token, globalExpression: ImportGlobalExpression) {
+  static globalImport(importModule: string, importName: string, globalExpression: ImportGlobalExpression) {
     const importExp = new ImportExpression(importModule, importName, TokenType.Global);
     importExp.globalExpression = globalExpression;
     return importExp;

@@ -1,0 +1,104 @@
+The following rules concern basic WebAssembly Text syntax.
+
+\subsection{White Space}
+White space is any sequence of the following: space (U+020), horizontal tab (U+09), line feed (U+0A), carriage return (U+0D) or comments. White space is ignored except as it separates tokens that would otherwise combine into a single token.
+
+\begin{alignat*}{9}
+    && \textit{space}    &&\quad ::= &\quad && (\textit{U+20}\ |\ \textit{format}\ |\ \textit{comment})^*\ \quad && \\[1mm]
+    && \textit{format}    &&\quad ::= &\quad && \textit{newline}\  \quad && \\[1mm]
+    &&    &&\quad | &\quad && \textit{U+09}  \quad && \textrm{horizontal tab} \\[1mm]
+    && \textit{newline}    &&\quad ::= &\quad && \textit{U+0A}\  \quad && \textrm{line feed} \\[1mm]
+    &&    &&\quad | &\quad && \textit{U+0D}\ \quad && \textrm{carriage return} \\[1mm]
+    &&    &&\quad | &\quad && \textit{U+0D U+0A}\  \quad && \textrm{line feed + carriage return} \\[1mm]
+\end{alignat*}
+
+A line comment starts with a double semicolon (\textbf{\texttt{;;}}) and continues to the end of the line, whereas a block comment is enclosed in parentheses and semicolons (\textbf{\texttt{(;}} and \textbf{\texttt{;)}}). Block comments can be nested.
+
+\begin{alignat*}{9}
+    && \textit{comment}    &&\quad ::= &\quad && \textit{linecomment}\ |\ \textit{blockcomment}  \quad && \\[1mm]
+    && \textit{linecomment}    &&\quad ::= &\quad && \textbf{\texttt{;;}}\ \textit{char}^*\ (\textit{newline}\ |\ \textit{eof})  \quad && \\[1mm]
+    && \textit{blockcomment}    &&\quad ::= &\quad && \textbf{\texttt{(;}}\ \textit{blockchar}^*\ \textbf{\texttt{;)}}\  \quad && \\[1mm]
+    && \textit{blockchar}&&\quad ::= &\quad && \textit{char} && \textrm{if char is not ; or (} \\[1mm]
+    && &&\quad | &\quad && \textrm{\texttt{;}} && \textrm{if next char is not )} \\[1mm]
+    && &&\quad | &\quad && \textrm{\texttt{(}} && \textrm{if next char is not ;} \\[1mm]
+    && &&\quad | &\quad && \textit{blockcomment} && \\[1mm]
+\end{alignat*}
+
+\subsection{Strings}
+A string is a sequence of characters encoded as UTF-8. A string must be enclosed in quotation marks and may contain any character other than ASCII44 control characters, quotation marks ("), or backslash (\textbackslash), except when expressed with an escape sequence.
+
+\begin{alignat*}{9}
+    && \textit{string}    &&\quad ::= &\quad && \textbf{\texttt{"}}\ \textit{stringelem}\ \textbf{\texttt{"}}\  \quad && \\[1mm]
+    && \textit{stringelem}    &&\quad ::= &\quad && \textinterrobangdown{stringchar}  \quad && \\[1mm]
+    && \textit{stringelem}    &&\quad ::= &\quad && \textbf{\texttt{\textbackslash}}\ \textit{hexdigit}\ \textit{hexdigit}\  \quad && \textrm{2-digit hexcode} \\[1mm]
+    && \textit{module-name}    &&\quad ::= &\quad && \textit{string} &&\\[1mm]
+    && \textit{name}    &&\quad ::= &\quad && \textit{string} &&\\[1mm]
+    && \textit{import-desc}       &&\quad ::= &\quad && \textbf{\texttt{(func}}\ \textit{id}^?\ \textit{typeuse}\ \textbf{\texttt{)}}  \quad && \textrm{function import} \\[1mm]
+    &&                            &&\quad  |  &\quad && \textbf{\texttt{(table}}\ \textit{id}^?\ \textit{tabletype}\ \textbf{\texttt{)}}  \quad && \textrm{table import} \\[1mm]
+    &&                            &&\quad  |  &\quad && \textbf{\texttt{(memory}}\ \textit{id}^?\ \textit{memtype}\ \textbf{\texttt{)}}  \quad && \textrm{memory import} \\[1mm]
+    &&                            &&\quad  |  &\quad && \textbf{\texttt{(global}}\ \textit{id}^?\ \textit{globaltype}\ \textbf{\texttt{)}}  \quad && \textrm{global import} \\[1mm]
+\end{alignat*}
+
+\subsection{Names}
+A name is string.
+
+\begin{alignat*}{9}
+    && \textit{name}    &&\quad ::= &\quad && \textit{string}  \quad && \\[1mm]
+\end{alignat*}
+
+\subsection{Identifiers}
+
+Each definition can be identified by either its index or symbolic identifier. Symbolic identifiers are identifiers that start with a dollar sign (\$) followed by a name. A name is a string that does not contain a space, quotation mark, comma, semicolon or bracket.
+
+\begin{alignat*}{9}
+    && \textit{id}    &&\quad ::= &\quad && \textbf{\texttt{\$}}\ \textit{idchar}^+  \quad && \\[1mm]
+    && \textit{idchar}    &&\quad ::= &\quad && \textbf{\texttt{0}}\ |\ \textbf{\texttt{\dots}}\ |\ \textbf{\texttt{9}}\ |  \quad && \\[1mm]
+    &&                    &&\quad  |  &\quad && \textbf{\texttt{a}}\ |\ \textbf{\texttt{\dots}}\ |\ \textbf{\texttt{z}}\ |  \quad && \\[1mm]
+    &&                    &&\quad  |  &\quad && \textbf{\texttt{A}}\ |\ \textbf{\texttt{\dots}}\ |\ \textbf{\texttt{Z}}\ |  \quad && \\[1mm]
+    &&                    &&\quad  |  &\quad && \textbf{\texttt{!}}\ |\ \textbf{\texttt{\#}}\ |\ \textbf{\texttt{\$}}\ |\ \textbf{\texttt{\%}}\ |\ \textbf{\texttt{\&}}\ |\ \textbf{\texttt{*}}\ |\ \textbf{\texttt{+}}\ |\ \textbf{\texttt{-}}\ |\ \textbf{\texttt{.}}\ |\ \textbf{\texttt{/}}\ |\ \textbf{\texttt{:}}\ |\ \textbf{\texttt{<}}\  \quad && \\[1mm]
+    &&                    &&\quad  |  &\quad && \textbf{\texttt{=}}\ |\ \textbf{\texttt{>}}\ |\ \textbf{\texttt{?}}\ |\ \textbf{\texttt{@}}\ |\ \textbf{\texttt{\textbackslash}}\ |\ \textbf{\texttt{\^}}\ |\ \textbf{\texttt{\_}}\ |\ \textbf{\texttt{`}}\ |\ \textbf{\texttt{|}}\ |\ \textbf{\texttt{~}}\  \quad && \\[1mm]
+\end{alignat*}
+
+\subsection{Types}
+The following are the available types in WebAssembly.
+\subsubsection{Number Types}
+All numbers are either 32- or 64-bit integers or floating points.
+
+\begin{alignat*}{9}
+    && \textit{numtype}    &&\quad ::= &\quad && \textbf{\texttt{i32}}  \quad && \\[1mm]
+    && &&\quad | &\quad && \textbf{\texttt{i64}}  \quad && \\[1mm]
+    && &&\quad | &\quad && \textbf{\texttt{f32}}  \quad && \\[1mm]
+    && &&\quad | &\quad && \textbf{\texttt{f64}}  \quad && \\[1mm]
+\end{alignat*}
+
+\subsubsection{Reference Types}
+Reference types are first-class references to objects. 
+\textbf{\texttt{funcref}} is a reference to a function. \textbf{\texttt{externref}} is a reference to an external object.
+\begin{alignat*}{9}
+    && \textit{reftype}    &&\quad ::= &\quad && \textbf{\texttt{funcref}}  \quad && \\[1mm]
+    && &&\quad | &\quad && \textbf{\texttt{externref}}  \quad && \\[1mm]
+    && \textit{heaptype}    &&\quad ::= &\quad && \textbf{\texttt{func}}  \quad && \\[1mm]
+    && &&\quad | &\quad && \textbf{\texttt{extern}}  \quad && \\[1mm]
+\end{alignat*}
+
+\subsubsection{Value Types}
+\begin{alignat*}{9}
+    && \textit{valtype}    &&\quad ::= &\quad && \textbf{\texttt{numtype}}  \quad && \\[1mm]
+    &&     &&\quad | &\quad && \textbf{\texttt{reftype}}  \quad && \\[1mm]
+\end{alignat*}
+
+\subsubsection{Function Types}
+The type of a function is determined by its parameters and result, where the function maps the parameter types to the result types. The parameters and result are value types.
+
+\begin{alignat*}{9}
+    && \textit{functype}    &&\quad ::= &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{func}}\ \textit{param}^*\ \textit{result}^*\ \textbf{\texttt{)}}\  \quad && \\[1mm]
+    && \textit{param}    &&\quad ::= &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{param}}\ \textit{id}^?\ \textit{valtype}\ \textbf{\texttt{)}}\  \quad && \\[1mm]
+    && \textit{result}    &&\quad ::= &\quad && \textbf{\texttt{(}}\ \textbf{\texttt{result}}\ \textit{valtype}\ \textbf{\texttt{)}}\  \quad && \\[1mm]
+\end{alignat*}
+
+\subsubsection{Global Types}
+\textit{Globals} refer to global variables. A global type is a value type and a mutability flag.
+\begin{alignat*}{9}
+    && \textit{globaltype}    &&\quad ::= &\quad && \textit{mut}\ \textit{valtype}  \quad && \\[1mm]
+    && \textit{mut} &&\quad | &\quad && \textit{const}\ |\ \textit{var} \quad && \\[1mm]
+\end{alignat*}

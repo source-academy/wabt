@@ -3,3 +3,9 @@
 /dist/
 /types/
 index.js
+
+# vs code
+/.vscode/
+
+# Examples PDF
+EXAMPLES.pdf

@@ -1,0 +1,33 @@
+\subsection{Background}
+
+The main motivation behind this document is to provide a specification for the WebAssembly Text
+format used in the Source Academy. \vspace{1em}
+
+This differs from the official WebAssembly specifications
+in that this document is meant to be a specification of the WebAssembly Text features implemented
+in Source Academy, and that it is also meant for users to write and understand WebAssembly Text as
+a language, rather than to provide a industry-wide specification for WebAssembly as a whole,
+including runtime, binary and verification details among others.  \vspace{1em}
+
+In short, this document is meant to be a specification for the WebAssembly Text format supported and used
+in the Source Academy (or the \textbf{\texttt{wasm}} module).
+
+\subsection{About WebAssembly Text}
+WebAssembly Text is a text format for WebAssembly modules. The design of the 
+WebAssembly runtime and instruction set are beyond the scope of this specification, 
+and can be read in the official WebAssembly 
+\href{https://webassembly.github.io/spec/core/_download/WebAssembly.pdf}{specification}. \vspace{1em}
+
+Notably, the computational model of WebAssembly is based on a stack machine, 
+where a sequence of instructions are executed in order. Instructions consume 
+values on an implicit operand stack, and push any results back onto the stack.
+The WebAssembly Text format is a rendering of the above syntax into S-expressions.
+
+\subsection{Differences between official WebAssembly Text Format}
+
+Here are documented differences between the current specifications and the official WebAssembly Text specifications.
+
+\subsubsection{Data \& Data Count Segment}
+
+The data and data count segments in the official WebAssembly Text specifications are omitted and not support in the current iteration of the WebAssembly Text compiler.
+Since the data segment is used to initialize the memory segment, users cannot currently initialise the heap memory with a pre-set array of values.

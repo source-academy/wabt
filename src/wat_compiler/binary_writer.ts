@@ -468,8 +468,8 @@ export class BinaryWriter {
 
 
   private encodeImportExpression(importExpression: ImportExpression): Uint8Array {
-    const importModuleEncoding = this.encodeToken(importExpression.importModule, null);
-    const importNameEncoding = this.encodeToken(importExpression.importName, null);
+    const importModuleEncoding = this.encodeTextLiteral(importExpression.importModule);
+    const importNameEncoding = this.encodeTextLiteral(importExpression.importName);
     let importTypeEncoding: number;
     let importDescEncoding: Uint8Array | number[];
     switch (importExpression.importType) {
@@ -620,6 +620,7 @@ export class BinaryWriter {
       case TokenType.TableInit:
         return this.encodeTableVarToken(token);
       case TokenType.RefFunc:
+      case TokenType.Call:
         return this.encodeFuncRefToken(token);
       case TokenType.ElemDrop:
         return this.encodeElementVarToken(token);
@@ -730,21 +731,24 @@ export class BinaryWriter {
     );
   }
   /**
-   * Encode a 'ref.func $var' token by evaluating the index for $var.
+   * Encode a 'ref.func $var' or 'call $var' token by evaluating the index for $var.
    * @returns a number corresponding to the local variable index.
    */
   private encodeFuncRefToken(
     token: IRToken,
   ): number {
     const nameToResolve = token.lexeme;
-    for (const [i, fn] of this.module.functions.entries()) {
+    const functions = (this.module.imports.filter((x) => x.importType === TokenType.Func) as (ImportExpression | FunctionExpression)[])
+      .concat(this.module.functions);
+
+    for (const [i, fn] of functions.entries()) {
       if (fn.getID() === nameToResolve) {
         return i;
       }
     }
     throw new Error(
       `Function name ${nameToResolve} not found in modules. Function names available: ${
-        this.module.functions
+        functions
           .map((fn) => fn.getID())
           .filter((name) => name !== null)
       }`,
@@ -949,10 +953,6 @@ export class BinaryWriter {
       return this.encodeOpcodeToken(token);
     }
 
-    if (token.isTextToken()) {
-      return this.encodeTextToken(token);
-    }
-
     if (token.valueType !== null) {
       // This is a last-ditch attempt to translate a given token. May not be correct.
       return new Uint8Array([ValueType.getValue(token.valueType!)]);
@@ -1051,8 +1051,11 @@ export class BinaryWriter {
     return new Uint8Array(encoding);
   }
 
-  private encodeTextToken(token: IRToken): Uint8Array {
-    const text = token.extractName();
+  /**
+   * Encode a text literal from a token of type TokenType.Text.
+   * Assumes that text has been extracted with the token.extractName() method (no quotes in string).
+   */
+  private encodeTextLiteral(text: string): Uint8Array {
     const length = text.length;
     const encoding = [];
     for (let i = 0; i < length; i++) {
