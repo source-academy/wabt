@@ -1,6 +1,9 @@
 # WABT-Parser
 Write WebAssembly in [Source Academy](https://sourceacademy.org/playground)!
 
+<p align="center">
+<img src="https://github.com/Yongbeom-Kim/source-academy-wabt/assets/63487502/6569e1e1-01fa-439c-8bc9-aeb5356d07e9" width="60%"></img>
+</p>
 
 ## Overview
 This is a TypeScript port of (relevant features) of the [WebAssembly Binary Toolkit](https://github.com/webassembly/wabt) to be used in Source Academy's WebAssembly module.
