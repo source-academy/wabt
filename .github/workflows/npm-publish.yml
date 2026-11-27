@@ -7,6 +7,10 @@ on:
   release:
     types: [created]
 
+# This workflow does not write with the built-in token (see the pull request that added this); read is enough.
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
